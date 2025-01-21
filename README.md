@@ -5,6 +5,7 @@
 
 - Alejandro López
 - Alejandro Villegas
+- Emmanuel Lora
 - Jacobo Prada
 - Luisa Rodríguez
 - Nicolás Correa
