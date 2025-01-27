@@ -6,6 +6,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.Splines.Interpolators;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -28,12 +30,19 @@ public class PlayerController : MonoBehaviour
     public Rigidbody rb;
     public CapsuleCollider playerCollider;
     public Transform cameraTransform;
-    [System.Obsolete] public CinemachineInputAxisController freeLookCamera;
+    [System.Obsolete] public CinemachineCamera freeLookCamera;
+
+    [Header("Camera Settings")]
+    [SerializeField] private float currentFOV = 65;
+    [SerializeField] private float aimFOV = 55;
+    [SerializeField] private float tFOV = 1;
     [SerializeField] private float rotationSpeed = 10f; // Velocidad de rotación
+    private bool wasAiming;
 
     private Vector3 previousCameraForward; // Dirección previa de la cámara
     private Vector2 moveInput;
     private Vector2 lookInput;
+    private float aimInput;
     private bool isRunning = false;
     private bool isCrouching = false;
     private bool isSliding = false;
@@ -70,6 +79,7 @@ public class PlayerController : MonoBehaviour
     {
         HandleMovement();
         HandleAnimations();
+        adjustFOV();
     }
 
     private void HandleMovement()
@@ -95,16 +105,25 @@ public class PlayerController : MonoBehaviour
 
             Vector3 desiredMoveDirection = (cameraRight * moveDirection.x + cameraForward * moveDirection.z);
 
+            Vector3 characterMoveDir = (Vector3.right * moveDirection.x + Vector3.forward * moveDirection.z);
+
             //float lookOrbitXValue = freeLookCamera.Controllers[0].InputValue;
             Quaternion targetRotation = Quaternion.LookRotation(desiredMoveDirection);
 
-            if (forward == true && right == false && left == false)
+            float speed = isRunning ? runSpeed : walkSpeed;
+
+            if (forward == true && right == false && left == false || aimInput == 1)
             {
+                cameraTransform.SetParent(null);
+                rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
             }
+            else
+            {
+                cameraTransform.SetParent(this.transform);
+                rb.MovePosition(rb.position + characterMoveDir * speed * Time.deltaTime);
+            }
 
-            float speed = isRunning ? runSpeed : walkSpeed;
-            rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
         }
         else
         {
@@ -197,6 +216,26 @@ public class PlayerController : MonoBehaviour
         lookInput = context.ReadValue<Vector2>();
     }
 
+    public void OnAim(InputAction.CallbackContext context)
+    {
+        aimInput = context.ReadValue<float>();
+    }
+
+    public void adjustFOV()
+    {
+        if (aimInput == 1)
+        {
+            freeLookCamera.Lens.FieldOfView = Mathf.Lerp(aimFOV, currentFOV, tFOV * Time.deltaTime);
+            wasAiming = true;
+            isRunning = false;
+        }
+        else if (aimInput == 0 && wasAiming == true)
+        {
+            freeLookCamera.Lens.FieldOfView = Mathf.Lerp(currentFOV, aimFOV, tFOV * Time.deltaTime);
+            wasAiming = false;
+        }
+    }
+
     public void OnJump(InputAction.CallbackContext context)
     {
         if (context.performed && jumpCount < maxJumps)
@@ -204,7 +243,7 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z); // Reset Y velocity
             rb.AddForce(rb.linearVelocity * jumpForce + Vector3.up * 5, ForceMode.Impulse);
             jumpCount++;
-            //animator.SetBool("jump", true);
+            animator.SetBool("jump", true);
         }
     }
 

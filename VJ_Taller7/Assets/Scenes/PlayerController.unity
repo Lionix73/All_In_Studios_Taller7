@@ -408,7 +408,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 529502198}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.1599022, y: 0.023968654, z: -0.0038837735, w: 0.9868342}
+  m_LocalRotation: {x: 0.15990222, y: 0.023968635, z: -0.0038837707, w: 0.9868342}
   m_LocalPosition: {x: 0.26363754, y: 1.9383096, z: -2.0479114}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -540,7 +540,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 762984746}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15990219, y: 0.023968654, z: -0.0038837735, w: 0.9868342}
+  m_LocalRotation: {x: 0.1599022, y: 0.023968633, z: -0.00388377, w: 0.9868342}
   m_LocalPosition: {x: 4.7010713, y: 1.9383096, z: -2.4017143}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -889,7 +889,10 @@ MonoBehaviour:
   rb: {fileID: 1332780509}
   playerCollider: {fileID: 1332780508}
   cameraTransform: {fileID: 762984747}
-  freeLookCamera: {fileID: 762984749}
+  freeLookCamera: {fileID: 762984753}
+  currentFOV: 65
+  aimFOV: 55
+  tFOV: 0.05
   rotationSpeed: 10
 --- !u!95 &1332780507
 Animator:
@@ -1421,6 +1424,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1332780506}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnAim
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: cbd2104c-c1c7-4fbe-82b6-b21ad5ebf8ec
+    m_ActionName: 'Player/Aim[/Mouse/rightButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
