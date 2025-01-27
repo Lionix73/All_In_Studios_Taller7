@@ -408,8 +408,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 529502198}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.1612887, y: 0.00000003335763, z: -0.0000000054515845, w: 0.9869073}
-  m_LocalPosition: {x: 0.3110876, y: 1.9383096, z: -2.0357053}
+  m_LocalRotation: {x: 0.1599022, y: 0.023968654, z: -0.0038837735, w: 0.9868342}
+  m_LocalPosition: {x: 0.26363754, y: 1.9383096, z: -2.0479114}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -540,13 +540,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 762984746}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.16128868, y: 0.000000032904385, z: -0.00000000267825, w: 0.9869073}
-  m_LocalPosition: {x: 0.06108761, y: 1.9383096, z: -2.0357053}
+  m_LocalRotation: {x: 0.15990219, y: 0.023968654, z: -0.0038837735, w: 0.9868342}
+  m_LocalPosition: {x: 4.7010713, y: 1.9383096, z: -2.4017143}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1170849918}
-  m_Father: {fileID: 543450652409199155}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &762984748
 MonoBehaviour:
@@ -560,7 +560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44d70cc20219cd84593f67d248eafe36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Offset: {x: 0.25, y: 0, z: 0}
+  Offset: {x: 0.3, y: 0, z: 0}
   ApplyAfter: 1
   PreserveComposition: 0
 --- !u!114 &762984749
@@ -650,7 +650,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Composition:
-    ScreenPosition: {x: 0, y: -0.06214288}
+    ScreenPosition: {x: 0, y: -0.06}
     DeadZone:
       Enabled: 0
       Size: {x: 0.5, y: 0.3}
@@ -695,14 +695,14 @@ MonoBehaviour:
       Radius: 2
       Height: 0.5
     Bottom:
-      Radius: 1.5
+      Radius: 2
       Height: 0.08
-    SplineCurvature: 0.5
-  RecenteringTarget: 2
+    SplineCurvature: 0.205
+  RecenteringTarget: 3
   HorizontalAxis:
     Value: 0
     Center: 0
-    Range: {x: -180, y: 180}
+    Range: {x: -45, y: 45}
     Wrap: 1
     Recentering:
       Enabled: 0
@@ -889,6 +889,8 @@ MonoBehaviour:
   rb: {fileID: 1332780509}
   playerCollider: {fileID: 1332780508}
   cameraTransform: {fileID: 762984747}
+  freeLookCamera: {fileID: 762984749}
+  rotationSpeed: 10
 --- !u!95 &1332780507
 Animator:
   serializedVersion: 7
@@ -918,7 +920,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132148206510217}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a4015eb993ad7d8499e777059ec51678, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1180,7 +1182,6 @@ Transform:
   - {fileID: 2484128539783919900}
   - {fileID: 5465940245524748967}
   - {fileID: 529502200}
-  - {fileID: 762984747}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &608321760480344996
@@ -1301,7 +1302,19 @@ MonoBehaviour:
     m_ActionId: 351f2ccd-1f9f-44bf-9bec-d62ac5c5f408
     m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1332780506}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnLook
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 6b444451-8a00-4d00-a97e-f47457f736a8
     m_ActionName: 'Player/Look[/Mouse/delta,/Pen/delta]'
   - m_PersistentCalls:
@@ -4527,4 +4540,5 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 226903715}
+  - {fileID: 762984747}
   - {fileID: 543450652409199155}

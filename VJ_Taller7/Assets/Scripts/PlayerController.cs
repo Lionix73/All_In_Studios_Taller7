@@ -1,4 +1,10 @@
+ï»¿using System.Collections;
+using System.Linq;
+using TreeEditor;
+using Unity.Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -22,16 +28,18 @@ public class PlayerController : MonoBehaviour
     public Rigidbody rb;
     public CapsuleCollider playerCollider;
     public Transform cameraTransform;
+    [System.Obsolete] public CinemachineInputAxisController freeLookCamera;
+    [SerializeField] private float rotationSpeed = 10f; // Velocidad de rotaciÃ³n
 
-    private float lastCameraYRotation = 0f; // Almacena la última rotación en el eje Y de la cámara
-    private bool isRotating = false; // Controla si el personaje está ejecutando la animación de rotación
+    private Vector3 previousCameraForward; // DirecciÃ³n previa de la cÃ¡mara
     private Vector2 moveInput;
+    private Vector2 lookInput;
     private bool isRunning = false;
     private bool isCrouching = false;
     private bool isSliding = false;
     private bool canSlide = true;
     private bool canCrouch = true;
-    
+
     private bool forward = true;
     private bool backward = true;
     private bool right = true;
@@ -50,6 +58,14 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    private void Start()
+    {
+        previousCameraForward = cameraTransform.forward;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     private void Update()
     {
         HandleMovement();
@@ -57,6 +73,82 @@ public class PlayerController : MonoBehaviour
     }
 
     private void HandleMovement()
+    {
+        Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
+        Vector3 worldInputDir = transform.TransformDirection(moveDirection);
+
+        MovDirection(moveDirection);
+
+        if (moveDirection != Vector3.zero)
+        {
+            isCrouching = false;
+
+            // Obtener la direccion orientada segun la camara
+            Vector3 cameraForward = cameraTransform.forward;
+            Vector3 cameraRight = cameraTransform.right;
+
+            // Asegurarnos de que los vectores esten en el plano horizontal (sin componente Y)
+            cameraForward.y = 0f;
+            cameraRight.y = 0f;
+            cameraForward.Normalize();
+            cameraRight.Normalize();
+
+            Vector3 desiredMoveDirection = (cameraRight * moveDirection.x + cameraForward * moveDirection.z);
+
+            //float lookOrbitXValue = freeLookCamera.Controllers[0].InputValue;
+            Quaternion targetRotation = Quaternion.LookRotation(desiredMoveDirection);
+
+            if (forward == true && right == false && left == false)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            }
+
+            float speed = isRunning ? runSpeed : walkSpeed;
+            rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
+        }
+        else
+        {
+            isRunning = false;
+        }
+    }
+
+    private void MovDirection(Vector3 movDir)
+    {
+        if (movDir.z > 0.05f)
+        {
+            forward = true;
+            backward = false;
+        }
+        else if (movDir.z < -0.05f)
+        {
+            forward = false;
+            backward = true;
+        }
+        else
+        {
+            forward = false;
+            backward = false;
+        }
+
+
+        if (movDir.x > 0.05f)
+        {
+            right = true;
+            left = false;
+        }
+        else if (movDir.x < -0.05f)
+        {
+            right = false;
+            left = true;
+        }
+        else
+        {
+            right = false;
+            left = false;
+        }
+    }
+
+    private void Slide()
     {
         if (isSliding)
         {
@@ -72,81 +164,6 @@ public class PlayerController : MonoBehaviour
                 ResetColliderHeight();
             }
             return;
-        }
-
-        Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
-        Vector3 worldInputDir = transform.TransformDirection(moveDirection);
-
-        if (moveDirection.z > 0.05f)
-        {
-            forward = true;
-            backward = false;
-        }
-        else if (moveDirection.z < -0.05f)
-        {
-            forward = false;
-            backward = true;
-        }
-        else
-        {
-            forward = false;
-            backward = false;
-        }
-
-
-        if (moveDirection.x > 0.05f)
-        {
-            right = true;
-            left = false;
-        }
-        else if (moveDirection.x < -0.05f)
-        {
-            right = false;
-            left = true;
-        }
-        else
-        {
-            right = false;
-            left = false;
-        }
-
-        if (moveDirection != Vector3.zero)
-        {
-            isCrouching = false;
-
-            // Obtener la dirección orientada según la cámara
-            Vector3 cameraForward = cameraTransform.forward;
-            Vector3 cameraRight = cameraTransform.right;
-
-            // Asegurarnos de que los vectores estén en el plano horizontal (sin componente Y)
-            cameraForward.y = 0f;
-            cameraRight.y = 0f;
-            cameraForward.Normalize();
-            cameraRight.Normalize();
-
-            // Calcular la dirección final del movimiento en el espacio local de la cámara
-            Vector3 desiredMoveDirection = (cameraRight * moveDirection.x + cameraForward * moveDirection.z).normalized;
-
-            float speed = isRunning ? runSpeed : walkSpeed;
-            // Mover al personaje en la dirección calculada
-            rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
-
-            Quaternion targetRotation = Quaternion.LookRotation(desiredMoveDirection);
-
-            if(forward == true && right == false && left == false)
-            {
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
-            }    
-
-            // Determinar el ángulo entre el personaje y la cámara
-            //float angleToCamera = Vector3.Angle(transform.forward, desiredMoveDirection);
-
-            //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
-        }
-
-        if (moveDirection == Vector3.zero)
-        {
-            isRunning = false;
         }
     }
 
@@ -169,24 +186,25 @@ public class PlayerController : MonoBehaviour
         playerCollider.height = normalHeight;
         playerCollider.center.Set(0f, 0.9f, 0f);
     }
-    
+
     public void OnMove(InputAction.CallbackContext context)
     {
-        Debug.Log("Movimiento detectado");
-
         moveInput = context.ReadValue<Vector2>();
+    }
+
+    public void OnLook(InputAction.CallbackContext context)
+    {
+        lookInput = context.ReadValue<Vector2>();
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        Debug.Log("Salto detectado");
-
         if (context.performed && jumpCount < maxJumps)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z); // Reset Y velocity
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            rb.AddForce(rb.linearVelocity * jumpForce + Vector3.up * 5, ForceMode.Impulse);
             jumpCount++;
-            animator.SetBool("jump", true);
+            //animator.SetBool("jump", true);
         }
     }
 
@@ -246,27 +264,5 @@ public class PlayerController : MonoBehaviour
             jumpCount = 0;
             animator.SetBool("jump", false);
         }
-    }
-    private bool CheckForCameraRotation(float angle)
-    {
-        // Obtener la rotación actual de la cámara en el eje Y
-        float currentCameraYRotation = cameraTransform.eulerAngles.y;
-
-        // Calcular la diferencia en rotación respecto a la última posición
-        float rotationDifference = Mathf.Abs(Mathf.DeltaAngle(lastCameraYRotation, currentCameraYRotation));
-
-        if (rotationDifference > angle)
-        {
-            // Ajustar la rotación del personaje para alinearse con la cámara
-            Vector3 newForward = cameraTransform.forward;
-            newForward.y = 0f;
-            //transform.rotation = Quaternion.LookRotation(newForward);
-
-            // Actualizar la última rotación de la cámara
-            lastCameraYRotation = currentCameraYRotation;
-
-            return true;
-        }
-        return false;
     }
 }
