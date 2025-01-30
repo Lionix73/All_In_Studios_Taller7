@@ -112,18 +112,21 @@ public class PlayerController : MonoBehaviour
 
             float speed = isRunning ? runSpeed : walkSpeed;
 
-            if (forward == true && right == false && left == false || aimInput == 1)
+            if (forward && !right && !left && aimInput == 1 || forward && !right && !left && aimInput == 0)
             {
                 cameraTransform.SetParent(null);
-                rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            }
+            else if (forward && right || forward && left)
+            {
+                cameraTransform.SetParent(this.transform);
             }
             else
             {
                 cameraTransform.SetParent(this.transform);
-                rb.MovePosition(rb.position + characterMoveDir * speed * Time.deltaTime);
             }
 
+            rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
         }
         else
         {
