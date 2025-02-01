@@ -14,8 +14,8 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Settings")]
     public float walkSpeed = 2f;
     public float runSpeed = 5f;
-    public float slideSpeed = 10f;
-    public float slideDistance = 5f;
+    public float slideSpeed = 1.2f;
+    public float slideDistance = 2f;
     public float crouchHeight = 0.9f;
     public float normalHeight = 1.8f;
 
@@ -36,10 +36,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float currentFOV = 65;
     [SerializeField] private float aimFOV = 55;
     [SerializeField] private float tFOV = 1;
-    [SerializeField] private float rotationSpeed = 10f; // Velocidad de rotación
+    [SerializeField] private float rotationSpeed = 10f;
     private bool wasAiming;
 
-    private Vector3 previousCameraForward; // Dirección previa de la cámara
+    private Vector3 previousCameraForward;
     private Vector2 moveInput;
     private Vector2 lookInput;
     private float aimInput;
@@ -49,10 +49,8 @@ public class PlayerController : MonoBehaviour
     private bool canSlide = true;
     private bool canCrouch = true;
 
-    private bool forward = true;
-    private bool backward = true;
-    private bool right = true;
-    private bool left = true;
+    private float speedX;
+    private float speedY;
 
     private int jumpCount = 0;
 
@@ -80,6 +78,7 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
         HandleAnimations();
         adjustFOV();
+        Slide();
     }
 
     private void HandleMovement()
@@ -87,17 +86,10 @@ public class PlayerController : MonoBehaviour
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
         Vector3 worldInputDir = transform.TransformDirection(moveDirection);
 
-        MovDirection(moveDirection);
-
         if (moveDirection != Vector3.zero)
         {
-            isCrouching = false;
-
-            // Obtener la direccion orientada segun la camara
             Vector3 cameraForward = cameraTransform.forward;
             Vector3 cameraRight = cameraTransform.right;
-
-            // Asegurarnos de que los vectores esten en el plano horizontal (sin componente Y)
             cameraForward.y = 0f;
             cameraRight.y = 0f;
             cameraForward.Normalize();
@@ -105,19 +97,17 @@ public class PlayerController : MonoBehaviour
 
             Vector3 desiredMoveDirection = (cameraRight * moveDirection.x + cameraForward * moveDirection.z);
 
-            Vector3 characterMoveDir = (Vector3.right * moveDirection.x + Vector3.forward * moveDirection.z);
-
             //float lookOrbitXValue = freeLookCamera.Controllers[0].InputValue;
-            Quaternion targetRotation = Quaternion.LookRotation(desiredMoveDirection);
+            Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
 
             float speed = isRunning ? runSpeed : walkSpeed;
 
-            if (forward && !right && !left && aimInput == 1 || forward && !right && !left && aimInput == 0)
+            if (moveInput.y > 0.05f)
             {
                 cameraTransform.SetParent(null);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
             }
-            else if (forward && right || forward && left)
+            else if (moveInput.y > 0.05f && moveInput.x > 0.05f || moveInput.y > 0.05f && moveInput.x < -0.05f)
             {
                 cameraTransform.SetParent(this.transform);
             }
@@ -134,48 +124,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void MovDirection(Vector3 movDir)
-    {
-        if (movDir.z > 0.05f)
-        {
-            forward = true;
-            backward = false;
-        }
-        else if (movDir.z < -0.05f)
-        {
-            forward = false;
-            backward = true;
-        }
-        else
-        {
-            forward = false;
-            backward = false;
-        }
-
-
-        if (movDir.x > 0.05f)
-        {
-            right = true;
-            left = false;
-        }
-        else if (movDir.x < -0.05f)
-        {
-            right = false;
-            left = true;
-        }
-        else
-        {
-            right = false;
-            left = false;
-        }
-    }
-
     private void Slide()
     {
         if (isSliding)
         {
             slideTimer += Time.deltaTime * slideSpeed;
-            rb.linearVelocity = slideDirection * slideSpeed;
+            //rb.linearVelocity = cameraTransform.forward * slideSpeed;
+            //rb.MovePosition(rb.position + transform.forward * slideSpeed);
 
             if (slideTimer >= slideDistance)
             {
@@ -183,7 +138,8 @@ public class PlayerController : MonoBehaviour
                 isCrouching = false;
                 canSlide = true;
                 slideTimer = 0f;
-                ResetColliderHeight();
+                ResetCrouchFlag();
+                //ResetColliderHeight();
             }
             return;
         }
@@ -192,15 +148,16 @@ public class PlayerController : MonoBehaviour
     private void HandleAnimations()
     {
         bool isMoving = moveInput.sqrMagnitude > 0.1f;
+        speedX = moveInput.x;
+        speedY = moveInput.y;
 
         animator.SetBool("isMoving", isMoving);
         animator.SetBool("isRunning", isRunning);
         animator.SetBool("isCrouching", isCrouching);
         animator.SetBool("isSliding", isSliding);
-        animator.SetBool("Forward", forward);
-        animator.SetBool("Backward", backward);
-        animator.SetBool("Left", left);
-        animator.SetBool("Right", right);
+
+        animator.SetFloat("SpeedX", speedX);
+        animator.SetFloat("SpeedY", speedY);
     }
 
     private void ResetColliderHeight()
@@ -265,7 +222,11 @@ public class PlayerController : MonoBehaviour
             isCrouching = !isCrouching;
             canCrouch = false;
 
-            if (isCrouching)
+            if(isRunning && canSlide)
+            {
+                OnSlide();
+            }
+            else if(isCrouching && !isRunning)
             {
                 animator.SetTrigger("crouch");
                 //playerCollider.height = crouchHeight;
@@ -281,17 +242,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnSlide(InputAction.CallbackContext context)
+    public void OnSlide()
     {
-        Debug.Log("Slide detectado");
-
-        if (context.performed && isRunning && canSlide)
-        {
-            isSliding = true;
-            canSlide = false;
-            slideDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
-            animator.SetTrigger("slide");
-        }
+        isSliding = true;
+        canSlide = false;
+        animator.applyRootMotion = true;
+        animator.SetTrigger("slide");
     }
 
     private void ResetCrouchFlag()
