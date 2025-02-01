@@ -85,42 +85,44 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
         Vector3 worldInputDir = transform.TransformDirection(moveDirection);
+        Vector3 cameraForward = cameraTransform.forward;
+        Vector3 cameraRight = cameraTransform.right;
+        cameraForward.y = 0f;
+        cameraRight.y = 0f;
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+
+        Vector3 desiredMoveDirection = (cameraRight * moveDirection.x + cameraForward * moveDirection.z);
+
+        //float lookOrbitXValue = freeLookCamera.Controllers[0].InputValue;
+        Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
+
+        float speed = isRunning ? runSpeed : walkSpeed;
 
         if (moveDirection != Vector3.zero)
         {
-            Vector3 cameraForward = cameraTransform.forward;
-            Vector3 cameraRight = cameraTransform.right;
-            cameraForward.y = 0f;
-            cameraRight.y = 0f;
-            cameraForward.Normalize();
-            cameraRight.Normalize();
 
-            Vector3 desiredMoveDirection = (cameraRight * moveDirection.x + cameraForward * moveDirection.z);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            //if(aimInput > 0.1f)
+            //{
+            //}
 
-            //float lookOrbitXValue = freeLookCamera.Controllers[0].InputValue;
-            Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
-
-            float speed = isRunning ? runSpeed : walkSpeed;
-
-            if (moveInput.y > 0.05f)
-            {
-                cameraTransform.SetParent(null);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-            }
-            else if (moveInput.y > 0.05f && moveInput.x > 0.05f || moveInput.y > 0.05f && moveInput.x < -0.05f)
-            {
-                cameraTransform.SetParent(this.transform);
-            }
-            else
-            {
-                cameraTransform.SetParent(this.transform);
-            }
+            //if (moveInput.y > 0.05f)
+            //{
+            //    cameraTransform.SetParent(null);
+            //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            //}
+            //else
+            //{
+            //    cameraTransform.SetParent(this.transform);
+            //}
 
             rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
         }
         else
         {
             isRunning = false;
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
         }
     }
 
@@ -183,7 +185,7 @@ public class PlayerController : MonoBehaviour
 
     public void adjustFOV()
     {
-        if (aimInput == 1)
+        if (aimInput > 0.1f)
         {
             freeLookCamera.Lens.FieldOfView = Mathf.Lerp(aimFOV, currentFOV, tFOV * Time.deltaTime);
             wasAiming = true;
