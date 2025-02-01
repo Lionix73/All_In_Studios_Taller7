@@ -101,27 +101,27 @@ public class PlayerController : MonoBehaviour
 
         if (moveDirection != Vector3.zero)
         {
-
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-            //if(aimInput > 0.1f)
-            //{
-            //}
 
-            //if (moveInput.y > 0.05f)
-            //{
-            //    cameraTransform.SetParent(null);
-            //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-            //}
-            //else
-            //{
-            //    cameraTransform.SetParent(this.transform);
-            //}
+            if (moveInput.y > 0.05f && moveInput.x < 0.05f && moveInput.x > -0.05f || moveInput.y < -0.05f && moveInput.x < 0.05f && moveInput.x > -0.05f)
+            {
+                cameraTransform.SetParent(null);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            }
+            else
+            {
+                cameraTransform.SetParent(this.transform);
+            }
 
             rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
         }
         else
         {
             isRunning = false;
+        }
+
+        if(aimInput > 0.1f)
+        {
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
         }
     }
