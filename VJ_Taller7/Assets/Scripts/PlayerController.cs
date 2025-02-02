@@ -185,6 +185,7 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(rb.linearVelocity * jumpForce + Vector3.up * 5, ForceMode.Impulse);
             jumpCount++;
             animator.SetBool("jump", true);
+            animator.SetTrigger("Jump");
         }
     }
 
