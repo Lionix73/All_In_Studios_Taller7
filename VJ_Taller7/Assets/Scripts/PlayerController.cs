@@ -1,21 +1,14 @@
 ﻿using System.Collections;
-using System.Linq;
-using TreeEditor;
 using Unity.Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.Splines.Interpolators;
-using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement Settings")]
     public float walkSpeed = 2f;
     public float runSpeed = 5f;
-    public float slideSpeed = 1.2f;
-    public float slideDistance = 2f;
+    public float slideDuration = 3f;
     public float crouchHeight = 0.9f;
     public float normalHeight = 1.8f;
 
@@ -25,6 +18,15 @@ public class PlayerController : MonoBehaviour
 
     [Header("Animator")]
     public Animator animator;
+
+    [Header("Movimiento y Dash")]
+    [SerializeField] private float dashSpeed = 15f;
+    [SerializeField] private float dashDuration = 0.2f;
+    [SerializeField] private float dashCooldown = 1f;
+
+    private bool isDashing = false;
+    private bool canDash = true;
+    private Vector3 dashDirection;
 
     [Header("Components")]
     public Rigidbody rb;
@@ -78,13 +80,12 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
         HandleAnimations();
         adjustFOV();
-        Slide();
+        //Slide();
     }
 
     private void HandleMovement()
     {
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
-        Vector3 worldInputDir = transform.TransformDirection(moveDirection);
         Vector3 cameraForward = cameraTransform.forward;
         Vector3 cameraRight = cameraTransform.right;
         cameraForward.y = 0f;
@@ -92,7 +93,7 @@ public class PlayerController : MonoBehaviour
         cameraForward.Normalize();
         cameraRight.Normalize();
 
-        Vector3 desiredMoveDirection = (cameraRight * moveDirection.x + cameraForward * moveDirection.z);
+        Vector3 desiredMoveDirection = (transform.right * moveDirection.x + transform.forward * moveDirection.z);
 
         //float lookOrbitXValue = freeLookCamera.Controllers[0].InputValue;
         Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
@@ -106,11 +107,10 @@ public class PlayerController : MonoBehaviour
             if (moveInput.y > 0.05f && moveInput.x < 0.05f && moveInput.x > -0.05f || moveInput.y < -0.05f && moveInput.x < 0.05f && moveInput.x > -0.05f)
             {
                 cameraTransform.SetParent(null);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
             }
             else
             {
-                cameraTransform.SetParent(this.transform);
+                //cameraTransform.SetParent(this.transform);
             }
 
             rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
@@ -123,27 +123,6 @@ public class PlayerController : MonoBehaviour
         if(aimInput > 0.1f)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-        }
-    }
-
-    private void Slide()
-    {
-        if (isSliding)
-        {
-            slideTimer += Time.deltaTime * slideSpeed;
-            //rb.linearVelocity = cameraTransform.forward * slideSpeed;
-            //rb.MovePosition(rb.position + transform.forward * slideSpeed);
-
-            if (slideTimer >= slideDistance)
-            {
-                isSliding = false;
-                isCrouching = false;
-                canSlide = true;
-                slideTimer = 0f;
-                ResetCrouchFlag();
-                //ResetColliderHeight();
-            }
-            return;
         }
     }
 
@@ -214,6 +193,7 @@ public class PlayerController : MonoBehaviour
         if (context.performed)
         {
             isRunning = !isRunning;
+            isCrouching = false;
         }
     }
 
@@ -224,9 +204,11 @@ public class PlayerController : MonoBehaviour
             isCrouching = !isCrouching;
             canCrouch = false;
 
-            if(isRunning && canSlide)
+            if(isRunning && canSlide && !isSliding)
             {
                 OnSlide();
+                StartCoroutine(Slide());
+
             }
             else if(isCrouching && !isRunning)
             {
@@ -244,6 +226,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private IEnumerator Slide()
+    {
+        if (isSliding)
+        {
+            float slideTimer = 0f;
+
+            while (slideTimer < slideDuration)
+            {
+                slideTimer += Time.deltaTime;
+                yield return null;
+            }
+
+            isSliding = false;
+            isCrouching = false;
+            yield return new WaitForSeconds(dashCooldown);
+
+            canSlide = true;
+            ResetCrouchFlag();
+            //ResetColliderHeight();
+        }
+    }
+
     public void OnSlide()
     {
         isSliding = true;
@@ -255,6 +259,37 @@ public class PlayerController : MonoBehaviour
     private void ResetCrouchFlag()
     {
         canCrouch = true;
+    }
+
+    public void OnDash()
+    {
+        if (!canDash || isCrouching || isSliding || moveInput.magnitude < 0.05f) return;
+
+        canDash = false;
+        isDashing = true;
+
+        Vector3 movDir = new Vector3(moveInput.x, 0, moveInput.y).normalized;
+        Vector3 moveDirection = (transform.right * movDir.x + transform.forward * movDir.z);
+
+        dashDirection = moveDirection;
+
+        StartCoroutine(DashCoroutine());
+    }
+
+    private IEnumerator DashCoroutine()
+    {
+        float dashTime = 0f;
+
+        while (dashTime < dashDuration)
+        {
+            rb.MovePosition(rb.position + dashDirection * dashSpeed * Time.deltaTime);
+            dashTime += Time.deltaTime;
+            yield return null;
+        }
+
+        isDashing = false;
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
     }
 
     private void OnCollisionEnter(Collision collision)
