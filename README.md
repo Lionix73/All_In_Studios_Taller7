@@ -1,4 +1,4 @@
-# Title: [Insert Game Name Here]
+# Title: EGGDIVERS
 
 ## Developed By:
 ### All In Studios
@@ -13,12 +13,16 @@
 - Santiago Pamplona
 
 ## Overview:
-[Insert Game Name Here] is a fast-paced, competitive 1v1 game built in Unity 3D. Designed for local area network (LAN) connection, this game emphasizes intense duels, strategy, and skill. With vibrant 3D visuals and immersive mechanics, players face off in arenas where creativity and precision are key to victory.
+In Eggdivers, players take control of Nyx and Umbra, two warriors who must defy the Manapati organization—an elite faction within Arcania that refuses to let the Golden Prophecy unfold. Determined to prevent their brother’s birth at all costs, Manapati wields both mystical arts and advanced technology to stop them.
+
+Face relentless waves of enemies, each more challenging than the last, including special foes that force you to adapt your strategy. Choose from a roster of characters, each with a unique ability, and progressively upgrade your arsenal to enhance your combat prowess. Play solo or team up in online cooperative mode, hosting your own server to fight side by side and overcome deadly challenges.
+
+Built in Unity 3D as a university project, Eggdivers delivers fast-paced action, strategic combat, and an ever-escalating battle for survival. Will you be able to defy fate and protect the future?
 
 ## Key Features:
-1v1 Multiplayer: Seamless LAN connection for direct and engaging matches.
+Co-op Multiplayer: Seamless Host connection for direct and engaging matches.
 Dynamic Gameplay: Unique mechanics and abilities that keep every duel fresh and competitive.
-Custom Arenas: Diverse and detailed 3D environments tailored for strategic encounters.
+Custom Arenas: Diverse and detailed 3D environments tailored for different playstyles.
 Player-Centric Design: Designed to cater to both casual and competitive players.
 
 ## About All In Studios:
