@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashSpeed = 15f;
     [SerializeField] private float dashDuration = 0.2f;
     [SerializeField] private float dashCooldown = 1f;
+    [SerializeField] private float jumpDuration = 1.4f;
+    [SerializeField] private float jumpCooldown = 1f;
 
     private bool isDashing = false;
     private bool canDash = true;
@@ -53,6 +55,7 @@ public class PlayerController : MonoBehaviour
     private bool isSliding = false;
     private bool canSlide = true;
     private bool canCrouch = true;
+    private bool canJump = true;
 
     private float speedX;
     private float speedY;
@@ -175,11 +178,33 @@ public class PlayerController : MonoBehaviour
         if (context.performed && jumpCount < maxJumps)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z); // Reset Y velocity
-            rb.AddForce(rb.linearVelocity * jumpForce + Vector3.up * 5, ForceMode.Impulse);
+            //rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
             jumpCount++;
-            animator.SetBool("jump", true);
-            animator.SetTrigger("Jump");
+
+            if(canJump)
+            {
+                animator.SetBool("isJumping", true);
+                animator.SetTrigger("Jump");
+                canJump = false;
+
+                StartCoroutine(Jump());
+            }
         }
+    }
+
+    private IEnumerator Jump()
+    {
+        float jumpTimer = 0f;
+
+        while (jumpTimer < jumpDuration)
+        {
+            jumpTimer += Time.deltaTime;
+            //yield return null;
+        }
+        jumpCount = 0;
+        animator.SetBool("isJumping", false);
+        yield return new WaitForSeconds(jumpCooldown);
+        canJump = true;
     }
 
     public void OnRun(InputAction.CallbackContext context)
@@ -295,7 +320,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             jumpCount = 0;
-            animator.SetBool("jump", false);
+            animator.SetBool("isJumping", false);
         }
     }
 }
