@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using Unity.Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -26,12 +28,14 @@ public class PlayerController : MonoBehaviour
 
     private bool isDashing = false;
     private bool canDash = true;
+    bool rayDash;
     private Vector3 dashDirection;
 
     [Header("Components")]
     public Rigidbody rb;
     public CapsuleCollider playerCollider;
     public Transform cameraTransform;
+    public Transform playerHead;
     [System.Obsolete] public CinemachineCamera freeLookCamera;
 
     [Header("Camera Settings")]
@@ -41,7 +45,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10f;
     private bool wasAiming;
 
-    private Vector3 previousCameraForward;
     private Vector2 moveInput;
     private Vector2 lookInput;
     private float aimInput;
@@ -69,50 +72,32 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        previousCameraForward = cameraTransform.forward;
-
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
     {
-        HandleMovement();
         HandleAnimations();
         adjustFOV();
-        //Slide();
+    }
+
+    private void FixedUpdate()
+    {
+        HandleMovement();
+        HandleRotation();
     }
 
     private void HandleMovement()
     {
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
-        Vector3 cameraForward = cameraTransform.forward;
-        Vector3 cameraRight = cameraTransform.right;
-        cameraForward.y = 0f;
-        cameraRight.y = 0f;
-        cameraForward.Normalize();
-        cameraRight.Normalize();
 
         Vector3 desiredMoveDirection = (transform.right * moveDirection.x + transform.forward * moveDirection.z);
-
-        //float lookOrbitXValue = freeLookCamera.Controllers[0].InputValue;
-        Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
 
         float speed = isRunning ? runSpeed : walkSpeed;
 
         if (moveDirection != Vector3.zero)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-
-            if (moveInput.y > 0.05f && moveInput.x < 0.05f && moveInput.x > -0.05f || moveInput.y < -0.05f && moveInput.x < 0.05f && moveInput.x > -0.05f)
-            {
-                cameraTransform.SetParent(null);
-            }
-            else
-            {
-                //cameraTransform.SetParent(this.transform);
-            }
-
             rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
         }
         else
@@ -122,8 +107,16 @@ public class PlayerController : MonoBehaviour
 
         if(aimInput > 0.1f)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
         }
+    }
+
+    private void HandleRotation()
+    {
+        Vector3 cameraForward = cameraTransform.forward;
+        cameraForward.y = 0;
+        Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
     private void HandleAnimations()
@@ -213,7 +206,6 @@ public class PlayerController : MonoBehaviour
             }
             else if(isCrouching && !isRunning)
             {
-                animator.SetTrigger("crouch");
                 //playerCollider.height = crouchHeight;
                 //playerCollider.center.Set(0f, 0.45f, 0f);
             }
@@ -254,7 +246,6 @@ public class PlayerController : MonoBehaviour
         isSliding = true;
         canSlide = false;
         animator.applyRootMotion = true;
-        animator.SetTrigger("slide");
     }
 
     private void ResetCrouchFlag()
@@ -283,6 +274,12 @@ public class PlayerController : MonoBehaviour
 
         while (dashTime < dashDuration)
         {
+            //RaycastHit hit;
+            //Physics.Raycast(playerHead.position, dashDirection, out hit);
+            //if (Physics.Raycast(playerHead.position, dashDirection, 15f) && hit.distance > 1f)
+            //{
+            //    rb.MovePosition(rb.position + dashDirection * dashSpeed * Time.deltaTime);
+            //}
             rb.MovePosition(rb.position + dashDirection * dashSpeed * Time.deltaTime);
             dashTime += Time.deltaTime;
             yield return null;
