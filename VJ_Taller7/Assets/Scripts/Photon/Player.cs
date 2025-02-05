@@ -11,16 +11,17 @@ public class Player : NetworkBehaviour
     private void Awake()
     {
         _cc = GetComponent<NetworkCharacterController>();
+        Debug.Log("Character Controller encontrado");
     }
 
     public override void FixedUpdateNetwork()
     {
-        if (GetInput(out NetInput data))
+        if (GetInput(out NetworkInputData data))
         {
             Debug.Log("Obtencion de datos");
             data.Direction.Normalize();
             _cc.Move(5 * data.Direction * Runner.DeltaTime);
-            previosButtons = data.Buttons;
+            //previosButtons = data.Buttons;
         }
     }
 }
