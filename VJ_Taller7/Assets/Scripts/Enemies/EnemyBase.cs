@@ -35,6 +35,8 @@ public abstract class EnemyBase : MonoBehaviour
     // Abstract method to move the enemy
     protected abstract void Move();
 
+    protected abstract void Chase();
+
     // Method to handle enemy attacks
     public virtual void Attack()
     {
