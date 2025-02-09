@@ -192,6 +192,7 @@ namespace FusionDemo {
     private NetworkRunner CreateRunner() {
       var runner = new GameObject("NetworkRunner", typeof(NetworkRunner)).GetComponent<NetworkRunner>();
       runner.gameObject.AddComponent<DemoInputPooling>();
+      runner.gameObject.AddComponent<InputManager>();
       // runner.gameObject.AddComponent<RunnerSimulatePhysics3D>();
       return runner;
     }

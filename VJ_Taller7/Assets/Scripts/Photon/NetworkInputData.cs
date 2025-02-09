@@ -1,7 +1,15 @@
 using Fusion;
 using UnityEngine;
 
+public enum InputButton
+{
+    Jump,
+    Slide,
+    Crouch
+}
 public struct NetworkInputData : INetworkInput
 {
-    public Vector3 Direction;
+    public NetworkButtons Buttons;
+    public Vector2 Direction;
+    public Vector2 LookDelta;
 }
