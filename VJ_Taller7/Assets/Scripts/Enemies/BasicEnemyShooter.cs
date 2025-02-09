@@ -1,11 +1,14 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BasicEnemy : EnemyBase
+public class BasicEnemyShooter : EnemyBase
 {
     [SerializeField] private float attackCooldown = 1.0f;
     [SerializeField] private float attackDamage = 10.0f;
-    [SerializeField] private float attackRange = 1.0f;
+    [SerializeField] private float bulletSpeed = 10.0f;
+    [SerializeField] private float bulletDamage = 10.0f;
+    [SerializeField] private float bulletLifetime = 2.0f;
+    [SerializeField] private GameObject bulletPrefab;
     private float lastAttackTime;
 
     private NavMeshAgent navMeshAgent;
@@ -37,15 +40,19 @@ public class BasicEnemy : EnemyBase
     {
         Debug.Log("Zambombazo!");
 
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange);
-        foreach (var hitCollider in hitColliders)
+        GameObject bullet = Instantiate(bulletPrefab, transform.position + transform.forward, Quaternion.identity);
+        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        if (rb != null)
         {
-            PlayerController playerHealth = hitCollider.GetComponent<PlayerController>();
-            if (playerHealth != null)
-            {
-                //playerHealth.TakeDamage(attackDamage);
-                Debug.Log("Lo deje temblando: " + attackDamage + " de daño.");
-            }
+            rb.linearVelocity = transform.forward * bulletSpeed;
         }
+
+        EnemyBullet bulletScript = bullet.GetComponent<EnemyBullet>();
+        if (bulletScript != null)
+        {
+            bulletScript.Damage = bulletDamage;
+        }
+
+        Destroy(bullet, bulletLifetime);
     }
 }
