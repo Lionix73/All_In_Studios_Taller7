@@ -28,6 +28,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpDuration = 1.4f;
     [SerializeField] private float jumpCooldown = 1f;
 
+    [Header("Slope Handling")]
+    [SerializeField] private float maxSlopeAngle;
+    [SerializeField] private GameObject stepRayLower;
+    private RaycastHit slopeHit;
+    
     private bool isDashing = false;
     private bool canDash = true;
     bool rayDash;
@@ -59,10 +64,11 @@ public class PlayerController : MonoBehaviour
 
     private float speedX;
     private float speedY;
-
+    private bool isGrounded;
     private int jumpCount = 0;
 
     private Vector3 slideDirection;
+    private Vector3 desiredMoveDirection;
     private float slideTimer = 0f;
 
     private PlayerInput playerInput;
@@ -95,7 +101,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
 
-        Vector3 desiredMoveDirection = (transform.right * moveDirection.x + transform.forward * moveDirection.z);
+        desiredMoveDirection = (transform.right * moveDirection.x + transform.forward * moveDirection.z);
 
         float speed = isRunning ? runSpeed : walkSpeed;
 
@@ -108,9 +114,19 @@ public class PlayerController : MonoBehaviour
             isRunning = false;
         }
 
-        if(aimInput > 0.1f)
+        if(!isSliding)
         {
-            //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            rb.useGravity = !OnSlope();
+        }
+
+        if (OnSlope())
+        {
+            rb.AddForce(GetSlopeMovement() * speed * 10f, ForceMode.Force);
+
+            if (rb.linearVelocity.y > 0)
+            {
+                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            }
         }
     }
 
@@ -177,8 +193,9 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed && jumpCount < maxJumps)
         {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z); // Reset Y velocity
-            //rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+            rb.linearVelocity *= 1.2f;
+            rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
             jumpCount++;
 
             if(canJump)
@@ -199,10 +216,8 @@ public class PlayerController : MonoBehaviour
         while (jumpTimer < jumpDuration)
         {
             jumpTimer += Time.deltaTime;
-            //yield return null;
+            yield return null;
         }
-        jumpCount = 0;
-        animator.SetBool("isJumping", false);
         yield return new WaitForSeconds(jumpCooldown);
         canJump = true;
     }
@@ -285,10 +300,7 @@ public class PlayerController : MonoBehaviour
         canDash = false;
         isDashing = true;
 
-        Vector3 movDir = new Vector3(moveInput.x, 0, moveInput.y).normalized;
-        Vector3 moveDirection = (transform.right * movDir.x + transform.forward * movDir.z);
-
-        dashDirection = moveDirection;
+        dashDirection = desiredMoveDirection;
 
         StartCoroutine(DashCoroutine());
     }
@@ -299,28 +311,50 @@ public class PlayerController : MonoBehaviour
 
         while (dashTime < dashDuration)
         {
-            //RaycastHit hit;
-            //Physics.Raycast(playerHead.position, dashDirection, out hit);
-            //if (Physics.Raycast(playerHead.position, dashDirection, 15f) && hit.distance > 1f)
-            //{
-            //    rb.MovePosition(rb.position + dashDirection * dashSpeed * Time.deltaTime);
-            //}
-            rb.MovePosition(rb.position + dashDirection * dashSpeed * Time.deltaTime);
+            rb.useGravity = false;
+            rb.AddForce(dashDirection * dashSpeed, ForceMode.Impulse);
             dashTime += Time.deltaTime;
             yield return null;
         }
 
         isDashing = false;
+        rb.useGravity = true;
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
+            isGrounded = true;
             jumpCount = 0;
             animator.SetBool("isJumping", false);
+            animator.SetBool("isGrounded", isGrounded);
         }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            isGrounded = false;
+            animator.SetBool("isGrounded", isGrounded);
+        }
+    }
+
+    private bool OnSlope()
+    {
+        if (Physics.Raycast(stepRayLower.transform.position, Vector3.down, out slopeHit, playerCollider.height * 0.5f + 0.3f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle < maxSlopeAngle && angle != 0;
+        }
+        return false;
+    }
+
+    private Vector3 GetSlopeMovement()
+    {
+        return Vector3.ProjectOnPlane(desiredMoveDirection, slopeHit.normal).normalized;
     }
 }
