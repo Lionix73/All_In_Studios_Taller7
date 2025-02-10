@@ -8,8 +8,10 @@ using UnityEngine.InputSystem;
 using Fusion;
 public class PlayerControllerPhoton : NetworkBehaviour
 {
+
     [Header("KCC")]
     [SerializeField] KCC kcc;
+    //[SerializeField] private AudioSource source;
     [Header("Movement Settings")]
     [SerializeField] private Vector3 jumpImpulse = new(0f, 10f, 0f);
     public float walkSpeed = 2f;
@@ -26,11 +28,10 @@ public class PlayerControllerPhoton : NetworkBehaviour
     public Animator animator;
 
     [Header("Movimiento y Dash")]
-    [SerializeField] private float dashSpeed = 15f;
+    [SerializeField] private float dashImpulse = 15f;
     [SerializeField] private float dashDuration = 0.2f;
-    [SerializeField] private float dashCooldown = 1f;
-    [SerializeField] private float jumpDuration = 1.4f;
-    [SerializeField] private float jumpCooldown = 1f;
+    [SerializeField] private float dashCD =2f;
+    [SerializeField] private float doubleJumpCD = 2f;
 
     private bool isDashing = false;
     private bool canDash = true;
@@ -56,23 +57,31 @@ public class PlayerControllerPhoton : NetworkBehaviour
     private Vector2 moveInput;
     private Vector2 lookInput;
     private float aimInput;
-    private bool isRunning = false;
-    private bool isCrouching = false;
-    private bool isSliding = false;
-    private bool canSlide = true;
-    private bool canCrouch = true;
-    private bool canJump = true;
+    [Networked] public bool IsRunning { get; set; }
+    [Networked] public bool IsCrouching { get; set; }
+    [Networked] public bool IsSliding { get; set; }
+    [Networked] public bool CanSlide { get; set; }
+    [Networked] public bool CanCrouch { get; set; }
+    [Networked] public bool CanJump { get; set; }
 
     private float speedX;
     private float speedY;
 
     private int jumpCount = 0;
+    [Networked, OnChangedRender(nameof(Jumped))] private int JumpSync { get; set; } //Synchronize sound in all clients
 
     private Vector3 slideDirection;
     private float slideTimer = 0f;
 
+    public float DoubleJumpCDFactor => (DoubleJumpCD.RemainingTime(Runner) ?? 0f) / doubleJumpCD; //Returns the remaining of cooldown in a range of 0 to 1
+    [Networked] private TickTimer DashCD { get; set; }
+    [Networked] private TickTimer DoubleJumpCD { get;  set;}
+
     private PlayerInput playerInput;
     [Networked] private NetworkButtons PreviousButtons { get; set; }
+
+    private InputManager inputManager;
+    private Vector2 baseLookRotation;
 
     public bool IsReady; //Server is the only one who cares about this
 
@@ -87,8 +96,11 @@ public class PlayerControllerPhoton : NetworkBehaviour
         
             if(HasInputAuthority)
             {
+                inputManager = Runner.GetComponent<InputManager>();
+                inputManager.LocalPlayer = this;
                 freeLookCamera.Target.TrackingTarget = camTarget;
-                Debug.Log("Camara Encontrada");
+                kcc.Settings.ForcePredictedLookRotation = true;
+            Debug.Log("Camara Encontrada");
             }
     }
 
@@ -97,7 +109,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
     {
 
         //adjustFOV();
-        //HandleAnimations();
+        HandleAnimations();
         HandleMovement();
         //HandleRotation();
         
@@ -108,12 +120,22 @@ public class PlayerControllerPhoton : NetworkBehaviour
         if (GetInput(out NetworkInputData input))
         {
             CheckJump(input);
-             kcc.AddLookRotation(input.LookDelta * lookSensitivity);
+            kcc.AddLookRotation(input.LookDelta * lookSensitivity);
             HandleRotation();
 
-            SetInputDirection(input);
-            float speed = isRunning ? runSpeed : walkSpeed;
+            if (input.Buttons.WasPressed(PreviousButtons,InputButton.Run))
+            {
+                IsRunning = !IsRunning;
+                IsCrouching = false;
+            }
 
+            float speed = IsRunning ? runSpeed : walkSpeed;
+            
+            SetInputDirection(input, speed);
+            CheckDash(input);
+
+            PreviousButtons = input.Buttons;
+            baseLookRotation = kcc.GetLookRotation();
             if (aimInput > 0.1f)
             {
                 //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
@@ -122,18 +144,55 @@ public class PlayerControllerPhoton : NetworkBehaviour
     }
     private void CheckJump(NetworkInputData input)
     {
-        if(input.Buttons.WasPressed(PreviousButtons, InputButton.Jump) && kcc.FixedData.IsGrounded)
+        if(input.Buttons.WasPressed(PreviousButtons, InputButton.Jump))
+        {
+            if (kcc.FixedData.IsGrounded)
+            {
                 kcc.Jump(jumpImpulse);
+                JumpSync++;
+
+            }
+            else if(DoubleJumpCD.ExpiredOrNotRunning(Runner))
+            {
+                kcc.Jump(jumpImpulse);
+                DoubleJumpCD = TickTimer.CreateFromSeconds(Runner, doubleJumpCD);
+                JumpSync++;
+            }
+        }
     }
-    private void SetInputDirection(NetworkInputData input)
+    private void CheckDash(NetworkInputData input)
     {
-        Vector3 worldDirection = kcc.FixedData.TransformRotation * input.Direction.X0Y();
+        if (input.Buttons.WasPressed(PreviousButtons, InputButton.Dash))
+        {
+            if (IsCrouching || IsSliding) 
+                return;
+            if (DashCD.ExpiredOrNotRunning(Runner))
+            {
+                isDashing = true;
+                Vector3 worldDirection = kcc.FixedData.TransformRotation * input.Direction.X0Y();
+                Debug.Log(worldDirection);
+                kcc.Jump(worldDirection * dashImpulse);
+                Debug.Log("Dash");
+                DashCD = TickTimer.CreateFromSeconds(Runner, dashCD);
+            }
+
+        }
+
+    }
+    private void SetInputDirection(NetworkInputData input, float speed)
+    {
+        Vector3 worldDirection = kcc.FixedData.TransformRotation * input.Direction.X0Y()*speed;
         kcc.SetInputDirection(worldDirection);
     }
     public override void Render()
     {
-        HandleAnimations();
-        HandleRotation();
+        //HandleAnimations();
+        if (kcc.Settings.ForcePredictedLookRotation && HasInputAuthority)
+        {
+            Vector2 predictedLookRotation = baseLookRotation + inputManager.AccumulatedMouseDelta * lookSensitivity;
+            kcc.SetLookRotation(predictedLookRotation);
+        }
+            HandleRotation();
     }
     private void HandleRotation()
     {
@@ -151,9 +210,9 @@ public class PlayerControllerPhoton : NetworkBehaviour
         }
 
             animator.SetBool("isMoving", isMoving);
-            animator.SetBool("isRunning", isRunning);
-            animator.SetBool("isCrouching", isCrouching);
-            animator.SetBool("isSliding", isSliding);
+            animator.SetBool("isRunning", IsRunning);
+            animator.SetBool("isCrouching", IsCrouching);
+            animator.SetBool("isSliding", IsSliding);
 
             animator.SetFloat("SpeedY", speedY);
             animator.SetFloat("SpeedX", speedX);
@@ -186,7 +245,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
         {
             freeLookCamera.Lens.FieldOfView = Mathf.Lerp(aimFOV, currentFOV, tFOV * Time.deltaTime);
             wasAiming = true;
-            isRunning = false;
+            IsRunning = false;
         }
         else if (aimInput == 0 && wasAiming == true)
         {
@@ -195,155 +254,29 @@ public class PlayerControllerPhoton : NetworkBehaviour
         }
     }
 
-    public void OnJump(InputAction.CallbackContext context)
+    private void Jumped()
     {
-        if (context.performed && jumpCount < maxJumps)
-        {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z); // Reset Y velocity
-            //rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
-            jumpCount++;
-
-            if(canJump)
-            {
-                animator.SetBool("isJumping", true);
-                animator.SetTrigger("Jump");
-                canJump = false;
-
-                StartCoroutine(Jump());
-            }
-        }
+        //source.Play();
     }
 
-    private IEnumerator Jump()
-    {
-        float jumpTimer = 0f;
 
-        while (jumpTimer < jumpDuration)
-        {
-            jumpTimer += Time.deltaTime;
-            //yield return null;
-        }
-        jumpCount = 0;
-        animator.SetBool("isJumping", false);
-        yield return new WaitForSeconds(jumpCooldown);
-        canJump = true;
+
+[Rpc(RpcSources.InputAuthority, RpcTargets.InputAuthority | RpcTargets.StateAuthority)] // The ui update is actually allowed to run locally when the player indicates their readiness
+    public void RPC_SetReady()
+    {
+        IsReady = true;
+        if (HasInputAuthority) { }
+            //UIManager.Singleton.DidSetReady();
     }
-
-    public void OnRun(InputAction.CallbackContext context)
+    public void Teleport(Vector3 position, Quaternion rotation)
     {
-        if (context.performed)
-        {
-            isRunning = !isRunning;
-            isCrouching = false;
-        }
+        kcc.SetPosition(position);
+        kcc.SetLookRotation(rotation);
     }
-
-    public void OnCrouch(InputAction.CallbackContext context)
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    private void RPC_PlayerName(string name)
     {
-        if (context.performed && canCrouch)
-        {
-            isCrouching = !isCrouching;
-            canCrouch = false;
-
-            if(isRunning && canSlide && !isSliding)
-            {
-                OnSlide();
-                StartCoroutine(Slide());
-
-            }
-            else if(isCrouching && !isRunning)
-            {
-                //playerCollider.height = crouchHeight;
-                //playerCollider.center.Set(0f, 0.45f, 0f);
-            }
-            else
-            {
-                //ResetColliderHeight();
-                //animator.SetTrigger("uncrouch");
-            }
-
-            Invoke(nameof(ResetCrouchFlag), 0.5f); // Adjust to match animation duration
-        }
-    }
-
-    private IEnumerator Slide()
-    {
-        if (isSliding)
-        {
-            float slideTimer = 0f;
-
-            while (slideTimer < slideDuration)
-            {
-                slideTimer += Time.deltaTime;
-                yield return null;
-            }
-
-            isSliding = false;
-            isCrouching = false;
-            yield return new WaitForSeconds(dashCooldown);
-
-            canSlide = true;
-            ResetCrouchFlag();
-            //ResetColliderHeight();
-        }
-    }
-
-    public void OnSlide()
-    {
-        isSliding = true;
-        canSlide = false;
-        animator.applyRootMotion = true;
-    }
-
-    private void ResetCrouchFlag()
-    {
-        canCrouch = true;
-    }
-
-    public void OnDash()
-    {
-        if (!canDash || isCrouching || isSliding || moveInput.magnitude < 0.05f) return;
-
-        canDash = false;
-        isDashing = true;
-
-        Vector3 movDir = new Vector3(moveInput.x, 0, moveInput.y).normalized;
-        Vector3 moveDirection = (transform.right * movDir.x + transform.forward * movDir.z);
-
-        dashDirection = moveDirection;
-
-        StartCoroutine(DashCoroutine());
-    }
-
-    private IEnumerator DashCoroutine()
-    {
-        float dashTime = 0f;
-
-        while (dashTime < dashDuration)
-        {
-            //RaycastHit hit;
-            //Physics.Raycast(playerHead.position, dashDirection, out hit);
-            //if (Physics.Raycast(playerHead.position, dashDirection, 15f) && hit.distance > 1f)
-            //{
-            //    rb.MovePosition(rb.position + dashDirection * dashSpeed * Time.deltaTime);
-            //}
-            rb.MovePosition(rb.position + dashDirection * dashSpeed * Time.deltaTime);
-            dashTime += Time.deltaTime;
-            yield return null;
-        }
-
-        isDashing = false;
-        yield return new WaitForSeconds(dashCooldown);
-        canDash = true;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            jumpCount = 0;
-            animator.SetBool("isJumping", false);
-        }
+        //Name = name;
     }
 
 }
