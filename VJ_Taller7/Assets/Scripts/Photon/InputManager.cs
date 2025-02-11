@@ -1,4 +1,5 @@
 using Fusion;
+using Fusion.Addons.KCC;
 using Fusion.Menu;
 using Fusion.Sockets;
 using System;
@@ -11,7 +12,10 @@ using UnityEngine.SceneManagement;
 
 public class InputManager : SimulationBehaviour,IBeforeUpdate, INetworkRunnerCallbacks
 {
+    public PlayerControllerPhoton LocalPlayer;
+    public Vector2 AccumulatedMouseDelta => mouseDeltaAccumulator.AccumulatedValue;
     private NetworkInputData accumulatedInput;
+    private Vector2Accumulator mouseDeltaAccumulator = new() { SmoothingWindow = 0.025f };
     private bool resetInput;
 
     //[SerializeField] private NetworkPrefabRef _playerPrefab;
@@ -50,7 +54,8 @@ public class InputManager : SimulationBehaviour,IBeforeUpdate, INetworkRunnerCal
         {
             Vector2 mouseDelta = mouse.delta.ReadValue();
             Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
-            accumulatedInput.LookDelta += lookRotationDelta;
+            //accumulatedInput.LookDelta += lookRotationDelta;
+            mouseDeltaAccumulator.Accumulate(lookRotationDelta);
         }
 
         if (keyboard != null)
@@ -66,6 +71,8 @@ public class InputManager : SimulationBehaviour,IBeforeUpdate, INetworkRunnerCal
                 moveDirection += Vector2.right;
             accumulatedInput.Direction += moveDirection;
             buttons.Set(InputButton.Jump, keyboard.spaceKey.isPressed);
+            buttons.Set(InputButton.Run, keyboard.leftShiftKey.isPressed);
+            buttons.Set(InputButton.Dash, keyboard.fKey.isPressed);
             // buttons.Set(InputButton.Jump, keyboard.spaceKey.isPressed);
             accumulatedInput.Buttons = new NetworkButtons(accumulatedInput.Buttons.Bits | buttons.Bits); //Combine the 2 networkButtons bits
         }
@@ -92,10 +99,11 @@ public class InputManager : SimulationBehaviour,IBeforeUpdate, INetworkRunnerCal
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         accumulatedInput.Direction.Normalize();
+        accumulatedInput.LookDelta = mouseDeltaAccumulator.ConsumeTickAligned(runner);
         input.Set(accumulatedInput);
         resetInput = true;
 
-        accumulatedInput.LookDelta = default;
+        //accumulatedInput.LookDelta = default;
     }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) 
