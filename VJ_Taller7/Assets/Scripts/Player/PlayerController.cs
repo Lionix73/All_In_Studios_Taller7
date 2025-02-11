@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Animator")]
     public Animator animator;
+    [SerializeField] private FloatDampener speedX;
+    [SerializeField] private FloatDampener speedY;
 
     [Header("Movimiento y Dash")]
     [SerializeField] private float dashSpeed = 15f;
@@ -62,8 +64,6 @@ public class PlayerController : MonoBehaviour
     private bool canCrouch = true;
     private bool canJump = true;
 
-    private float speedX;
-    private float speedY;
     private bool isGrounded;
     private int jumpCount = 0;
 
@@ -140,17 +140,20 @@ public class PlayerController : MonoBehaviour
 
     private void HandleAnimations()
     {
+        speedX.Update();
+        speedY.Update();
+
         bool isMoving = moveInput.sqrMagnitude > 0.1f;
-        speedX = moveInput.x;
-        speedY = moveInput.y;
+        speedX.TargetValue = moveInput.x;
+        speedY.TargetValue = moveInput.y;
 
         animator.SetBool("isMoving", isMoving);
         animator.SetBool("isRunning", isRunning);
         animator.SetBool("isCrouching", isCrouching);
         animator.SetBool("isSliding", isSliding);
 
-        animator.SetFloat("SpeedX", speedX);
-        animator.SetFloat("SpeedY", speedY);
+        animator.SetFloat("SpeedX", speedX.CurrentValue);
+        animator.SetFloat("SpeedY", speedY.CurrentValue);
     }
 
     private void ResetColliderHeight()
