@@ -64,8 +64,10 @@ public class BasicEnemy : EnemyBase
     }
 
     public override void Attack()
-    {
-        navMeshAgent.SetDestination(transform.position);
+    {   
+        if(!isStatic){
+            navMeshAgent.SetDestination(transform.position);
+        }
 
         if (Time.time >= lastAttackTime + attackCooldown)
         {

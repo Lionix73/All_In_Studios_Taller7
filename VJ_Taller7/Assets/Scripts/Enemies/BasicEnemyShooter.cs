@@ -84,7 +84,10 @@ public class BasicEnemyShooter : EnemyBase
         if (Vector3.Distance(transform.position, movePositionTransform.position) > attackRange)
         {
             currentState = State.Chasing;
-            navMeshAgent.isStopped = false; 
+
+            if(!isStatic){
+                navMeshAgent.isStopped = false; 
+            }
         }
     }
 
