@@ -157,6 +157,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isCrouching", isCrouching);
         animator.SetBool("isSliding", isSliding);
         animator.SetBool("isEmoting", isEmoting);
+        animator.SetBool("isGrounded", isGrounded);
 
         animator.SetFloat("SpeedX", speedX.CurrentValue);
         animator.SetFloat("SpeedY", speedY.CurrentValue);
@@ -355,7 +356,6 @@ public class PlayerController : MonoBehaviour
             isGrounded = true;
             jumpCount = 0;
             animator.SetBool("isJumping", false);
-            animator.SetBool("isGrounded", isGrounded);
         }
     }
 
@@ -364,7 +364,6 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             isGrounded = false;
-            animator.SetBool("isGrounded", isGrounded);
         }
     }
 
