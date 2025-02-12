@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,12 +14,21 @@ public class BasicEnemy : EnemyBase
     [SerializeField] private Transform movePositionTransform;
     [SerializeField] private bool isStatic = false;
 
+    [Header("NavMesh Settings")]
     private NavMeshAgent navMeshAgent;
-    private enum State { Chasing, Attacking }
+
+    [Header("Animator Settings")]
+    [SerializeField] private FloatDampener speedX;
+    [SerializeField] private FloatDampener speedY;
+    private Animator animator;
+
+    [Header("State Settings")]
     private State currentState;
+    private enum State { Chasing, Attacking }
 
     protected override void Initialize()
     {
+        animator = GetComponentInChildren<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = speed;
         currentState = State.Chasing;
@@ -27,6 +37,24 @@ public class BasicEnemy : EnemyBase
 
     void Update()
     {
+        if(navMeshAgent.hasPath){
+            Vector3 dir = (navMeshAgent.steeringTarget - transform.position).normalized;
+            Vector3 animDir = transform.InverseTransformDirection(dir);
+
+            speedX.Update();
+            speedY.Update();
+
+            speedX.TargetValue = animDir.x;
+            speedY.TargetValue = animDir.z;
+
+            animator.SetFloat("Horizontal", speedX.CurrentValue);
+            animator.SetFloat("Vertical", speedY.CurrentValue);
+
+            if(Vector3.Distance(transform.position, navMeshAgent.destination) <= navMeshAgent.radius){
+                //navMeshAgent.ResetPath();
+            }
+        }
+
         if (isStatic)
         {
             Attack();
