@@ -4,18 +4,18 @@ using UnityEngine;
 public class AmmoPickable : MonoBehaviour
 {
     [SerializeField] private int amountOfAmmo;
-    ProjectileGuns playerAmmo;
+    GunManager playerAmmo;
 
     private void Awake()
     {
-        playerAmmo = FindAnyObjectByType(typeof(ProjectileGuns)).GetComponent<ProjectileGuns>();
+        playerAmmo = FindAnyObjectByType(typeof(GunManager)).GetComponent<GunManager>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            playerAmmo.GetTotalAmmo = amountOfAmmo;
+            playerAmmo.actualTotalAmmo += amountOfAmmo;
 
             Destroy(gameObject);
         }
