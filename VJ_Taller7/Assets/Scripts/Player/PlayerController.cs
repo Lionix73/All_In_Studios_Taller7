@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -34,17 +35,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxSlopeAngle;
     [SerializeField] private GameObject stepRayLower;
     private RaycastHit slopeHit;
-    
-    private bool isDashing = false;
-    private bool canDash = true;
-    bool rayDash;
-    private Vector3 dashDirection;
 
     [Header("Components")]
     public Rigidbody rb;
     public CapsuleCollider playerCollider;
+    public CapsuleCollider crouchCollider;
     public Transform cameraTransform;
-    public Transform playerHead;
     [System.Obsolete] public CinemachineCamera freeLookCamera;
 
     [Header("Camera Settings")]
@@ -63,9 +59,14 @@ public class PlayerController : MonoBehaviour
     private bool canSlide = true;
     private bool canCrouch = true;
     private bool canJump = true;
+    private bool isEmoting = false;
 
     private bool isGrounded;
     private int jumpCount = 0;
+
+    private bool isDashing = false;
+    private bool canDash = true;
+    private Vector3 dashDirection;
 
     private Vector3 slideDirection;
     private Vector3 desiredMoveDirection;
@@ -132,10 +133,14 @@ public class PlayerController : MonoBehaviour
 
     private void HandleRotation()
     {
-        Vector3 cameraForward = cameraTransform.forward;
-        cameraForward.y = 0;
-        Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        if (moveInput.magnitude > 0.05f || aimInput > 0.05f)
+        {
+            Vector3 cameraForward = cameraTransform.forward;
+            cameraForward.y = 0;
+            Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
+
     }
 
     private void HandleAnimations()
@@ -151,6 +156,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isRunning", isRunning);
         animator.SetBool("isCrouching", isCrouching);
         animator.SetBool("isSliding", isSliding);
+        animator.SetBool("isEmoting", isEmoting);
 
         animator.SetFloat("SpeedX", speedX.CurrentValue);
         animator.SetFloat("SpeedY", speedY.CurrentValue);
@@ -177,17 +183,25 @@ public class PlayerController : MonoBehaviour
         aimInput = context.ReadValue<float>();
     }
 
+    public void OnEmote(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            isEmoting = !isEmoting;
+        }
+    }
+
     public void adjustFOV()
     {
         if (aimInput > 0.1f)
         {
-            freeLookCamera.Lens.FieldOfView = Mathf.Lerp(aimFOV, currentFOV, tFOV * Time.deltaTime);
+            freeLookCamera.Lens.FieldOfView = Mathf.Lerp(aimFOV, currentFOV, tFOV);
             wasAiming = true;
             isRunning = false;
         }
         else if (aimInput == 0 && wasAiming == true)
         {
-            freeLookCamera.Lens.FieldOfView = Mathf.Lerp(currentFOV, aimFOV, tFOV * Time.deltaTime);
+            freeLookCamera.Lens.FieldOfView = Mathf.Lerp(currentFOV, aimFOV, tFOV);
             wasAiming = false;
         }
     }
@@ -238,6 +252,7 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed && canCrouch)
         {
+            ExchangeColliders();
             isCrouching = !isCrouching;
             canCrouch = false;
 
@@ -245,20 +260,26 @@ public class PlayerController : MonoBehaviour
             {
                 OnSlide();
                 StartCoroutine(Slide());
-
             }
-            else if(isCrouching && !isRunning)
+
+            Invoke(nameof(ResetCrouchFlag), 0.5f);
+        }
+    }
+
+    private void ExchangeColliders()
+    {
+        if(playerCollider != null && crouchCollider != null)
+        {
+            if(playerCollider.enabled)
             {
-                //playerCollider.height = crouchHeight;
-                //playerCollider.center.Set(0f, 0.45f, 0f);
+                crouchCollider.enabled = true;
+                playerCollider.enabled = false;
             }
             else
             {
-                //ResetColliderHeight();
-                //animator.SetTrigger("uncrouch");
+                playerCollider.enabled = true;
+                crouchCollider.enabled = false;
             }
-
-            Invoke(nameof(ResetCrouchFlag), 0.5f); // Adjust to match animation duration
         }
     }
 
@@ -280,7 +301,7 @@ public class PlayerController : MonoBehaviour
 
             canSlide = true;
             ResetCrouchFlag();
-            //ResetColliderHeight();
+            ExchangeColliders();
         }
     }
 
@@ -321,6 +342,7 @@ public class PlayerController : MonoBehaviour
         }
 
         isDashing = false;
+        yield return new WaitForSeconds(dashDuration);
         rb.useGravity = true;
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
