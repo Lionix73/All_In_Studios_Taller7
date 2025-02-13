@@ -5,9 +5,8 @@ public abstract class EnemyBase : MonoBehaviour
 {
     [Header("Enemy Stats")]
     public float maxHealth = 100f;
-    [SerializeField] protected float health; 
+    [SerializeField] protected float health ; 
     public float speed = 5f;
-    public float attackPower = 10f;
 
     [SerializeField] protected FloatingHealthBar healthBar;
 
@@ -104,6 +103,14 @@ public abstract class EnemyBase : MonoBehaviour
         {
             Die();
         }
+        else{
+            TriggerHitAnimation();
+        }
+    }
+
+    protected virtual void TriggerHitAnimation()
+    {
+        animator.SetTrigger("isHit");
     }
 
     // Method to handle enemy death

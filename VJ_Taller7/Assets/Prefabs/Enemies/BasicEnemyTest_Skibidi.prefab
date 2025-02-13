@@ -1573,6 +1573,37 @@ Transform:
   - {fileID: 1734036363440204313}
   m_Father: {fileID: 5031597096019705927}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3836068282578725412
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8975837232593312408}
+  m_Layer: 9
+  m_Name: AttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8975837232593312408
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3836068282578725412}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.33, z: 0.598}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8509374554903976923}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3876388983346697894
 GameObject:
   m_ObjectHideFlags: 0
@@ -4532,6 +4563,9 @@ PrefabInstance:
       addedObject: {fileID: 1803907792494730997}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: b34a9f063d78a8042b8fed34cbdb08ba, type: 3}
       insertIndex: 7
+      addedObject: {fileID: 8975837232593312408}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: b34a9f063d78a8042b8fed34cbdb08ba, type: 3}
+      insertIndex: 8
       addedObject: {fileID: 1011636976187506053}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b34a9f063d78a8042b8fed34cbdb08ba, type: 3}
@@ -4574,20 +4608,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   health: 0
-  speed: 1
+  speed: 2
   attackPower: 10
   healthBar: {fileID: 8919991886793127599}
   respawnOnDeath: 0
   respawnTime: 5
   attackCooldown: 1
   attackDamage: 10
-  attackRange: 2
+  attackRange: 0.5
+  attackPoint: {fileID: 8975837232593312408}
   movePositionTransform: {fileID: 0}
   isStatic: 0
   speedX:
-    smoothTime: 0
+    smoothTime: 0.2
   speedY:
-    smoothTime: 0
+    smoothTime: 0.2
 --- !u!136 &5902610535903038806
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4637,7 +4672,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!195 &1191157340625814013
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4648,17 +4683,17 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 2
-  m_Acceleration: 8
+  m_Speed: 1
+  m_Acceleration: 1
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 90
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
 --- !u!95 &3933767077419618006
 Animator:
