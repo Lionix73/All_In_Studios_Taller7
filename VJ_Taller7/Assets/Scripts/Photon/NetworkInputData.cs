@@ -7,7 +7,8 @@ public enum InputButton
     Slide,
     Crouch,
     Run,
-    Dash
+    Dash,
+    OnAim
 }
 public struct NetworkInputData : INetworkInput
 {

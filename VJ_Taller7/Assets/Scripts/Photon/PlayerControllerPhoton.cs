@@ -6,11 +6,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Fusion;
+using UnityEngine.Windows;
 public class PlayerControllerPhoton : NetworkBehaviour
 {
 
     [Header("KCC")]
     [SerializeField] KCC kcc;
+    [SerializeField] KCCProcessor dashProcessor;
     //[SerializeField] private AudioSource source;
     [Header("Movement Settings")]
     [SerializeField] private Vector3 jumpImpulse = new(0f, 10f, 0f);
@@ -28,10 +30,12 @@ public class PlayerControllerPhoton : NetworkBehaviour
     public Animator animator;
 
     [Header("Movimiento y Dash")]
-    [SerializeField] private float dashImpulse = 15f;
+    [SerializeField] private float dashImpulse = 20f;
     [SerializeField] private float dashDuration = 0.2f;
-    [SerializeField] private float dashCD =2f;
+    [SerializeField] private float dashCD = 2f;
     [SerializeField] private float doubleJumpCD = 2f;
+    [SerializeField] private float slideImpulse = 7.5f;
+    [SerializeField] private float slideCD = 1.5f;
 
     private bool isDashing = false;
     private bool canDash = true;
@@ -60,9 +64,12 @@ public class PlayerControllerPhoton : NetworkBehaviour
     [Networked] public bool IsRunning { get; set; }
     [Networked] public bool IsCrouching { get; set; }
     [Networked] public bool IsSliding { get; set; }
-    [Networked] public bool CanSlide { get; set; }
-    [Networked] public bool CanCrouch { get; set; }
-    [Networked] public bool CanJump { get; set; }
+    [Networked] public bool IsEmoting { get; set; } 
+    private bool IsGrounded => kcc.Data.IsGrounded;
+
+    private bool CanSlide => IsRunning && CanSlide && !IsSliding;
+    private bool CanCrouch => kcc.Data.IsGrounded;
+    private bool CanJump { get; set; }
 
     private float speedX;
     private float speedY;
@@ -75,7 +82,8 @@ public class PlayerControllerPhoton : NetworkBehaviour
 
     public float DoubleJumpCDFactor => (DoubleJumpCD.RemainingTime(Runner) ?? 0f) / doubleJumpCD; //Returns the remaining of cooldown in a range of 0 to 1
     [Networked] private TickTimer DashCD { get; set; }
-    [Networked] private TickTimer DoubleJumpCD { get;  set;}
+    [Networked] private TickTimer DoubleJumpCD { get; set; }
+    [Networked] private TickTimer SlideCD { get; set; }
 
     private PlayerInput playerInput;
     [Networked] private NetworkButtons PreviousButtons { get; set; }
@@ -108,7 +116,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
     public override void FixedUpdateNetwork()
     {
 
-        //adjustFOV();
+        
         HandleAnimations();
         HandleMovement();
         //HandleRotation();
@@ -123,23 +131,17 @@ public class PlayerControllerPhoton : NetworkBehaviour
             kcc.AddLookRotation(input.LookDelta * lookSensitivity);
             HandleRotation();
 
-            if (input.Buttons.WasPressed(PreviousButtons,InputButton.Run))
-            {
-                IsRunning = !IsRunning;
-                IsCrouching = false;
-            }
-
+            CheckRun(input);
+            //bool isMoving = input.Direction.x > 0f || input.Direction.y > 0f;
             float speed = IsRunning ? runSpeed : walkSpeed;
+            CheckCrouch(input);
             
             SetInputDirection(input, speed);
             CheckDash(input);
+            adjustFOV(input);
 
             PreviousButtons = input.Buttons;
             baseLookRotation = kcc.GetLookRotation();
-            if (aimInput > 0.1f)
-            {
-                //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-            }
         }
     }
     private void CheckJump(NetworkInputData input)
@@ -150,6 +152,8 @@ public class PlayerControllerPhoton : NetworkBehaviour
             {
                 kcc.Jump(jumpImpulse);
                 JumpSync++;
+                //animator.SetBool("isJumping", true);
+                //animator.SetTrigger("Jump");
 
             }
             else if(DoubleJumpCD.ExpiredOrNotRunning(Runner))
@@ -169,10 +173,16 @@ public class PlayerControllerPhoton : NetworkBehaviour
             if (DashCD.ExpiredOrNotRunning(Runner))
             {
                 isDashing = true;
+                kcc.AddModifier(dashProcessor);
+                Debug.Log(dashProcessor);
                 Vector3 worldDirection = kcc.FixedData.TransformRotation * input.Direction.X0Y();
                 Debug.Log(worldDirection);
                 kcc.Jump(worldDirection * dashImpulse);
+                kcc.SetDynamicVelocity(kcc.FixedData.DynamicVelocity - Vector3.Scale(kcc.FixedData.DynamicVelocity, worldDirection.normalized));
+                kcc.AddExternalImpulse(worldDirection * dashImpulse);
                 Debug.Log("Dash");
+                kcc.RemoveModifier(dashProcessor);
+                Debug.Log(dashProcessor);
                 DashCD = TickTimer.CreateFromSeconds(Runner, dashCD);
             }
 
@@ -184,6 +194,46 @@ public class PlayerControllerPhoton : NetworkBehaviour
         Vector3 worldDirection = kcc.FixedData.TransformRotation * input.Direction.X0Y()*speed;
         kcc.SetInputDirection(worldDirection);
     }
+    private void CheckRun(NetworkInputData input)
+    {
+        if (input.Buttons.WasPressed(PreviousButtons, InputButton.Run))
+        {
+            Debug.Log("Trying to run");
+            IsRunning = !IsRunning;
+            IsCrouching = false;
+        }
+    }
+    private void CheckCrouch(NetworkInputData input)
+    {
+        if (input.Buttons.WasPressed(PreviousButtons, InputButton.Crouch) && CanCrouch)
+        {
+            Debug.Log("Trying to crouch");
+
+
+            if (!IsRunning)
+            {
+                IsCrouching = !IsCrouching;
+            }
+            else if (IsRunning && !IsSliding)
+            {
+                Debug.Log("Slide");
+                OnSliding(input);
+            }
+
+        }
+    }
+    private void OnSliding(NetworkInputData input)
+    {
+        if (SlideCD.ExpiredOrNotRunning(Runner) && CanSlide)
+        {
+            Vector3 worldDirection = kcc.FixedData.TransformRotation * input.Direction.X0Y();
+            Debug.Log(worldDirection);
+            kcc.Jump(worldDirection * dashImpulse);
+            SlideCD = TickTimer.CreateFromSeconds(Runner, slideCD);
+        }
+    }
+
+
     public override void Render()
     {
         //HandleAnimations();
@@ -204,17 +254,22 @@ public class PlayerControllerPhoton : NetworkBehaviour
         bool isMoving = false;
         if (GetInput(out NetworkInputData input))
         { 
-            isMoving = input.Direction.sqrMagnitude > 0.1f;
+            isMoving = input.Direction.sqrMagnitude > 0f;
             speedX = input.Direction.x;
             speedY = input.Direction.y;
         }
+        if (!isMoving)
+        {
+            IsRunning = false;
+        }
+        animator.SetBool("isMoving", isMoving);
+        animator.SetBool("isRunning", IsRunning);
+        animator.SetBool("isCrouching", IsCrouching);
+        animator.SetBool("isSliding", IsSliding);
+        animator.SetBool("isEmoting", IsEmoting);
+        animator.SetBool("isGrounded", IsGrounded);
 
-            animator.SetBool("isMoving", isMoving);
-            animator.SetBool("isRunning", IsRunning);
-            animator.SetBool("isCrouching", IsCrouching);
-            animator.SetBool("isSliding", IsSliding);
-
-            animator.SetFloat("SpeedY", speedY);
+        animator.SetFloat("SpeedY", speedY);
             animator.SetFloat("SpeedX", speedX);
     }
 
@@ -239,18 +294,21 @@ public class PlayerControllerPhoton : NetworkBehaviour
         aimInput = context.ReadValue<float>();
     }*/
 
-    public void adjustFOV()
+    public void adjustFOV(NetworkInputData input)
     {
-        if (aimInput > 0.1f)
-        {
-            freeLookCamera.Lens.FieldOfView = Mathf.Lerp(aimFOV, currentFOV, tFOV * Time.deltaTime);
-            wasAiming = true;
-            IsRunning = false;
-        }
-        else if (aimInput == 0 && wasAiming == true)
+        if (input.Buttons.WasPressed(PreviousButtons, InputButton.OnAim))
         {
             freeLookCamera.Lens.FieldOfView = Mathf.Lerp(currentFOV, aimFOV, tFOV * Time.deltaTime);
-            wasAiming = false;
+            wasAiming = !wasAiming;
+            if (wasAiming == false)
+            {
+                freeLookCamera.Lens.FieldOfView = Mathf.Lerp(aimFOV, currentFOV, tFOV * Time.deltaTime);
+               // IsRunning = false;
+            }
+            else
+            {
+                freeLookCamera.Lens.FieldOfView = Mathf.Lerp(currentFOV, aimFOV, tFOV * Time.deltaTime);
+            }
         }
     }
 
