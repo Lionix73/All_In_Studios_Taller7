@@ -9,20 +9,24 @@ public abstract class EnemyBase : MonoBehaviour
     public float speed = 5f;
     public float attackPower = 10f;
 
-    [SerializeField] FloatingHealthBar healthBar;
+    [SerializeField] protected FloatingHealthBar healthBar;
 
     [Header("Respawn Settings")]
-    [SerializeField] private bool respawnOnDeath = false;
-    [SerializeField] private float respawnTime = 5f;
+    [SerializeField] protected bool respawnOnDeath = false;
+    [SerializeField] protected float respawnTime = 5f;
+    protected Vector3 spawnPoint;
 
-    private Vector3 initialPosition;
+    [Header("Ragdoll Settings")]
+    protected Collider mainCollider;
+    protected Animator animator;
+    protected Collider[] colliders;
+    protected Rigidbody[] rigidbodies;
 
     private void Awake()
     {
         health = maxHealth;
         healthBar = GetComponentInChildren<FloatingHealthBar>();
         healthBar.UpdateHealthBar(health, maxHealth);
-        initialPosition = transform.position;
     }
 
     void Start()
@@ -38,7 +42,39 @@ public abstract class EnemyBase : MonoBehaviour
     // Method to initialize the enemy
     protected virtual void Initialize()
     {
+        DisableRagdoll();
+    }
 
+    protected virtual void EnableRagdoll()
+    {
+        animator.enabled = false;
+
+        foreach (Rigidbody rb in rigidbodies)
+        {
+            rb.isKinematic = false;
+        }
+        foreach (Collider col in colliders)
+        {
+            col.enabled = true;
+        }
+
+        mainCollider.enabled = false;
+        GetComponent<Rigidbody>().isKinematic = true;
+    }
+
+    protected virtual void DisableRagdoll(){
+        foreach (Rigidbody rb in rigidbodies)
+        {
+            rb.isKinematic = true;
+        }
+        foreach (Collider col in colliders)
+        {
+            col.enabled = false;
+        }
+
+        mainCollider.enabled = true;
+        animator.enabled = true;
+        GetComponent<Rigidbody>().isKinematic = false;
     }
 
     // Abstract method to handle animations
@@ -47,6 +83,7 @@ public abstract class EnemyBase : MonoBehaviour
     // Abstract method to move the enemy
     protected abstract void Move();
 
+    // Abstract method to handle enemy chasing
     protected abstract void Chase();
 
     // Method to handle enemy attacks
@@ -70,26 +107,5 @@ public abstract class EnemyBase : MonoBehaviour
     }
 
     // Method to handle enemy death
-    protected virtual void Die()
-    {
-        if (respawnOnDeath)
-        {
-            StartCoroutine(Respawn());
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    // Method to handle enemy respawning
-    private IEnumerator Respawn()
-    {
-        gameObject.SetActive(false);
-        yield return new WaitForSeconds(respawnTime);
-        transform.position = initialPosition;
-        health = maxHealth;
-        healthBar.UpdateHealthBar(health, maxHealth);
-        gameObject.SetActive(true);
-    }
+    protected abstract void Die();
 }

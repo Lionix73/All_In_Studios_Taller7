@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
 public class BasicEnemy : EnemyBase
 {
@@ -21,7 +22,6 @@ public class BasicEnemy : EnemyBase
     [Header("Animator Settings")]
     [SerializeField] private FloatDampener speedX;
     [SerializeField] private FloatDampener speedY;
-    private Animator animator;
 
     [Header("State Settings")]
     private State currentState;
@@ -30,7 +30,14 @@ public class BasicEnemy : EnemyBase
     private void Awake()
     {
         animator = GetComponent<Animator>();
+
         navMeshAgent = GetComponent<NavMeshAgent>();
+
+        mainCollider = GetComponent<Collider>();
+        colliders = GetComponentsInChildren<Collider>();
+        rigidbodies = GetComponentsInChildren<Rigidbody>();
+
+        spawnPoint = transform.position;
     }
 
     protected override void Initialize()
@@ -140,6 +147,29 @@ public class BasicEnemy : EnemyBase
         }
     }
 
+    protected override void Die()
+    {
+        if (respawnOnDeath)
+        {
+            StartCoroutine(Respawn());
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }   
+
+    private IEnumerator Respawn()
+    {
+        EnableRagdoll();
+        yield return new WaitForSeconds(respawnTime);
+        health = maxHealth;
+        healthBar.UpdateHealthBar(health, maxHealth);
+        transform.position = spawnPoint;
+        currentState = State.Chasing;
+        DisableRagdoll();
+    }
+
     private void OnDrawGizmos()
     {
         if(navMeshAgent == null) return;
@@ -148,6 +178,17 @@ public class BasicEnemy : EnemyBase
             for(int i = 0; i < navMeshAgent.path.corners.Length - 1; i++){
             Debug.DrawLine(navMeshAgent.path.corners[i], navMeshAgent.path.corners[i + 1], Color.red);
             }
+        }
+    }
+
+    private void NavMeshInstatiator(){
+        NavMeshHit hit;
+
+        if(NavMesh.SamplePosition(transform.position, out hit, 500f, NavMesh.AllAreas)){
+            transform.position = hit.position;
+        }
+        else{
+            Debug.Log("No se pudo instanciar el NavMesh.");
         }
     }
 }
