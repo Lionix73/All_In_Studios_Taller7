@@ -1,0 +1,168 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Pool;
+using UnityEngine.InputSystem;
+
+[CreateAssetMenu(fileName = "Gun", menuName = "Guns/Gun", order = 0)]
+public class GunScriptableObject : ScriptableObject {
+    public GunType Type;
+    public string Name;
+    public GameObject ModelPrefab;
+    public Vector3 SpawnPoint;
+    public Vector3 SpawnRotation;
+    public int Damage;
+    public int MagazineSize;
+    public float ReloadTime;
+
+    public ShootConfigScriptableObjtect ShootConfig;
+    public TrailConfigScriptableObject TrailConfig;
+
+    
+    private MonoBehaviour ActiveMonoBehaviour;
+    private GameObject Model;
+    private float LastShootTime;
+    private int bulletsLeft;
+    public int BulletsLeft {
+        get => bulletsLeft;
+        set {
+            bulletsLeft = value;
+        }
+    }
+    private bool realoading;
+    public bool Realoading {
+        get => realoading;
+    }
+    private ParticleSystem ShootSystem;
+    private ObjectPool<TrailRenderer> TrailPool;
+
+    private void Awake() {
+        bulletsLeft = MagazineSize;
+    }
+
+    public void Spawn(Transform Parent, MonoBehaviour ActiveMonoBehaviour) {
+        this.ActiveMonoBehaviour = ActiveMonoBehaviour;
+        LastShootTime = 0f;
+        if (bulletsLeft == 0){ //En revision porque no se recarga al recoger el arma, ni la primera vez que aparece.
+        bulletsLeft = MagazineSize;}
+        realoading = false;
+        TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
+
+        Model = Instantiate(ModelPrefab);
+        Model.transform.SetParent(Parent, false);
+        Model.transform.localPosition = SpawnPoint;
+        Model.transform.localEulerAngles = SpawnRotation;
+        ShootSystem = Model.GetComponentInChildren<ParticleSystem>();
+    }
+
+    public void DeSpawn(){
+        //Destroy(Model);
+        Model.SetActive(false);
+    }
+
+    public void Shoot(){
+        if (Time.time > ShootConfig.FireRate + LastShootTime && bulletsLeft > 0 && !realoading){ {
+            LastShootTime = Time.time;
+            ShootSystem.Play();
+            Vector3 shootDirection;
+            if (ShootConfig.HaveSpread){
+                shootDirection = ShootSystem.transform.forward +
+                new Vector3(Random.Range
+                (-ShootConfig.Spread.x, ShootConfig.Spread.x),
+                Random.Range
+                (-ShootConfig.Spread.y, ShootConfig.Spread.y),
+                Random.Range
+                (-ShootConfig.Spread.z, ShootConfig.Spread.z)
+                );
+            }
+            else {
+                shootDirection = ShootSystem.transform.forward;
+            }
+            shootDirection.Normalize();
+
+            if (Physics.Raycast(ShootSystem.transform.position, 
+                                shootDirection, 
+                                out RaycastHit hit, 
+                                float.MaxValue, 
+                                ShootConfig.HitMask))
+                {
+                ActiveMonoBehaviour.StartCoroutine(PlayTrail(ShootSystem.transform.position, hit.point, hit));
+                if (hit.collider.TryGetComponent(out EnemyBase enemey)){
+                    enemey.TakeDamage(Damage);
+                }
+            }
+            else {
+                ActiveMonoBehaviour.StartCoroutine(PlayTrail(
+                    ShootSystem.transform.position,
+                    ShootSystem.transform.position + (shootDirection * TrailConfig.MissDistance),
+                    new RaycastHit())
+                    );
+            }
+
+            bulletsLeft--;
+        }
+    }
+}
+    public void Reload() {
+        realoading = true;
+        //Invoke("FinishedReload", ReloadTime);
+        ActiveMonoBehaviour.StartCoroutine(ReloadingCoroutine());
+    }
+    private IEnumerator ReloadingCoroutine(){
+        yield return new WaitForSeconds(ReloadTime);
+        FinishedReload();
+    }
+    private void FinishedReload() {
+        bulletsLeft = MagazineSize;
+        realoading = false;
+        //Debug.Log("Fin de la recarga");
+    }
+
+    private IEnumerator PlayTrail(Vector3 StartPoint, Vector3 EndPoint, RaycastHit Hit){
+        TrailRenderer instance = TrailPool.Get();
+        instance.gameObject.SetActive(true);
+        instance.transform.position = StartPoint;
+        yield return null; //Evitar sobreposicion de trails
+
+        instance.emitting = true;
+
+        float distance = Vector3.Distance(StartPoint, EndPoint);
+        float remainingDistance = distance;
+        while (remainingDistance > 0){
+            instance.transform.position = Vector3.Lerp(
+                StartPoint, 
+                EndPoint, 
+                Mathf.Clamp01(1- (remainingDistance / distance))
+            );
+            remainingDistance -= TrailConfig.SimulationSpeed * Time.deltaTime;
+            yield return null;
+        }
+
+        instance.transform.position = EndPoint;
+
+        yield return new WaitForSeconds(TrailConfig.Duration);
+        yield return null;
+        instance.emitting = false;
+        instance.gameObject.SetActive(false);
+        TrailPool.Release(instance);
+    }
+
+
+
+
+    private TrailRenderer CreateTrail() {
+        GameObject instance = new GameObject("Trail");
+        TrailRenderer trail = instance.AddComponent<TrailRenderer>();
+
+        trail.colorGradient = TrailConfig.ColorGradient;
+        trail.material = TrailConfig.TrailMaterial;
+        trail.widthCurve = TrailConfig.WidthCurve;
+        trail.time = TrailConfig.Duration;
+        trail.minVertexDistance = TrailConfig.MinVertexDistance;
+
+        trail.emitting = false;
+        trail.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+
+        return trail;
+    }
+}
