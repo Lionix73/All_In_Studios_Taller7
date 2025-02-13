@@ -11,21 +11,41 @@ public class GunScriptableObject : ScriptableObject {
     public GameObject ModelPrefab;
     public Vector3 SpawnPoint;
     public Vector3 SpawnRotation;
+    public int Damage;
+    public int MagazineSize;
+    public float ReloadTime;
 
     public ShootConfigScriptableObjtect ShootConfig;
     public TrailConfigScriptableObject TrailConfig;
 
-    //De aqui abajo en revision
+    
     private MonoBehaviour ActiveMonoBehaviour;
     private GameObject Model;
     private float LastShootTime;
+    private int bulletsLeft;
+    public int BulletsLeft {
+        get => bulletsLeft;
+        set {
+            bulletsLeft = value;
+        }
+    }
+    private bool realoading;
+    public bool Realoading {
+        get => realoading;
+    }
     private ParticleSystem ShootSystem;
     private ObjectPool<TrailRenderer> TrailPool;
 
+    private void Awake() {
+        bulletsLeft = MagazineSize;
+    }
 
     public void Spawn(Transform Parent, MonoBehaviour ActiveMonoBehaviour) {
         this.ActiveMonoBehaviour = ActiveMonoBehaviour;
         LastShootTime = 0f;
+        if (bulletsLeft == 0){ //En revision porque no se recarga al recoger el arma, ni la primera vez que aparece.
+        bulletsLeft = MagazineSize;}
+        realoading = false;
         TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
 
         Model = Instantiate(ModelPrefab);
@@ -35,8 +55,13 @@ public class GunScriptableObject : ScriptableObject {
         ShootSystem = Model.GetComponentInChildren<ParticleSystem>();
     }
 
+    public void DeSpawn(){
+        //Destroy(Model);
+        Model.SetActive(false);
+    }
+
     public void Shoot(){
-        if (Time.time > ShootConfig.FireRate + LastShootTime) {
+        if (Time.time > ShootConfig.FireRate + LastShootTime && bulletsLeft > 0 && !realoading){ {
             LastShootTime = Time.time;
             ShootSystem.Play();
             Vector3 shootDirection;
@@ -63,7 +88,7 @@ public class GunScriptableObject : ScriptableObject {
                 {
                 ActiveMonoBehaviour.StartCoroutine(PlayTrail(ShootSystem.transform.position, hit.point, hit));
                 if (hit.collider.TryGetComponent(out EnemyBase enemey)){
-                    enemey.TakeDamage(20);
+                    enemey.TakeDamage(Damage);
                 }
             }
             else {
@@ -73,7 +98,24 @@ public class GunScriptableObject : ScriptableObject {
                     new RaycastHit())
                     );
             }
+
+            bulletsLeft--;
         }
+    }
+}
+    public void Reload() {
+        realoading = true;
+        //Invoke("FinishedReload", ReloadTime);
+        ActiveMonoBehaviour.StartCoroutine(ReloadingCoroutine());
+    }
+    private IEnumerator ReloadingCoroutine(){
+        yield return new WaitForSeconds(ReloadTime);
+        FinishedReload();
+    }
+    private void FinishedReload() {
+        bulletsLeft = MagazineSize;
+        realoading = false;
+        //Debug.Log("Fin de la recarga");
     }
 
     private IEnumerator PlayTrail(Vector3 StartPoint, Vector3 EndPoint, RaycastHit Hit){

@@ -13,6 +13,7 @@ public class ShootConfigScriptableObjtect : ScriptableObject {
     public bool HaveSpread;
     public Vector3 Spread = new Vector3(0.1f, 0.1f, 0.1f);
 
+
     [Header("HitScanStats")]
     public LayerMask HitMask;
 

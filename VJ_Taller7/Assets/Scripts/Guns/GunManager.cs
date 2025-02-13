@@ -11,27 +11,28 @@ public class GunManager : MonoBehaviour
     [SerializeField] private int MaxTotalAmmo; //Cuanta municion puede llevar el jugador
 
     public TextMeshProUGUI totalAmmoDisplay; //UI de la municion total que le queda al jugador
+    public TextMeshProUGUI ammunitionDisplay; //UI de la municion que le queda en el cargador
 
     [SerializeField] private List<GunScriptableObject> gunsList;
     [SerializeField] private Transform gunParent;
-    [SerializeField] private GunType Gun;
+    [SerializeField] private GunType Gun; //Tipo de arma que tiene el jugador
 
-    public CinemachineBrain cinemachineBrain;
-    public Camera playerCamera;
-    public Transform aimRigPoint;
+    public Transform aimRigPoint;  //La verdadera dirección de apuntado, coincide con el punto central de la camara.
+    [SerializeField] private bool inAPickeableGun;
 
     private bool shooting;
 
     [Space]
     public GunScriptableObject CurrentGun;
+    public GunScriptableObject CurrentSecondaryGun;
+    private GunType gunToPick;
 
     private void Awake() {
         actualTotalAmmo=MaxTotalAmmo;
         gunParent = this.transform;
         ActiveWeapon();
-        if (cinemachineBrain!=null){
-            playerCamera = cinemachineBrain.GetComponent<Camera>();
-        }
+        CurrentSecondaryGun=null;
+        inAPickeableGun=false;
         
     }
 
@@ -39,22 +40,21 @@ public class GunManager : MonoBehaviour
         if (totalAmmoDisplay != null) {
             totalAmmoDisplay.SetText(actualTotalAmmo + "/" + MaxTotalAmmo);
         }
-        if (shooting) {
+        if (shooting && CurrentGun.BulletsLeft > 0) {
             CurrentGun.Shoot();
         }
-        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        RaycastHit aimHit;
-
-        Vector3 targetPoint;
-
-        if (Physics.Raycast(ray, out aimHit)) {
-            targetPoint = aimHit.point;
+        else if (CurrentGun.BulletsLeft<=0 && !CurrentGun.Realoading){
+            RealoadGun();
         }
-        else { targetPoint = ray.GetPoint(CurrentGun.TrailConfig.MissDistance); }
 
-        Vector3 aimDirection = cinemachineBrain.gameObject.transform.position-targetPoint;
 
-        //aimRigPoint.transform.position = aimDirection;
+        if (ammunitionDisplay != null) {
+            ammunitionDisplay.SetText(CurrentGun.BulletsLeft + "/" + CurrentGun.MagazineSize);
+        }
+
+        if (actualTotalAmmo>MaxTotalAmmo){
+            actualTotalAmmo=MaxTotalAmmo;
+        }
     }
 
     public void ActiveWeapon(){
@@ -66,6 +66,10 @@ public class GunManager : MonoBehaviour
 
         CurrentGun = gun;
         CurrentGun.Spawn(gunParent, this);
+        if (CurrentSecondaryGun!=null){
+            CurrentSecondaryGun.DeSpawn();
+        }
+        
     }
 
     public void OnShoot(InputAction.CallbackContext context) { //RECORDAR ASIGNAR MANUALMENTE EN LOS EVENTOS DEL INPUT
@@ -74,5 +78,59 @@ public class GunManager : MonoBehaviour
         }
         else { shooting = context.started; }
         //Debug.Log("Fase: " + shooting);
+    }
+
+    public void OnWeaponChange(InputAction.CallbackContext context){
+        if (context.started){
+            if (CurrentSecondaryGun!=null){
+                ChangeWeapon();
+            }
+        }
+    }
+
+    public void ChangeWeapon(){
+        if (Gun == CurrentGun.Type) {
+            GunType temp = Gun;
+            Gun = CurrentSecondaryGun.Type;
+            CurrentSecondaryGun= gunsList.Find(gun => gun.Type == temp);
+        }
+        ActiveWeapon();
+    }
+
+    public void GrabGun(GunType gunPicked){
+        if (CurrentGun.Type!=gunPicked){
+            CurrentSecondaryGun = CurrentGun;
+            CurrentSecondaryGun = CurrentGun;
+            Gun = gunPicked;
+            ActiveWeapon();
+        }
+        
+    }
+    public void OnGrabGun(InputAction.CallbackContext context){
+        if (context.started){
+            if (inAPickeableGun){
+                GrabGun(gunToPick);
+            }
+        }
+    }
+
+    public void EnterPickeableGun(GunType gunType, bool enter){
+        inAPickeableGun=enter;
+        //inAPickeableGun = !inAPickeableGun;
+        if (inAPickeableGun){
+            gunToPick = gunType;
+        }
+    }
+
+    public void OnReload(InputAction.CallbackContext context){
+        if (context.started){
+            if (!CurrentGun.Realoading){
+            RealoadGun();
+            }
+        }
+    }
+    private void RealoadGun(){
+        CurrentGun.Reload();
+        actualTotalAmmo -= CurrentGun.MagazineSize - CurrentGun.BulletsLeft;
     }
 }
