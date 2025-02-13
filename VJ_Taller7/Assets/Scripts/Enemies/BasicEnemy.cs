@@ -4,6 +4,7 @@ using UnityEngine.AI;
 
 public class BasicEnemy : EnemyBase
 {
+
     [Header("Attack Settings")]
     [SerializeField] private float attackCooldown = 1.0f;
     [SerializeField] private float attackDamage = 10.0f;
@@ -26,10 +27,15 @@ public class BasicEnemy : EnemyBase
     private State currentState;
     private enum State { Chasing, Attacking }
 
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
+    }
+
     protected override void Initialize()
     {
-        animator = GetComponentInChildren<Animator>();
-        navMeshAgent = GetComponent<NavMeshAgent>();
+        health = maxHealth;
         navMeshAgent.speed = speed;
         currentState = State.Chasing;
         movePositionTransform = GameObject.FindWithTag("Player").transform;
@@ -37,23 +43,7 @@ public class BasicEnemy : EnemyBase
 
     void Update()
     {
-        if(navMeshAgent.hasPath){
-            Vector3 dir = (navMeshAgent.steeringTarget - transform.position).normalized;
-            Vector3 animDir = transform.InverseTransformDirection(dir);
-
-            speedX.Update();
-            speedY.Update();
-
-            speedX.TargetValue = animDir.x;
-            speedY.TargetValue = animDir.z;
-
-            animator.SetFloat("Horizontal", speedX.CurrentValue);
-            animator.SetFloat("Vertical", speedY.CurrentValue);
-
-            if(Vector3.Distance(transform.position, navMeshAgent.destination) <= navMeshAgent.radius){
-                //navMeshAgent.ResetPath();
-            }
-        }
+        HandleAnims();
 
         if (isStatic)
         {
@@ -71,6 +61,33 @@ public class BasicEnemy : EnemyBase
                     break;
             }
         }
+    }
+
+    protected override void HandleAnims()
+    {
+        if(navMeshAgent.hasPath){
+            Vector3 dir = (navMeshAgent.steeringTarget - transform.position).normalized;
+            Vector3 animDir = transform.InverseTransformDirection(dir);
+
+            speedX.Update();
+            speedY.Update();
+
+            speedX.TargetValue = animDir.x;
+            speedY.TargetValue = animDir.z;
+
+            animator.SetFloat("Horizontal", speedX.CurrentValue);
+            animator.SetFloat("Vertical", speedY.CurrentValue);
+
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir), 180 * Time.deltaTime);
+
+            if(Vector3.Distance(transform.position, navMeshAgent.destination) <= navMeshAgent.radius){
+                //navMeshAgent.ResetPath();
+            }
+        }
+        else{
+            animator.SetFloat("Horizontal", 0, 0.25f, Time.deltaTime);
+            animator.SetFloat("Vertical", 0, 0.25f, Time.deltaTime);
+        }    
     }
 
     protected override void Move()
@@ -111,8 +128,6 @@ public class BasicEnemy : EnemyBase
 
     public void PerformAttack()
     {
-        Debug.Log("Zambombazo!");
-
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange);
         foreach (var hitCollider in hitColliders)
         {
@@ -121,6 +136,17 @@ public class BasicEnemy : EnemyBase
             {
                 //playerHealth.TakeDamage(attackDamage);
                 Debug.Log("Lo deje temblando: " + attackDamage + " de daño.");
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if(navMeshAgent == null) return;
+
+        if(navMeshAgent.hasPath){
+            for(int i = 0; i < navMeshAgent.path.corners.Length - 1; i++){
+            Debug.DrawLine(navMeshAgent.path.corners[i], navMeshAgent.path.corners[i + 1], Color.red);
             }
         }
     }

@@ -34,6 +34,8 @@ public class BasicEnemyShooter : EnemyBase
 
     void Update()
     {
+        HandleAnims();
+
         if (isStatic)
         {
             Attack();
@@ -52,6 +54,11 @@ public class BasicEnemyShooter : EnemyBase
         }
 
         RotateTowardsPlayer();
+    }
+
+    protected override void HandleAnims()
+    {
+
     }
 
     protected override void Move()
@@ -93,8 +100,6 @@ public class BasicEnemyShooter : EnemyBase
 
     public void PerformAttack()
     {
-        Debug.Log("Disparo!");
-
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         if (rb != null)
