@@ -17,16 +17,14 @@ public class GunPickeable : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
             gunManager = other.gameObject.GetComponentInChildren<GunManager>();
-            gunManager.EnterPickeableGun(gunType, true);
+            gunManager.EnterPickeableGun(gunType);
 
             PickeableUI.SetActive(true);
         }
     }
+
     private void OnTriggerExit(Collider other) {
         if (other.CompareTag("Player")) {
-            gunManager = other.gameObject.GetComponentInChildren<GunManager>();
-            gunManager.EnterPickeableGun(gunType, false);
-
             PickeableUI.SetActive(false);
         }
     }

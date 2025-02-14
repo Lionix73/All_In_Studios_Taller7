@@ -114,18 +114,26 @@ public class GunManager : MonoBehaviour
         }
     }
 
-    public void EnterPickeableGun(GunType gunType, bool enter){
-        inAPickeableGun=enter;
-        //inAPickeableGun = !inAPickeableGun;
-        if (inAPickeableGun){
-            gunToPick = gunType;
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Pickeable")){
+            inAPickeableGun=true;
         }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Pickeable")){
+            inAPickeableGun=false;
+        }
+    }
+
+    public void EnterPickeableGun(GunType gunType){
+        gunToPick = gunType;
     }
 
     public void OnReload(InputAction.CallbackContext context){
         if (context.started){
             if (!CurrentGun.Realoading){
-            RealoadGun();
+                RealoadGun();
             }
         }
     }
