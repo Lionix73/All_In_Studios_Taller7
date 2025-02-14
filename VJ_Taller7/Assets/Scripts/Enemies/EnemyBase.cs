@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using JetBrains.Annotations;
 
 public abstract class EnemyBase : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public abstract class EnemyBase : MonoBehaviour
     protected Animator animator;
     protected Collider[] colliders;
     protected Rigidbody[] rigidbodies;
+
+    [SerializeField] GameObject floatingTextPrefab;
 
     private void Awake()
     {
@@ -99,6 +102,12 @@ public abstract class EnemyBase : MonoBehaviour
 
         Debug.Log("Health: " + health);
 
+        //Trigger floating text
+        if (floatingTextPrefab != null)
+        {
+            ShowFloatingText(damage);
+        }
+
         if (health <= 0)
         {
             Die();
@@ -108,6 +117,11 @@ public abstract class EnemyBase : MonoBehaviour
         }
     }
 
+    private void ShowFloatingText(float damage)
+    {
+        var go = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity, transform);
+        go.GetComponent<TextMesh>().text = damage.ToString();
+    }
     protected virtual void TriggerHitAnimation()
     {
         animator.SetTrigger("isHit");
