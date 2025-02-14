@@ -73,11 +73,13 @@ public class PlayerController : MonoBehaviour
     private float slideTimer = 0f;
 
     private PlayerInput playerInput;
+    MusicEmitter emitter;
 
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody>();
+        emitter = GetComponent<MusicEmitter>();
     }
 
     private void Start()
@@ -109,6 +111,8 @@ public class PlayerController : MonoBehaviour
         if (moveDirection != Vector3.zero)
         {
             rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
+            isEmoting = false;
+            emitter.StopMusic();
         }
         else
         {
@@ -152,12 +156,12 @@ public class PlayerController : MonoBehaviour
         speedX.TargetValue = moveInput.x;
         speedY.TargetValue = moveInput.y;
 
+        animator.SetBool("isGrounded", isGrounded);
         animator.SetBool("isMoving", isMoving);
         animator.SetBool("isRunning", isRunning);
         animator.SetBool("isCrouching", isCrouching);
         animator.SetBool("isSliding", isSliding);
         animator.SetBool("isEmoting", isEmoting);
-        animator.SetBool("isGrounded", isGrounded);
 
         animator.SetFloat("SpeedX", speedX.CurrentValue);
         animator.SetFloat("SpeedY", speedY.CurrentValue);
@@ -186,9 +190,18 @@ public class PlayerController : MonoBehaviour
 
     public void OnEmote(InputAction.CallbackContext context)
     {
-        if(context.performed)
+        if(context.performed && moveInput.magnitude < 0.05f)
         {
+            if(!isEmoting)
+            {
+                emitter.PlayMusic();
+            }
+            else
+            { 
+                emitter.StopMusic(); 
+            }
             isEmoting = !isEmoting;
+
         }
     }
 
@@ -211,15 +224,25 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed && jumpCount < maxJumps)
         {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-            rb.linearVelocity *= 1.2f;
-            rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
+            if(jumpCount == 0)
+            {
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+                rb.linearVelocity *= 1.2f;
+                rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
+                animator.SetTrigger("Jump");
+            }
+            else if (jumpCount == 1)
+            {
+                //rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+                //rb.linearVelocity *= 2.2f;
+                rb.AddForce(rb.linearVelocity * 2 + jumpForce * Vector3.up, ForceMode.Impulse);
+                animator.SetTrigger("DoubleJump");
+            }
             jumpCount++;
 
             if(canJump)
             {
                 animator.SetBool("isJumping", true);
-                animator.SetTrigger("Jump");
                 canJump = false;
 
                 StartCoroutine(Jump());
@@ -236,6 +259,7 @@ public class PlayerController : MonoBehaviour
             jumpTimer += Time.deltaTime;
             yield return null;
         }
+        animator.SetBool("isJumping", false);
         yield return new WaitForSeconds(jumpCooldown);
         canJump = true;
     }

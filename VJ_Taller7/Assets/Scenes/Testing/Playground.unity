@@ -32360,6 +32360,49 @@ MonoBehaviour:
   - m_Rig: {fileID: 1015462322}
     m_Active: 1
   m_Effectors: []
+--- !u!114 &960368997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960368986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1294159216
+      Data2: 1090433151
+      Data3: -368698184
+      Data4: 1659181348
+    Path: event:/Music/TestMusic
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!114 &960369005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960368986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 914cb9af8d652bd48939ebf7f661ef76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &982962203
 GameObject:
   m_ObjectHideFlags: 0
@@ -66402,12 +66445,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
+      propertyPath: m_ActionEvents.Array.data[23].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
       propertyPath: m_ActionEvents.Array.data[24].m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
       propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
+      propertyPath: m_ActionEvents.Array.data[23].m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
       propertyPath: m_ActionEvents.Array.data[24].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -66426,11 +66477,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 835773878}
     - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
+      propertyPath: m_ActionEvents.Array.data[23].m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 960369005}
+    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
       propertyPath: m_ActionEvents.Array.data[24].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 835773878}
     - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
       propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
+      propertyPath: m_ActionEvents.Array.data[23].m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
@@ -66450,6 +66509,10 @@ PrefabInstance:
       value: OnReload
       objectReference: {fileID: 0}
     - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
+      propertyPath: m_ActionEvents.Array.data[23].m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlayMusic
+      objectReference: {fileID: 0}
+    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
       propertyPath: m_ActionEvents.Array.data[24].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnWeaponChange
       objectReference: {fileID: 0}
@@ -66466,11 +66529,19 @@ PrefabInstance:
       value: GunManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
+      propertyPath: m_ActionEvents.Array.data[23].m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: MusicEmitter, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
       propertyPath: m_ActionEvents.Array.data[24].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: GunManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
       propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
+      propertyPath: m_ActionEvents.Array.data[23].m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
@@ -66618,6 +66689,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2504184262613002398, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
       insertIndex: -1
       addedObject: {fileID: 960368995}
+    - targetCorrespondingSourceObject: {fileID: 2504184262613002398, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 960368997}
+    - targetCorrespondingSourceObject: {fileID: 2504184262613002398, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 960369005}
   m_SourcePrefab: {fileID: 100100000, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
 --- !u!1001 &7492141096830729372
 PrefabInstance:
