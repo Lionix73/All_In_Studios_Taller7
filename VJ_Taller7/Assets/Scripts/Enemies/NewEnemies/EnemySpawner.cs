@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public Transform player;
+    [SerializeField] private Transform player;
     [SerializeField] private int numberOfEnemiesToSpawn = 1;
     [SerializeField] private float spawnDelay = 1f;
     [SerializeField] private List<Enemy> enemyPrefabs = new List<Enemy>();
@@ -68,11 +68,11 @@ public class EnemySpawner : MonoBehaviour
 
             NavMeshHit hit;
             if(NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out hit, 2f, -1)){
-                enemy.agent.Warp(hit.position);
+                enemy.Agent.Warp(hit.position);
 
-                enemy.movement.player = player;
-                enemy.agent.enabled = true;
-                enemy.movement.StartChasing();
+                enemy.Movement.Player = player;
+                enemy.Agent.enabled = true;
+                enemy.Movement.StartChasing();
             }
             else{
                 Debug.LogError($"No se pudo poner el NavMeshAgent en el navmesh, usando {navMeshTriangulation.vertices[vertexIndex]}");

@@ -6,8 +6,18 @@ using System.Collections;
 public class EnemyMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public Transform player;
-    private float updateRate = 0.1f;
+    [SerializeField] private Transform player;
+    public Transform Player{
+        get => player;
+        set => player = value;
+    }
+
+    [SerializeField] private float updateRate = 0.1f;
+    public float UpdateRate{
+        get => updateRate;
+        set => updateRate = value;
+    }
+    
     private NavMeshAgent agent;
     private AgentLinkMover linkMover;
     private Coroutine followCoroutine;
@@ -41,7 +51,7 @@ public class EnemyMovement : MonoBehaviour
     }
 
     private IEnumerator FollowTarget(){
-        WaitForSeconds wait = new WaitForSeconds(updateRate);
+        WaitForSeconds wait = new WaitForSeconds(UpdateRate);
 
         while (enabled){
             agent.SetDestination(player.transform.position);
