@@ -1,8 +1,16 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy : PoolableObject
+public class Enemy : PoolableObject, IDamageable
 {
+    [Header("Enemy Components")]
+    [SerializeField] private AttackRadius attackRadius;
+    public AttackRadius AttackRadius{
+        get => attackRadius;
+        set => attackRadius = value;
+    }
+
     [SerializeField] private EnemyMovement movement;
     public EnemyMovement Movement{
         get => movement;
@@ -17,10 +25,48 @@ public class Enemy : PoolableObject
 
     [SerializeField] private EnemyScriptableObject enemyConfiguration;
     
+    [Header("Enemy Health")]
     [SerializeField] private int health = 100;
     public int Health{
         get => health;
         set => health = value;
+    }
+
+    private Coroutine lookCoroutine;
+
+    [Header("Enemy Animator")]
+    [SerializeField] private Animator animator;
+    private const string ATTACK_TRIGGER = "Attack";
+
+
+    private void Awake()
+    {
+        AttackRadius.OnAttack += OnAttack;
+    }
+
+    private void OnAttack(IDamageable target)
+    {
+        animator.SetTrigger(ATTACK_TRIGGER);
+
+        if(lookCoroutine != null){
+            StopCoroutine(lookCoroutine);
+        }
+
+        lookCoroutine = StartCoroutine(LookAt(target.GetTransform()));
+    }
+
+    private IEnumerator LookAt(Transform target)
+    {
+        Quaternion lookRotation = Quaternion.LookRotation(target.position - transform.position);
+        float time = 0f;
+
+        while(time < 1f){
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, time);
+            time += Time.deltaTime * 2f;
+            yield return null;
+        }
+
+        transform.rotation = lookRotation;
     }
 
     public virtual void OnEnable(){
@@ -30,23 +76,39 @@ public class Enemy : PoolableObject
     public override void OnDisable(){
         base.OnDisable();
 
-        Agent.enabled = false;
+        agent.enabled = false;
     }
 
     public virtual void SetUpAgentFromConfiguration(){
-        Agent.acceleration = enemyConfiguration.acceleration;
-        Agent.angularSpeed = enemyConfiguration.angularSpeed;
-        Agent.areaMask = enemyConfiguration.areaMask;
-        Agent.avoidancePriority = enemyConfiguration.avoidancePriority;
-        Agent.baseOffset = enemyConfiguration.baseOffset;
-        Agent.height = enemyConfiguration.height;
-        Agent.obstacleAvoidanceType = enemyConfiguration.obstacleAvoidanceType;
-        Agent.radius = enemyConfiguration.radius;
-        Agent.speed = enemyConfiguration.speed;
-        Agent.stoppingDistance = enemyConfiguration.stoppingDistance;
+        agent.acceleration = enemyConfiguration.acceleration;
+        agent.angularSpeed = enemyConfiguration.angularSpeed;
+        agent.areaMask = enemyConfiguration.areaMask;
+        agent.avoidancePriority = enemyConfiguration.avoidancePriority;
+        agent.baseOffset = enemyConfiguration.baseOffset;
+        agent.height = enemyConfiguration.height;
+        agent.obstacleAvoidanceType = enemyConfiguration.obstacleAvoidanceType;
+        agent.radius = enemyConfiguration.radius;
+        agent.speed = enemyConfiguration.speed;
+        agent.stoppingDistance = enemyConfiguration.stoppingDistance;
 
-        Movement.UpdateRate = enemyConfiguration.aIUpdateInterval;
+        movement.UpdateRate = enemyConfiguration.aIUpdateInterval;
 
-        Health = enemyConfiguration.health;
-    } 
+        health = enemyConfiguration.health;
+        
+        (attackRadius.sphereCollider == null ? attackRadius.GetComponent<SphereCollider>() : attackRadius.sphereCollider).radius = enemyConfiguration.attackRadius;
+        attackRadius.AttackDelay = enemyConfiguration.attackDelay;
+        attackRadius.Damage = enemyConfiguration.damage;
+    }
+
+    public void TakeDamage(int damage){
+        Health -= damage;
+
+        if (Health <= 0){
+            gameObject.SetActive(false);
+        }
+    }
+
+    public Transform GetTransform(){
+        return transform;
+    }
 }

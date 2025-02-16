@@ -18,8 +18,8 @@ public class BasicBulletBehavior : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.GetComponent<EnemyBase>() != null){
-            other.gameObject.GetComponent<EnemyBase>().TakeDamage(baseDamage);
+        if (other.gameObject.GetComponent<Enemy>() != null){
+            other.gameObject.GetComponent<Enemy>().TakeDamage(baseDamage);
         }
         
         rb.linearVelocity =Vector3.zero;
