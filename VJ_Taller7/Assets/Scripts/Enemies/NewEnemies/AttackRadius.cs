@@ -6,24 +6,24 @@ using UnityEngine;
 public class AttackRadius : MonoBehaviour
 {
     public SphereCollider sphereCollider;
-    private List<IDamageable> damageables = new List<IDamageable>();
+    protected List<IDamageable> damageables = new List<IDamageable>();
     
-    [SerializeField] private int damage = 10;
+    [SerializeField] protected int damage = 10;
     public int Damage { get => damage; set => damage = value; }
 
-    [SerializeField] private float attackDelay = 1f;
+    [SerializeField] protected float attackDelay = 1f;
     public float AttackDelay { get => attackDelay; set => attackDelay = value; }
     
     public delegate void AttackEvent(IDamageable target);
     public AttackEvent OnAttack;
-    private Coroutine attackCoroutine;
+    protected Coroutine attackCoroutine;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         sphereCollider = GetComponent<SphereCollider>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         IDamageable damageable = other.GetComponent<IDamageable>();
         if(damageable != null)
@@ -36,7 +36,7 @@ public class AttackRadius : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    protected virtual void OnTriggerExit(Collider other)
     {
         IDamageable damageable = other.GetComponent<IDamageable>();
         if(damageable != null)
@@ -50,9 +50,9 @@ public class AttackRadius : MonoBehaviour
         }
     }
 
-    private IEnumerator Attack()
+    protected virtual IEnumerator Attack()
     {
-        WaitForSeconds wait = new WaitForSeconds(AttackDelay);
+        WaitForSeconds wait = new WaitForSeconds(attackDelay);
 
         yield return wait;
 
@@ -76,7 +76,7 @@ public class AttackRadius : MonoBehaviour
             if(closestDamageable != null)
             {
                 OnAttack?.Invoke(closestDamageable);
-                closestDamageable.TakeDamage(Damage);
+                closestDamageable.TakeDamage(damage);
             }
 
             closestDamageable = null;
@@ -90,7 +90,7 @@ public class AttackRadius : MonoBehaviour
         attackCoroutine = null;
     }
 
-    private bool DisabledDamageables(IDamageable damageable)
+    protected bool DisabledDamageables(IDamageable damageable)
     {
         return damageable != null && !damageable.GetTransform().gameObject.activeSelf;
     }
