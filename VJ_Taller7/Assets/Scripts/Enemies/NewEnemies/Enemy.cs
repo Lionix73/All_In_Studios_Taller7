@@ -32,6 +32,13 @@ public class Enemy : PoolableObject, IDamageable
         set => health = value;
     }
 
+    [Header("Enemy Settings")]
+    [SerializeField] private bool isStatic = false;
+    public bool IsStatic{
+        get => isStatic;
+        set => isStatic = value;
+    }
+
     private Coroutine lookCoroutine;
 
     [Header("Enemy Animator")]

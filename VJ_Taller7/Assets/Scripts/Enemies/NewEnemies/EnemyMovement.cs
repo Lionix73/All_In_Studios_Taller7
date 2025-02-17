@@ -12,6 +12,8 @@ public class EnemyMovement : MonoBehaviour
         set => player = value;
     }
 
+    [SerializeField] private Enemy enemy;
+
     [SerializeField] private float updateRate = 0.1f;
     public float UpdateRate{
         get => updateRate;
@@ -38,10 +40,20 @@ public class EnemyMovement : MonoBehaviour
 
         linkMover.OnLinkStart += HandleLinkStart;
         linkMover.OnLinkEnd += HandleLinkEnd;
+
+        if(enemy != null){
+            enemy = GetComponent<Enemy>();
+        }
     }
 
     public void StartChasing()
     {
+        if (enemy != null && enemy.IsStatic)
+        {
+            //Won't chase if static
+            return;
+        }
+
         if(followCoroutine == null){
             followCoroutine = StartCoroutine(FollowTarget());
         }
