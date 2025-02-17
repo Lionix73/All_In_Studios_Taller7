@@ -98,6 +98,8 @@ public class PlayerController : MonoBehaviour
     {
         HandleMovement();
         HandleRotation();
+
+        CheckGround();
     }
 
     private void HandleMovement()
@@ -226,16 +228,15 @@ public class PlayerController : MonoBehaviour
         {
             if(jumpCount == 0)
             {
-                rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-                rb.linearVelocity *= 1.2f;
                 rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
+                rb.AddForce(desiredMoveDirection * 1.2f, ForceMode.Impulse);
                 animator.SetTrigger("Jump");
             }
             else if (jumpCount == 1)
             {
-                //rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-                //rb.linearVelocity *= 2.2f;
-                rb.AddForce(rb.linearVelocity * 2 + jumpForce * Vector3.up, ForceMode.Impulse);
+                rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
+                rb.AddForce(desiredMoveDirection * 2, ForceMode.Impulse);
+
                 animator.SetTrigger("DoubleJump");
             }
             jumpCount++;
@@ -373,13 +374,26 @@ public class PlayerController : MonoBehaviour
         canDash = true;
     }
 
+
+    private void CheckGround()
+    {
+        //isGrounded = Physics.Raycast(playerCollider.center, Vector3.down, playerCollider.height * 0.5f + 0.3f, LayerMask.NameToLayer("Ground"));
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), Vector3.down, out hit, 0.15f))
+        {
+            if (hit.collider.gameObject.layer == 7 && isGrounded == false)
+            {
+                isGrounded = true;
+            }
+        }
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             isGrounded = true;
             jumpCount = 0;
-            animator.SetBool("isJumping", false);
         }
     }
 
