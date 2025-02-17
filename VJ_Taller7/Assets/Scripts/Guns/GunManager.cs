@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -25,6 +26,7 @@ public class GunManager : MonoBehaviour
     [Space]
     public GunScriptableObject CurrentGun;
     [SerializeField] private GunType CurrentSecondGunType;
+    private int CurrentSecondaryGunBulletsLeft;
 
     public GunScriptableObject ActiveBaseGun { get; private set; }
     private GunType gunToPick;
@@ -40,6 +42,7 @@ public class GunManager : MonoBehaviour
         }
         SetUpGun(gun);
 
+        CurrentSecondaryGunBulletsLeft = CurrentGun.MagazineSize;
         CurrentSecondGunType=Gun;
         inAPickeableGun=false;
     }
@@ -97,19 +100,24 @@ public class GunManager : MonoBehaviour
     public void ChangeWeapon(){
         DespawnActiveGun();
         GunType temp = CurrentGun.Type;
+        int tempAmmo = CurrentSecondaryGunBulletsLeft;
+        CurrentSecondaryGunBulletsLeft = CurrentGun.BulletsLeft;
         GunScriptableObject gun = gunsList.Find(gun => gun.Type == CurrentSecondGunType);
         SetUpGun(gun);
         CurrentSecondGunType = temp;
+        CurrentGun.BulletsLeft = tempAmmo;
     }
 
     public void GrabGun(GunType gunPicked){
-        if (CurrentSecondGunType == CurrentGun.Type){
-            CurrentSecondGunType = CurrentGun.Type;
+        if (CurrentSecondGunType != gunPicked){
+            if (CurrentSecondGunType == CurrentGun.Type){
+                CurrentSecondGunType = CurrentGun.Type;
+            }
+            DespawnActiveGun();
+            this.Gun = gunPicked;
+            GunScriptableObject gun = gunsList.Find(gun => gun.Type == gunPicked);
+            SetUpGun(gun);
         }
-        DespawnActiveGun();
-        this.Gun = gunPicked;
-        GunScriptableObject gun = gunsList.Find(gun => gun.Type == gunPicked);
-        SetUpGun(gun);
     }
     public void OnGrabGun(InputAction.CallbackContext context){
         if (context.started){

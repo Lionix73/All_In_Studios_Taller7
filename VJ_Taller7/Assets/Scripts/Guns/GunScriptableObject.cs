@@ -69,48 +69,63 @@ public class GunScriptableObject : ScriptableObject {
     }
 
     public void Shoot(){
-        if (Time.time > ShootConfig.FireRate + LastShootTime && bulletsLeft > 0 && !realoading){ {
+        if (Time.time > ShootConfig.FireRate + LastShootTime && bulletsLeft > 0 && !realoading){
             LastShootTime = Time.time;
             ShootSystem.Play();
-            Vector3 shootDirection;
-            if (ShootConfig.HaveSpread){
-                shootDirection = ShootSystem.transform.forward +
-                new Vector3(Random.Range
-                (-ShootConfig.Spread.x, ShootConfig.Spread.x),
-                Random.Range
-                (-ShootConfig.Spread.y, ShootConfig.Spread.y),
-                Random.Range
-                (-ShootConfig.Spread.z, ShootConfig.Spread.z)
-                );
-            }
-            else {
-                shootDirection = ShootSystem.transform.forward;
-            }
-            shootDirection.Normalize();
+            bulletsLeft -= ShootConfig.BulletsPerShot;
 
-            if (Physics.Raycast(ShootSystem.transform.position, 
-                                shootDirection, 
-                                out RaycastHit hit, 
-                                float.MaxValue, 
-                                ShootConfig.HitMask))
+            for (int i = 0; i < ShootConfig.BulletsPerShot; i++){
+                Vector3 shootDirection;
+                if (ShootConfig.HaveSpread){
+                    shootDirection = ShootSystem.transform.forward +
+                    new Vector3(Random.Range
+                    (-ShootConfig.Spread.x, ShootConfig.Spread.x),
+                    Random.Range
+                    (-ShootConfig.Spread.y, ShootConfig.Spread.y),
+                    Random.Range
+                    (-ShootConfig.Spread.z, ShootConfig.Spread.z)
+                    );
+                }
+                else {
+                    shootDirection = ShootSystem.transform.forward;
+                }
+                shootDirection.Normalize();
+
+                if (ShootConfig.IsHitScan){
+                    DoHitScanShooting(shootDirection, ShootSystem.transform.position, ShootSystem.transform.position);
+                }
+                else {
+                    //DoProjectileShooting();
+                }
+            }
+        }
+    }
+
+    private void DoHitScanShooting(Vector3 shootDirection, Vector3 Origin, Vector3 TrailOrigin, int Iteration = 0){
+        if (Physics.Raycast(Origin, 
+                            shootDirection, 
+                            out RaycastHit hit, 
+                            float.MaxValue, 
+                            ShootConfig.HitMask))
                 {
-                ActiveMonoBehaviour.StartCoroutine(PlayTrail(ShootSystem.transform.position, hit.point, hit));
+                ActiveMonoBehaviour.StartCoroutine(PlayTrail(TrailOrigin, hit.point, hit));
                 if (hit.collider.TryGetComponent(out EnemyBase enemey)){
                     enemey.TakeDamage(Damage);
                 }
             }
-            else {
+            else {  
                 ActiveMonoBehaviour.StartCoroutine(PlayTrail(
-                    ShootSystem.transform.position,
-                    ShootSystem.transform.position + (shootDirection * TrailConfig.MissDistance),
+                    TrailOrigin,
+                    TrailOrigin + (shootDirection * TrailConfig.MissDistance),
                     new RaycastHit())
                     );
             }
-
-            bulletsLeft--;
-        }
     }
-}
+
+    private void DoProjectileShooting(Vector3 shootDirection){
+    
+    }
+        
     public void Reload() {
         realoading = true;
         //Invoke("FinishedReload", ReloadTime);
