@@ -1274,7 +1274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 563b1c5623c4d2c4382ddcc597041cab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackRadius: {fileID: 1356328306122705351}
+  attackRadius: {fileID: 7749417017978051759}
   movement: {fileID: 3222403606473282591}
   agent: {fileID: 2201402117764995550}
   enemyConfiguration: {fileID: 11400000, guid: 21ed1a5a01a54ba4da5367bcf32db792, type: 2}
@@ -1324,8 +1324,8 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -2831,7 +2831,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3469049677579179237}
   - component: {fileID: 9032037112743138318}
-  - component: {fileID: 1356328306122705351}
+  - component: {fileID: 7749417017978051759}
   m_Layer: 10
   m_Name: AttackRadius
   m_TagString: Untagged
@@ -2875,7 +2875,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1356328306122705351
+--- !u!114 &7749417017978051759
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2888,7 +2888,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sphereCollider: {fileID: 9032037112743138318}
-  damage: 2
+  damage: 10
   attackDelay: 1
 --- !u!1 &8845701097885382783
 GameObject:

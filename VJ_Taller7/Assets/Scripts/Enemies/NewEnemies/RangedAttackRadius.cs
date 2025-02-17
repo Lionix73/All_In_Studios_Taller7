@@ -36,7 +36,7 @@ public class RangedAttackRadius : AttackRadius
                 if(HasLineOfSight(damageables[i].GetTransform())){
                     targetDamageable = damageables[i];
                     OnAttack?.Invoke(damageables[i]);
-                    agent.enabled = false;
+                    agent.isStopped = true;
                     break;
                 }
             }
@@ -46,42 +46,54 @@ public class RangedAttackRadius : AttackRadius
                 if(poolableObject != null){
                     bullet = poolableObject.GetComponent<BulletEnemie>();
 
-                    bullet.Damage = damage;
                     bullet.transform.position = transform.position + bulletSpawnOffset;
                     bullet.transform.rotation = agent.transform.rotation;
-                    bullet.Rb.AddForce(agent.transform.forward * bulletPrefab.MoveSpeed, ForceMode.VelocityChange);
+
+                    bullet.Spawn(agent.transform.forward, damage, targetDamageable.GetTransform());
                 }
             }
             else{
-                agent.enabled = true; //No hubo vision del jugador, seguir acercandose
+                agent.isStopped = false; //No hubo vision del jugador, seguir acercandose
             }
 
             yield return wait;
 
             if(targetDamageable == null || !HasLineOfSight(targetDamageable.GetTransform())){
-                agent.enabled = true;
+                agent.isStopped = false;
             }
 
             damageables.RemoveAll(DisabledDamageables);
         }
 
-        agent.enabled = true;
+        agent.isStopped = false;
         attackCoroutine = null;
     }
 
     private bool HasLineOfSight(Transform target)
     {
-        Vector3 direction = target.position - transform.position;
-        float distance = direction.magnitude;
-        direction.Normalize();
+        Vector3 origin = transform.position + bulletSpawnOffset;
+        Vector3 direction = (target.position + bulletSpawnOffset - origin).normalized;
+        float distance = Vector3.Distance(origin, target.position + bulletSpawnOffset);
 
-        if(Physics.SphereCast(transform.position + bulletSpawnOffset, sphereCastRadius, (target.position + bulletSpawnOffset) - (transform.position + bulletSpawnOffset).normalized, out hit, sphereCollider.radius, mask)){
+        Debug.DrawRay(origin, direction, Color.red, 1.0f);
+
+        if (Physics.SphereCast(origin, sphereCastRadius, direction, out hit, distance, mask)){
             IDamageable damageable;
             if(hit.collider.TryGetComponent<IDamageable>(out damageable)){
+                Debug.Log("Line of sight to target: " + (damageable.GetTransform() == target));
                 return damageable.GetTransform() == target;
             }
+            else
+            {
+                Debug.Log($"Hit: {hit.collider.name}, but it is not damageable");
+            }   
+        }
+        else
+        {
+            Debug.Log("SphereCast did not hit anything");
         }
 
+        Debug.Log("No line of sight to target");
         return false;
     }
 

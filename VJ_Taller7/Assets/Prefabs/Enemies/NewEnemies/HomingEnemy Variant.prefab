@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 285247312561169073, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 937e6ca0fb6f34045935b208dd9dc242, type: 2}
     - target: {fileID: 519785900808738317, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       propertyPath: bulletPrefab
       value: 
@@ -16,6 +20,10 @@ PrefabInstance:
       propertyPath: bulletSpawnOffset.z
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 620287941604618435, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 07dceacbb887db64b9529a874b66166c, type: 2}
     - target: {fileID: 2201402117764995550, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       propertyPath: m_Speed
       value: 3
@@ -42,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4480754247436323794, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       propertyPath: m_Name
-      value: RangedEnemy Variant
+      value: HomingEnemy Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7185059666713373341, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       propertyPath: m_LocalScale.x
@@ -148,10 +156,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sphereCollider: {fileID: 7840266389160722431}
-  damage: 10
-  attackDelay: 1
+  damage: 5
+  attackDelay: 2
   agent: {fileID: 1088453614860775983}
-  bulletPrefab: {fileID: 7591190929885391435, guid: b3a62e98da1604449b38caa074d6a808, type: 3}
+  bulletPrefab: {fileID: 6862706226651708098, guid: 3a7db5c1aeb815d498fe1e6dc971a380, type: 3}
   bulletSpawnOffset: {x: 0, y: 0.2, z: 0.1}
   mask:
     serializedVersion: 2
