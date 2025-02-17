@@ -66,6 +66,12 @@ public class EnemyMovement : MonoBehaviour
         WaitForSeconds wait = new WaitForSeconds(UpdateRate);
 
         while (enabled){
+
+            if(enemy.Health <= 0){
+                followCoroutine = null;
+                yield break;
+            }
+
             agent.SetDestination(player.transform.position);
             yield return wait;
         }

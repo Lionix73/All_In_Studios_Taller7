@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private Transform player;
+    [SerializeField] private Camera mainCamera;
     [SerializeField] private int numberOfEnemiesToSpawn = 1;
     [SerializeField] private float spawnDelay = 1f;
     [SerializeField] private List<Enemy> enemyPrefabs = new List<Enemy>();
@@ -70,6 +71,7 @@ public class EnemySpawner : MonoBehaviour
             if(NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out hit, 2f, -1)){
                 enemy.Agent.Warp(hit.position);
 
+                enemy.MainCamera = mainCamera;
                 enemy.Movement.Player = player;
                 enemy.Agent.enabled = true;
                 enemy.Movement.StartChasing();

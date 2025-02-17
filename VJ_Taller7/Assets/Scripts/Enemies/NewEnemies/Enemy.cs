@@ -32,6 +32,12 @@ public class Enemy : PoolableObject, IDamageable
         set => health = value;
     }
 
+    [SerializeField] private ProgressBar healthBar;
+
+    public Camera MainCamera { get; set; }
+
+    private float maxHealth;
+
     [Header("Enemy Settings")]
     [SerializeField] private bool isStatic = false;
     public bool IsStatic{
@@ -49,6 +55,7 @@ public class Enemy : PoolableObject, IDamageable
     private void Awake()
     {
         AttackRadius.OnAttack += OnAttack;
+        maxHealth = health;
     }
 
     private void OnAttack(IDamageable target)
@@ -81,9 +88,10 @@ public class Enemy : PoolableObject, IDamageable
     }
 
     public override void OnDisable(){
-        base.OnDisable();
-
-        agent.enabled = false;
+        if(!isStatic){
+            base.OnDisable();
+            agent.enabled = false;
+        }
     }
 
     public virtual void SetUpAgentFromConfiguration(){
@@ -110,12 +118,31 @@ public class Enemy : PoolableObject, IDamageable
     public void TakeDamage(int damage){
         health -= damage;
 
+        //healthBar.SetProgress(health / maxHealth, 3);
+
         if (health <= 0){
-            gameObject.SetActive(false);
+
+            if(!isStatic){
+                agent.ResetPath();
+                agent.enabled = false;
+            }
+
+            OnDied();
         }
     }
 
     public Transform GetTransform(){
         return transform;
+    }
+
+    private void OnDied(){
+        float destroyDelay = Random.value;
+        gameObject.SetActive(false);
+        //Destroy(healthBar.gameObject, destroyDelay);
+    }
+
+    public void SetUpHealthBar(Canvas canvas, Camera mainCamera){
+        healthBar.transform.SetParent(canvas.transform);
+   
     }
 }

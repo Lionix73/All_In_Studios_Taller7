@@ -11,6 +11,7 @@ public class RangedAttackRadius : AttackRadius
     [SerializeField] private LayerMask mask;
     [SerializeField] private ObjectPool bulletPool;
     [SerializeField] private float sphereCastRadius = 0.1f;
+    [SerializeField] private Enemy enemy;
 
     private RaycastHit hit;
     private IDamageable targetDamageable;
@@ -26,6 +27,7 @@ public class RangedAttackRadius : AttackRadius
 
     protected override IEnumerator Attack()
     {
+
         WaitForSeconds wait = new WaitForSeconds(AttackDelay);
 
         yield return wait;
@@ -36,6 +38,8 @@ public class RangedAttackRadius : AttackRadius
                 if(HasLineOfSight(damageables[i].GetTransform())){
                     targetDamageable = damageables[i];
                     OnAttack?.Invoke(damageables[i]);
+
+                    if(!enemy.IsStatic)
                     agent.isStopped = true;
                     break;
                 }
@@ -53,19 +57,23 @@ public class RangedAttackRadius : AttackRadius
                 }
             }
             else{
+                if(!enemy.IsStatic)
                 agent.isStopped = false; //No hubo vision del jugador, seguir acercandose
             }
 
             yield return wait;
 
             if(targetDamageable == null || !HasLineOfSight(targetDamageable.GetTransform())){
+                if(!enemy.IsStatic)
                 agent.isStopped = false;
             }
 
             damageables.RemoveAll(DisabledDamageables);
         }
 
+        if(!enemy.IsStatic)
         agent.isStopped = false;
+
         attackCoroutine = null;
     }
 
@@ -102,6 +110,7 @@ public class RangedAttackRadius : AttackRadius
         base.OnTriggerExit(other);
 
         if(attackCoroutine == null){
+            if(!enemy.IsStatic)
             agent.enabled = true;
         }
     }

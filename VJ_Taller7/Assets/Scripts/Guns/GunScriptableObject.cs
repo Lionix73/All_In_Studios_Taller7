@@ -109,7 +109,7 @@ public class GunScriptableObject : ScriptableObject {
                             ShootConfig.HitMask))
                 {
                 ActiveMonoBehaviour.StartCoroutine(PlayTrail(TrailOrigin, hit.point, hit));
-                if (hit.collider.TryGetComponent(out EnemyBase enemey)){
+                if (hit.collider.TryGetComponent(out Enemy enemey)){
                     enemey.TakeDamage(Damage);
                 }
             }
