@@ -1,14 +1,14 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Shoot Config", menuName = "Guns/Shoot Configuration", order = 2)]
 public class ShootConfigScriptableObjtect : ScriptableObject {
-    
-    public ShootType shootType;
 
     [Header("GeneralStats")]
     public bool IsAutomatic;
     //public float TimeBetweenShooting; //Para las armas no automácticas, el tiempo para aceptar entre cada input
+    public bool IsHitScan = true;
     public float FireRate; //tiempo entre disparos, INREVIEW para los proyectiles
     public bool HaveSpread;
     public Vector3 Spread = new Vector3(0.1f, 0.1f, 0.1f);
@@ -19,4 +19,12 @@ public class ShootConfigScriptableObjtect : ScriptableObject {
 
     [Header("ProjectileStats")]
     public GameObject BulletPrefab; //para las especiales, asignar el projectil manualmente
+
+    public object Clone() {
+        ShootConfigScriptableObjtect clone = CreateInstance<ShootConfigScriptableObjtect>();
+
+        Utilities.CopyValues(this, clone);
+
+        return clone;
+    }
 }

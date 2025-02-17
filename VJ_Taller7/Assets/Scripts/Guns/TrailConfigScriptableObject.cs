@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Trail Config", menuName = "Guns/Guns Trail Config", order = 4)]
@@ -10,4 +11,13 @@ public class TrailConfigScriptableObject : ScriptableObject {
 
     public float MissDistance = 100f; //en caso de no apuntar a nada, fija un punto a esta distancia
     public float SimulationSpeed = 100f; //Basicamente la velocidad que aparece el trail y la bala 
+
+    public object Clone() {
+        TrailConfigScriptableObject clone = CreateInstance<TrailConfigScriptableObject>();
+
+        Utilities.CopyValues(this, clone);
+
+        return clone;
+    }
+
 }

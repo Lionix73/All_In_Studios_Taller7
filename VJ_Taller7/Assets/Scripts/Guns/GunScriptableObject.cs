@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Pool;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,7 @@ using UnityEngine.InputSystem;
 public class GunScriptableObject : ScriptableObject {
     public GunType Type;
     public string Name;
+    public Image UIImage;
     public GameObject ModelPrefab;
     public Vector3 SpawnPoint;
     public Vector3 SpawnRotation;
@@ -35,6 +37,7 @@ public class GunScriptableObject : ScriptableObject {
     }
     private ParticleSystem ShootSystem;
     private ObjectPool<TrailRenderer> TrailPool;
+    private ObjectPool<Bullet> BulletPool;
 
     private void Awake() {
         bulletsLeft = MagazineSize;
@@ -58,6 +61,11 @@ public class GunScriptableObject : ScriptableObject {
     public void DeSpawn(){
         //Destroy(Model);
         Model.SetActive(false);
+        Destroy(Model);
+        TrailPool.Clear();
+        if (BulletPool != null){
+            BulletPool.Clear();
+        }
     }
 
     public void Shoot(){
@@ -164,5 +172,34 @@ public class GunScriptableObject : ScriptableObject {
         trail.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 
         return trail;
+    }
+
+    ///<summary>
+    ///Funcion de copia manual, asignar valores del objeto general a una instancia nueva
+    ///evita errores de referencias compartidas.
+    ///RECORDAR: Si se añaden nuevos valores al objeto, añadirlos a esta función.
+    ///          Si se añaden nuevos objetos, añadirlos a esta función.
+    ///NOTA: Me encantaría explicar a detalle la magia negra que hace esta función, 
+    ///      pero no tengo idea real de como funciona. aunque si siguen los saltos que da
+    ///      todo tiene sentido...
+    ///
+    ///</summary>
+
+    public object Clone() {
+        GunScriptableObject clone = CreateInstance<GunScriptableObject>();
+
+        clone.ShootConfig = ShootConfig.Clone() as ShootConfigScriptableObjtect;
+        clone.TrailConfig = TrailConfig.Clone() as TrailConfigScriptableObject;
+
+        clone.MagazineSize = MagazineSize;
+        clone.Damage = Damage;
+        clone.ReloadTime = ReloadTime;
+        clone.Type = Type;
+        clone.Name = Name;
+        clone.UIImage = UIImage;
+        clone.ModelPrefab = ModelPrefab;
+        clone.SpawnPoint = SpawnPoint;
+        clone.SpawnRotation = SpawnRotation;
+        return clone;
     }
 }

@@ -1,6 +1,9 @@
 public enum GunType{
     BasicPistol,
-    Rifle
+    Revolver,
+    Rifle,
+    Shotgun,
+    Sniper
 }
 
 public enum ShootType{

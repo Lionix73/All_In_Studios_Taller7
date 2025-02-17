@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6293879747867273357}
   - component: {fileID: 7857538833840811330}
+  - component: {fileID: 3070749591246278766}
   m_Layer: 0
   m_Name: GunManager
   m_TagString: Untagged
@@ -51,9 +52,31 @@ MonoBehaviour:
   gunsList:
   - {fileID: 11400000, guid: 3652ac941fa776349a082da73b60cc8f, type: 2}
   - {fileID: 11400000, guid: dad2d973a9349f14ca3f690c0d2e33cb, type: 2}
+  - {fileID: 11400000, guid: bdb2fbb6410586b48bec8d8b462c8248, type: 2}
   gunParent: {fileID: 0}
-  Gun: 0
+  Gun: 1
   aimRigPoint: {fileID: 0}
   inAPickeableGun: 0
   CurrentGun: {fileID: 0}
   CurrentSecondaryGun: {fileID: 0}
+--- !u!135 &3070749591246278766
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 492504566856871708}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: -0.45, y: 0, z: 0}

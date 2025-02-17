@@ -24,16 +24,24 @@ public class GunManager : MonoBehaviour
 
     [Space]
     public GunScriptableObject CurrentGun;
-    public GunScriptableObject CurrentSecondaryGun;
+    [SerializeField] private GunType CurrentSecondGunType;
+
+    public GunScriptableObject ActiveBaseGun { get; private set; }
     private GunType gunToPick;
 
     private void Awake() {
         actualTotalAmmo=MaxTotalAmmo;
         gunParent = this.transform;
-        ActiveWeapon();
-        CurrentSecondaryGun=null;
+
+        GunScriptableObject gun = gunsList.Find(gun => gun.Type == Gun);
+        if (gun == null) {
+            Debug.LogError($"No se ha encontrado el arma: {CurrentGun}");
+            return;
+        }
+        SetUpGun(gun);
+
+        CurrentSecondGunType=Gun;
         inAPickeableGun=false;
-        
     }
 
     private void Update() {
@@ -57,19 +65,17 @@ public class GunManager : MonoBehaviour
         }
     }
 
-    public void ActiveWeapon(){
-        GunScriptableObject gun = gunsList.Find(gun => gun.Type == Gun);
-        if (gun == null) {
-            Debug.LogError($"No se ha encontrado el arma: {CurrentGun}");
-            return;
-        }
-
-        CurrentGun = gun;
+    private void SetUpGun(GunScriptableObject gun){
+        ActiveBaseGun = gun;
+        CurrentGun = gun.Clone() as GunScriptableObject;
         CurrentGun.Spawn(gunParent, this);
-        if (CurrentSecondaryGun!=null){
-            CurrentSecondaryGun.DeSpawn();
+    }
+
+    public void DespawnActiveGun(){
+        if (CurrentGun!=null){
+            CurrentGun.DeSpawn();
         }
-        
+        Destroy(CurrentGun);
     }
 
     public void OnShoot(InputAction.CallbackContext context) { //RECORDAR ASIGNAR MANUALMENTE EN LOS EVENTOS DEL INPUT
@@ -82,29 +88,28 @@ public class GunManager : MonoBehaviour
 
     public void OnWeaponChange(InputAction.CallbackContext context){
         if (context.started){
-            if (CurrentSecondaryGun!=null){
+            if (CurrentSecondGunType!=CurrentGun.Type){
                 ChangeWeapon();
             }
         }
     }
 
     public void ChangeWeapon(){
-        if (Gun == CurrentGun.Type) {
-            GunType temp = Gun;
-            Gun = CurrentSecondaryGun.Type;
-            CurrentSecondaryGun= gunsList.Find(gun => gun.Type == temp);
-        }
-        ActiveWeapon();
+        DespawnActiveGun();
+        GunType temp = CurrentGun.Type;
+        GunScriptableObject gun = gunsList.Find(gun => gun.Type == CurrentSecondGunType);
+        SetUpGun(gun);
+        CurrentSecondGunType = temp;
     }
 
     public void GrabGun(GunType gunPicked){
-        if (CurrentGun.Type!=gunPicked){
-            CurrentSecondaryGun = CurrentGun;
-            CurrentSecondaryGun = CurrentGun;
-            Gun = gunPicked;
-            ActiveWeapon();
+        if (CurrentSecondGunType == CurrentGun.Type){
+            CurrentSecondGunType = CurrentGun.Type;
         }
-        
+        DespawnActiveGun();
+        this.Gun = gunPicked;
+        GunScriptableObject gun = gunsList.Find(gun => gun.Type == gunPicked);
+        SetUpGun(gun);
     }
     public void OnGrabGun(InputAction.CallbackContext context){
         if (context.started){
