@@ -7,11 +7,17 @@ public class GunPickeable : MonoBehaviour
     [SerializeField] private GunType gunType;
     [SerializeField] private GameObject PickeableUI;
     [SerializeField] private TextMeshProUGUI gunName;
+
+    private Vector3 spinDirection = new Vector3(0, 1, 0);
     private GunManager gunManager;
 
     private void Awake() {
         gunName.SetText(gunType.ToString() + "\n" + "Press E to pick up");
         PickeableUI.SetActive(false);
+    }
+
+    private void Update() {
+        transform.Rotate(spinDirection);
     }
 
     private void OnTriggerEnter(Collider other) {
