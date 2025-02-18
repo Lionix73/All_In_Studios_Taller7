@@ -92,6 +92,15 @@ public class PlayerController : MonoBehaviour
     {
         HandleAnimations();
         adjustFOV();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.visible = !Cursor.visible;
+            Cursor.lockState = CursorLockMode.None;
+            if (Cursor.visible)
+                InputSystem.PauseHaptics();
+            else
+                InputSystem.ResumeHaptics();
+        }
     }
 
     private void FixedUpdate()

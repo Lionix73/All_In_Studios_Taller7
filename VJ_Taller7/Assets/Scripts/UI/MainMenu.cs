@@ -45,6 +45,11 @@ public class UIManager : MonoBehaviour
         {
             PauseGame(4);
         }
+        if (screens[0].activeSelf)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
 
     }
 
@@ -77,6 +82,11 @@ public class UIManager : MonoBehaviour
     {
         screens[0].SetActive(false);
         screens[indexInGameUI].SetActive(true);
+    }
+    public void BackToMenu(int indexInGameUI)
+    {
+        screens[0].SetActive(true);
+        screens[indexInGameUI].SetActive(false);
     }
 
 }
