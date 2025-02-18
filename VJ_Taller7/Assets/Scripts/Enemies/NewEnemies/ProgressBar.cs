@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class ProgressBar : MonoBehaviour
 {
     [SerializeField] private Image progressImage;
-    [SerializeField] private float defaultSpeed;
+    [SerializeField] private float defaultSpeed = 1f;
     [SerializeField] private Gradient colorGradient;
     [SerializeField] private UnityEvent<float> onProgress;
     [SerializeField] private UnityEvent onComplete;
@@ -52,7 +52,7 @@ public class ProgressBar : MonoBehaviour
         while (time < 1){
             progressImage.fillAmount = Mathf.Lerp(initialProgress, progress, time);
             time += Time.deltaTime * speed;
-
+            
             progressImage.color = colorGradient.Evaluate(1 - progressImage.fillAmount);
 
             onProgress?.Invoke(progressImage.fillAmount);

@@ -5,15 +5,23 @@ using UnityEngine.AI;
 
 public class EnemySpawner : MonoBehaviour
 {
+    [Header("Player Settings")]
     [SerializeField] private Transform player;
     [SerializeField] private Camera mainCamera;
+
+    [Header("Spawn Settings")]
+    [SerializeField] private bool storeInitialPos = false;
     [SerializeField] private int numberOfEnemiesToSpawn = 1;
     [SerializeField] private float spawnDelay = 1f;
     [SerializeField] private List<Enemy> enemyPrefabs = new List<Enemy>();
     [SerializeField] private SpawnMethod enemySpawnMethod = SpawnMethod.Roundrobin;
 
+    [Header("UI Settings")]
+    [SerializeField] private Canvas healthBarCanvas;
+
     private NavMeshTriangulation navMeshTriangulation;
     private Dictionary<int, ObjectPool> EnemyObjectPools = new Dictionary<int, ObjectPool>();
+    private Dictionary<Enemy, Vector3> initialPositions = new Dictionary<Enemy, Vector3>();
 
     private void Awake()
     {
@@ -25,9 +33,23 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
-        navMeshTriangulation = NavMesh.CalculateTriangulation();
+        if(storeInitialPos){
+            StoreInitialPositions();
+        }
 
         StartCoroutine(SpawnEnemies());
+    }
+
+    private void StoreInitialPositions()
+    {
+        Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+        foreach (Enemy enemy in enemies)
+        {
+            if (enemy.IsStatic)
+            {
+                initialPositions[enemy] = enemy.transform.position;
+            }
+        }
     }
 
     private IEnumerator SpawnEnemies(){
@@ -73,6 +95,7 @@ public class EnemySpawner : MonoBehaviour
 
                 enemy.MainCamera = mainCamera;
                 enemy.Movement.Player = player;
+                enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
                 enemy.Agent.enabled = true;
                 enemy.Movement.StartChasing();
             }
@@ -82,6 +105,21 @@ public class EnemySpawner : MonoBehaviour
         }
         else{
             Debug.LogError($"No se logro spawnear un enemigo tipo {spawnIndex} del object pool");
+        }
+    }
+
+    public void RespawnEnemy(Enemy enemy)
+    {
+        if (initialPositions.TryGetValue(enemy, out Vector3 initialPosition))
+        {
+            enemy.transform.position = initialPosition;
+            enemy.gameObject.SetActive(true);
+            enemy.Health = enemy.EnemyConfiguration.health;
+            enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
+        }
+        else
+        {
+            Debug.LogError("Initial position not found for the enemy.");
         }
     }
 

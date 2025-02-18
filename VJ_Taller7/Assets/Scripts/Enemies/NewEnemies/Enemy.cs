@@ -24,6 +24,10 @@ public class Enemy : PoolableObject, IDamageable
     }
 
     [SerializeField] private EnemyScriptableObject enemyConfiguration;
+    public EnemyScriptableObject EnemyConfiguration{
+        get => enemyConfiguration;
+        private set => enemyConfiguration = value;
+    }
     
     [Header("Enemy Health")]
     [SerializeField] private int health = 100;
@@ -54,11 +58,15 @@ public class Enemy : PoolableObject, IDamageable
     [Header("Enemy UI")]
     [SerializeField] GameObject floatingTextPrefab;
 
+    private EnemySpawner enemySpawner;
 
     private void Awake()
     {
         AttackRadius.OnAttack += OnAttack;
         maxHealth = health;
+
+        if(isStatic)
+        enemySpawner = FindFirstObjectByType<EnemySpawner>();
     }
 
     private void OnAttack(IDamageable target)
@@ -126,7 +134,7 @@ public class Enemy : PoolableObject, IDamageable
             ShowFloatingText(damage);
         }
 
-        //healthBar.SetProgress(health / maxHealth, 3);
+        healthBar.SetProgress(health / maxHealth, 3);
 
         if (health <= 0){
 
@@ -146,12 +154,24 @@ public class Enemy : PoolableObject, IDamageable
     private void OnDied(){
         float destroyDelay = Random.value;
         gameObject.SetActive(false);
-        //Destroy(healthBar.gameObject, destroyDelay);
+
+        if(!isStatic){
+            Destroy(healthBar.gameObject, destroyDelay);
+        }
+
+        if (isStatic && enemySpawner != null)
+        {
+            enemySpawner.RespawnEnemy(this);
+        }
     }
 
     public void SetUpHealthBar(Canvas canvas, Camera mainCamera){
         healthBar.transform.SetParent(canvas.transform);
-   
+
+        if (healthBar.TryGetComponent<FaceCamera>(out FaceCamera faceCamera))
+        {
+            faceCamera.Camera = mainCamera;
+        }
     }
     private void ShowFloatingText(float damage)
     {
