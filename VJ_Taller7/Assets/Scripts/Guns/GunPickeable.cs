@@ -7,12 +7,15 @@ public class GunPickeable : MonoBehaviour
     [SerializeField] private GunType gunType;
     [SerializeField] private GameObject PickeableUI;
     [SerializeField] private TextMeshProUGUI gunName;
+    [SerializeField] private ObjectLookAtCamera lookCamera;
 
     private Vector3 spinDirection = new Vector3(0, 1, 0);
     private GunManager gunManager;
 
+
     private void Awake() {
-        gunName.SetText(gunType.ToString() + "\n" + "Press E to pick up");
+        //gunName.SetText(gunType.ToString() + "\n" + "Press E to pick up");
+        gunName.SetText(gunType.ToString());
         PickeableUI.SetActive(false);
     }
 
@@ -26,6 +29,18 @@ public class GunPickeable : MonoBehaviour
             gunManager.EnterPickeableGun(gunType);
 
             PickeableUI.SetActive(true);
+            lookCamera = PickeableUI.GetComponentInChildren<ObjectLookAtCamera>();
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            if (lookCamera !=null)
+            {
+                lookCamera.LookAtCamera();
+            }
         }
     }
 

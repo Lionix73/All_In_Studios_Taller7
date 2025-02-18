@@ -51,6 +51,9 @@ public class Enemy : PoolableObject, IDamageable
     [SerializeField] private Animator animator;
     private const string ATTACK_TRIGGER = "Attack";
 
+    [Header("Enemy UI")]
+    [SerializeField] GameObject floatingTextPrefab;
+
 
     private void Awake()
     {
@@ -117,6 +120,11 @@ public class Enemy : PoolableObject, IDamageable
 
     public void TakeDamage(int damage){
         health -= damage;
+        
+        if (floatingTextPrefab != null)
+        {
+            ShowFloatingText(damage);
+        }
 
         //healthBar.SetProgress(health / maxHealth, 3);
 
@@ -144,5 +152,10 @@ public class Enemy : PoolableObject, IDamageable
     public void SetUpHealthBar(Canvas canvas, Camera mainCamera){
         healthBar.transform.SetParent(canvas.transform);
    
+    }
+    private void ShowFloatingText(float damage)
+    {
+        var go = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity, transform);
+        go.GetComponent<TextMesh>().text = damage.ToString();
     }
 }
