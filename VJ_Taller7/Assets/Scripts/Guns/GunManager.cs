@@ -49,7 +49,10 @@ public class GunManager : MonoBehaviour
     private void Update() {
         if (totalAmmoDisplay != null) {
             totalAmmoDisplay.SetText(actualTotalAmmo + "/" + MaxTotalAmmo);
-            UIManager.Singleton.GetPlayerTotalAmmo(actualTotalAmmo);
+            if (UIManager.Singleton !=null)
+            {
+                UIManager.Singleton.GetPlayerTotalAmmo(actualTotalAmmo);
+            }
             
         }
         if (shooting && CurrentGun.BulletsLeft > 0) {
@@ -62,7 +65,10 @@ public class GunManager : MonoBehaviour
 
         if (ammunitionDisplay != null) {
             ammunitionDisplay.SetText(CurrentGun.BulletsLeft + "/" + CurrentGun.MagazineSize);
-            UIManager.Singleton.GetPlayerActualAmmo(CurrentGun.BulletsLeft, CurrentGun.MagazineSize);
+            if (UIManager.Singleton != null)
+            {
+                UIManager.Singleton.GetPlayerActualAmmo(CurrentGun.BulletsLeft, CurrentGun.MagazineSize);
+            }
         }
 
         if (actualTotalAmmo>MaxTotalAmmo){
@@ -74,7 +80,10 @@ public class GunManager : MonoBehaviour
         ActiveBaseGun = gun;
         CurrentGun = gun.Clone() as GunScriptableObject;
         CurrentGun.Spawn(gunParent, this);
+        if (UIManager.Singleton != null)
+        {
         UIManager.Singleton.GetPlayerGunInfo(actualTotalAmmo, MaxTotalAmmo, gun);
+        }
     }
 
     public void DespawnActiveGun(){

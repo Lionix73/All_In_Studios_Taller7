@@ -12,7 +12,10 @@ public class Health : MonoBehaviour, IDamageable
     }
     void Update()
     {
-        UIManager.Singleton.GetPlayerHealth(currentHealth, maxHealth);
+        if (UIManager.Singleton !=null)
+        {
+            UIManager.Singleton.GetPlayerHealth(currentHealth, maxHealth);
+        }
     }
 
     public void TakeDamage(int damage)
