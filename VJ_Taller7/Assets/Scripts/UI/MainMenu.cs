@@ -1,3 +1,4 @@
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -57,6 +58,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject[] screens;
     [SerializeField] int activeScene;
     [SerializeField] Image healthBar;
+
+    [SerializeField] Image gunImage;
+    [SerializeField] TextMeshProUGUI gunTypeText;
+    [SerializeField] TextMeshProUGUI ammoText;
+    [SerializeField] TextMeshProUGUI maxTotalAmmoText;
+
     public void SelectedScene(string scene)
     {
         SceneManager.LoadScene(scene);
@@ -93,6 +100,21 @@ public class UIManager : MonoBehaviour
     public void GetPlayerHealth(float playerHealth, float maxHealth)
     {
         healthBar.fillAmount = Mathf.Clamp(playerHealth / maxHealth, 0, 1);
+    }
+
+    public void GetPlayerGunInfo(int actualAmmo,int maxActualAmmo, GunScriptableObject equippedGun)
+    {
+        GetPlayerActualAmmo(actualAmmo, maxActualAmmo);
+        gunTypeText.text = $"{equippedGun.name}";
+        gunImage.sprite = equippedGun.UIImage;
+    }
+    public void GetPlayerActualAmmo(int actualAmmo, int maxActualAmmo)
+    {
+        ammoText.text = $"{actualAmmo} / {maxActualAmmo}";
+    }
+    public void GetPlayerTotalAmmo(int totalAmmo)
+    {
+        maxTotalAmmoText.text = $"{totalAmmo}";
     }
 
 }

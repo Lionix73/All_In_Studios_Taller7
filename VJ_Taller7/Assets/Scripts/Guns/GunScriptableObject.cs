@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 public class GunScriptableObject : ScriptableObject {
     public GunType Type;
     public string Name;
-    public Image UIImage;
+    public Sprite UIImage;
     public GameObject ModelPrefab;
     public Vector3 SpawnPoint;
     public Vector3 SpawnRotation;
