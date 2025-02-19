@@ -31,6 +31,8 @@ public class GunManager : MonoBehaviour
     public GunScriptableObject ActiveBaseGun { get; private set; }
     private GunType gunToPick;
 
+
+
     private void Awake() {
         actualTotalAmmo=MaxTotalAmmo;
         gunParent = this.transform;
@@ -139,6 +141,8 @@ public class GunManager : MonoBehaviour
         }
     }
 
+    #region Pickeables management //Aqui sabemos si el jugador esta cerca de un arma, que tipo de arma es y si puede recogerla
+    
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject.layer == LayerMask.NameToLayer("Pickeable")){
             inAPickeableGun=true;
@@ -154,7 +158,9 @@ public class GunManager : MonoBehaviour
     public void EnterPickeableGun(GunType gunType){
         gunToPick = gunType;
     }
+    #endregion
 
+    #region Ammo management //Aqui recibimos el input de recarga y llamamos a la funciond de recarga
     public void OnReload(InputAction.CallbackContext context){
         if (context.started){
             if (!CurrentGun.Realoading){
@@ -166,7 +172,13 @@ public class GunManager : MonoBehaviour
         CurrentGun.Reload();
         actualTotalAmmo -= CurrentGun.MagazineSize - CurrentGun.BulletsLeft;
     }
+    #endregion
 
+/// <summary>
+/// Devuelve el arma que se le pida
+/// </summary>
+/// <param name="gunToFind">Tipo del arma que se quiere encontrar.</param>
+/// <returns></returns>
     public GunScriptableObject GetGun(GunType gunToFind){
         return gunsList.Find(gun => gun.Type == gunToFind);
     }
