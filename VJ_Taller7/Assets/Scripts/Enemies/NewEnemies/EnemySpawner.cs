@@ -33,6 +33,8 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
+        navMeshTriangulation = NavMesh.CalculateTriangulation();
+
         if(storeInitialPos){
             StoreInitialPositions();
         }
