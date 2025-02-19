@@ -30,6 +30,8 @@ public class GunPickeable : MonoBehaviour
 
             PickeableUI.SetActive(true);
             lookCamera = PickeableUI.GetComponentInChildren<ObjectLookAtCamera>();
+
+            GunScriptableObject gun = gunManager.GetGun(gunType); //Pa tomar lo que quiran del arma a pickear
         }
     }
 

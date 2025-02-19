@@ -18,7 +18,7 @@ public class GunManager : MonoBehaviour
     [SerializeField] private Transform gunParent;
     [SerializeField] private GunType Gun; //Tipo de arma que tiene el jugador
 
-    public Transform aimRigPoint;  //La verdadera dirección de apuntado, coincide con el punto central de la camara.
+    //public Transform aimRigPoint;  //La verdadera dirección de apuntado, coincide con el punto central de la camara.
     [SerializeField] private bool inAPickeableGun;
 
     private bool shooting;
@@ -165,5 +165,9 @@ public class GunManager : MonoBehaviour
     private void RealoadGun(){
         CurrentGun.Reload();
         actualTotalAmmo -= CurrentGun.MagazineSize - CurrentGun.BulletsLeft;
+    }
+
+    public GunScriptableObject GetGun(GunType gunToFind){
+        return gunsList.Find(gun => gun.Type == gunToFind);
     }
 }
