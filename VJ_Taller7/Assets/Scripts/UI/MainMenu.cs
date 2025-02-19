@@ -2,7 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Singleton
@@ -56,6 +56,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private bool IsPaused = false;
     [SerializeField] GameObject[] screens;
     [SerializeField] int activeScene;
+    [SerializeField] Image healthBar;
     public void SelectedScene(string scene)
     {
         SceneManager.LoadScene(scene);
@@ -87,6 +88,11 @@ public class UIManager : MonoBehaviour
     {
         screens[0].SetActive(true);
         screens[indexInGameUI].SetActive(false);
+    }
+
+    public void GetPlayerHealth(float playerHealth, float maxHealth)
+    {
+        healthBar.fillAmount = Mathf.Clamp(playerHealth / maxHealth, 0, 1);
     }
 
 }

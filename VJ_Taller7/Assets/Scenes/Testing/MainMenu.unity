@@ -211,7 +211,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: PlayGround
+          m_StringArgument: ArenaTest
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 581074952}
@@ -276,7 +276,7 @@ GameObject:
   - component: {fileID: 63336292}
   - component: {fileID: 63336291}
   - component: {fileID: 63336290}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Playground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -346,7 +346,43 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 63336291}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 581074952}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: Hide
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 581074952}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: SelectedScene
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Playground
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 581074952}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: PlayScene
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 5
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &63336291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -397,7 +433,7 @@ GameObject:
   - component: {fileID: 75748365}
   - component: {fileID: 75748364}
   - component: {fileID: 75748363}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Scene1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -467,7 +503,43 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 75748364}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 581074952}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: Hide
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 581074952}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: SelectedScene
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ArenaTest
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 581074952}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: PlayScene
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 5
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &75748364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -517,7 +589,7 @@ GameObject:
   - component: {fileID: 106937187}
   - component: {fileID: 106937189}
   - component: {fileID: 106937188}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: HeaderDesc
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1206,7 +1278,7 @@ GameObject:
   - component: {fileID: 444959000}
   - component: {fileID: 444958999}
   - component: {fileID: 444958998}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PreviousButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1472,7 +1544,7 @@ GameObject:
   m_Component:
   - component: {fileID: 581074953}
   - component: {fileID: 581074952}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1500,6 +1572,7 @@ MonoBehaviour:
   - {fileID: 261202577}
   - {fileID: 379885012}
   activeScene: 0
+  healthBar: {fileID: 1680151427}
 --- !u!4 &581074953
 Transform:
   m_ObjectHideFlags: 0
@@ -1555,7 +1628,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -299, y: 49}
+  m_AnchoredPosition: {x: -299, y: 7.5}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &585168165
@@ -1815,7 +1888,7 @@ GameObject:
   - component: {fileID: 800272535}
   - component: {fileID: 800272537}
   - component: {fileID: 800272536}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1892,7 +1965,7 @@ GameObject:
   - component: {fileID: 997345010}
   - component: {fileID: 997345012}
   - component: {fileID: 997345011}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PlayerImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2028,6 +2101,7 @@ GameObject:
   - component: {fileID: 1025516068}
   - component: {fileID: 1025516067}
   - component: {fileID: 1025516066}
+  - component: {fileID: 1025516069}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2052,7 +2126,7 @@ Camera:
   m_GameObject: {fileID: 1025516065}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -2109,6 +2183,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1025516069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025516065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!1 &1072331300
 GameObject:
   m_ObjectHideFlags: 0
@@ -2303,7 +2421,7 @@ GameObject:
   - component: {fileID: 1141280427}
   - component: {fileID: 1141280426}
   - component: {fileID: 1141280425}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: MenuScenes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2407,7 +2525,7 @@ GameObject:
   - component: {fileID: 1162989164}
   - component: {fileID: 1162989166}
   - component: {fileID: 1162989165}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2484,7 +2602,7 @@ GameObject:
   - component: {fileID: 1190380222}
   - component: {fileID: 1190380224}
   - component: {fileID: 1190380223}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: CharacterSpace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2602,7 +2720,7 @@ GameObject:
   - component: {fileID: 1251786498}
   - component: {fileID: 1251786497}
   - component: {fileID: 1251786496}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: NextButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3077,7 +3195,7 @@ GameObject:
   - component: {fileID: 1340762378}
   - component: {fileID: 1340762380}
   - component: {fileID: 1340762379}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3425,7 +3543,7 @@ GameObject:
   - component: {fileID: 1417412466}
   - component: {fileID: 1417412465}
   - component: {fileID: 1417412464}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3557,7 +3675,7 @@ GameObject:
   - component: {fileID: 1509082957}
   - component: {fileID: 1509082956}
   - component: {fileID: 1509082955}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3688,7 +3806,7 @@ GameObject:
   - component: {fileID: 1509445340}
   - component: {fileID: 1509445342}
   - component: {fileID: 1509445341}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4289,7 +4407,7 @@ GameObject:
   - component: {fileID: 1585629766}
   - component: {fileID: 1585629768}
   - component: {fileID: 1585629767}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4892,8 +5010,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 320.6857, y: 50}
-  m_SizeDelta: {x: 641.3714, y: 100}
+  m_AnchoredPosition: {x: 231.66522, y: 35.72313}
+  m_SizeDelta: {x: 463.3304, y: 71.4463}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1680151427
 MonoBehaviour:
@@ -4908,18 +5026,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9245283, g: 0.2921858, b: 0.2921858, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -5309,7 +5427,7 @@ GameObject:
   - component: {fileID: 1922551528}
   - component: {fileID: 1922551530}
   - component: {fileID: 1922551529}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: HeaderDesc
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5447,7 +5565,7 @@ GameObject:
   - component: {fileID: 1942342783}
   - component: {fileID: 1942342785}
   - component: {fileID: 1942342784}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5585,7 +5703,7 @@ GameObject:
   - component: {fileID: 1997400568}
   - component: {fileID: 1997400570}
   - component: {fileID: 1997400569}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5662,7 +5780,7 @@ GameObject:
   - component: {fileID: 2080831738}
   - component: {fileID: 2080831737}
   - component: {fileID: 2080831740}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: CharacterSelection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5820,7 +5938,7 @@ GameObject:
   - component: {fileID: 2133401391}
   - component: {fileID: 2133401390}
   - component: {fileID: 2133401389}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: SelectedPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}

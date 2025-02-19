@@ -6,7 +6,10 @@ public class Health : MonoBehaviour, IDamageable
     [SerializeField] private TextMeshProUGUI healthDisplay;
     [SerializeField] private float currentHealth = 20f;
     [SerializeField] private float maxHealth = 100f;
-
+    private void Awake()
+    {
+        UIManager.Singleton.GetPlayerHealth(currentHealth, maxHealth);
+    }
     void Update()
     {
         healthDisplay.SetText(currentHealth + "/" + maxHealth);
@@ -15,6 +18,7 @@ public class Health : MonoBehaviour, IDamageable
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        UIManager.Singleton.GetPlayerHealth(currentHealth, maxHealth);
     }
 
     public Transform GetTransform()
