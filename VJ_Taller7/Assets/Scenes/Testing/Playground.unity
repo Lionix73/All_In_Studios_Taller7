@@ -23702,6 +23702,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 4858076400073079447}
   mainCamera: {fileID: 4858076400073079448}
+  storeInitialPos: 1
   numberOfEnemiesToSpawn: 0
   spawnDelay: 1
   enemyPrefabs:
@@ -23709,7 +23710,6 @@ MonoBehaviour:
   - {fileID: 8576732452067944932, guid: 149aa7a2a0e909247be201f5046f7211, type: 3}
   - {fileID: 8576732452067944932, guid: 06337be50a07d2043b19ccbaf121497f, type: 3}
   enemySpawnMethod: 0
-  storeInitialPos: 1
   healthBarCanvas: {fileID: 1646865119}
 --- !u!1 &661863125
 GameObject:
@@ -64917,6 +64917,14 @@ PrefabInstance:
     - target: {fileID: 4468175175659240506, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4744916341109281450, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
+      propertyPath: Lens.FarClipPlane
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6914599799018107233, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
+      propertyPath: far clip plane
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
