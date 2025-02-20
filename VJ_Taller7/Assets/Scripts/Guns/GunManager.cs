@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using TMPro;
-using Unity.Cinemachine;
 
 public class GunManager : MonoBehaviour
 {
@@ -51,11 +49,11 @@ public class GunManager : MonoBehaviour
     private void Update() {
         if (totalAmmoDisplay != null) {
             totalAmmoDisplay.SetText(actualTotalAmmo + "/" + MaxTotalAmmo);
-            if (UIManager.Singleton !=null)
-            {
-                UIManager.Singleton.GetPlayerTotalAmmo(actualTotalAmmo);
-            }
             
+        }
+        if (UIManager.Singleton !=null)
+        {
+            UIManager.Singleton.GetPlayerTotalAmmo(actualTotalAmmo);
         }
         if (shooting && CurrentGun.BulletsLeft > 0) {
             CurrentGun.Shoot();
@@ -67,10 +65,10 @@ public class GunManager : MonoBehaviour
 
         if (ammunitionDisplay != null) {
             ammunitionDisplay.SetText(CurrentGun.BulletsLeft + "/" + CurrentGun.MagazineSize);
-            if (UIManager.Singleton != null)
-            {
-                UIManager.Singleton.GetPlayerActualAmmo(CurrentGun.BulletsLeft, CurrentGun.MagazineSize);
-            }
+        }
+        if (UIManager.Singleton != null)
+        {
+            UIManager.Singleton.GetPlayerActualAmmo(CurrentGun.BulletsLeft, CurrentGun.MagazineSize);
         }
 
         if (actualTotalAmmo>MaxTotalAmmo){
@@ -84,7 +82,7 @@ public class GunManager : MonoBehaviour
         CurrentGun.Spawn(gunParent, this);
         if (UIManager.Singleton != null)
         {
-        UIManager.Singleton.GetPlayerGunInfo(actualTotalAmmo, MaxTotalAmmo, gun);
+            UIManager.Singleton.GetPlayerGunInfo(CurrentGun.BulletsLeft, CurrentGun.MagazineSize, CurrentGun);
         }
     }
 
