@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 slideDirection;
     private Vector3 desiredMoveDirection;
-    private float slideTimer = 0f;
+    //private float slideTimer = 0f;
 
     private PlayerInput playerInput;
     MusicEmitter emitter;

@@ -1,5 +1,4 @@
 using FMODUnity;
-using System;
 using UnityEngine;
 
 public class MusicEmitter : MonoBehaviour
@@ -14,7 +13,8 @@ public class MusicEmitter : MonoBehaviour
 
     public void PlayMusic()
     {
-        emitter.EventReference = EventReference.Find(path_GangamStyle);
+        //emitter.EventReference = EventReference.Find(path_GangamStyle);
+        emitter.Event = path_GangamStyle;
 
         if(emitter.IsPlaying() == false)
         {
