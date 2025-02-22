@@ -36,6 +36,9 @@ public class PlayerControllerPhoton : NetworkBehaviour
     [SerializeField] private float doubleJumpCD = 2f;
     [SerializeField] private float slideImpulse = 7.5f;
     [SerializeField] private float slideCD = 1.5f;
+    [SerializeField] private float jumpDuration = 1.4f;
+    [SerializeField] private float doubleJumpDuration = 1.4f;
+    [SerializeField] private float jumpCooldown = 1f;
 
     private bool isDashing = false;
     private bool canDash = true;
@@ -43,8 +46,8 @@ public class PlayerControllerPhoton : NetworkBehaviour
     private Vector3 dashDirection;
 
     [Header("Components")]
-    public Rigidbody rb;
-    public CapsuleCollider playerCollider;
+    [SerializeField] private CapsuleCollider crouchCollider;
+    private CapsuleCollider playerCollider;
     public Transform cameraTransform;
     public Transform playerHead;
     [System.Obsolete] public CinemachineCamera freeLookCamera;
@@ -64,15 +67,19 @@ public class PlayerControllerPhoton : NetworkBehaviour
     [Networked] public bool IsRunning { get; set; }
     [Networked] public bool IsCrouching { get; set; }
     [Networked] public bool IsSliding { get; set; }
-    [Networked] public bool IsEmoting { get; set; } 
+    [Networked] public bool IsEmoting { get; set; }
+    [Networked] public bool IsJumping { get; set; }
+    [Networked] public bool IsDoubleJumping { get; set; }
     private bool IsGrounded => kcc.Data.IsGrounded;
 
-    private bool CanSlide => IsRunning && CanSlide && !IsSliding;
+    private bool CanSlide => IsRunning && !IsSliding;
     private bool CanCrouch => kcc.Data.IsGrounded;
-    private bool CanJump { get; set; }
+    private bool CanJump => kcc.Data.IsGrounded;
 
     private float speedX;
     private float speedY;
+
+
 
     private int jumpCount = 0;
     [Networked, OnChangedRender(nameof(Jumped))] private int JumpSync { get; set; } //Synchronize sound in all clients
@@ -96,8 +103,8 @@ public class PlayerControllerPhoton : NetworkBehaviour
     public override void Spawned()
     {
         //kcc.SetGravity(Physics.gravity.y * 2f);
+        playerCollider = GameObject.Find("KCCCollider").GetComponent<CapsuleCollider>();
         playerInput = GetComponent<PlayerInput>();
-        rb = GetComponent<Rigidbody>();
         GameObject camera = FindFirstObjectByType<CinemachineCamera>().gameObject;
         freeLookCamera = camera.GetComponent<CinemachineCamera>();
         cameraTransform = camera.transform;
@@ -127,6 +134,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData input))
         {
+            CheckEmote(input);
             CheckJump(input);
             kcc.AddLookRotation(input.LookDelta * lookSensitivity);
             HandleRotation();
@@ -148,8 +156,12 @@ public class PlayerControllerPhoton : NetworkBehaviour
     {
         if(input.Buttons.WasPressed(PreviousButtons, InputButton.Jump))
         {
-            if (kcc.FixedData.IsGrounded)
+            if (CanJump)
             {
+                IsJumping = true;
+                animator.SetBool("isJumping", IsJumping);
+                GetComponent<NetworkMecanimAnimator>().SetTrigger(125937960);
+                StartCoroutine(Jump());
                 kcc.Jump(jumpImpulse);
                 JumpSync++;
                 //animator.SetBool("isJumping", true);
@@ -158,11 +170,26 @@ public class PlayerControllerPhoton : NetworkBehaviour
             }
             else if(DoubleJumpCD.ExpiredOrNotRunning(Runner))
             {
+                GetComponent<NetworkMecanimAnimator>().SetTrigger(129565385);
+                animator.SetTrigger("DoubleJump");
                 kcc.Jump(jumpImpulse);
                 DoubleJumpCD = TickTimer.CreateFromSeconds(Runner, doubleJumpCD);
                 JumpSync++;
             }
         }
+    }
+    private IEnumerator Jump()
+    {
+        float jumpTimer = 0f;
+
+        while (jumpTimer < jumpDuration)
+        {
+            jumpTimer += Runner.DeltaTime;
+            yield return null;
+        }
+        
+        IsJumping = false;
+        animator.SetBool("isJumping", IsJumping);
     }
     private void CheckDash(NetworkInputData input)
     {
@@ -193,6 +220,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
     {
         Vector3 worldDirection = kcc.FixedData.TransformRotation * input.Direction.X0Y()*speed;
         kcc.SetInputDirection(worldDirection);
+
     }
     private void CheckRun(NetworkInputData input)
     {
@@ -208,7 +236,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
         if (input.Buttons.WasPressed(PreviousButtons, InputButton.Crouch) && CanCrouch)
         {
             Debug.Log("Trying to crouch");
-
+            ExchangeColliders();
 
             if (!IsRunning)
             {
@@ -222,6 +250,30 @@ public class PlayerControllerPhoton : NetworkBehaviour
 
         }
     }
+
+    private void CheckEmote(NetworkInputData input)
+    {
+        if (input.Buttons.WasPressed(PreviousButtons,InputButton.Emote))
+        { 
+            IsEmoting = !IsEmoting;
+        }
+    }
+    private void ExchangeColliders()
+    {
+        if (playerCollider != null && crouchCollider != null)
+        {
+            if (playerCollider.enabled)
+            {
+                crouchCollider.enabled = true;
+                playerCollider.enabled = false;
+            }
+            else
+            {
+                playerCollider.enabled = true;
+                crouchCollider.enabled = false;
+            }
+        }
+    }
     private void OnSliding(NetworkInputData input)
     {
         if (SlideCD.ExpiredOrNotRunning(Runner) && CanSlide)
@@ -230,6 +282,25 @@ public class PlayerControllerPhoton : NetworkBehaviour
             Debug.Log(worldDirection);
             kcc.Jump(worldDirection * dashImpulse);
             SlideCD = TickTimer.CreateFromSeconds(Runner, slideCD);
+            IsSliding = true;
+            StartCoroutine(Slide());
+        }
+    }
+    private IEnumerator Slide()
+    {
+        if (IsSliding)
+        {
+            float slideTimer = 0f;
+
+            while (slideTimer < slideDuration)
+            {
+                slideTimer += Runner.DeltaTime;
+                yield return null;
+            }
+
+            IsSliding = false;
+            IsCrouching = false;
+            ExchangeColliders();
         }
     }
 
@@ -254,14 +325,15 @@ public class PlayerControllerPhoton : NetworkBehaviour
         bool isMoving = false;
         if (GetInput(out NetworkInputData input))
         { 
-            isMoving = input.Direction.sqrMagnitude > 0f;
+            isMoving = input.Direction.sqrMagnitude > 0f && kcc.Data.IsGrounded;
             speedX = input.Direction.x;
             speedY = input.Direction.y;
+
+            if (input.Direction.sqrMagnitude < 0.1f && IsRunning)
+                IsRunning = false;
+
         }
-        if (!isMoving)
-        {
-            IsRunning = false;
-        }
+
         animator.SetBool("isMoving", isMoving);
         animator.SetBool("isRunning", IsRunning);
         animator.SetBool("isCrouching", IsCrouching);
@@ -270,7 +342,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
         animator.SetBool("isGrounded", IsGrounded);
 
         animator.SetFloat("SpeedY", speedY);
-            animator.SetFloat("SpeedX", speedX);
+        animator.SetFloat("SpeedX", speedX);
     }
 
     private void ResetColliderHeight()
@@ -278,6 +350,8 @@ public class PlayerControllerPhoton : NetworkBehaviour
         playerCollider.height = normalHeight;
         playerCollider.center.Set(0f, 0.9f, 0f);
     }
+
+
 
     /*public void OnMove(InputAction.CallbackContext context)
     {
