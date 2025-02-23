@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
     private bool canCrouch = true;
     private bool canJump = true;
     private bool isEmoting = false;
+    private bool usingRifle = true;
 
     private bool isGrounded;
     private int jumpCount = 0;
@@ -71,13 +72,15 @@ public class PlayerController : MonoBehaviour
     //private float slideTimer = 0f;
 
     private PlayerInput playerInput;
-    MusicEmitter emitter;
+    private GunManager gunManager;
+    SoundEmitter emitter;
 
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody>();
-        emitter = GetComponent<MusicEmitter>();
+        emitter = GetComponent<SoundEmitter>();
+        gunManager = FindAnyObjectByType<GunManager>();
     }
 
     private void Start()
@@ -90,6 +93,10 @@ public class PlayerController : MonoBehaviour
     {
         HandleAnimations();
         adjustFOV();
+
+        if (gunManager.Gun == GunType.BasicPistol || gunManager.Gun == GunType.Revolver) { usingRifle = false; }
+        else { usingRifle = true; }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Cursor.visible = !Cursor.visible;
@@ -97,7 +104,10 @@ public class PlayerController : MonoBehaviour
             if (Cursor.visible)
                 InputSystem.PauseHaptics();
             else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
                 InputSystem.ResumeHaptics();
+            }
         }
     }
 
@@ -171,15 +181,10 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isCrouching", isCrouching);
         animator.SetBool("isSliding", isSliding);
         animator.SetBool("isEmoting", isEmoting);
+        animator.SetBool("usingRifle", usingRifle);
 
         animator.SetFloat("SpeedX", speedX.CurrentValue);
         animator.SetFloat("SpeedY", speedY.CurrentValue);
-    }
-
-    private void ResetColliderHeight()
-    {
-        playerCollider.height = normalHeight;
-        playerCollider.center.Set(0f, 0.9f, 0f);
     }
 
     public void OnMove(InputAction.CallbackContext context)

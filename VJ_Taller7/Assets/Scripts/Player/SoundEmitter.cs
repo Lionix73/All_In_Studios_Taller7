@@ -1,7 +1,7 @@
 using FMODUnity;
 using UnityEngine;
 
-public class MusicEmitter : MonoBehaviour
+public class SoundEmitter : MonoBehaviour
 {
     private StudioEventEmitter emitter;
     private string path_GangamStyle = "event:/Music/GangnamStyle";
@@ -14,9 +14,8 @@ public class MusicEmitter : MonoBehaviour
     public void PlayMusic()
     {
         //emitter.EventReference = EventReference.Find(path_GangamStyle);
-        emitter.Event = path_GangamStyle;
 
-        if(emitter.IsPlaying() == false)
+        if (emitter.IsPlaying() == false)
         {
             emitter.Play();
         }

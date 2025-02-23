@@ -14,7 +14,7 @@ public class GunManager : MonoBehaviour
 
     [SerializeField] private List<GunScriptableObject> gunsList;
     [SerializeField] private Transform gunParent;
-    [SerializeField] private GunType Gun; //Tipo de arma que tiene el jugador
+    [SerializeField] public GunType Gun; //Tipo de arma que tiene el jugador
 
     //public Transform aimRigPoint;  //La verdadera dirección de apuntado, coincide con el punto central de la camara.
     [SerializeField] private bool inAPickeableGun;

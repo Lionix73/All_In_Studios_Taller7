@@ -18,6 +18,17 @@ public class JumpPad : MonoBehaviour
                 rb.linearVelocity = Vector3.zero; // Resetear la velocidad para evitar acumulaciones raras
                 rb.AddForce(jumpForce * jumpDirection, ForceMode.Impulse);
             }
+            else
+            {
+                rb = other.GetComponentInParent<Rigidbody>();
+                if (rb != null)
+                {
+                    Vector3 jumpDirection = GetSurfaceNormal();
+
+                    rb.linearVelocity = Vector3.zero; // Resetear la velocidad para evitar acumulaciones raras
+                    rb.AddForce(jumpForce * jumpDirection, ForceMode.Impulse);
+                }
+            }
         }
     }
 
