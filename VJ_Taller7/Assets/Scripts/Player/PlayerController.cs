@@ -73,6 +73,7 @@ public class PlayerController : MonoBehaviour
 
     private PlayerInput playerInput;
     private GunManager gunManager;
+    private SoundManager soundManager;
     SoundEmitter emitter;
 
     private void Awake()
@@ -81,6 +82,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         emitter = GetComponent<SoundEmitter>();
         gunManager = FindAnyObjectByType<GunManager>();
+        soundManager = FindAnyObjectByType<SoundManager>();
     }
 
     private void Start()
@@ -132,15 +134,27 @@ public class PlayerController : MonoBehaviour
             rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
             isEmoting = false;
             emitter.StopMusic();
+
+            if(isRunning && isGrounded)
+            {
+                soundManager.PlaySound(1);
+                soundManager.StopSound(0);
+            }
+            else if(isGrounded)
+            {
+                soundManager.PlaySound(0);
+                soundManager.StopSound(1);
+            }
+            else
+            {
+                soundManager.StopSound(0);
+                soundManager.StopSound(1);
+            }
         }
         else
         {
             isRunning = false;
-        }
-
-        if(!isSliding)
-        {
-            rb.useGravity = !OnSlope();
+            soundManager.StopAllSounds();
         }
 
         if (OnSlope())
@@ -242,7 +256,10 @@ public class PlayerController : MonoBehaviour
             {
                 rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
                 rb.AddForce(desiredMoveDirection * 1.2f, ForceMode.Impulse);
+                
                 animator.SetTrigger("Jump");
+                soundManager.StopAllSounds();
+                soundManager.PlaySound(3);
             }
             else if (jumpCount == 1)
             {
@@ -250,6 +267,8 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(desiredMoveDirection * 2, ForceMode.Impulse);
 
                 animator.SetTrigger("DoubleJump");
+                soundManager.StopAllSounds();
+                soundManager.PlaySound(3);
             }
             jumpCount++;
 
@@ -296,6 +315,7 @@ public class PlayerController : MonoBehaviour
 
             if(isRunning && canSlide && !isSliding)
             {
+                soundManager.PlaySound(2);
                 OnSlide();
                 StartCoroutine(Slide());
             }
@@ -329,10 +349,12 @@ public class PlayerController : MonoBehaviour
 
             while (slideTimer < slideDuration)
             {
+                soundManager.StopSound(1);
                 slideTimer += Time.deltaTime;
                 yield return null;
             }
 
+            soundManager.StopSound(2);
             isSliding = false;
             isCrouching = false;
             yield return new WaitForSeconds(dashCooldown);
@@ -362,6 +384,9 @@ public class PlayerController : MonoBehaviour
         canDash = false;
         isDashing = true;
 
+        soundManager.StopAllSounds();
+        soundManager.PlaySound(4);
+
         dashDirection = desiredMoveDirection;
 
         StartCoroutine(DashCoroutine());
@@ -389,14 +414,17 @@ public class PlayerController : MonoBehaviour
 
     private void CheckGround()
     {
-        //isGrounded = Physics.Raycast(playerCollider.center, Vector3.down, playerCollider.height * 0.5f + 0.3f, LayerMask.NameToLayer("Ground"));
-
         RaycastHit hit;
-        if (Physics.Raycast(transform.position + new Vector3(0, 0.1f, 0), Vector3.down, out hit, 0.15f))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f))
         {
-            if (hit.collider.gameObject.layer == 7 && isGrounded == false)
+            if (hit.collider.gameObject.layer == 7 && isGrounded == false && hit.distance < 0.1f)
             {
                 isGrounded = true;
+                soundManager.PlaySound(5);
+            }
+            else
+            {
+                if (hit.distance > 0.05f) isGrounded = false;
             }
         }
     }
@@ -404,16 +432,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            isGrounded = true;
             jumpCount = 0;
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            isGrounded = false;
         }
     }
 
