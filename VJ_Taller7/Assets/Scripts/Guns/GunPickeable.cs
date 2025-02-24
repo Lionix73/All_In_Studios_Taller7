@@ -36,8 +36,6 @@ public class GunPickeable : MonoBehaviour
             magazineText.text = $"Magazine: {gun.MagazineSize}";
             PickeableUI.SetActive(true);
             lookCamera = PickeableUI.GetComponentInChildren<ObjectLookAtCamera>();
-
-            
         }
     }
 

@@ -143,13 +143,14 @@ public class GunManager : MonoBehaviour
     
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject.layer == LayerMask.NameToLayer("Pickeable")){
-            inAPickeableGun=true;
+            if (other.TryGetComponent<GunPickeable>(out GunPickeable component)){ inAPickeableGun=true;}
+            
         }
     }
 
     private void OnTriggerExit(Collider other) {
         if (other.gameObject.layer == LayerMask.NameToLayer("Pickeable")){
-            inAPickeableGun=false;
+            if (other.TryGetComponent<GunPickeable>(out GunPickeable component)){ inAPickeableGun=false;}
         }
     }
 
