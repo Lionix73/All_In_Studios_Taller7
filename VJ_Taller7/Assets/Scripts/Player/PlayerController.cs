@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
 
     private PlayerInput playerInput;
     private GunManager gunManager;
-    //private SoundManager soundManager;
+    private SoundManager soundManager;
     SoundEmitter emitter;
 
     private void Awake()
@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         emitter = GetComponent<SoundEmitter>();
         gunManager = FindAnyObjectByType<GunManager>();
-        //soundManager = FindAnyObjectByType<SoundManager>();
+        soundManager = FindAnyObjectByType<SoundManager>();
     }
 
     private void Start()
@@ -137,24 +137,24 @@ public class PlayerController : MonoBehaviour
 
             if(isRunning && isGrounded)
             {
-                //soundManager.PlaySound(1);
-                //soundManager.StopSound(0);
+                soundManager.PlaySound(1);
+                soundManager.StopSound(0);
             }
             else if(isGrounded)
             {
-                //soundManager.PlaySound(0);
-                //soundManager.StopSound(1);
+                soundManager.PlaySound(0);
+                soundManager.StopSound(1);
             }
             else
             {
-                //soundManager.StopSound(0);
-                //soundManager.StopSound(1);
+                soundManager.StopSound(0);
+                soundManager.StopSound(1);
             }
         }
         else
         {
             isRunning = false;
-            //soundManager.StopAllSounds();
+            soundManager.StopAllSounds();
         }
 
         if (OnSlope())
