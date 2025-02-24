@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
 
     private PlayerInput playerInput;
     private GunManager gunManager;
-    private SoundManager soundManager;
+    //private SoundManager soundManager;
     SoundEmitter emitter;
 
     private void Awake()
@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         emitter = GetComponent<SoundEmitter>();
         gunManager = FindAnyObjectByType<GunManager>();
-        soundManager = FindAnyObjectByType<SoundManager>();
+        //soundManager = FindAnyObjectByType<SoundManager>();
     }
 
     private void Start()
@@ -137,24 +137,24 @@ public class PlayerController : MonoBehaviour
 
             if(isRunning && isGrounded)
             {
-                soundManager.PlaySound(1);
-                soundManager.StopSound(0);
+                //soundManager.PlaySound(1);
+                //soundManager.StopSound(0);
             }
             else if(isGrounded)
             {
-                soundManager.PlaySound(0);
-                soundManager.StopSound(1);
+                //soundManager.PlaySound(0);
+                //soundManager.StopSound(1);
             }
             else
             {
-                soundManager.StopSound(0);
-                soundManager.StopSound(1);
+                //soundManager.StopSound(0);
+                //soundManager.StopSound(1);
             }
         }
         else
         {
             isRunning = false;
-            soundManager.StopAllSounds();
+            //soundManager.StopAllSounds();
         }
 
         if (OnSlope())
@@ -258,8 +258,8 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(desiredMoveDirection * 1.2f, ForceMode.Impulse);
                 
                 animator.SetTrigger("Jump");
-                soundManager.StopAllSounds();
-                soundManager.PlaySound(3);
+                //soundManager.StopAllSounds();
+                //soundManager.PlaySound(3);
             }
             else if (jumpCount == 1)
             {
@@ -267,8 +267,8 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(desiredMoveDirection * 2, ForceMode.Impulse);
 
                 animator.SetTrigger("DoubleJump");
-                soundManager.StopAllSounds();
-                soundManager.PlaySound(3);
+                //soundManager.StopAllSounds();
+                //soundManager.PlaySound(3);
             }
             jumpCount++;
 
@@ -315,7 +315,7 @@ public class PlayerController : MonoBehaviour
 
             if(isRunning && canSlide && !isSliding)
             {
-                soundManager.PlaySound(2);
+                //soundManager.PlaySound(2);
                 OnSlide();
                 StartCoroutine(Slide());
             }
@@ -349,12 +349,12 @@ public class PlayerController : MonoBehaviour
 
             while (slideTimer < slideDuration)
             {
-                soundManager.StopSound(1);
+                //soundManager.StopSound(1);
                 slideTimer += Time.deltaTime;
                 yield return null;
             }
 
-            soundManager.StopSound(2);
+            //soundManager.StopSound(2);
             isSliding = false;
             isCrouching = false;
             yield return new WaitForSeconds(dashCooldown);
@@ -384,8 +384,8 @@ public class PlayerController : MonoBehaviour
         canDash = false;
         isDashing = true;
 
-        soundManager.StopAllSounds();
-        soundManager.PlaySound(4);
+        //soundManager.StopAllSounds();
+        //soundManager.PlaySound(4);
 
         dashDirection = desiredMoveDirection;
 
@@ -420,7 +420,7 @@ public class PlayerController : MonoBehaviour
             if (hit.collider.gameObject.layer == 7 && isGrounded == false && hit.distance < 0.1f)
             {
                 isGrounded = true;
-                soundManager.PlaySound(5);
+                //soundManager.PlaySound(5);
             }
             else
             {
