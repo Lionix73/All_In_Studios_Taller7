@@ -28,7 +28,8 @@ public class GunPickeable : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            gunManager = other.gameObject.GetComponentInChildren<GunManager>();
+            gunManager = FindFirstObjectByType<GunManager>();
+            //gunManager = other.gameObject.GetComponentInChildren<GunManager>();
             gunManager.EnterPickeableGun(gunType);
             GunScriptableObject gun = gunManager.GetGun(gunType); //Pa tomar lo que quiran del arma a pickear
             damageText.text = $"DMG: {gun.Damage}";
