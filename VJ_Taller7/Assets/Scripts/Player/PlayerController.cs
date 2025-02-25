@@ -74,13 +74,11 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private GunManager gunManager;
     private SoundManager soundManager;
-    SoundEmitter emitter;
 
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody>();
-        emitter = GetComponent<SoundEmitter>();
         gunManager = FindAnyObjectByType<GunManager>();
         soundManager = FindAnyObjectByType<SoundManager>();
     }
@@ -133,7 +131,6 @@ public class PlayerController : MonoBehaviour
         {
             rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
             isEmoting = false;
-            emitter.StopMusic();
 
             if(isRunning && isGrounded)
             {
@@ -222,11 +219,11 @@ public class PlayerController : MonoBehaviour
         {
             if(!isEmoting)
             {
-                emitter.PlayMusic();
+                //emitter.PlayMusic();
             }
             else
             { 
-                emitter.StopMusic(); 
+                //emitter.StopMusic(); 
             }
             isEmoting = !isEmoting;
 
