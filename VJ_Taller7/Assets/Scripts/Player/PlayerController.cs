@@ -69,7 +69,6 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 slideDirection;
     private Vector3 desiredMoveDirection;
-    //private float slideTimer = 0f;
 
     private PlayerInput playerInput;
     private GunManager gunManager;
@@ -131,27 +130,27 @@ public class PlayerController : MonoBehaviour
         {
             rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
             isEmoting = false;
+            soundManager.StopSound("GangamStyle");
 
-            if(isRunning && isGrounded)
+            if (isRunning && isGrounded)
             {
-                soundManager.PlaySound(1);
-                soundManager.StopSound(0);
+                soundManager.PlaySound("Run");
+                soundManager.StopSound("Walk");
             }
             else if(isGrounded)
             {
-                soundManager.PlaySound(0);
-                soundManager.StopSound(1);
+                soundManager.PlaySound("Walk");
+                soundManager.StopSound("Run");
             }
             else
             {
-                soundManager.StopSound(0);
-                soundManager.StopSound(1);
+                soundManager.StopSound("Walk", "Run");
             }
         }
         else
         {
             isRunning = false;
-            soundManager.StopAllSounds();
+            soundManager.StopSound("Walk", "Run");
         }
 
         if (OnSlope())
@@ -217,16 +216,16 @@ public class PlayerController : MonoBehaviour
     {
         if(context.performed && moveInput.magnitude < 0.05f)
         {
-            if(!isEmoting)
-            {
-                //emitter.PlayMusic();
-            }
-            else
+            if(!isEmoting) 
             { 
-                //emitter.StopMusic(); 
+                soundManager.PlaySound("GangamStyle"); 
             }
+            else 
+            { 
+                soundManager.StopSound("GangamStyle"); 
+            }
+            
             isEmoting = !isEmoting;
-
         }
     }
 
@@ -249,14 +248,15 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed && jumpCount < maxJumps)
         {
+            soundManager.StopSound("Walk", "Run");
+            soundManager.PlaySound("Jump");
+
             if(jumpCount == 0)
             {
                 rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
                 rb.AddForce(desiredMoveDirection * 1.2f, ForceMode.Impulse);
                 
                 animator.SetTrigger("Jump");
-                //soundManager.StopAllSounds();
-                //soundManager.PlaySound(3);
             }
             else if (jumpCount == 1)
             {
@@ -264,8 +264,6 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(desiredMoveDirection * 2, ForceMode.Impulse);
 
                 animator.SetTrigger("DoubleJump");
-                //soundManager.StopAllSounds();
-                //soundManager.PlaySound(3);
             }
             jumpCount++;
 
@@ -312,7 +310,7 @@ public class PlayerController : MonoBehaviour
 
             if(isRunning && canSlide && !isSliding)
             {
-                //soundManager.PlaySound(2);
+                soundManager.PlaySound("Slide");
                 OnSlide();
                 StartCoroutine(Slide());
             }
@@ -346,12 +344,11 @@ public class PlayerController : MonoBehaviour
 
             while (slideTimer < slideDuration)
             {
-                //soundManager.StopSound(1);
+                soundManager.StopSound("Run");
                 slideTimer += Time.deltaTime;
                 yield return null;
             }
 
-            //soundManager.StopSound(2);
             isSliding = false;
             isCrouching = false;
             yield return new WaitForSeconds(dashCooldown);
@@ -381,8 +378,8 @@ public class PlayerController : MonoBehaviour
         canDash = false;
         isDashing = true;
 
-        //soundManager.StopAllSounds();
-        //soundManager.PlaySound(4);
+        soundManager.StopSound("Walk", "Run");
+        soundManager.PlaySound("Dash");
 
         dashDirection = desiredMoveDirection;
 
@@ -412,18 +409,21 @@ public class PlayerController : MonoBehaviour
     private void CheckGround()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 50f))
         {
             if (hit.collider.gameObject.layer == 7 && isGrounded == false && hit.distance < 0.1f)
             {
                 isGrounded = true;
-                //soundManager.PlaySound(5);
+                soundManager.StopSound("Falling");
+                soundManager.PlaySound("Landing");
             }
             else
             {
                 if (hit.distance > 0.05f) isGrounded = false;
             }
         }
+
+        if (!isGrounded && rb.linearVelocity.y < 0 && rb.linearVelocity.y > -0.1f && hit.distance > 3) soundManager.PlaySound("Falling");
     }
     private void OnCollisionEnter(Collision collision)
     {
