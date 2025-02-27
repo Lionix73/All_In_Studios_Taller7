@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -59,6 +60,14 @@ public class Enemy : PoolableObject, IDamageable
     [SerializeField] GameObject floatingTextPrefab;
 
     private EnemySpawner enemySpawner;
+
+    [Header("Game Manager")]
+    //Evento que se llama para el game manager
+    [SerializeField] private int scoreOnKill;
+    public event EventHandler<OnEnemyDeadEventArgs> OnEnemyDead;
+    public class OnEnemyDeadEventArgs : EventArgs{
+        public int score;
+    }
 
     private void Awake()
     {
@@ -152,7 +161,7 @@ public class Enemy : PoolableObject, IDamageable
     }
 
     private void OnDied(){
-        float destroyDelay = Random.value;
+        float destroyDelay = UnityEngine.Random.value;
         gameObject.SetActive(false);
 
         if(!isStatic){
@@ -163,6 +172,8 @@ public class Enemy : PoolableObject, IDamageable
         {
             enemySpawner.RespawnEnemy(this);
         }
+
+        OnEnemyDead?.Invoke(this, new OnEnemyDeadEventArgs{score = scoreOnKill});
     }
 
     public void SetUpHealthBar(Canvas canvas, Camera mainCamera){
