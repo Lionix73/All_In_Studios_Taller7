@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6293879747867273357}
   - component: {fileID: 7857538833840811330}
   - component: {fileID: 3070749591246278766}
+  - component: {fileID: 4633763210580677908}
   m_Layer: 0
   m_Name: GunManager
   m_TagString: Gun Manager
@@ -45,6 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70f272d6fb2f3584aa5bfc6a2257b247, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Camera: {fileID: 0}
+  cinemachineBrain: {fileID: 0}
   actualTotalAmmo: 0
   MaxTotalAmmo: 500
   totalAmmoDisplay: {fileID: 0}
@@ -55,7 +58,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bdb2fbb6410586b48bec8d8b462c8248, type: 2}
   - {fileID: 11400000, guid: 1d47203ce74508a45bef38a7c467cadc, type: 2}
   gunParent: {fileID: 0}
-  Gun: 3
+  Gun: 0
   inAPickeableGun: 0
   CurrentGun: {fileID: 0}
   CurrentSecondGunType: 0
@@ -80,3 +83,17 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: -0.45, y: 0, z: 0}
+--- !u!114 &4633763210580677908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 492504566856871708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a4facaa7fbff0d46a89843ec541da9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crosshairImage: {fileID: 0}
+  aimTarget: {fileID: 0}

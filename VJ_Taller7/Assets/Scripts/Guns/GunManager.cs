@@ -3,37 +3,48 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using Unity.Cinemachine;
+using System.Runtime.InteropServices;
 
+[RequireComponent(typeof(CrosshairManager))]
 public class GunManager : MonoBehaviour
 {
+    [Header("Camera")]
+    public Camera Camera; public CinemachineBrain cinemachineBrain;  
+    [Header("Ammo Info")]
     public int actualTotalAmmo; //Cuanta municion tiene el jugador
     [SerializeField] private int MaxTotalAmmo; //Cuanta municion puede llevar el jugador
 
     public TextMeshProUGUI totalAmmoDisplay; //UI de la municion total que le queda al jugador
     public TextMeshProUGUI ammunitionDisplay; //UI de la municion que le queda en el cargador
 
+    [Header("Gun General Info")]
+    [Tooltip("Lista de las armas que existen en el juego")]
     [SerializeField] private List<GunScriptableObject> gunsList;
     [SerializeField] private Transform gunParent;
+    [Tooltip("Tipo de arma que posee el jugador, define con cuál empieza")]
     [SerializeField] public GunType Gun; //Tipo de arma que tiene el jugador
-    private Transform secondHandGrabPoint;
-    public Transform secondHandRigTarget;
+    private Transform secondHandGrabPoint; // la posicion a asignar
+    private Transform secondHandRigTarget; //el Rig en sí
 
-    //public Transform aimRigPoint;  //La verdadera dirección de apuntado, coincide con el punto central de la camara.
     [SerializeField] private bool inAPickeableGun;
+    private GunType gunToPick;
 
     private bool shooting;
 
     [Space]
+    [Header("Active Guns Info")]
+
     public GunScriptableObject CurrentGun;
     [SerializeField] private GunType CurrentSecondGunType;
     private int CurrentSecondaryGunBulletsLeft;
-
-    public GunScriptableObject ActiveBaseGun { get; private set; }
-    private GunType gunToPick;
+    
 
 
 
     private void Awake() {
+        cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
+        Camera = cinemachineBrain.GetComponent<Camera>();
         actualTotalAmmo=MaxTotalAmmo;
         gunParent = this.transform;
 
@@ -79,15 +90,14 @@ public class GunManager : MonoBehaviour
     }
 
     private void SetUpGun(GunScriptableObject gun){
-        ActiveBaseGun = gun;
         CurrentGun = gun.Clone() as GunScriptableObject;
-        CurrentGun.Spawn(gunParent, this);
+        CurrentGun.Spawn(gunParent, this, Camera);
         if (UIManager.Singleton != null)
         {
             UIManager.Singleton.GetPlayerGunInfo(CurrentGun.BulletsLeft, CurrentGun.MagazineSize, CurrentGun);
         }
 
-        SetUGunRigs();
+        SetUpGunRigs();
     }
 
     public void DespawnActiveGun(){
@@ -97,7 +107,7 @@ public class GunManager : MonoBehaviour
         Destroy(CurrentGun);
     }
 
-    private void SetUGunRigs(){
+    private void SetUpGunRigs(){
         Transform[] chGun = GetComponentsInChildren<Transform>();
         for(int i = 0; i < chGun.Length; i++){
             if (chGun[i].name == "SecondHandGrip") {

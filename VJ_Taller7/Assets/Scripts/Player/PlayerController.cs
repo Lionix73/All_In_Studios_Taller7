@@ -274,8 +274,11 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Ajusta los rigs que se tienen para el agarre del arma
+    /// con la otra mano y el punto donde se apunta
+    /// </summary>
     private void AdjustRigs(){
-        //ajustar los Rigs del apuntado
         if (aimRig==null || gripRig == null) return;
         else if (wasAiming){
             aimRig.weight=1.0f;

@@ -20,6 +20,7 @@ public class GunScriptableObject : ScriptableObject {
     
     private MonoBehaviour ActiveMonoBehaviour;
     private GameObject Model;
+    private Camera activeCamera;
     private float LastShootTime;
     private int bulletsLeft;
     public int BulletsLeft {
@@ -40,7 +41,7 @@ public class GunScriptableObject : ScriptableObject {
         bulletsLeft = MagazineSize;
     }
 
-    public void Spawn(Transform Parent, MonoBehaviour ActiveMonoBehaviour) {
+    public void Spawn(Transform Parent, MonoBehaviour ActiveMonoBehaviour, Camera camera =null) {
         this.ActiveMonoBehaviour = ActiveMonoBehaviour;
         LastShootTime = 0f;
         if (bulletsLeft == 0){ //En revision porque no se recarga al recoger el arma, ni la primera vez que aparece.
@@ -52,6 +53,9 @@ public class GunScriptableObject : ScriptableObject {
         Model.transform.SetParent(Parent, false);
         Model.transform.localPosition = SpawnPoint;
         Model.transform.localEulerAngles = SpawnRotation;
+
+        activeCamera = camera;
+
         ShootSystem = Model.GetComponentInChildren<ParticleSystem>();
     }
 
@@ -117,6 +121,19 @@ public class GunScriptableObject : ScriptableObject {
                     new RaycastHit())
                     );
             }
+    }
+
+    public Vector3 GetRaycastOrigin(){
+        Vector3 origin = ShootSystem.transform.position; //si dispara desde el arma
+
+        origin = activeCamera.transform.position +
+                 activeCamera.transform.forward * Vector3.Distance(
+                    activeCamera.transform.position, ShootSystem.transform.position
+                 );
+        return origin;
+    }
+    public Vector3 GetGunForward(){
+        return Model.transform.forward;
     }
 
     private void DoProjectileShooting(Vector3 shootDirection){
