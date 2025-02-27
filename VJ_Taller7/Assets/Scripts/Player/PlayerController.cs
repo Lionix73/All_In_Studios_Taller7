@@ -93,8 +93,14 @@ public class PlayerController : MonoBehaviour
         HandleAnimations();
         adjustFOV();
 
-        if (gunManager.Gun == GunType.BasicPistol || gunManager.Gun == GunType.Revolver) { usingRifle = false; }
-        else { usingRifle = true; }
+        if (gunManager.Gun == GunType.BasicPistol || gunManager.Gun == GunType.Revolver) 
+        {
+            animator.SetLayerWeight(1, 1);  
+        }
+        else 
+        { 
+            animator.SetLayerWeight(1, 0);
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
