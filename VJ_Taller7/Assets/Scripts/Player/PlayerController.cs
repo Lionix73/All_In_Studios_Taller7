@@ -4,6 +4,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Animations.Rigging;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerController : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     [SerializeField] private FloatDampener speedX;
     [SerializeField] private FloatDampener speedY;
+    [SerializeField] private FloatDampener layersDampener;
+    private FloatDampener layerDesactivateDamp;
 
     [Header("Movimiento y Dash")]
     [SerializeField] private float dashSpeed = 15f;
@@ -95,15 +98,6 @@ public class PlayerController : MonoBehaviour
     {
         HandleAnimations();
         adjustFOV();
-
-        if (gunManager.Gun == GunType.BasicPistol || gunManager.Gun == GunType.Revolver) 
-        {
-            animator.SetLayerWeight(1, 1);
-        }
-        else 
-        { 
-            animator.SetLayerWeight(1, 0);
-        }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -184,13 +178,15 @@ public class PlayerController : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
-
     }
 
     private void HandleAnimations()
     {
         speedX.Update();
         speedY.Update();
+        layersDampener.Update();
+        layerDesactivateDamp.Update();
+        ChangeAnimLayer();
 
         bool isMoving = moveInput.sqrMagnitude > 0.1f;
         speedX.TargetValue = moveInput.x;
@@ -208,6 +204,46 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("SpeedY", speedY.CurrentValue);
     }
 
+    private void ChangeAnimLayer()
+    {
+        int layersAmount = animator.layerCount;
+        layersDampener.TargetValue = 1;
+        layerDesactivateDamp.TargetValue = 0;
+
+        for (int i = 1; i < layersAmount; i++)
+        {
+            if (animator.GetLayerWeight(i) > 0)
+            {
+                animator.SetLayerWeight(i, layerDesactivateDamp.CurrentValue);
+            }
+        }
+
+        if (aimInput > 0.1f)
+        {
+            animator.SetLayerWeight(4, layersDampener.CurrentValue);
+            return;
+        }
+
+        if (gunManager.Gun == GunType.BasicPistol || gunManager.Gun == GunType.Revolver)
+        {
+            if(isRunning)
+            {
+                animator.SetLayerWeight(3, layersDampener.CurrentValue);
+            }
+            else
+            {
+                animator.SetLayerWeight(1, layersDampener.CurrentValue);
+            }
+        }
+        else
+        {
+            if (isRunning)
+            {
+                animator.SetLayerWeight(2, layersDampener.CurrentValue);
+            }
+        }
+    }
+
     public void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
@@ -221,16 +257,6 @@ public class PlayerController : MonoBehaviour
     public void OnAim(InputAction.CallbackContext context)
     {
         aimInput = context.ReadValue<float>();
-
-        if(context.started)
-        {
-            animator.SetLayerWeight(2, 1);
-        }
-
-        if(context.canceled)
-        {
-            animator.SetLayerWeight(2, 0);
-        }
     }
 
     public void OnChangeGun(InputAction.CallbackContext context)
@@ -238,6 +264,14 @@ public class PlayerController : MonoBehaviour
         if(context.performed) 
         {
             animator.SetTrigger("ChangeGun");
+        }
+    }
+
+    public void OnReload(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            animator.SetTrigger("Reload");
         }
     }
 
