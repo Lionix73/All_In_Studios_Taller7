@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using NUnit.Framework;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
@@ -38,10 +40,12 @@ public class RoundManager : MonoBehaviour
     [Tooltip("Tiempo entre oleadas")]
     [SerializeField] private float spawnTimer; //Tiempo entre oleadas
     [SerializeField] private float inBetweenRoundsTimer; //not using now
+    private bool inBetweenRounds=true;
     private int aliveEnemies;
 
     [Header("Cosas de Interfaz")]
     [SerializeField] private TextMeshProUGUI _UiWaveTimer;
+    [SerializeField] private TextMeshProUGUI _UiBetweenWavesTimer;
     [SerializeField] private TextMeshProUGUI _UiWaveCounter;
     [SerializeField] private TextMeshProUGUI _UiRoundCounter;
     [SerializeField] private TextMeshProUGUI _UiEnemyCounter;
@@ -55,8 +59,35 @@ public class RoundManager : MonoBehaviour
     }
     private void Update() {
         if (aliveEnemies == 1){
-            
+            //setear al enemigo con el loot, o activar el loot en su muerte, algo...
         }
+        if (aliveEnemies == 0){
+            //Next round
+            inBetweenRounds = true;
+        }
+        if (inBetweenRounds) {
+            inBetweenRoundsTimer -= Time.deltaTime;
+
+            if (inBetweenRoundsTimer<=0){
+            currentWave++;
+            SetWaveBalance();
+            SpawnWave();
+            inBetweenRounds = false;
+            inBetweenRoundsTimer = 60f;
+            }
+        }
+        else {
+            waveTimer -= Time.deltaTime;
+            if (waveTimer <= 0){
+            //End round
+            inBetweenRounds = true;
+            //castigar por no completar
+            //aumentar el escalado de los enemigos o repetir
+            }
+        }
+
+        UISet();
+
     }
 
     private void SetWaveBalance(){
@@ -97,8 +128,30 @@ public class RoundManager : MonoBehaviour
         //SendWave();
     }
 
+    private void SpawnWave(){
+
+    }
+
     private void SendWave(){
         GetComponent<EnemyWaves>().WaveSpawn(enemiesToSpawn,spawnInterval);
+    }
+
+    private void UISet(){
+        if (_UiEnemyCounter!=null) _UiEnemyCounter.text = $" Enemigos restantes: \n {aliveEnemies}";
+        if (_UiWaveCounter!=null) _UiWaveCounter.text = $"Oleada: {currentWave} /3";
+        if (_UiRoundCounter!=null) _UiRoundCounter.text = $"Ronda {currentRound}";
+
+        if (inBetweenRounds){ //depronto hacer un timer general que rote
+            if (_UiBetweenWavesTimer!=null) _UiBetweenWavesTimer.text = $"Siguiente ronda en: \n {Mathf.FloorToInt(inBetweenRoundsTimer/60)} : {Mathf.FloorToInt(inBetweenRoundsTimer % 60)}";
+            _UiBetweenWavesTimer.gameObject.SetActive(true);
+            _UiWaveTimer.gameObject.SetActive(false);
+        }
+        else{ 
+            if (_UiWaveTimer!=null) _UiWaveTimer.text = $"Tiempo restante: \n {Mathf.FloorToInt(waveTimer/60)} : {Mathf.FloorToInt(waveTimer % 60)}";
+            _UiBetweenWavesTimer.gameObject.SetActive(false);
+            _UiWaveTimer.gameObject.SetActive(true);
+        }
+        
     }
 
     private void ChangeScore(object sender, Enemy.OnEnemyDeadEventArgs e){
