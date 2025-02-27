@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
 
         if (gunManager.Gun == GunType.BasicPistol || gunManager.Gun == GunType.Revolver) 
         {
-            animator.SetLayerWeight(1, 1);  
+            animator.SetLayerWeight(1, 1);
         }
         else 
         { 
@@ -216,6 +216,16 @@ public class PlayerController : MonoBehaviour
     public void OnAim(InputAction.CallbackContext context)
     {
         aimInput = context.ReadValue<float>();
+
+        if(context.started)
+        {
+            animator.SetLayerWeight(2, 1);
+        }
+
+        if(context.canceled)
+        {
+            animator.SetLayerWeight(2, 0);
+        }
     }
 
     public void OnEmote(InputAction.CallbackContext context)
@@ -308,7 +318,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnCrouch(InputAction.CallbackContext context)
     {
-        if (context.performed && canCrouch)
+        if (context.performed && canCrouch && isGrounded)
         {
             ExchangeColliders();
             isCrouching = !isCrouching;
