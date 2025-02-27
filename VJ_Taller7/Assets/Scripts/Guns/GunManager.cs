@@ -15,6 +15,8 @@ public class GunManager : MonoBehaviour
     [SerializeField] private List<GunScriptableObject> gunsList;
     [SerializeField] private Transform gunParent;
     [SerializeField] public GunType Gun; //Tipo de arma que tiene el jugador
+    private Transform secondHandGrabPoint;
+    public Transform secondHandRigTarget;
 
     //public Transform aimRigPoint;  //La verdadera dirección de apuntado, coincide con el punto central de la camara.
     [SerializeField] private bool inAPickeableGun;
@@ -84,6 +86,8 @@ public class GunManager : MonoBehaviour
         {
             UIManager.Singleton.GetPlayerGunInfo(CurrentGun.BulletsLeft, CurrentGun.MagazineSize, CurrentGun);
         }
+
+        SetUGunRigs();
     }
 
     public void DespawnActiveGun(){
@@ -93,11 +97,28 @@ public class GunManager : MonoBehaviour
         Destroy(CurrentGun);
     }
 
-    public void OnShoot(InputAction.CallbackContext context) { //RECORDAR ASIGNAR MANUALMENTE EN LOS EVENTOS DEL INPUT
-        if (CurrentGun.ShootConfig.IsAutomatic) {
-            shooting = context.performed;
+    private void SetUGunRigs(){
+        Transform[] chGun = GetComponentsInChildren<Transform>();
+        for(int i = 0; i < chGun.Length; i++){
+            if (chGun[i].name == "SecondHandGrip") {
+                secondHandGrabPoint = chGun[i].transform;
+            }
         }
-        else { shooting = context.started; }
+        if (secondHandRigTarget==null) return;
+        secondHandRigTarget.position = secondHandGrabPoint.position;
+    }
+
+    public void OnShoot(InputAction.CallbackContext context) { //RECORDAR ASIGNAR MANUALMENTE EN LOS EVENTOS DEL INPUT
+        //if (CurrentGun.ShootConfig.IsAutomatic) {
+        //    shooting = context.performed;
+        //}
+        //else { shooting = context.started; }
+
+        if (context.started && CurrentGun.ShootConfig.IsAutomatic) 
+            shooting=true;
+        else if (!CurrentGun.ShootConfig.IsAutomatic) shooting = context.started;
+        if (context.canceled && CurrentGun.ShootConfig.IsAutomatic)
+            shooting = false; 
         //Debug.Log("Fase: " + shooting);
     }
 

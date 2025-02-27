@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Animations.Rigging;
 
 public class PlayerController : MonoBehaviour
 {
@@ -51,6 +52,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private Vector2 lookInput;
     private float aimInput;
+    [SerializeField] private MultiAimConstraint aimRig;
+    [SerializeField] private TwoBoneIKConstraint gripRig;
     private bool isRunning = false;
     private bool isCrouching = false;
     private bool isSliding = false;
@@ -114,6 +117,8 @@ public class PlayerController : MonoBehaviour
                 InputSystem.ResumeHaptics();
             }
         }
+
+        AdjustRigs();
     }
 
     private void FixedUpdate()
@@ -257,6 +262,21 @@ public class PlayerController : MonoBehaviour
         {
             freeLookCamera.Lens.FieldOfView = Mathf.Lerp(currentFOV, aimFOV, tFOV);
             wasAiming = false;
+        }
+
+    }
+
+    private void AdjustRigs(){
+        //ajustar los Rigs del apuntado
+        if (aimRig==null || gripRig == null) return;
+        else if (wasAiming){
+            aimRig.weight=1.0f;
+            gripRig.weight = 1.0f;
+        }
+        else {aimRig.weight=0; gripRig.weight = 0.5f;}
+
+        if (moveInput.magnitude!=0){
+            aimRig.weight = 1.0f;
         }
     }
 
