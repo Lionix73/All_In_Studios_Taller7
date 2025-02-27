@@ -228,6 +228,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void OnChangeGun(InputAction.CallbackContext context)
+    {
+        if(context.performed) 
+        {
+            animator.SetTrigger("ChangeGun");
+        }
+    }
+
     public void OnEmote(InputAction.CallbackContext context)
     {
         if(context.performed && moveInput.magnitude < 0.05f)
