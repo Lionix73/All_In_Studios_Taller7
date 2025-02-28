@@ -23,8 +23,8 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     [SerializeField] private FloatDampener speedX;
     [SerializeField] private FloatDampener speedY;
-    [SerializeField] private FloatDampener layersDampener;
-    private FloatDampener layerDesactivateDamp;
+    [SerializeField] private FloatDampener layersDampener1;
+    [SerializeField] private FloatDampener layersDampener2;
 
     [Header("Movimiento y Dash")]
     [SerializeField] private float dashSpeed = 15f;
@@ -52,11 +52,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10f;
     private bool wasAiming;
 
+    [SerializeField] private MultiAimConstraint aimRig;
+    [SerializeField] private TwoBoneIKConstraint gripRig;
+
     private Vector2 moveInput;
     private Vector2 lookInput;
     private float aimInput;
-    [SerializeField] private MultiAimConstraint aimRig;
-    [SerializeField] private TwoBoneIKConstraint gripRig;
     private bool isRunning = false;
     private bool isCrouching = false;
     private bool isSliding = false;
@@ -64,6 +65,7 @@ public class PlayerController : MonoBehaviour
     private bool canCrouch = true;
     private bool canJump = true;
     private bool isEmoting = false;
+    private bool isAiming = false;
     private bool usingRifle = true;
 
     private bool isGrounded;
@@ -71,8 +73,10 @@ public class PlayerController : MonoBehaviour
 
     private bool isDashing = false;
     private bool canDash = true;
-    private Vector3 dashDirection;
 
+    private int animationLayerToShow = 0;
+
+    private Vector3 dashDirection;
     private Vector3 slideDirection;
     private Vector3 desiredMoveDirection;
 
@@ -97,6 +101,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         HandleAnimations();
+        UpdateAnimLayer();
         adjustFOV();
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -184,9 +189,9 @@ public class PlayerController : MonoBehaviour
     {
         speedX.Update();
         speedY.Update();
-        layersDampener.Update();
-        layerDesactivateDamp.Update();
-        ChangeAnimLayer();
+        layersDampener1.Update();
+        layersDampener2.Update();
+        SelectAnimLayer();
 
         bool isMoving = moveInput.sqrMagnitude > 0.1f;
         speedX.TargetValue = moveInput.x;
@@ -198,48 +203,85 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isCrouching", isCrouching);
         animator.SetBool("isSliding", isSliding);
         animator.SetBool("isEmoting", isEmoting);
-        animator.SetBool("usingRifle", usingRifle);
 
         animator.SetFloat("SpeedX", speedX.CurrentValue);
         animator.SetFloat("SpeedY", speedY.CurrentValue);
     }
 
-    private void ChangeAnimLayer()
+    private void ChangeAnimLayer(int index)
     {
-        int layersAmount = animator.layerCount;
-        layersDampener.TargetValue = 1;
-        layerDesactivateDamp.TargetValue = 0;
+        if (animationLayerToShow == index) return;
 
-        for (int i = 1; i < layersAmount; i++)
+        animationLayerToShow = index;
+
+        if(layersDampener1.TargetValue == 0)
         {
-            if (animator.GetLayerWeight(i) > 0)
+            layersDampener1.TargetValue = 1;
+            layersDampener2.TargetValue = 0;
+        }
+        else
+        {
+            layersDampener1.TargetValue = 0;
+            layersDampener2.TargetValue = 1;
+        }
+    }
+
+    private void UpdateAnimLayer()
+    {
+        animator.SetLayerWeight(animationLayerToShow, layersDampener1.TargetValue == 1 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
+
+        for (int i = 0; i < animator.layerCount; i++)
+        {            
+            if (i != animationLayerToShow)
             {
-                animator.SetLayerWeight(i, layerDesactivateDamp.CurrentValue);
+                //animator.SetLayerWeight(i, layersDampener1.TargetValue == 0 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
+                animator.SetLayerWeight(i, 0);
             }
         }
+    }
 
-        if (aimInput > 0.1f)
-        {
-            animator.SetLayerWeight(4, layersDampener.CurrentValue);
-            return;
-        }
-
+    private void SelectAnimLayer()
+    {
         if (gunManager.Gun == GunType.BasicPistol || gunManager.Gun == GunType.Revolver)
         {
-            if(isRunning)
+            if (isRunning)
             {
-                animator.SetLayerWeight(3, layersDampener.CurrentValue);
+                ChangeAnimLayer(3);
+                return;
             }
             else
             {
-                animator.SetLayerWeight(1, layersDampener.CurrentValue);
+                if (isAiming)
+                {
+                    ChangeAnimLayer(4);
+                    return;
+                }
+                else
+                {
+                    ChangeAnimLayer(1);
+                    return;
+                }
             }
         }
         else
         {
             if (isRunning)
             {
-                animator.SetLayerWeight(2, layersDampener.CurrentValue);
+                ChangeAnimLayer(2);
+                return;
+            }
+            else
+            {
+                if (isAiming)
+                {
+                    ChangeAnimLayer(4);
+                    return;
+                }
+                else
+                {
+                    ChangeAnimLayer(0);
+                    return;
+                }
             }
         }
     }
@@ -257,6 +299,15 @@ public class PlayerController : MonoBehaviour
     public void OnAim(InputAction.CallbackContext context)
     {
         aimInput = context.ReadValue<float>();
+
+        if (aimInput > 0.1f)
+        {
+            isAiming = true;
+        }
+        else if (aimInput < 0.1f)
+        {
+            isAiming = false;
+        }
     }
 
     public void OnChangeGun(InputAction.CallbackContext context)
@@ -504,7 +555,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (!isGrounded && rb.linearVelocity.y < 0 && rb.linearVelocity.y > -0.1f && hit.distance > 3) soundManager.PlaySound("Falling");
+        if (!isGrounded && rb.linearVelocity.y < 0.1f && rb.linearVelocity.y > -0.1f && hit.distance > 5) soundManager.PlaySound("Falling");
     }
     private void OnCollisionEnter(Collision collision)
     {
