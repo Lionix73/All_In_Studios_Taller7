@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Animations.Rigging;
 using static UnityEditor.Experimental.GraphView.GraphView;
+using NUnit.Framework;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
@@ -191,7 +193,7 @@ public class PlayerController : MonoBehaviour
         speedY.Update();
         layersDampener1.Update();
         layersDampener2.Update();
-        SelectAnimLayer();
+        ChangeAnimLayer(SelectAnimLayer());
 
         bool isMoving = moveInput.sqrMagnitude > 0.1f;
         speedX.TargetValue = moveInput.x;
@@ -214,15 +216,18 @@ public class PlayerController : MonoBehaviour
 
         animationLayerToShow = index;
 
-        if(layersDampener1.TargetValue == 0)
+        if(Mathf.Abs(layersDampener1.TargetValue - layersDampener1.CurrentValue) <= 0.05f)
         {
-            layersDampener1.TargetValue = 1;
-            layersDampener2.TargetValue = 0;
-        }
-        else
-        {
-            layersDampener1.TargetValue = 0;
-            layersDampener2.TargetValue = 1;
+            if(layersDampener1.TargetValue == 0)
+            {
+                layersDampener1.TargetValue = 1;
+                layersDampener2.TargetValue = 0;
+            }
+            else
+            {
+                layersDampener1.TargetValue = 0;
+                layersDampener2.TargetValue = 1;
+            }
         }
     }
 
@@ -231,35 +236,36 @@ public class PlayerController : MonoBehaviour
         animator.SetLayerWeight(animationLayerToShow, layersDampener1.TargetValue == 1 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
 
         for (int i = 0; i < animator.layerCount; i++)
-        {            
-            if (i != animationLayerToShow)
+        {
+            if (i != animationLayerToShow && animator.GetLayerWeight(i) > 0.05f)
             {
-                //animator.SetLayerWeight(i, layersDampener1.TargetValue == 0 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
+                animator.SetLayerWeight(i, layersDampener1.TargetValue == 0 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
+            }
+
+            if (i != animationLayerToShow && animator.GetLayerWeight(i) < 0.05f && animator.GetLayerWeight(i) > 0f)
+            {
                 animator.SetLayerWeight(i, 0);
             }
         }
     }
 
-    private void SelectAnimLayer()
+    private int SelectAnimLayer()
     {
         if (gunManager.Gun == GunType.BasicPistol || gunManager.Gun == GunType.Revolver)
         {
             if (isRunning)
             {
-                ChangeAnimLayer(3);
-                return;
+                return 3;
             }
             else
             {
                 if (isAiming)
                 {
-                    ChangeAnimLayer(4);
-                    return;
+                    return 4;
                 }
                 else
                 {
-                    ChangeAnimLayer(1);
-                    return;
+                    return 1;
                 }
             }
         }
@@ -267,20 +273,17 @@ public class PlayerController : MonoBehaviour
         {
             if (isRunning)
             {
-                ChangeAnimLayer(2);
-                return;
+                return 2;
             }
             else
             {
                 if (isAiming)
                 {
-                    ChangeAnimLayer(4);
-                    return;
+                    return 4;
                 }
                 else
                 {
-                    ChangeAnimLayer(0);
-                    return;
+                    return 0;
                 }
             }
         }
