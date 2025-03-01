@@ -13,7 +13,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private bool storeInitialPos = false;
     [SerializeField] private int numberOfEnemiesToSpawn = 1;
     [SerializeField] private float spawnDelay = 1f;
-    [SerializeField] private List<Enemy> enemyPrefabs = new List<Enemy>();
+    [SerializeField] private List<EnemyScriptableObject> enemies = new List<EnemyScriptableObject>();
     [SerializeField] private SpawnMethod enemySpawnMethod = SpawnMethod.Roundrobin;
 
     [Header("UI Settings")]
@@ -25,9 +25,9 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-        for (int i = 0; i < enemyPrefabs.Count; i++)
+        for (int i = 0; i < enemies.Count; i++)
         {
-            EnemyObjectPools.Add(i, ObjectPool.CreateInstance(enemyPrefabs[i], numberOfEnemiesToSpawn));
+            EnemyObjectPools.Add(i, ObjectPool.CreateInstance(enemies[i].prefab, numberOfEnemiesToSpawn));
         }
     }
 
@@ -74,13 +74,13 @@ public class EnemySpawner : MonoBehaviour
     }
 
     private void SpawnRoundRobinEnemy(int spawnedEnemies){
-        int spawnIndex = spawnedEnemies % enemyPrefabs.Count;
+        int spawnIndex = spawnedEnemies % enemies.Count;
 
         DoSpawnEnemy(spawnIndex);
     }
 
     private void SpawnRandomEnemy(){
-        DoSpawnEnemy(Random.Range(0, enemyPrefabs.Count));
+        DoSpawnEnemy(Random.Range(0, enemies.Count));
     }
 
     private void DoSpawnEnemy(int spawnIndex){
@@ -88,6 +88,7 @@ public class EnemySpawner : MonoBehaviour
 
         if(poolableObject != null){
             Enemy enemy = poolableObject.GetComponent<Enemy>();
+            enemies[spawnIndex].SetUpEnemy(enemy);
             
             int vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
 
@@ -116,7 +117,7 @@ public class EnemySpawner : MonoBehaviour
         {
             enemy.transform.position = initialPosition;
             enemy.gameObject.SetActive(true);
-            enemy.Health = enemy.EnemyConfiguration.health;
+            //enemy.Health = enemies.Health;
             enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
         }
         else

@@ -1,16 +1,24 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class RangedAttackRadius : AttackRadius
 {
+    [Header("Ranged Attack Settings")]
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private BulletEnemie bulletPrefab;
+    public BulletEnemie BulletPrefab{ get => bulletPrefab; set => bulletPrefab = value; }
+
     [SerializeField] private Vector3 bulletSpawnOffset = new Vector3(0, 1, 0);
+    public Vector3 BulletSpawnOffset{ get => bulletSpawnOffset; set => bulletSpawnOffset = value; }
+
     [SerializeField] private LayerMask mask;
+    public LayerMask Mask{ get => mask; set => mask = value; }
+
     [SerializeField] private ObjectPool bulletPool;
     [SerializeField] private float sphereCastRadius = 0.1f;
+
+    [Header("Enemy Settings")]
     [SerializeField] private Enemy enemy;
 
     private RaycastHit hit;
@@ -21,8 +29,13 @@ public class RangedAttackRadius : AttackRadius
     {
         base.Awake();
 
-        bulletPool = ObjectPool.CreateInstance(bulletPrefab, Mathf.CeilToInt(1 / attackDelay * bulletPrefab.AutoDestroyTime));
         agent = GetComponentInParent<NavMeshAgent>();
+    }
+
+    public void CreateBulletPool(){
+        if (bulletPool == null){
+            bulletPool = ObjectPool.CreateInstance(bulletPrefab, Mathf.CeilToInt(1 / attackDelay * bulletPrefab.AutoDestroyTime));
+        }
     }
 
     protected override IEnumerator Attack()

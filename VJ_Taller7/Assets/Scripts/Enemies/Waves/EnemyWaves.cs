@@ -113,7 +113,7 @@ public class EnemyWaves : MonoBehaviour
         {
             enemy.transform.position = initialPosition;
             enemy.gameObject.SetActive(true);
-            enemy.Health = enemy.EnemyConfiguration.health;
+            //enemy.Health = enemy.EnemyConfiguration.health;
             enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
         }
         else

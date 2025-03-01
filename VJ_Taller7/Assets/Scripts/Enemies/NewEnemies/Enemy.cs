@@ -23,12 +23,6 @@ public class Enemy : PoolableObject, IDamageable
         get => agent;
         set => agent = value;
     }
-
-    [SerializeField] private EnemyScriptableObject enemyConfiguration;
-    public EnemyScriptableObject EnemyConfiguration{
-        get => enemyConfiguration;
-        private set => enemyConfiguration = value;
-    }
     
     [Header("Enemy Health")]
     [SerializeField] private int health = 100;
@@ -103,36 +97,11 @@ public class Enemy : PoolableObject, IDamageable
         transform.rotation = lookRotation;
     }
 
-    public virtual void OnEnable(){
-        SetUpAgentFromConfiguration();
-    }
-
     public override void OnDisable(){
         if(!isStatic){
             base.OnDisable();
             agent.enabled = false;
         }
-    }
-
-    public virtual void SetUpAgentFromConfiguration(){
-        agent.acceleration = enemyConfiguration.acceleration;
-        agent.angularSpeed = enemyConfiguration.angularSpeed;
-        agent.areaMask = enemyConfiguration.areaMask;
-        agent.avoidancePriority = enemyConfiguration.avoidancePriority;
-        agent.baseOffset = enemyConfiguration.baseOffset;
-        agent.height = enemyConfiguration.height;
-        agent.obstacleAvoidanceType = enemyConfiguration.obstacleAvoidanceType;
-        agent.radius = enemyConfiguration.radius;
-        agent.speed = enemyConfiguration.speed;
-        agent.stoppingDistance = enemyConfiguration.stoppingDistance;
-
-        movement.UpdateRate = enemyConfiguration.aIUpdateInterval;
-
-        health = enemyConfiguration.health;
-        
-        (attackRadius.sphereCollider == null ? attackRadius.GetComponent<SphereCollider>() : attackRadius.sphereCollider).radius = enemyConfiguration.attackRadius;
-        attackRadius.AttackDelay = enemyConfiguration.attackDelay;
-        attackRadius.Damage = enemyConfiguration.damage;
     }
 
     public void TakeDamage(int damage){
