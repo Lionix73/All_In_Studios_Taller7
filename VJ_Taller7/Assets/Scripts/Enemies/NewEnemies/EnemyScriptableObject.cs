@@ -10,6 +10,14 @@ public class EnemyScriptableObject : ScriptableObject
     // Enemy configuration
     public int health = 100;
 
+    //Movement Stats
+    public EnemyState defaultState;
+    public float idleLocationRadius = 4f;
+    public float idleMoveSpeedMultiplier = 0.5f;
+    [Range(2, 10)] public int numberOfWaypoints = 4;
+    public float lineOfSightRadius = 6f;
+    public float fov = 90f;
+
     // NavMeshAgent configuration
     public float aIUpdateInterval = 0.1f;
 
@@ -38,6 +46,13 @@ public class EnemyScriptableObject : ScriptableObject
         enemy.Agent.stoppingDistance = stoppingDistance;
 
         enemy.Movement.UpdateRate = aIUpdateInterval;
+        enemy.Movement.DefaultState = defaultState;
+        enemy.Movement.IdleMoveSpeedMultiplier = idleMoveSpeedMultiplier;
+        enemy.Movement.IdleLocationRadius = idleLocationRadius;
+        enemy.Movement.Waypoints = new Vector3[numberOfWaypoints];
+        enemy.Movement.LineOfSightChecker.Fov = fov;
+        enemy.Movement.LineOfSightChecker.SphereCollider.radius = lineOfSightRadius;
+        enemy.Movement.LineOfSightChecker.LineOfSightMask = attackConfiguration.lineOfSightLayer;
 
         enemy.Health = health;
 

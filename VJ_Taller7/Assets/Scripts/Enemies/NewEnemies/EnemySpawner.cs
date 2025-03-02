@@ -97,10 +97,11 @@ public class EnemySpawner : MonoBehaviour
                 enemy.Agent.Warp(hit.position);
 
                 enemy.MainCamera = mainCamera;
+                enemy.Movement.Triangulation = navMeshTriangulation;
                 enemy.Movement.Player = player;
                 enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
                 enemy.Agent.enabled = true;
-                enemy.Movement.StartChasing();
+                enemy.Movement.Spawn();
             }
             else{
                 Debug.LogError($"No se pudo poner el NavMeshAgent en el navmesh, usando {navMeshTriangulation.vertices[vertexIndex]}");

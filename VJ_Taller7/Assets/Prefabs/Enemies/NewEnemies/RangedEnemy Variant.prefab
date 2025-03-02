@@ -40,6 +40,10 @@ PrefabInstance:
       propertyPath: m_ObstacleAvoidanceType
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3222403606473282591, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+      propertyPath: defaultState
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4480754247436323794, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       propertyPath: m_Name
       value: RangedEnemy Variant
@@ -110,7 +114,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 1210907979af0b04b9419d53c80f1bfa, type: 2}
     - target: {fileID: 9032037112743138318, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       propertyPath: m_Radius
-      value: 5
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7749417017978051759, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
@@ -160,7 +164,7 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 193
-  sphereCastRadius: 0.1
+  sphereCastRadius: 6
   enemy: {fileID: 8576732452067944932}
 --- !u!135 &7840266389160722431 stripped
 SphereCollider:

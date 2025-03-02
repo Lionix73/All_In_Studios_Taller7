@@ -12,6 +12,18 @@ public class EnemyMovement : MonoBehaviour
         set => player = value;
     }
 
+    [SerializeField] private LineOfSightChecker lineOfSightChecker;
+    public LineOfSightChecker LineOfSightChecker{
+        get => lineOfSightChecker;
+        set => lineOfSightChecker = value;
+    }
+
+    [SerializeField] private NavMeshTriangulation triangulation;
+    public NavMeshTriangulation Triangulation{
+        get => triangulation;
+        set => triangulation = value;
+    }
+
     [SerializeField] private Enemy enemy;
 
     [SerializeField] private float updateRate = 0.1f;
@@ -23,6 +35,46 @@ public class EnemyMovement : MonoBehaviour
     private NavMeshAgent agent;
     private AgentLinkMover linkMover;
     private Coroutine followCoroutine;
+
+    [Header("State Settings")]
+    [SerializeField] private EnemyState defaultState;
+    public EnemyState DefaultState{
+        get => defaultState;
+        set => defaultState = value;
+    }
+
+    private EnemyState state;
+    public EnemyState State{
+        get => state;
+        set{
+            OnStateChange?.Invoke(state, value);
+            state = value;
+        }
+    }
+
+    public delegate void StateChangeEvent(EnemyState oldState, EnemyState newState);
+    public StateChangeEvent OnStateChange;
+
+    [SerializeField] private float idleLocationRadius = 4f;
+    public float IdleLocationRadius{
+        get => idleLocationRadius;
+        set => idleLocationRadius = value;
+    }
+
+    [SerializeField] private float idleMoveSpeedMultiplier = 0.5f;
+    public float IdleMoveSpeedMultiplier{
+        get => idleMoveSpeedMultiplier;
+        set => idleMoveSpeedMultiplier = value;
+    }
+
+    private Vector3[] waypoints = new Vector3[4];
+    public Vector3[] Waypoints{
+        get => waypoints;
+        set => waypoints = value;
+    }
+
+    [SerializeField] private int waypointIndex = 0;
+
 
     [Header("Animation Settings")]
     [SerializeField] private Animator animator;
@@ -41,40 +93,43 @@ public class EnemyMovement : MonoBehaviour
         linkMover.OnLinkStart += HandleLinkStart;
         linkMover.OnLinkEnd += HandleLinkEnd;
 
+        lineOfSightChecker.OnGainSight += HandleGainSight;
+        lineOfSightChecker.OnLoseSight += HandleLoseSight;
+
+        OnStateChange += HandleStateChange;
+
         if(enemy != null){
             enemy = GetComponent<Enemy>();
         }
     }
 
-    public void StartChasing()
+    private void HandleGainSight(PlayerController player)
     {
-        if (enemy != null && enemy.IsStatic)
-        {
-            //Won't chase if static
-            return;
-        }
-
-        if(followCoroutine == null){
-            followCoroutine = StartCoroutine(FollowTarget());
-        }
-        else{
-            Debug.LogWarning("Llamaste StartChasing en un enemigo que ya esta en estado chasing");
-        }
+        State = EnemyState.Chase;
     }
 
-    private IEnumerator FollowTarget(){
-        WaitForSeconds wait = new WaitForSeconds(UpdateRate);
+    private void HandleLoseSight(PlayerController player)
+    {
+        State = defaultState;
+    }
 
-        while (enabled){
+    private void OnDisable()
+    {
+        state = defaultState;       
+    }
 
-            if(enemy.Health <= 0){
-                followCoroutine = null;
-                yield break;
+    public void Spawn()
+    {
+        for(int i = 0; i < waypoints.Length; i++){
+            NavMeshHit hit;
+            if(NavMesh.SamplePosition(triangulation.vertices[Random.Range(0, triangulation.vertices.Length)], out hit, 2f, agent.areaMask)){
+                waypoints[i] = hit.position;
             }
-
-            agent.SetDestination(player.transform.position);
-            yield return wait;
+            else{
+                Debug.LogError("No se pudo encontrar un punto de navmesh cerca de las triangulaciones");
+            }
         }
+        OnStateChange?.Invoke(EnemyState.Spawn, defaultState);
     }
 
     private void HandleLinkStart(){
@@ -112,5 +167,109 @@ public class EnemyMovement : MonoBehaviour
             animator.SetFloat("Horizontal", 0, 0.25f, Time.deltaTime);
             animator.SetFloat("Vertical", 0, 0.25f, Time.deltaTime);
         }    
+    }
+
+    private void HandleStateChange(EnemyState oldState, EnemyState newState)
+    {
+        if(oldState != newState){
+
+            if(followCoroutine != null){
+                StopCoroutine(followCoroutine);
+            }
+
+            if(oldState == EnemyState.Idle){
+                agent.speed /= idleMoveSpeedMultiplier;
+            }
+
+            switch(newState){
+                case EnemyState.Idle:
+                    followCoroutine = StartCoroutine(DoIdleMotion());
+                break;
+
+                case EnemyState.Patrol:
+                    followCoroutine = StartCoroutine(DoPatrolMotion());
+                break;
+
+                case EnemyState.Chase:
+                    followCoroutine = StartCoroutine(FollowTarget());
+                break;
+            }
+        }
+    }
+
+    private IEnumerator DoIdleMotion(){
+        WaitForSeconds wait = new WaitForSeconds(updateRate);
+        agent.speed *= idleMoveSpeedMultiplier;
+
+        while (true)
+        {
+            if(!agent.enabled || !agent.isOnNavMesh){
+                yield return wait;
+            }
+            else if(agent.remainingDistance <= agent.stoppingDistance){
+                Vector2 point = Random.insideUnitCircle * idleLocationRadius;
+                NavMeshHit hit;
+
+                if(NavMesh.SamplePosition(agent.transform.position + new Vector3(point.x, 0, point.y), out hit, 2f, agent.areaMask)){
+                    agent.SetDestination(hit.position);
+                }
+            }
+
+            yield return wait;
+        }
+    }
+
+    private IEnumerator DoPatrolMotion(){
+        WaitForSeconds wait = new WaitForSeconds(updateRate);
+        
+        yield return new WaitUntil(() => agent.isOnNavMesh && agent.enabled);
+        agent.SetDestination(waypoints[waypointIndex]);
+
+        while (true)
+        {
+            if(agent.isOnNavMesh && agent.enabled && agent.remainingDistance <= agent.stoppingDistance){
+                waypointIndex++;
+                
+                if(waypointIndex >= waypoints.Length){
+                    waypointIndex = 0;
+                }
+
+                agent.SetDestination(waypoints[waypointIndex]);
+            }
+
+            yield return wait;
+        }
+    }
+
+    private IEnumerator FollowTarget(){
+        WaitForSeconds wait = new WaitForSeconds(updateRate);
+
+        while (true){
+
+            if(enemy.Health <= 0){
+                followCoroutine = null;
+                yield break;
+            }
+
+            agent.SetDestination(player.transform.position);
+            yield return wait;
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        for(int i = 0; i < waypoints.Length; i++){
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(waypoints[i], 0.25f);
+
+            if(i + 1 < waypoints.Length){
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(waypoints[i], waypoints[i + 1]);
+            }
+            else{
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(waypoints[i], waypoints[0]);
+            }
+        }
     }
 }

@@ -70,22 +70,28 @@ public class RangedAttackRadius : AttackRadius
                 }
             }
             else{
-                if(!enemy.IsStatic)
-                agent.isStopped = false; //No hubo vision del jugador, seguir acercandose
+                if(!enemy.IsStatic){
+                    agent.enabled = true;
+                    agent.isStopped = false;
+                }
             }
 
             yield return wait;
 
             if(targetDamageable == null || !HasLineOfSight(targetDamageable.GetTransform())){
-                if(!enemy.IsStatic)
-                agent.isStopped = false;
+                if(!enemy.IsStatic){
+                    agent.enabled = true;
+                    agent.isStopped = false;
+                }
             }
 
             damageables.RemoveAll(DisabledDamageables);
         }
 
-        if(!enemy.IsStatic)
-        agent.isStopped = false;
+        if(!enemy.IsStatic){
+            agent.enabled = true;
+            agent.isStopped = false;
+        }
 
         attackCoroutine = null;
     }
@@ -99,7 +105,9 @@ public class RangedAttackRadius : AttackRadius
         Debug.DrawRay(origin, direction, Color.red, 1.0f);
 
         if (Physics.SphereCast(origin, sphereCastRadius, direction, out hit, distance, mask)){
+            
             IDamageable damageable;
+            
             if(hit.collider.TryGetComponent<IDamageable>(out damageable)){
                 Debug.Log("Line of sight to target: " + (damageable.GetTransform() == target));
                 return damageable.GetTransform() == target;
