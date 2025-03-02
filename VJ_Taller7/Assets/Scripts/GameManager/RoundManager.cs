@@ -1,15 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using NUnit.Framework;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
-using UnityEngine.UI;
 
-[RequireComponent(typeof(ScoreManager))]
+[RequireComponent(typeof(ScoreManager),typeof(EnemyWaves))]
 public class RoundManager : MonoBehaviour
 {
     [Header("Seteo de enemigos")]
@@ -19,6 +12,7 @@ public class RoundManager : MonoBehaviour
     [SerializeField] private int currentWave; //oleadas
     [SerializeField] private int currentRound; //Rondas
     private int waveValue;
+    
 
     [Space]
     [Tooltip("Definir el aumento de valor de la ronda; aumenta la cantidad de enemigos y su dificultad")]
@@ -28,18 +22,18 @@ public class RoundManager : MonoBehaviour
     
     [Space]
     [Tooltip("Enemigos en cola generados para esta oleada")]
-    public List<GameObject> enemiesToSpawn = new List<GameObject>();
+    public List<EnemyScriptableObject> enemiesToSpawn = new List<EnemyScriptableObject>();
+    private List<int> enemyIndex;
     private GameObject lastEnemyOfWave; //saber el último enemigo con vida para el drop
     //public Transform[] spawnPoints;
-    private int spawnIndex;
     
     [Space]
+    [Tooltip("Tiempo de duración base de las oleadas")]
     public float waveDuration;
     private float waveTimer;
     private float spawnInterval; //Time between each enemy
     [Tooltip("Tiempo entre oleadas")]
-    [SerializeField] private float spawnTimer; //Tiempo entre oleadas
-    [SerializeField] private float inBetweenRoundsTimer; //not using now
+    [SerializeField] private float inBetweenRoundsTimer; //Tiempo entre oleadas
     private bool inBetweenRounds=true;
     private int aliveEnemies;
 
@@ -50,28 +44,47 @@ public class RoundManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _UiRoundCounter;
     [SerializeField] private TextMeshProUGUI _UiEnemyCounter;
 
+    [Header("Managers")]
     private ScoreManager scoreManager;
+    private EnemyWaves enemySpawner;
+
+    [SerializeField] private bool _Simulating = false;
 
 
     private void Start() {
         scoreManager = GetComponent<ScoreManager>();
+        enemySpawner = GetComponent<EnemyWaves>();
+
         SetWaveBalance();
+        SetEnemiesInSpawner();
     }
     private void Update() {
         if (aliveEnemies == 1){
             //setear al enemigo con el loot, o activar el loot en su muerte, algo...
         }
-        if (aliveEnemies == 0){
-            //Next round
-            inBetweenRounds = true;
+        if (aliveEnemies == 0 && !inBetweenRounds){
+            
+            inBetweenRounds = true; //Next round
         }
+
+        if (_Simulating) UpdateTimers();
+
+        UISet();
+
+    }
+
+    /// <summary>
+    /// Almacena la lógica del temporizador entre rondas y el de las rondas
+    /// <br/>Para limpiar el Update()
+    /// </summary>
+    private void UpdateTimers(){
         if (inBetweenRounds) {
             inBetweenRoundsTimer -= Time.deltaTime;
 
             if (inBetweenRoundsTimer<=0){
             currentWave++;
             SetWaveBalance();
-            SpawnWave();
+            SendWave(enemyIndex);
             inBetweenRounds = false;
             inBetweenRoundsTimer = 60f;
             }
@@ -85,9 +98,6 @@ public class RoundManager : MonoBehaviour
             //aumentar el escalado de los enemigos o repetir
             }
         }
-
-        UISet();
-
     }
 
     private void SetWaveBalance(){
@@ -101,8 +111,8 @@ public class RoundManager : MonoBehaviour
     }
 
     public void GenerateEnemies(){
-        List<GameObject> generatedEnmies = new List<GameObject>();
-
+        List<EnemyScriptableObject> generatedEnmies = new List<EnemyScriptableObject>();
+        enemyIndex = new List<int>();
         while(waveValue>0){ //en caso de queres también límite de enemigos poner como condicional ||generatedenemies.count<X
             int randEnemyId = UnityEngine.Random.Range(0,enemies.Count);
             int randEnemyCost = enemies[randEnemyId].spawnCost;
@@ -110,30 +120,34 @@ public class RoundManager : MonoBehaviour
             if (waveValue-randEnemyCost < 0){
                 continue;
             }
-            generatedEnmies.Add(enemies[randEnemyId].enemyPrefab);
+            generatedEnmies.Add(enemies[randEnemyId].enemyInfo);
+
+            enemyIndex.Add(randEnemyId);
             waveValue -= randEnemyCost;
         }
 
         enemiesToSpawn.Clear();
         enemiesToSpawn = generatedEnmies;
 
-        foreach(GameObject enemy in enemiesToSpawn){
-            enemy.TryGetComponent<Enemy>(out Enemy enemieDead);
-            enemieDead.OnEnemyDead += ChangeScore;
-        }
-
         //saber cuantos enemigos hay vivos en la oleada
         aliveEnemies = enemiesToSpawn.Count; 
-
-        //SendWave();
     }
 
-    private void SpawnWave(){
-
+    /// <summary>
+    /// Manda la lista de enemigos creados al spawner de enemigos
+    /// <br/> En el momento en que se manda es cuando estos hacen spawn
+    /// </summary>
+    /// <param name="enemiesIndex">Lista con los indices de los enemigos dentro de los disponibles</param>
+    private void SendWave(List<int> enemiesIndex){
+        enemySpawner.RecibeWaveEnemies(enemiesIndex);
     }
 
-    private void SendWave(){
-        GetComponent<EnemyWaves>().WaveSpawn(enemiesToSpawn,spawnInterval);
+    /// <summary>
+    /// Iguala la lista de enemigos disponibles con la del spawner,
+    /// <br/> para así que concuerden los indices
+    /// </summary>
+    private void SetEnemiesInSpawner(){
+       enemySpawner.SetEnemiesInSpawner(enemies);
     }
 
     private void UISet(){
@@ -154,31 +168,26 @@ public class RoundManager : MonoBehaviour
         
     }
 
-    private void ChangeScore(object sender, Enemy.OnEnemyDeadEventArgs e){
-        scoreManager.SetScore(e.score);
-
-        aliveEnemies -=1; //posiblemente aguanta moverlo a su propia función y suscribirla también al evento
-    }
-
+#region FUNCIONES SUSCRITAS A EVENTOS
 /// <summary>
-/// Esta función solo la uso desde el editor, en vista de que el spawn todavía no esta integrado
-/// Busca todos los enemigos de la escena y los asigna como si fueran los generados
+/// Decirle al score manager ocurrio algo que cambio la puntación
 /// </summary>
-    [ContextMenu("SearchEnemiesOnScene")]
-    private void SearchEnemiesOnScene(){
-        Enemy[] enemiesOnScene = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
-        enemiesToSpawn.Clear();
-        for (int i=0; i < enemiesOnScene.Length-1; i++){
-            enemiesOnScene[i].OnEnemyDead += ChangeScore;
-            enemiesToSpawn.Add(enemiesOnScene[i].gameObject);
-        }
+/// <param name="sender"></param>
+/// <param name="e"></param>
+    public void ChangeScore(object sender, Enemy.OnEnemyDeadEventArgs e){
+        scoreManager.SetScore(e.score);
     }
+
+    public void EnemyDied(object sender, Enemy.OnEnemyDeadEventArgs e){
+        aliveEnemies -=1; 
+    }
+#endregion
 
 }
 
 [System.Serializable]
 public class BuyableEnemy{
-    public GameObject enemyPrefab;
+    public EnemyScriptableObject enemyInfo;
     public int spawnCost;
 
 }

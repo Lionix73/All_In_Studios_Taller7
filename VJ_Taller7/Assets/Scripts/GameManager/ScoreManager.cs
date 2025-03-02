@@ -3,7 +3,7 @@ using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
-    public RoundManager roundManager;
+    private RoundManager roundManager;
 
     [SerializeField] private float score;
     [SerializeField] private TextMeshProUGUI _UIscoreText;

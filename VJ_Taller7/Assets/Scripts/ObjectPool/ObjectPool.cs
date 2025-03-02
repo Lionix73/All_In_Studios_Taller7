@@ -4,7 +4,7 @@ using UnityEngine;
 public class ObjectPool
 {
     private PoolableObject Prefab;
-    private int Size;
+    public int Size {get; private set;}
     private List<PoolableObject> AvailableObjectsPool;
 
     private ObjectPool(PoolableObject Prefab, int Size)

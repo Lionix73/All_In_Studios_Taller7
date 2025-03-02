@@ -6084,7 +6084,6 @@ Transform:
   m_Children:
   - {fileID: 636921891}
   - {fileID: 1302012384}
-  - {fileID: 596772573}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &235002931
@@ -15897,62 +15896,6 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
---- !u!1 &596772572
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 596772573}
-  - component: {fileID: 596772574}
-  m_Layer: 0
-  m_Name: EnemyManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &596772573
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 596772572}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 225404293}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &596772574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 596772572}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 438023eba62c3e34aaec44f91fb2a732, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 960368987}
-  mainCamera: {fileID: 312226504}
-  storeInitialPos: 0
-  numberOfEnemiesToSpawn: 6
-  spawnDelay: 1
-  enemies:
-  - {fileID: 11400000, guid: 21ed1a5a01a54ba4da5367bcf32db792, type: 2}
-  - {fileID: 11400000, guid: 1210907979af0b04b9419d53c80f1bfa, type: 2}
-  - {fileID: 11400000, guid: 694b5b92d05735442901ef6c4e481a22, type: 2}
-  - {fileID: 11400000, guid: 8021c479d8fe1be4893654b7de4f9db0, type: 2}
-  enemySpawnMethod: 0
-  healthBarCanvas: {fileID: 539107200}
 --- !u!43 &599552549
 Mesh:
   m_ObjectHideFlags: 0
@@ -26287,10 +26230,6 @@ PrefabInstance:
     - target: {fileID: 2666794559733852778, guid: 2d623929b809fcc45a35c2a49115102d, type: 3}
       propertyPath: m_Name
       value: GameManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 2666794559733852778, guid: 2d623929b809fcc45a35c2a49115102d, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7021727127881821152, guid: 2d623929b809fcc45a35c2a49115102d, type: 3}
       propertyPath: _UiWaveTimer

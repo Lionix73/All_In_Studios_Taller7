@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.AI;
-using System.Linq;
 
 public class EnemyWaves : MonoBehaviour
 {
@@ -12,9 +11,12 @@ public class EnemyWaves : MonoBehaviour
 
     [Header("Spawn Settings")]
     [SerializeField] private bool storeInitialPos = false;
-    //[SerializeField] private int numberOfEnemiesToSpawn = 1;
-    //[SerializeField] private float spawnDelay = 1f;
-    [SerializeField] private List<Enemy> enemyPrefabs = new List<Enemy>();
+    [field:SerializeField] private int numberOfEnemiesToSpawn=1;
+    [SerializeField] private float spawnDelay = 1f;
+    [Tooltip("Enemigos disponibles en el juego")]
+    [SerializeField] private List<EnemyScriptableObject> enemies = new List<EnemyScriptableObject>();
+    [Tooltip("Indices de los enemigos que van a aparecer")] 
+    private List<int> enemiesIndex;
     [SerializeField] private SpawnMethod enemySpawnMethod = SpawnMethod.Roundrobin;
 
     [Header("UI Settings")]
@@ -24,15 +26,46 @@ public class EnemyWaves : MonoBehaviour
     private Dictionary<int, ObjectPool> EnemyObjectPools = new Dictionary<int, ObjectPool>();
     private Dictionary<Enemy, Vector3> initialPositions = new Dictionary<Enemy, Vector3>();
 
+    [Header("Managers")]
+    private RoundManager _roundManager;
+    private ScoreManager _scoreManager;
 
     private void Start()
     {
+        _roundManager = GetComponent<RoundManager>();
+        _scoreManager = GetComponent<ScoreManager>();
+
         navMeshTriangulation = NavMesh.CalculateTriangulation();
 
         if(storeInitialPos){
             StoreInitialPositions();
         }
     }
+
+    public void SetEnemiesInSpawner(List<BuyableEnemy> available){
+        for (int i = 0; i < available.Count; i++){
+            enemies.Add(available[i].enemyInfo);
+        }
+
+        //Si somos absolutamente precisos debería buscar por cada index y crear la cantidad... pero pa luego :D
+        //primera pool
+        for (int i = 0; i < enemies.Count; i++){
+            EnemyObjectPools.Add(i, ObjectPool.CreateInstance(enemies[i].prefab, numberOfEnemiesToSpawn));
+        }
+    }
+
+    //[ContextMenu("CreateEnemyPool")]
+    //private void CreateEnemyPool(){
+    //    ObjectPool poolCheck;
+    //    for (int i = 0; i < enemies.Count; i++)
+    //    {
+    //        if (EnemyObjectPools.TryGetValue(i, out poolCheck)){
+    //            if (poolCheck.Size < enemies.Count){
+    //            }
+    //        }
+    //        else continue;
+    //    }
+    //}
 
     private void StoreInitialPositions()
     {
@@ -46,22 +79,27 @@ public class EnemyWaves : MonoBehaviour
         }
     }
 
-    public void WaveSpawn(List<GameObject> enememiesForWave, float spawnDelay){
-        StartCoroutine(SpawnEnemies(enememiesForWave, spawnDelay));
-
+    public void RecibeWaveEnemies(List<int> index){
+        numberOfEnemiesToSpawn = index.Count;
+        enemiesIndex = index;
+        //CreateEnemyPool(); //Todavía estoy viendo como hacerla dinámica, por ahora, solo es muy grande
+        StartCoroutine(SpawnEnemies());
     }
 
-    private IEnumerator SpawnEnemies(List<GameObject> enemies, float spawnDelay){
+    private IEnumerator SpawnEnemies(){
         WaitForSeconds wait = new WaitForSeconds(spawnDelay);
 
         int spawnedEnemies = 0;
 
-        while(spawnedEnemies < enemies.Count){
+        while(spawnedEnemies < numberOfEnemiesToSpawn){
             if(enemySpawnMethod == SpawnMethod.Roundrobin){
                 SpawnRoundRobinEnemy(spawnedEnemies);
             }
             else if(enemySpawnMethod == SpawnMethod.Random){
                 SpawnRandomEnemy();
+            }
+            else if (enemySpawnMethod == SpawnMethod.Especific){
+                SpawnEspecificEnemy(enemiesIndex[spawnedEnemies]);
             }
 
             spawnedEnemies++;
@@ -71,13 +109,17 @@ public class EnemyWaves : MonoBehaviour
     }
 
     private void SpawnRoundRobinEnemy(int spawnedEnemies){
-        int spawnIndex = spawnedEnemies % enemyPrefabs.Count;
+        int spawnIndex = spawnedEnemies % enemies.Count;
 
         DoSpawnEnemy(spawnIndex);
     }
 
+    private void SpawnEspecificEnemy(int index){
+        DoSpawnEnemy(index);
+    }
+
     private void SpawnRandomEnemy(){
-        DoSpawnEnemy(Random.Range(0, enemyPrefabs.Count));
+        DoSpawnEnemy(Random.Range(0, enemies.Count));
     }
 
     private void DoSpawnEnemy(int spawnIndex){
@@ -85,6 +127,9 @@ public class EnemyWaves : MonoBehaviour
 
         if(poolableObject != null){
             Enemy enemy = poolableObject.GetComponent<Enemy>();
+
+            enemy.OnEnemyDead += _roundManager.EnemyDied; //suscribir al evento
+            enemy.OnEnemyDead += _roundManager.ChangeScore; //suscribir al evento
             
             int vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
 
@@ -113,7 +158,7 @@ public class EnemyWaves : MonoBehaviour
         {
             enemy.transform.position = initialPosition;
             enemy.gameObject.SetActive(true);
-            //enemy.Health = enemy.EnemyConfiguration.health;
+            //enemy.Health = enemies.Health;
             enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
         }
         else
@@ -122,8 +167,13 @@ public class EnemyWaves : MonoBehaviour
         }
     }
 
+    public void ChangeScore(object sender, Enemy.OnEnemyDeadEventArgs e){
+
+    }
+
     public enum SpawnMethod{
         Roundrobin,
-        Random
+        Random,
+        Especific
     }
 }
