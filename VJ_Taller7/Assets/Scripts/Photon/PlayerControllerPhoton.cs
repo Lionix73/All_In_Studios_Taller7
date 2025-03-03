@@ -80,7 +80,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
     private float speedY;
 
     private WeaponBase _weapon;
-
+    private GunPickeablePhoton gunPickable;
 
     private int jumpCount = 0;
     [Networked, OnChangedRender(nameof(Jumped))] private int JumpSync { get; set; } //Synchronize sound in all clients
@@ -101,6 +101,8 @@ public class PlayerControllerPhoton : NetworkBehaviour
 
     public bool IsReady; //Server is the only one who cares about this
 
+    public bool ShowPickable;
+
     private void Awake()
     {
         _weapon = GetComponentInChildren<WeaponBase>();
@@ -109,6 +111,12 @@ public class PlayerControllerPhoton : NetworkBehaviour
     {
         //kcc.SetGravity(Physics.gravity.y * 2f);
         colliders = gameObject.GetComponentsInChildren<CapsuleCollider>();
+        //gunPickable.LocalPlayer = this;
+        foreach (CapsuleCollider collider in colliders)
+        {
+            // Asignar el tag "Player" al GameObject que contiene el collider
+            collider.gameObject.tag = "Player";
+        }
         playerInput = GetComponent<PlayerInput>();
         GameObject camera = FindFirstObjectByType<CinemachineCamera>().gameObject;
         freeLookCamera = camera.GetComponent<CinemachineCamera>();
@@ -410,6 +418,13 @@ public class PlayerControllerPhoton : NetworkBehaviour
     private void RPC_PlayerName(string name)
     {
         //Name = name;
+    }
+
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.InputAuthority | RpcTargets.StateAuthority)] // The ui update is actually allowed to run locally when the player indicates their readiness
+    public void RPC_ActivateObject(bool value)
+    {
+        ShowPickable = value;
     }
 
 }

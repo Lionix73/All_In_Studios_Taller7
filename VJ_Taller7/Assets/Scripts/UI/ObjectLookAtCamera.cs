@@ -8,7 +8,7 @@ public class ObjectLookAtCamera : MonoBehaviour
 
     public void LookAtCamera()
     {
-        transform.LookAt(transform.position + mainCamera.transform.rotation * Vector3.forward, mainCamera.transform.rotation * Vector3.up);
+        transform.LookAt(mainCamera.transform, Vector3.up);
     }
     public void ApplyOffset()
     {
@@ -16,6 +16,9 @@ public class ObjectLookAtCamera : MonoBehaviour
     }
     void Awake()
     {
-        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+        }
     }
 }
