@@ -31,7 +31,13 @@ public class SoundManager : MonoBehaviour
         sound_index = GetSoundIndex(s_name1);
         if(sound_index != -1)
         {
-            if (!sounds[sound_index].IsPlaying())
+            FMOD.RESULT isLoop = sounds[sound_index].EventDescription.isOneshot(out bool oneshot);
+
+            if (!oneshot && !sounds[sound_index].IsPlaying())
+            {
+                sounds[sound_index].Play();
+            }
+            else if(oneshot)
             {
                 sounds[sound_index].Play();
             }

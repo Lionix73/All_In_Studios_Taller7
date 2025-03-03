@@ -320,11 +320,61 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void OnFire(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            switch(gunManager.Gun)
+            {
+                case GunType.Rifle:
+                    soundManager.PlaySound("rifleFire");
+                    break;
+                case GunType.BasicPistol:
+                    soundManager.PlaySound("pistolFire");
+                    break;
+                case GunType.Revolver:
+                    soundManager.PlaySound("revolverFire");
+                    break;
+                case GunType.Shotgun:
+                    soundManager.PlaySound("shotgunFire");
+                    break;
+                case GunType.Sniper:
+                    soundManager.PlaySound("sniperFire");
+                    break;
+            }
+        }
+
+        if (context.canceled)
+        {
+            soundManager.StopSound("rifleFire");
+        }
+    }
+
+
     public void OnReload(InputAction.CallbackContext context)
     {
         if(context.performed)
         {
             animator.SetTrigger("Reload");
+
+            switch (gunManager.Gun)
+            {
+                case GunType.Rifle:
+                    soundManager.PlaySound("rifleReload");
+                    break;
+                case GunType.BasicPistol:
+                    soundManager.PlaySound("pistolReload");
+                    break;
+                case GunType.Revolver:
+                    soundManager.PlaySound("revolverReload");
+                    break;
+                case GunType.Shotgun:
+                    soundManager.PlaySound("shotgunReload");
+                    break;
+                case GunType.Sniper:
+                    soundManager.PlaySound("sniperReload");
+                    break;
+            }
         }
     }
 
@@ -533,7 +583,6 @@ public class PlayerController : MonoBehaviour
         }
 
         isDashing = false;
-        yield return new WaitForSeconds(dashDuration);
         rb.useGravity = true;
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
