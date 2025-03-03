@@ -18,7 +18,10 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 		private float _hitImpulse = 50f;
 		[SerializeField]
 		private DummyFlyingProjectile _dummyProjectilePrefab;
-
+		[SerializeField]
+		private float damage;
+		[Networked]
+		private HealthPhoton Damageable {  get; set; }
 		[Networked]
 		private int _fireCount { get; set; }
 		[Networked, Capacity(32)]
@@ -31,6 +34,9 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 		public override void Fire()
 		{
 			var hitPosition = Vector3.zero;
+			bool isHit = false;
+			Damageable = null;
+
 
 			var hitOptions = HitOptions.IncludePhysX | HitOptions.IgnoreInputAuthority;
 
@@ -40,7 +46,17 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 			{
 				if (hit.Collider != null && hit.Collider.attachedRigidbody != null)
 				{
-					hit.Collider.attachedRigidbody.AddForce(FireTransform.forward * _hitImpulse, ForceMode.Impulse);
+					
+					if (hit.Collider.attachedRigidbody.TryGetComponent(out HealthPhoton other))
+					{
+						Damageable = other;	
+						isHit = true;
+
+					}
+					else
+					{
+                        hit.Collider.attachedRigidbody.AddForce(FireTransform.forward * _hitImpulse, ForceMode.Impulse);
+                    }
 				}
 
 				hitPosition = hit.Point;
@@ -51,7 +67,9 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 			_projectileData.Set(_fireCount % _projectileData.Length, new ProjectileData()
 			{
 				HitPosition = hitPosition,
-			});
+				IsHit = isHit,
+				Damage = damage,
+			}) ;
 
 			_fireCount++;
 		}
@@ -78,6 +96,14 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 					var dummyProjectile = Instantiate(_dummyProjectilePrefab, FireTransform.position, FireTransform.rotation);
 					dummyProjectile.SetHitPosition(data.HitPosition);
 
+					if (data.IsHit)
+					{
+						Damageable.TakeDamage(data.Damage);
+						Damageable.ShowFloatingText(data.Damage, data.HitPosition);
+						Damageable.healthBar.SetProgress(Damageable.CurrentHealth / Damageable.MaxHealth);
+
+                    }
+
 					// When using multipeer, move to correct scene and disable renderers for other clients. Can be omitted otherwise.
 					if (Runner.Config.PeerMode == NetworkProjectConfig.PeerModes.Multiple)
 					{
@@ -95,7 +121,8 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 		private struct ProjectileData : INetworkStruct
 		{
 			public Vector3 HitPosition;
-
+			public float Damage;
+			public bool IsHit;
 			// ProjectileData struct can be expanded with additional data
 			// like ImpactNormal, ImpactType to better reconstruct projectile effects on all clients
 			// See ProjectileManager in the Projectiles Advanced.
