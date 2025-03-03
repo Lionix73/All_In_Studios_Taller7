@@ -9,7 +9,9 @@ public enum InputButton
     Run,
     Dash,
     OnAim,
-    Emote
+    Emote,
+    Fire,
+
 }
 public struct NetworkInputData : INetworkInput
 {

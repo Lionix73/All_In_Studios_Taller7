@@ -57,6 +57,7 @@ public class InputManager : SimulationBehaviour,IBeforeUpdate, INetworkRunnerCal
             //accumulatedInput.LookDelta += lookRotationDelta;
             mouseDeltaAccumulator.Accumulate(lookRotationDelta);
             buttons.Set(InputButton.OnAim, mouse.rightButton.isPressed);
+            buttons.Set(InputButton.Fire, mouse.leftButton.isPressed);
         }
 
         if (keyboard != null)

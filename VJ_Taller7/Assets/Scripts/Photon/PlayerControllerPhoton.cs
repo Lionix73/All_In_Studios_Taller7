@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Fusion;
 using UnityEngine.Windows;
+using Projectiles;
 public class PlayerControllerPhoton : NetworkBehaviour
 {
 
@@ -46,8 +47,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
     private Vector3 dashDirection;
 
     [Header("Components")]
-    [SerializeField] private CapsuleCollider crouchCollider;
-    private CapsuleCollider playerCollider;
+    [SerializeField] private CapsuleCollider[] colliders;
     public Transform cameraTransform;
     public Transform playerHead;
     [System.Obsolete] public CinemachineCamera freeLookCamera;
@@ -79,6 +79,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
     private float speedX;
     private float speedY;
 
+    private WeaponBase _weapon;
 
 
     private int jumpCount = 0;
@@ -100,10 +101,14 @@ public class PlayerControllerPhoton : NetworkBehaviour
 
     public bool IsReady; //Server is the only one who cares about this
 
+    private void Awake()
+    {
+        _weapon = GetComponentInChildren<WeaponBase>();
+    }
     public override void Spawned()
     {
         //kcc.SetGravity(Physics.gravity.y * 2f);
-        playerCollider = GameObject.Find("KCCCollider").GetComponent<CapsuleCollider>();
+        colliders = gameObject.GetComponentsInChildren<CapsuleCollider>();
         playerInput = GetComponent<PlayerInput>();
         GameObject camera = FindFirstObjectByType<CinemachineCamera>().gameObject;
         freeLookCamera = camera.GetComponent<CinemachineCamera>();
@@ -147,6 +152,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
             SetInputDirection(input, speed);
             CheckDash(input);
             adjustFOV(input);
+            FireWeapon(input);
 
             PreviousButtons = input.Buttons;
             baseLookRotation = kcc.GetLookRotation();
@@ -237,7 +243,6 @@ public class PlayerControllerPhoton : NetworkBehaviour
         {
             Debug.Log("Trying to crouch");
             ExchangeColliders();
-
             if (!IsRunning)
             {
                 IsCrouching = !IsCrouching;
@@ -246,6 +251,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
             {
                 Debug.Log("Slide");
                 OnSliding(input);
+                
             }
 
         }
@@ -260,18 +266,11 @@ public class PlayerControllerPhoton : NetworkBehaviour
     }
     private void ExchangeColliders()
     {
-        if (playerCollider != null && crouchCollider != null)
+        if (colliders != null)
         {
-            if (playerCollider.enabled)
-            {
-                crouchCollider.enabled = true;
-                playerCollider.enabled = false;
-            }
-            else
-            {
-                playerCollider.enabled = true;
-                crouchCollider.enabled = false;
-            }
+            Debug.Log("Cambio de colliders");
+            colliders[0].enabled = !IsCrouching;
+            colliders[1].enabled = IsCrouching;
         }
     }
     private void OnSliding(NetworkInputData input)
@@ -300,7 +299,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
 
             IsSliding = false;
             IsCrouching = false;
-            ExchangeColliders();
+            //ExchangeColliders();
         }
     }
 
@@ -345,12 +344,6 @@ public class PlayerControllerPhoton : NetworkBehaviour
         animator.SetFloat("SpeedX", speedX);
     }
 
-    private void ResetColliderHeight()
-    {
-        playerCollider.height = normalHeight;
-        playerCollider.center.Set(0f, 0.9f, 0f);
-    }
-
 
 
     /*public void OnMove(InputAction.CallbackContext context)
@@ -386,6 +379,14 @@ public class PlayerControllerPhoton : NetworkBehaviour
         }
     }
 
+    public void FireWeapon(NetworkInputData input)
+    {
+        if (input.Buttons.WasPressed(PreviousButtons, InputButton.Fire))
+        {
+            Debug.Log("Disparar");
+            _weapon.Fire();
+        }
+    }
     private void Jumped()
     {
         //source.Play();

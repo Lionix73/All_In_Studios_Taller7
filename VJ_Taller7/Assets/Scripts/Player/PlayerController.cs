@@ -4,9 +4,8 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Animations.Rigging;
-using static UnityEditor.Experimental.GraphView.GraphView;
-using NUnit.Framework;
-using System.Collections.Generic;
+//using static UnityEditor.Experimental.GraphView.GraphView;
+
 
 public class PlayerController : MonoBehaviour
 {
