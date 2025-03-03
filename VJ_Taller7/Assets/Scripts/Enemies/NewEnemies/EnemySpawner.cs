@@ -14,6 +14,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int numberOfEnemiesToSpawn = 1;
     [SerializeField] private float spawnDelay = 1f;
     [SerializeField] private List<EnemyScriptableObject> enemies = new List<EnemyScriptableObject>();
+    public List<EnemyScriptableObject> Enemies => enemies;
+
     [SerializeField] private SpawnMethod enemySpawnMethod = SpawnMethod.Roundrobin;
 
     [Header("UI Settings")]
@@ -83,7 +85,7 @@ public class EnemySpawner : MonoBehaviour
         DoSpawnEnemy(Random.Range(0, enemies.Count));
     }
 
-    private void DoSpawnEnemy(int spawnIndex){
+    public void DoSpawnEnemy(int spawnIndex){
         PoolableObject poolableObject = EnemyObjectPools[spawnIndex].GetObject();
 
         if(poolableObject != null){

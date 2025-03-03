@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -134,7 +135,7 @@ public class Enemy : PoolableObject, IDamageable
         gameObject.SetActive(false);
 
         if(!isStatic){
-            Destroy(healthBar.gameObject, destroyDelay);
+            healthBar.gameObject.SetActive(false);
         }
 
         if (isStatic && enemySpawner != null)
