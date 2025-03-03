@@ -1648,7 +1648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ed2804d64e659b4485c797cbb7e59aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Method: 3
+  defaultMoveMethod: 2
   m_Curve:
     serializedVersion: 2
     m_Curve:
@@ -1682,6 +1682,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  parabolaHeight: 8
+  linkTraversalConfigs:
+  - m_Method: 1
+    areaType: 0
+  - m_Method: 2
+    areaType: 2
 --- !u!1 &4613670454768124645
 GameObject:
   m_ObjectHideFlags: 0

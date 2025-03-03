@@ -132,13 +132,20 @@ public class EnemyMovement : MonoBehaviour
         OnStateChange?.Invoke(EnemyState.Spawn, defaultState);
     }
 
-    private void HandleLinkStart(){
-        animator.SetTrigger(Jump); 
+    private void HandleLinkStart(OffMeshLinkMoveMethod moveMethod){
+        if(moveMethod == OffMeshLinkMoveMethod.NormalSpeed){
+            animator.SetBool(IsWalking, true);
+        }
+        else if(moveMethod != OffMeshLinkMoveMethod.Teleport){
+            animator.SetTrigger(Jump); 
+        }
     }
 
-    private void HandleLinkEnd()
+    private void HandleLinkEnd(OffMeshLinkMoveMethod moveMethod)
     {
-        animator.SetTrigger(Landed);
+        if(moveMethod != OffMeshLinkMoveMethod.Teleport && moveMethod != OffMeshLinkMoveMethod.NormalSpeed){
+            animator.SetTrigger(Landed);
+        }
     }
 
     private void Update()
@@ -148,7 +155,7 @@ public class EnemyMovement : MonoBehaviour
 
     private void HandleAnims()
     {
-        if(agent.hasPath){
+        if(agent.hasPath && !agent.isOnOffMeshLink){
             Vector3 dir = (agent.steeringTarget - transform.position).normalized;
             Vector3 animDir = transform.InverseTransformDirection(dir);
 
