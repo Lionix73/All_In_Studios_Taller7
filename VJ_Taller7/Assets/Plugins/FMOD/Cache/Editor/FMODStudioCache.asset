@@ -27,26 +27,6 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 248332
---- !u!114 &-8589631866219466387
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/UI.bank
-  m_EditorClassIdentifier: 
-  Path: ../FMOD/Build/Desktop/UI.bank
-  Name: UI
-  StudioPath: bank:/UI
-  lastModified: 638766155601695123
-  FileSizes:
-  - Name: Desktop
-    Value: 494
-  Exists: 1
 --- !u!114 &-8321730620031244040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,7 +69,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638766155601085286
+  lastModified: 638765343766544918
   FileSizes:
   - Name: Desktop
     Value: 289920
@@ -244,38 +224,11 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Guns.bank
   Name: Guns
   StudioPath: bank:/Guns
-  lastModified: 638766165734478560
+  lastModified: 638766242071850150
   FileSizes:
   - Name: Desktop
     Value: 427680
   Exists: 1
---- !u!114 &-4492184278970040576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Environment/HealthPick
-  m_EditorClassIdentifier: 
-  Path: event:/Environment/HealthPick
-  Guid:
-    Data1: -1485809469
-    Data2: 1256671218
-    Data3: -75308381
-    Data4: -1771860443
-  Banks:
-  - {fileID: -3976989874711971527}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 15
-  Length: 9000
 --- !u!114 &-4303300845778931015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303,26 +256,6 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 24600
---- !u!114 &-3976989874711971527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Env.bank
-  m_EditorClassIdentifier: 
-  Path: ../FMOD/Build/Desktop/Env.bank
-  Name: Env
-  StudioPath: bank:/Env
-  lastModified: 638766155600553710
-  FileSizes:
-  - Name: Desktop
-    Value: 122304
-  Exists: 1
 --- !u!114 &-3788098629132005875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,33 +337,6 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 90897
---- !u!114 &-529706161524884370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Environment/AmmoPick
-  m_EditorClassIdentifier: 
-  Path: event:/Environment/AmmoPick
-  Guid:
-    Data1: -33921719
-    Data2: 1153912399
-    Data3: -176208217
-    Data4: -291813761
-  Banks:
-  - {fileID: -3976989874711971527}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 15
-  Length: 600
 --- !u!114 &-168895572551709543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,8 +382,6 @@ MonoBehaviour:
   - {fileID: 7110951529853266717}
   - {fileID: -4513784106951406516}
   - {fileID: 1312478745403810463}
-  - {fileID: -3976989874711971527}
-  - {fileID: -8589631866219466387}
   EditorEvents:
   - {fileID: -4303300845778931015}
   - {fileID: -8687818927546312647}
@@ -488,9 +392,6 @@ MonoBehaviour:
   - {fileID: 4387715265204309562}
   - {fileID: 5951964841540460801}
   - {fileID: -6562122329363156979}
-  - {fileID: 5732111803088509972}
-  - {fileID: -529706161524884370}
-  - {fileID: -4492184278970040576}
   - {fileID: -3788098629132005875}
   - {fileID: 6242960818866578445}
   - {fileID: -4793974485510669844}
@@ -506,7 +407,7 @@ MonoBehaviour:
   - {fileID: -8195523702505923715}
   StringsBanks:
   - {fileID: 5092639294113453569}
-  cacheTime: 638766165734478560
+  cacheTime: 638766242073620777
   cacheVersion: 131622
 --- !u!114 &16718576494435817
 MonoBehaviour:
@@ -550,7 +451,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Player.bank
   Name: Player
   StudioPath: bank:/Player
-  lastModified: 638766158716166632
+  lastModified: 638766242073620777
   FileSizes:
   - Name: Desktop
     Value: 1256160
@@ -624,38 +525,11 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638766155601100321
+  lastModified: 638766242072136314
   FileSizes:
   - Name: Desktop
     Value: 1938
   Exists: 1
---- !u!114 &5732111803088509972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Environment/Jump Pad
-  m_EditorClassIdentifier: 
-  Path: event:/Environment/Jump Pad
-  Guid:
-    Data1: -2077254888
-    Data2: 1138089643
-    Data3: -269164909
-    Data4: -331878208
-  Banks:
-  - {fileID: -3976989874711971527}
-  IsStream: 0
-  Is3D: 1
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 1400
 --- !u!114 &5951964841540460801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -752,7 +626,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638766155601378648
+  lastModified: 638765343766835198
   FileSizes:
   - Name: Desktop
     Value: 3100128

@@ -29,6 +29,8 @@ public class PlayerControllerPhoton : NetworkBehaviour
 
     [Header("Animator")]
     public Animator animator;
+    [SerializeField] private FloatDampener speedX;
+    [SerializeField] private FloatDampener speedY;
 
     [Header("Movimiento y Dash")]
     [SerializeField] private float dashImpulse = 20f;
@@ -76,8 +78,6 @@ public class PlayerControllerPhoton : NetworkBehaviour
     private bool CanCrouch => kcc.Data.IsGrounded;
     private bool CanJump => kcc.Data.IsGrounded;
 
-    private float speedX;
-    private float speedY;
 
     private WeaponBase _weapon;
     private GunPickeablePhoton gunPickable;
@@ -329,12 +329,14 @@ public class PlayerControllerPhoton : NetworkBehaviour
 
     private void HandleAnimations()
     {
+        speedX.Update();
+        speedY.Update();
         bool isMoving = false;
         if (GetInput(out NetworkInputData input))
         { 
             isMoving = input.Direction.sqrMagnitude > 0f && kcc.Data.IsGrounded;
-            speedX = input.Direction.x;
-            speedY = input.Direction.y;
+            speedX.TargetValue = input.Direction.x;
+            speedY.TargetValue = input.Direction.y;
 
             if (input.Direction.sqrMagnitude < 0.1f && IsRunning)
                 IsRunning = false;
@@ -348,8 +350,8 @@ public class PlayerControllerPhoton : NetworkBehaviour
         animator.SetBool("isEmoting", IsEmoting);
         animator.SetBool("isGrounded", IsGrounded);
 
-        animator.SetFloat("SpeedY", speedY);
-        animator.SetFloat("SpeedX", speedX);
+        animator.SetFloat("SpeedY", speedY.CurrentValue);
+        animator.SetFloat("SpeedX", speedX.CurrentValue);
     }
 
 
