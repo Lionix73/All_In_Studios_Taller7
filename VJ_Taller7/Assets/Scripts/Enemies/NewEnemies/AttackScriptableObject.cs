@@ -13,6 +13,21 @@ public class AttackScriptableObject : ScriptableObject
     public Vector3 bulletSpawnOffSet = new Vector3(0, 1, 0);
     public LayerMask lineOfSightLayer;
 
+    public AttackScriptableObject ScaleUpLevel(ScalingScriptableObject scaling, int level){
+        AttackScriptableObject scaledAttack = CreateInstance<AttackScriptableObject>();
+
+        scaledAttack.isRanged = isRanged;
+        scaledAttack.damage = Mathf.FloorToInt(damage * scaling.damageCurve.Evaluate(level));
+        scaledAttack.attackRadius = attackRadius;
+        scaledAttack.attackDelay = attackDelay;
+
+        scaledAttack.bulletPrefab = bulletPrefab;
+        scaledAttack.bulletSpawnOffSet = bulletSpawnOffSet;
+        scaledAttack.lineOfSightLayer = lineOfSightLayer;
+
+        return scaledAttack;
+    }
+
     public void SetUpEnemey(Enemy enemy){
         (enemy.AttackRadius.sphereCollider == null ? enemy.AttackRadius.GetComponent<SphereCollider>() : enemy.AttackRadius.sphereCollider).radius = attackRadius;
         enemy.AttackRadius.AttackDelay = attackDelay;

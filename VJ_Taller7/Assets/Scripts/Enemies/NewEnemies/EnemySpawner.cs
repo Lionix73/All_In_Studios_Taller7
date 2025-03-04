@@ -15,15 +15,28 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float spawnDelay = 1f;
     [SerializeField] private List<EnemyScriptableObject> enemies = new List<EnemyScriptableObject>();
     public List<EnemyScriptableObject> Enemies => enemies;
-
+    [SerializeField] private ScalingScriptableObject scaling;  
     [SerializeField] private SpawnMethod enemySpawnMethod = SpawnMethod.Roundrobin;
+    [SerializeField] private bool continousSpawn = false;
 
-    [Header("UI Settings")]
-    [SerializeField] private Canvas healthBarCanvas;
+
+    [Space]
+    [Header("Read At Runtime")]
+    [SerializeField] private int level = 0;
+    [SerializeField] private List<EnemyScriptableObject> scaledEnemies = new List<EnemyScriptableObject>();
+
+    private int enemiesAlive = 0;
+    private int enemiesSpawned = 0;
+    private int initialEnemiesToSpawn;
+    private float initialSpawnDelay;
 
     private NavMeshTriangulation navMeshTriangulation;
     private Dictionary<int, ObjectPool> EnemyObjectPools = new Dictionary<int, ObjectPool>();
     private Dictionary<Enemy, Vector3> initialPositions = new Dictionary<Enemy, Vector3>();
+
+    [Header("UI Settings")]
+    [SerializeField] private Canvas healthBarCanvas;
+
 
     private void Awake()
     {
@@ -31,11 +44,19 @@ public class EnemySpawner : MonoBehaviour
         {
             EnemyObjectPools.Add(i, ObjectPool.CreateInstance(enemies[i].prefab, numberOfEnemiesToSpawn));
         }
+
+        initialEnemiesToSpawn = numberOfEnemiesToSpawn;
+        initialSpawnDelay = spawnDelay;
     }
 
     private void Start()
     {
         navMeshTriangulation = NavMesh.CalculateTriangulation();
+
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            scaledEnemies.Add(enemies[i].ScaleUpLevel(scaling, 0));
+        }
 
         if(storeInitialPos){
             StoreInitialPositions();
@@ -57,40 +78,59 @@ public class EnemySpawner : MonoBehaviour
     }
 
     private IEnumerator SpawnEnemies(){
+        level++;
+
+        enemiesAlive = 0;
+        enemiesSpawned = 0;
+
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            scaledEnemies[i] = enemies[i].ScaleUpLevel(scaling, level);
+        } 
+
         WaitForSeconds wait = new WaitForSeconds(spawnDelay);
 
-        int spawnedEnemies = 0;
-
-        while(spawnedEnemies < numberOfEnemiesToSpawn){
+        while(enemiesSpawned < numberOfEnemiesToSpawn){
             if(enemySpawnMethod == SpawnMethod.Roundrobin){
-                SpawnRoundRobinEnemy(spawnedEnemies);
+                SpawnRoundRobinEnemy(enemiesSpawned);
             }
             else if(enemySpawnMethod == SpawnMethod.Random){
                 SpawnRandomEnemy();
             }
 
-            spawnedEnemies++;
+            enemiesSpawned++;
 
             yield return wait;
+        }
+
+        if(continousSpawn){
+            ScaleUpSpawns();
+            StartCoroutine(SpawnEnemies());
         }
     }
 
     private void SpawnRoundRobinEnemy(int spawnedEnemies){
         int spawnIndex = spawnedEnemies % enemies.Count;
 
-        DoSpawnEnemy(spawnIndex);
+        DoSpawnEnemy(spawnIndex, ChooseRandomPositionOnNavMesh());
     }
 
     private void SpawnRandomEnemy(){
-        DoSpawnEnemy(Random.Range(0, enemies.Count));
+        DoSpawnEnemy(Random.Range(0, enemies.Count), ChooseRandomPositionOnNavMesh());
     }
 
-    public void DoSpawnEnemy(int spawnIndex){
+    private Vector3 ChooseRandomPositionOnNavMesh()
+    {
+        int VertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
+        return navMeshTriangulation.vertices[VertexIndex];
+    }
+
+    public void DoSpawnEnemy(int spawnIndex, Vector3 spawnPosition){
         PoolableObject poolableObject = EnemyObjectPools[spawnIndex].GetObject();
 
         if(poolableObject != null){
             Enemy enemy = poolableObject.GetComponent<Enemy>();
-            enemies[spawnIndex].SetUpEnemy(enemy);
+            scaledEnemies[spawnIndex].SetUpEnemy(enemy);
             
             int vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
 
@@ -104,6 +144,9 @@ public class EnemySpawner : MonoBehaviour
                 enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
                 enemy.Agent.enabled = true;
                 enemy.Movement.Spawn();
+                enemy.OnDie += HandleEnemyDeath;
+
+                enemiesAlive++;
             }
             else{
                 Debug.LogError($"No se pudo poner el NavMeshAgent en el navmesh, usando {navMeshTriangulation.vertices[vertexIndex]}");
@@ -111,6 +154,20 @@ public class EnemySpawner : MonoBehaviour
         }
         else{
             Debug.LogError($"No se logro spawnear un enemigo tipo {spawnIndex} del object pool");
+        }
+    }
+
+    private void ScaleUpSpawns(){
+        numberOfEnemiesToSpawn = Mathf.FloorToInt(initialEnemiesToSpawn * scaling.spawnCountCurve.Evaluate(level + 1));
+        spawnDelay = initialSpawnDelay * scaling.spawnRateCurve.Evaluate(level + 1);
+    }
+
+    private void HandleEnemyDeath(Enemy enemy){
+         enemiesAlive--;
+
+        if(enemiesAlive == 0 && enemiesSpawned == numberOfEnemiesToSpawn){
+            ScaleUpSpawns();
+            StartCoroutine(SpawnEnemies());
         }
     }
 

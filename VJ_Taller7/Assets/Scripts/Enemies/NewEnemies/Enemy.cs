@@ -33,6 +33,10 @@ public class Enemy : PoolableObject, IDamageable
     }
 
     [SerializeField] private ProgressBar healthBar;
+    public ProgressBar HealthBar{
+        get => healthBar;
+        set => healthBar = value;
+    }
 
     public Camera MainCamera { get; set; }
 
@@ -63,6 +67,9 @@ public class Enemy : PoolableObject, IDamageable
     public class OnEnemyDeadEventArgs : EventArgs{
         public int score;
     }
+    
+    public delegate void DeathEvent(Enemy enemy);
+    public DeathEvent OnDie;
 
     private void Awake()
     {
@@ -121,8 +128,10 @@ public class Enemy : PoolableObject, IDamageable
                 agent.ResetPath();
                 agent.enabled = false;
             }
-
-            OnDied();
+            OnDie?.Invoke(this);
+            gameObject.SetActive(false);
+            healthBar.gameObject.SetActive(false);
+            //OnDied();
         }
     }
 
@@ -148,11 +157,14 @@ public class Enemy : PoolableObject, IDamageable
 
     public void SetUpHealthBar(Canvas canvas, Camera mainCamera){
         healthBar.transform.SetParent(canvas.transform);
+        healthBar.gameObject.SetActive(true);
 
         if (healthBar.TryGetComponent<FaceCamera>(out FaceCamera faceCamera))
         {
             faceCamera.Camera = mainCamera;
         }
+
+        healthBar.SetProgress(health / maxHealth, 3);
     }
     private void ShowFloatingText(float damage)
     {
