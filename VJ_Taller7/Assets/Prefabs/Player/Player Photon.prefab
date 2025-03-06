@@ -1539,7 +1539,7 @@ MonoBehaviour:
   _IsJumping: 0
   _IsDoubleJumping: 0
   IsReady: 0
-  ShowPickable: 0
+  _ShowPickable: 0
 --- !u!114 &2154555916449954242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1620,6 +1620,7 @@ MonoBehaviour:
   - {fileID: 2154555916449954242}
   - {fileID: 7310771614372243653}
   - {fileID: 3232680129489170652}
+  - {fileID: 2440805492102453034}
   - {fileID: 531693185501737953}
   ForceRemoteRenderTimeframe: 0
 --- !u!1 &4082625712162230198
@@ -3097,6 +3098,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4986896875533987216}
   - component: {fileID: 3232680129489170652}
+  - component: {fileID: 8684485505521510756}
+  - component: {fileID: 2440805492102453034}
   m_Layer: 0
   m_Name: GunManager
   m_TagString: Untagged
@@ -3139,11 +3142,50 @@ MonoBehaviour:
   ammunitionDisplay: {fileID: 0}
   gunsList:
   - {fileID: 11400000, guid: 00a1ab607eeda624eb93a56cf7a4ae5b, type: 2}
-  gunParent: {fileID: 0}
-  Gun: 0
-  inAPickeableGun: 0
-  CurrentGun: {fileID: 0}
+  - {fileID: 11400000, guid: 752defd28fd1c5146a08d1316236edc6, type: 2}
+  _Gun: 0
+  _inAPickeableGun: 0
   CurrentSecondGunType: 0
+  _LocalPlayer: {fileID: 0}
+  _Model: {fileID: 0}
+--- !u!135 &8684485505521510756
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8946805148234436937}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.08
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2440805492102453034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8946805148234436937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateAuthorityChangeErrorCorrectionDelta: 0.15
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0
 --- !u!1 &9182100386559508226
 GameObject:
   m_ObjectHideFlags: 0

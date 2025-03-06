@@ -14,7 +14,7 @@ public class GunPickeablePhoton : NetworkBehaviour
 
     [SerializeField] private GameObject gunModel;
     private Vector3 spinDirection = new Vector3(0, 0, 1);
-    private GunManager gunManager;
+    private GunManagerPhoton gunManager;
     public PlayerControllerPhoton LocalPlayer;
     // Networked Property para sincronizar el estado de la UI
     [Networked,OnChangedRender(nameof(UpdatePickeableUIState))]private NetworkBool IsPickeableUIActive { get; set; }
@@ -29,24 +29,35 @@ public class GunPickeablePhoton : NetworkBehaviour
 
     public override void FixedUpdateNetwork() {
         gunModel.transform.Rotate(spinDirection);
+        if (LocalPlayer == null)
+            PickeableUI.SetActive(false);
+        
     }
 
     private void OnTriggerEnter(Collider other) {
         LocalPlayer = other.GetComponentInParent<PlayerControllerPhoton>();
         if (LocalPlayer != null && LocalPlayer.HasInputAuthority)
         {
-            LocalPlayer.ShowPickable=true;
-            PickeableUI.SetActive(LocalPlayer.ShowPickable);
+            PickeableUI.SetActive(true);
             //IsPickeableUIActive = true;
-            gunManager = FindFirstObjectByType<GunManager>();
-            //gunManager = other.gameObject.GetComponentInChildren<GunManager>();
+           // gunManager = FindFirstObjectByType<GunManagerPhoton>();
+            gunManager = LocalPlayer.gameObject.GetComponentInChildren<GunManagerPhoton>();
             if (gunManager != null)
             {
                 gunManager.EnterPickeableGun(gunType);
-                GunScriptableObject gun = gunManager.GetGun(gunType); //Pa tomar lo que quiran del arma a pickear
-                damageText.text = $"DMG: {gun.Damage}";
-                fireRateText.text = $"Fire Rate: {gun.ShootConfig.FireRate}";
-                magazineText.text = $"Magazine: {gun.MagazineSize}";
+                GunScriptableObjectPhoton gun = gunManager.GetGun(gunType); //Pa tomar lo que quiran del arma a pickear
+                if (gun != null)
+                {
+                    damageText.text = $"DMG: {gun.Damage}";
+                    fireRateText.text = $"Fire Rate: {gun.ShootConfig.FireRate}";
+                    magazineText.text = $"Magazine: {gun.MagazineSize}";
+                }
+                else
+                    Debug.Log("No se encontro arma");
+            }
+            else
+            {
+                Debug.Log("No se encontro GunManager");
             }
 
 
@@ -69,7 +80,7 @@ public class GunPickeablePhoton : NetworkBehaviour
         if (other.CompareTag("Player")) {
             //IsPickeableUIActive = false;
             LocalPlayer.ShowPickable = false;
-            PickeableUI.SetActive(LocalPlayer.ShowPickable);
+            LocalPlayer =null;
         }
     }
     private void UpdatePickeableUIState()

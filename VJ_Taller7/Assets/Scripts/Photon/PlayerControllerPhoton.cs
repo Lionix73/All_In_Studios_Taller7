@@ -81,6 +81,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
 
     private WeaponBase _weapon;
     private GunPickeablePhoton gunPickable;
+    private GunManagerPhoton gunManager;
 
     private int jumpCount = 0;
     [Networked, OnChangedRender(nameof(Jumped))] private int JumpSync { get; set; } //Synchronize sound in all clients
@@ -101,7 +102,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
 
     public bool IsReady; //Server is the only one who cares about this
 
-    public bool ShowPickable;
+    [Networked] public bool ShowPickable { get; set; }
 
     private void Awake()
     {
@@ -111,6 +112,7 @@ public class PlayerControllerPhoton : NetworkBehaviour
     {
         //kcc.SetGravity(Physics.gravity.y * 2f);
         colliders = gameObject.GetComponentsInChildren<CapsuleCollider>();
+        gunManager = GetComponentInChildren<GunManagerPhoton>();
         //gunPickable.LocalPlayer = this;
         foreach (CapsuleCollider collider in colliders)
         {
@@ -161,7 +163,8 @@ public class PlayerControllerPhoton : NetworkBehaviour
             CheckDash(input);
             adjustFOV(input);
             FireWeapon(input);
-
+            GrabWeapon(input);
+            ChangeWeapon(input);
             PreviousButtons = input.Buttons;
             baseLookRotation = kcc.GetLookRotation();
         }
@@ -395,6 +398,24 @@ public class PlayerControllerPhoton : NetworkBehaviour
         {
             Debug.Log("Disparar");
             _weapon.Fire();
+        }
+    }
+    public void GrabWeapon(NetworkInputData input)
+    {
+        if (input.Buttons.WasPressed(PreviousButtons,InputButton.Interact))
+        {
+            gunManager.OnGrabGun();
+            gunManager.RPC_OrganizeWeapon();
+            Debug.Log("Intento de coger arma");
+        }
+    }
+    public void ChangeWeapon(NetworkInputData input)
+    {
+        if (input.Buttons.WasPressed(PreviousButtons, InputButton.ChangeWeapon))
+        {
+            gunManager.OnWeaponChange();
+            gunManager.RPC_OrganizeWeapon();
+            Debug.Log("Intento de cambiar arma");
         }
     }
     private void Jumped()

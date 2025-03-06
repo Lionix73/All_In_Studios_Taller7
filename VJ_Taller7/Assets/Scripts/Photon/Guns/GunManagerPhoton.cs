@@ -21,13 +21,13 @@ public class GunManagerPhoton : NetworkBehaviour
     [Header("Gun General Info")]
     [Tooltip("Lista de las armas que existen en el juego")]
     [SerializeField] private List<GunScriptableObjectPhoton> gunsList;
-    [SerializeField] private Transform gunParent;
+    [Networked] NetworkTransform gunParent { get; set; }
     [Tooltip("Tipo de arma que posee el jugador, define con cuál empieza")]
-    [SerializeField] public GunType Gun; //Tipo de arma que tiene el jugador
+    [Networked] public GunType Gun { get; private set; } //Tipo de arma que tiene el jugador
     private Transform secondHandGrabPoint; // la posicion a asignar
     private Transform secondHandRigTarget; //el Rig en sí
 
-    [SerializeField] private bool inAPickeableGun;
+    [Networked] public bool inAPickeableGun {  get; private set; }
     private GunType gunToPick;
 
     private bool shooting;
@@ -35,25 +35,23 @@ public class GunManagerPhoton : NetworkBehaviour
     [Space]
     [Header("Active Guns Info")]
 
-    public GunScriptableObjectPhoton CurrentGun;
+    GunScriptableObjectPhoton CurrentGun;
     [SerializeField] private GunType CurrentSecondGunType;
     private int CurrentSecondaryGunBulletsLeft;
 
     TickTimer ReloadDuration;
-    [Networked] public NetworkObject Model {  get; private set; }
+
+    [Networked] public PlayerControllerPhoton LocalPlayer {  get; private set; }
+    [Networked] public NetworkObject Model {  get; set; }
 
     public override void Spawned() {
 
         cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
         Camera = cinemachineBrain.GetComponent<Camera>();
         actualTotalAmmo = MaxTotalAmmo;
-        gunParent = transform;
-        GunScriptableObjectPhoton gun = gunsList.Find(gun => gun.Type == Gun);
-        if (gun == null) {
-            Debug.LogError($"No se ha encontrado el arma: {CurrentGun}");
-            return;
-        }
-        SetUpGun(gun);
+        gunParent = GetComponent<NetworkTransform>();
+
+        SetUpGun();
         CurrentSecondaryGunBulletsLeft = CurrentGun.MagazineSize;
         CurrentSecondGunType=Gun;
         inAPickeableGun=false;
@@ -88,8 +86,14 @@ public class GunManagerPhoton : NetworkBehaviour
             actualTotalAmmo=MaxTotalAmmo;
         }
     }*/
-
-    private void SetUpGun(GunScriptableObjectPhoton gun){
+    public void SetUpGun(){
+        GunScriptableObjectPhoton gun = gunsList.Find(gun => gun.Type == Gun);
+        if (gun == null)
+        {
+            Debug.LogError($"No se ha encontrado el arma: {CurrentGun}");
+            return;
+        }
+        gunParent = GetComponent<NetworkTransform>();
         CurrentGun = gun.Clone() as GunScriptableObjectPhoton;
         //CurrentGun.Spawn(gunParent);
        CurrentGun.LastShootTime = 0f;
@@ -101,9 +105,9 @@ public class GunManagerPhoton : NetworkBehaviour
         {
             Model = Runner.Spawn(CurrentGun.ModelPrefab);
         }
-            Model.transform.SetParent(gunParent, false);
-            Model.transform.localPosition = CurrentGun.SpawnPoint;
-            Model.transform.localEulerAngles = CurrentGun.SpawnRotation;
+        Model.transform.SetParent(gunParent.transform, false);
+        Model.transform.localPosition = CurrentGun.SpawnPoint;
+        Model.transform.localEulerAngles = CurrentGun.SpawnRotation;
        /* if (UIManager.Singleton != null)
         {
             UIManager.Singleton.GetPlayerGunInfo(CurrentGun.BulletsLeft, CurrentGun.MagazineSize, CurrentGun);
@@ -112,11 +116,15 @@ public class GunManagerPhoton : NetworkBehaviour
         SetUpGunRigs();
     }
 
-    public void DespawnActiveGun(){
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_DespawnActiveGun(){
         if (CurrentGun!=null){
             //CurrentGun.Model.SetActive(false);
+            if (Runner.IsServer) { 
             
-            Runner.Despawn(CurrentGun.ModelPrefab);
+                Runner.Despawn(Model);
+                Model = null;
+            }
         }
         //Destroy(CurrentGun);
     }
@@ -132,6 +140,7 @@ public class GunManagerPhoton : NetworkBehaviour
         secondHandRigTarget.position = secondHandGrabPoint.position;
     }
 
+
     public void OnShoot(InputAction.CallbackContext context) { //RECORDAR ASIGNAR MANUALMENTE EN LOS EVENTOS DEL INPUT
         //if (CurrentGun.ShootConfig.IsAutomatic) {
         //    shooting = context.performed;
@@ -146,49 +155,82 @@ public class GunManagerPhoton : NetworkBehaviour
         //Debug.Log("Fase: " + shooting);
     }
 
-    public void OnWeaponChange(InputAction.CallbackContext context){
-        if (context.started){
-            if (CurrentSecondGunType!=CurrentGun.Type){
-                ChangeWeapon();
-            }
+    public void OnWeaponChange(){
+        if (CurrentSecondGunType != CurrentGun.Type)
+        {
+            RPC_ChangeWeapon();
+            Debug.Log("CambiandoArma");
         }
     }
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_ChangeWeapon(){
+        if (CurrentSecondGunType != CurrentGun.Type)
+        {
+            RPC_DespawnActiveGun();
+            gunParent =GetComponent<NetworkTransform>();
+            GunType temp = CurrentGun.Type;
+            int tempAmmo = CurrentSecondaryGunBulletsLeft;
+            CurrentSecondaryGunBulletsLeft = CurrentGun.BulletsLeft;
+            GunScriptableObjectPhoton gun = gunsList.Find(gun => gun.Type == CurrentSecondGunType);
+            CurrentGun = gun.Clone() as GunScriptableObjectPhoton;
+            //CurrentGun.Spawn(gunParent);
+            CurrentGun.LastShootTime = 0f;
+            if (CurrentGun.BulletsLeft == 0)
+                CurrentGun.BulletsLeft = CurrentGun.MagazineSize;
 
-    public void ChangeWeapon(){
-        DespawnActiveGun();
-        GunType temp = CurrentGun.Type;
-        int tempAmmo = CurrentSecondaryGunBulletsLeft;
-        CurrentSecondaryGunBulletsLeft = CurrentGun.BulletsLeft;
-        GunScriptableObjectPhoton gun = gunsList.Find(gun => gun.Type == CurrentSecondGunType);
-        SetUpGun(gun);
-        CurrentSecondGunType = temp;
-        CurrentGun.BulletsLeft = tempAmmo;
+            CurrentGun.realoading = false;
+            
+            Model = Runner.Spawn(CurrentGun.ModelPrefab, null, null, Object.InputAuthority);
+            
+            CurrentSecondGunType = temp;
+            CurrentGun.BulletsLeft = tempAmmo;
+        }
     }
-
-    public void GrabGun(GunType gunPicked){
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_GrabGun(GunType gunPicked){
         if (CurrentSecondGunType != gunPicked){
             if (CurrentSecondGunType == CurrentGun.Type){
                 CurrentSecondGunType = CurrentGun.Type;
             }
-            DespawnActiveGun();
+            gunParent = GetComponent<NetworkTransform>();
+            RPC_DespawnActiveGun();
             this.Gun = gunPicked;
             GunScriptableObjectPhoton gun = gunsList.Find(gun => gun.Type == gunPicked);
-            SetUpGun(gun);
+            CurrentGun = gun.Clone() as GunScriptableObjectPhoton;
+            //CurrentGun.Spawn(gunParent);
+            CurrentGun.LastShootTime = 0f;
+            if (CurrentGun.BulletsLeft == 0)
+                CurrentGun.BulletsLeft = CurrentGun.MagazineSize;
+
+            CurrentGun.realoading = false;
+           
+            Model = Runner.Spawn(CurrentGun.ModelPrefab, null, null, Object.InputAuthority);
+
         }
     }
-    public void OnGrabGun(InputAction.CallbackContext context){
-        if (context.started){
+    [ContextMenu("RCP_OganizeWeapon")]
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    public void RPC_OrganizeWeapon()
+    {
+
+        Model.transform.SetParent(gunParent.transform, false);
+        Debug.Log(gunParent.transform);
+        Model.transform.localPosition = CurrentGun.SpawnPoint;
+        Model.transform.localEulerAngles = CurrentGun.SpawnRotation;
+    }
+    public void OnGrabGun(){
             if (inAPickeableGun){
-                GrabGun(gunToPick);
+                RPC_GrabGun(gunToPick);
+                
             }
-        }
     }
 
     #region Pickeables management //Aqui sabemos si el jugador esta cerca de un arma, que tipo de arma es y si puede recogerla
     
     private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Pickeable")){
-            if (other.TryGetComponent<GunPickeablePhoton>(out GunPickeablePhoton component)){ inAPickeableGun=true;}
+        if (other.gameObject.layer == LayerMask.NameToLayer("Pickeable"))
+        {
+            if (other.TryGetComponent<GunPickeablePhoton>(out GunPickeablePhoton component)){ inAPickeableGun=true; Debug.Log(inAPickeableGun); }
             
         }
     }

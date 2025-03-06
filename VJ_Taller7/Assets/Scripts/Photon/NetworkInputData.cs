@@ -11,6 +11,8 @@ public enum InputButton
     OnAim,
     Emote,
     Fire,
+    ChangeWeapon,
+    Interact
 
 }
 public struct NetworkInputData : INetworkInput
