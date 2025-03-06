@@ -1619,6 +1619,7 @@ MonoBehaviour:
   - {fileID: 1006273147430585961}
   - {fileID: 2154555916449954242}
   - {fileID: 7310771614372243653}
+  - {fileID: 3232680129489170652}
   - {fileID: 531693185501737953}
   ForceRemoteRenderTimeframe: 0
 --- !u!1 &4082625712162230198
@@ -2183,6 +2184,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4986896875533987216}
   - {fileID: 3421952923186529568}
   - {fileID: 2018960402553069409}
   - {fileID: 4630474962933513820}
@@ -3085,6 +3087,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3056607739026927685}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8946805148234436937
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4986896875533987216}
+  - component: {fileID: 3232680129489170652}
+  m_Layer: 0
+  m_Name: GunManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4986896875533987216
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8946805148234436937}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7634005247142909620}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3232680129489170652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8946805148234436937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5ad565823e9ed54aa566d05db8c9529, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Camera: {fileID: 0}
+  cinemachineBrain: {fileID: 0}
+  actualTotalAmmo: 0
+  MaxTotalAmmo: 500
+  totalAmmoDisplay: {fileID: 0}
+  ammunitionDisplay: {fileID: 0}
+  gunsList:
+  - {fileID: 11400000, guid: 00a1ab607eeda624eb93a56cf7a4ae5b, type: 2}
+  gunParent: {fileID: 0}
+  Gun: 0
+  inAPickeableGun: 0
+  CurrentGun: {fileID: 0}
+  CurrentSecondGunType: 0
 --- !u!1 &9182100386559508226
 GameObject:
   m_ObjectHideFlags: 0
