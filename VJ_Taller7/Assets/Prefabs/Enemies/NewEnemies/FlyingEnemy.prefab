@@ -81,6 +81,7 @@ GameObject:
   - component: {fileID: 8266645271477071059}
   - component: {fileID: 1448196762064966218}
   - component: {fileID: 5289491791027165704}
+  - component: {fileID: 6062292715231365302}
   - component: {fileID: 2747067144664192308}
   - component: {fileID: 3947342866677436198}
   - component: {fileID: 181376495685447790}
@@ -152,12 +153,30 @@ MonoBehaviour:
   attackRadius: {fileID: 5679873897294225954}
   movement: {fileID: 1448196762064966218}
   agent: {fileID: 2747067144664192308}
+  ragdollEnabler: {fileID: 6062292715231365302}
   health: 20
   healthBar: {fileID: 1333611208540599741}
   isStatic: 0
+  fadeOutDelay: 3
   animator: {fileID: 181376495685447790}
   floatingTextPrefab: {fileID: 1630708236341063626, guid: 622845b07a8f25746a9060d62484e843, type: 3}
   scoreOnKill: 130
+--- !u!114 &6062292715231365302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2755460205172945919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7df5b43d8035fe04b93f630fe07a1392, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 181376495685447790}
+  ragdollRoot: {fileID: 8266645271477071059}
+  agent: {fileID: 2747067144664192308}
+  startRagdoll: 0
 --- !u!195 &2747067144664192308
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -192,13 +211,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ed2804d64e659b4485c797cbb7e59aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Method: 1
+  defaultMoveMethod: 2
   m_Curve:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  parabolaHeight: 8
+  linkTraversalConfigs: []
 --- !u!95 &181376495685447790
 Animator:
   serializedVersion: 7
@@ -267,8 +288,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1.2595255, z: 1}
-  m_Center: {x: 0, y: 0.58610475, z: 0}
+  m_Size: {x: 1, y: 0.80252457, z: 1}
+  m_Center: {x: 0, y: 0.35760427, z: 0}
 --- !u!1 &5585700801503267848
 GameObject:
   m_ObjectHideFlags: 0

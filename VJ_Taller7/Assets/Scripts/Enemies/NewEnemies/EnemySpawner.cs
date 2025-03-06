@@ -13,8 +13,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private bool storeInitialPos = false;
     [SerializeField] private int numberOfEnemiesToSpawn = 1;
     [SerializeField] private float spawnDelay = 1f;
-    [SerializeField] private List<EnemyScriptableObject> enemies = new List<EnemyScriptableObject>();
-    public List<EnemyScriptableObject> Enemies => enemies;
+    [SerializeField] private List<WeightedSpawnScriptableObject> weightedEnemies = new List<WeightedSpawnScriptableObject>();
+    public List<WeightedSpawnScriptableObject> WeightedEnemies => weightedEnemies;
     [SerializeField] private ScalingScriptableObject scaling;  
     [SerializeField] private SpawnMethod enemySpawnMethod = SpawnMethod.Roundrobin;
     [SerializeField] private bool continousSpawn = false;
@@ -24,10 +24,12 @@ public class EnemySpawner : MonoBehaviour
     [Header("Read At Runtime")]
     [SerializeField] private int level = 0;
     [SerializeField] private List<EnemyScriptableObject> scaledEnemies = new List<EnemyScriptableObject>();
+    [SerializeField] private float[] weights;
+
 
     private int enemiesAlive = 0;
     private int enemiesSpawned = 0;
-    private int initialEnemiesToSpawn;
+    private int initialweightedEnemiesToSpawn;
     private float initialSpawnDelay;
 
     private NavMeshTriangulation navMeshTriangulation;
@@ -40,12 +42,13 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-        for (int i = 0; i < enemies.Count; i++)
+        for (int i = 0; i < weightedEnemies.Count; i++)
         {
-            EnemyObjectPools.Add(i, ObjectPool.CreateInstance(enemies[i].prefab, numberOfEnemiesToSpawn));
+            EnemyObjectPools.Add(i, ObjectPool.CreateInstance(weightedEnemies[i].enemy.prefab, numberOfEnemiesToSpawn));
         }
 
-        initialEnemiesToSpawn = numberOfEnemiesToSpawn;
+        weights = new float[weightedEnemies.Count];
+        initialweightedEnemiesToSpawn = numberOfEnemiesToSpawn;
         initialSpawnDelay = spawnDelay;
     }
 
@@ -53,9 +56,9 @@ public class EnemySpawner : MonoBehaviour
     {
         navMeshTriangulation = NavMesh.CalculateTriangulation();
 
-        for (int i = 0; i < enemies.Count; i++)
+        for (int i = 0; i < weightedEnemies.Count; i++)
         {
-            scaledEnemies.Add(enemies[i].ScaleUpLevel(scaling, 0));
+            scaledEnemies.Add(weightedEnemies[i].enemy.ScaleUpLevel(scaling, 0));
         }
 
         if(storeInitialPos){
@@ -67,8 +70,8 @@ public class EnemySpawner : MonoBehaviour
 
     private void StoreInitialPositions()
     {
-        Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
-        foreach (Enemy enemy in enemies)
+        Enemy[] weightedEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+        foreach (Enemy enemy in weightedEnemies)
         {
             if (enemy.IsStatic)
             {
@@ -83,10 +86,12 @@ public class EnemySpawner : MonoBehaviour
         enemiesAlive = 0;
         enemiesSpawned = 0;
 
-        for (int i = 0; i < enemies.Count; i++)
+        for (int i = 0; i < weightedEnemies.Count; i++)
         {
-            scaledEnemies[i] = enemies[i].ScaleUpLevel(scaling, level);
-        } 
+            scaledEnemies[i] = weightedEnemies[i].enemy.ScaleUpLevel(scaling, level);
+        }
+
+        ResetSpawnWeights(); 
 
         WaitForSeconds wait = new WaitForSeconds(spawnDelay);
 
@@ -96,6 +101,9 @@ public class EnemySpawner : MonoBehaviour
             }
             else if(enemySpawnMethod == SpawnMethod.Random){
                 SpawnRandomEnemy();
+            }
+            else if(enemySpawnMethod == SpawnMethod.WeightedRandom){
+                SpawnWeightedRandomEnemy();
             }
 
             enemiesSpawned++;
@@ -109,14 +117,45 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private void SpawnRoundRobinEnemy(int spawnedEnemies){
-        int spawnIndex = spawnedEnemies % enemies.Count;
+    private void ResetSpawnWeights(){
+        float totalWeight = 0;
+
+        for (int i = 0; i < weightedEnemies.Count; i++)
+        {
+            weights[i] = weightedEnemies[i].GetWeight();
+            totalWeight += weights[i];
+        }
+
+        for (int i = 0; i < weights.Length ; i++)
+        {
+            weights[i] = weights[i]/totalWeight;
+        } 
+    }
+
+    private void SpawnRoundRobinEnemy(int spawnedweightedEnemies){
+        int spawnIndex = spawnedweightedEnemies % weightedEnemies.Count;
 
         DoSpawnEnemy(spawnIndex, ChooseRandomPositionOnNavMesh());
     }
 
     private void SpawnRandomEnemy(){
-        DoSpawnEnemy(Random.Range(0, enemies.Count), ChooseRandomPositionOnNavMesh());
+        DoSpawnEnemy(Random.Range(0, weightedEnemies.Count), ChooseRandomPositionOnNavMesh());
+    }
+    
+    private void SpawnWeightedRandomEnemy(){
+        float randomValue = Random.value;
+
+        for (int i = 0; i < weights.Length; i++)
+        {
+            if(randomValue <= weights[i]){
+                DoSpawnEnemy(i, ChooseRandomPositionOnNavMesh());
+                return;
+            }
+
+            randomValue -= weights[i];
+        }
+
+        Debug.LogError("No se pudo spawnear un enemigo con peso.");
     }
 
     private Vector3 ChooseRandomPositionOnNavMesh()
@@ -158,7 +197,7 @@ public class EnemySpawner : MonoBehaviour
     }
 
     private void ScaleUpSpawns(){
-        numberOfEnemiesToSpawn = Mathf.FloorToInt(initialEnemiesToSpawn * scaling.spawnCountCurve.Evaluate(level + 1));
+        numberOfEnemiesToSpawn = Mathf.FloorToInt(initialweightedEnemiesToSpawn * scaling.spawnCountCurve.Evaluate(level + 1));
         spawnDelay = initialSpawnDelay * scaling.spawnRateCurve.Evaluate(level + 1);
     }
 
@@ -177,7 +216,7 @@ public class EnemySpawner : MonoBehaviour
         {
             enemy.transform.position = initialPosition;
             enemy.gameObject.SetActive(true);
-            //enemy.Health = enemies.Health;
+            //enemy.Health = weightedEnemies.Health;
             enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
         }
         else
@@ -188,6 +227,7 @@ public class EnemySpawner : MonoBehaviour
 
     public enum SpawnMethod{
         Roundrobin,
-        Random
+        Random,
+        WeightedRandom
     }
 }

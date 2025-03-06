@@ -44,10 +44,10 @@ public class EnemyBurstSpawnArea : MonoBehaviour
         for (int i = 0; i < spawnCount; i++)
         {
             if(spawnMethod == EnemySpawner.SpawnMethod.Roundrobin){
-                enemySpawner.DoSpawnEnemy(enemySpawner.Enemies.FindIndex((enemy) => enemy.Equals(enemies[i % enemies.Count])), GetRandomPositionInBounds());
+                enemySpawner.DoSpawnEnemy(enemySpawner.WeightedEnemies.FindIndex((enemy) => enemy.enemy.Equals(enemies[i % enemies.Count])), GetRandomPositionInBounds());
             } else if (spawnMethod == EnemySpawner.SpawnMethod.Random){
                 int index = Random.Range(0, enemies.Count);
-                enemySpawner.DoSpawnEnemy(enemySpawner.Enemies.FindIndex((enemy) => enemy.Equals(enemies[index])), GetRandomPositionInBounds());
+                enemySpawner.DoSpawnEnemy(enemySpawner.WeightedEnemies.FindIndex((enemy) => enemy.enemy.Equals(enemies[index])), GetRandomPositionInBounds());
             }
 
             yield return null;

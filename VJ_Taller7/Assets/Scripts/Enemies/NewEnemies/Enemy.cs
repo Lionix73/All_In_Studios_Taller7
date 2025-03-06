@@ -24,6 +24,10 @@ public class Enemy : PoolableObject, IDamageable
         get => agent;
         set => agent = value;
     }
+
+    private Collider collider;
+
+    [SerializeField] private RagdollEnabler ragdollEnabler;
     
     [Header("Enemy Health")]
     [SerializeField] private int health = 100;
@@ -49,6 +53,8 @@ public class Enemy : PoolableObject, IDamageable
         set => isStatic = value;
     }
 
+    [SerializeField] private float fadeOutDelay = 3f;
+
     private Coroutine lookCoroutine;
 
     [Header("Enemy Animator")]
@@ -73,6 +79,7 @@ public class Enemy : PoolableObject, IDamageable
 
     private void Awake()
     {
+        collider = GetComponent<Collider>();
         AttackRadius.OnAttack += OnAttack;
         maxHealth = health;
 
@@ -125,14 +132,38 @@ public class Enemy : PoolableObject, IDamageable
         if (health <= 0){
 
             if(!isStatic){
-                agent.ResetPath();
                 agent.enabled = false;
             }
+
             OnDie?.Invoke(this);
-            gameObject.SetActive(false);
-            healthBar.gameObject.SetActive(false);
+
+            if(ragdollEnabler != null){
+                ragdollEnabler.EnableRagdoll();
+            }
+            
+            StartCoroutine(FadeOut());
             //OnDied();
         }
+    }
+
+    private IEnumerator FadeOut(){
+        yield return new WaitForSeconds(fadeOutDelay);
+
+        if(ragdollEnabler != null){
+            collider.enabled = false;
+            ragdollEnabler.DisableAllRigidbodies();
+        }
+
+        float time = 0;
+
+        while(time < 1){
+            transform.position += Vector3.down * Time.deltaTime;
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        healthBar.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public Transform GetTransform(){
