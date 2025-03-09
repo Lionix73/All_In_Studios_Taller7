@@ -46,7 +46,7 @@ public class GunManager : MonoBehaviour
         cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
         Camera = cinemachineBrain.GetComponent<Camera>();
         actualTotalAmmo=MaxTotalAmmo;
-        gunParent = this.transform;
+        if (gunParent == null) {gunParent = this.transform;} //En caso de no tener asignado el punto de la mano donde aparece el arma, que la sostenga encima
 
         GunScriptableObject gun = gunsList.Find(gun => gun.Type == Gun);
         if (gun == null) {
@@ -171,22 +171,14 @@ public class GunManager : MonoBehaviour
     }
 
     #region Pickeables management //Aqui sabemos si el jugador esta cerca de un arma, que tipo de arma es y si puede recogerla
-    
-    private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Pickeable")){
-            if (other.TryGetComponent<GunPickeable>(out GunPickeable component)){ inAPickeableGun=true;}
-            
-        }
-    }
-
-    private void OnTriggerExit(Collider other) {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Pickeable")){
-            if (other.TryGetComponent<GunPickeable>(out GunPickeable component)){ inAPickeableGun=false;}
-        }
-    }
 
     public void EnterPickeableGun(GunType gunType){
         gunToPick = gunType;
+        inAPickeableGun = true;
+    }
+
+    public void ExitPickeableGun(){
+        inAPickeableGun = false;
     }
     #endregion
 
