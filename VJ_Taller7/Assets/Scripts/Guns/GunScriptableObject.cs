@@ -113,6 +113,12 @@ public class GunScriptableObject : ScriptableObject {
                 if (hit.collider.TryGetComponent(out Enemy enemey)){
                     enemey.TakeDamage(Damage);
                 }
+                else if(hit.collider.TryGetComponent(out EnemyHealthMulti enemy))
+                {
+                    enemy.TakeDamageRpc(Damage);
+                
+                }
+
             }
             else {  
                 ActiveMonoBehaviour.StartCoroutine(PlayTrail(
