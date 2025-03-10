@@ -87,6 +87,7 @@ public class PlayerControllerMulti : NetworkBehaviour
     private GunManager gunManager;
     private SoundManager soundManager;
 
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
