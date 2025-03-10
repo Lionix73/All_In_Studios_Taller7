@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -25,10 +24,16 @@ public class Enemy : PoolableObject, IDamageable
         set => agent = value;
     }
 
-    private Collider collider;
+    [SerializeField] private SkillScriptableObject[] skills;
+    public SkillScriptableObject[] Skills{
+        get => skills;
+        set => skills = value;
+    }
 
     [SerializeField] private RagdollEnabler ragdollEnabler;
+    private Collider collider;
     
+
     [Header("Enemy Health")]
     [SerializeField] private int health = 100;
     public int Health{
@@ -42,9 +47,8 @@ public class Enemy : PoolableObject, IDamageable
         set => healthBar = value;
     }
 
-    public Camera MainCamera { get; set; }
-
     private float maxHealth;
+
 
     [Header("Enemy Settings")]
     [SerializeField] private bool isStatic = false;
@@ -57,14 +61,17 @@ public class Enemy : PoolableObject, IDamageable
 
     private Coroutine lookCoroutine;
 
+
     [Header("Enemy Animator")]
     [SerializeField] private Animator animator;
     private const string ATTACK_TRIGGER = "Attack";
+
 
     [Header("Enemy UI")]
     [SerializeField] GameObject floatingTextPrefab;
 
     private EnemySpawner enemySpawner;
+
 
     [Header("Game Manager")]
     //Evento que se llama para el game manager
@@ -77,6 +84,12 @@ public class Enemy : PoolableObject, IDamageable
     public delegate void DeathEvent(Enemy enemy);
     public DeathEvent OnDie;
 
+
+    [Header("External Calls")]
+    public Camera MainCamera { get; set; }
+    public PlayerController Player { get; set; }
+    public int Level { get; set; }
+
     private void Awake()
     {
         collider = GetComponent<Collider>();
@@ -85,6 +98,15 @@ public class Enemy : PoolableObject, IDamageable
 
         if(isStatic)
         enemySpawner = FindFirstObjectByType<EnemySpawner>();
+    }
+
+    private void Update()
+    {
+        for(int i = 0; i < skills.Length; i++){
+            if(skills[i].CanUseSkill(this, Player, Level)){
+                skills[i].UseSkill(this, Player);
+            }
+        }
     }
 
     private void OnAttack(IDamageable target)
