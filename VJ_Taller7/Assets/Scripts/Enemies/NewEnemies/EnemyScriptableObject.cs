@@ -6,6 +6,7 @@ public class EnemyScriptableObject : ScriptableObject
 {
     public Enemy prefab;
     public AttackScriptableObject attackConfiguration;
+    public SkillScriptableObject[] skills;
 
     // Enemy configuration
     public int health = 100;
@@ -39,6 +40,11 @@ public class EnemyScriptableObject : ScriptableObject
         scaledEnemy.prefab = prefab;
 
         scaledEnemy.attackConfiguration = attackConfiguration.ScaleUpLevel(scaling, level);
+
+        scaledEnemy.skills = new SkillScriptableObject[skills.Length];
+        for(int i = 0; i < skills.Length; i++){
+            scaledEnemy.skills[i] = skills[i].scaleUpForLevel(scaling, level);
+        }
 
         scaledEnemy.health = Mathf.FloorToInt(health * scaling.healthCurve.Evaluate(level));
 

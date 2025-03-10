@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Player Settings")]
-    [SerializeField] private Transform player;
+    [SerializeField] private PlayerController player;
     [SerializeField] private Camera mainCamera;
 
     [Header("Spawn Settings")]
@@ -179,11 +179,14 @@ public class EnemySpawner : MonoBehaviour
 
                 enemy.MainCamera = mainCamera;
                 enemy.Movement.Triangulation = navMeshTriangulation;
-                enemy.Movement.Player = player;
+                enemy.Movement.Player = player.transform;
                 enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
                 enemy.Agent.enabled = true;
                 enemy.Movement.Spawn();
                 enemy.OnDie += HandleEnemyDeath;
+                enemy.Level = level;
+                enemy.Skills = scaledEnemies[spawnIndex].skills;
+                enemy.Player = player;
 
                 enemiesAlive++;
             }
