@@ -505,7 +505,7 @@ public class PlayerControllerMulti : NetworkBehaviour
     {
         if (context.performed && canCrouch && isGrounded)
         {
-            ExchangeColliders();
+            ExchangeCollidersRpc();
             isCrouching = !isCrouching;
             canCrouch = false;
 
@@ -519,9 +519,10 @@ public class PlayerControllerMulti : NetworkBehaviour
             Invoke(nameof(ResetCrouchFlag), 0.5f);
         }
     }
-
-    private void ExchangeColliders()
+    [Rpc(SendTo.Everyone)]
+    private void ExchangeCollidersRpc()
     {
+        Debug.Log("Agachandose");
         if(playerCollider != null && crouchCollider != null)
         {
             if(playerCollider.enabled)
@@ -556,7 +557,7 @@ public class PlayerControllerMulti : NetworkBehaviour
 
             canSlide = true;
             ResetCrouchFlag();
-            ExchangeColliders();
+            ExchangeCollidersRpc();
         }
     }
 
