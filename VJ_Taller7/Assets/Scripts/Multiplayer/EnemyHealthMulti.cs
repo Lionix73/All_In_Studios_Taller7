@@ -68,7 +68,7 @@ public class EnemyHealthMulti : NetworkBehaviour
     }
     private void ShowFloatingText(float damage)
     {
-        var go = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity, transform);
+        var go = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity);
         go.GetComponent<TextMesh>().text = damage.ToString();
     }
 }
