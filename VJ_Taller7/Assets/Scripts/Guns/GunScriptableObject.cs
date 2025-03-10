@@ -18,24 +18,24 @@ public class GunScriptableObject : ScriptableObject {
     public TrailConfigScriptableObject TrailConfig;
 
     
-    private MonoBehaviour ActiveMonoBehaviour;
-    private GameObject Model;
-    private Camera activeCamera;
-    private float LastShootTime;
-    private int bulletsLeft;
+    public MonoBehaviour ActiveMonoBehaviour;
+    public GameObject Model;
+    public Camera activeCamera;
+    public float LastShootTime;
+    public int bulletsLeft;
     public int BulletsLeft {
         get => bulletsLeft;
         set {
             bulletsLeft = value;
         }
     }
-    private bool realoading;
+    public bool realoading;
     public bool Realoading {
         get => realoading;
     }
-    private ParticleSystem ShootSystem;
-    private ObjectPool<TrailRenderer> TrailPool;
-    private ObjectPool<Bullet> BulletPool;
+    public ParticleSystem ShootSystem;
+    public ObjectPool<TrailRenderer> TrailPool;
+    public ObjectPool<Bullet> BulletPool;
 
     private void Awake() {
         bulletsLeft = MagazineSize;
@@ -193,7 +193,7 @@ public class GunScriptableObject : ScriptableObject {
 
 
 
-    private TrailRenderer CreateTrail() {
+    public TrailRenderer CreateTrail() {
         GameObject instance = new GameObject("Trail");
         TrailRenderer trail = instance.AddComponent<TrailRenderer>();
 
