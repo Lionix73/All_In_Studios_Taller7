@@ -84,21 +84,21 @@ public class PlayerControllerMulti : NetworkBehaviour
     private Vector3 desiredMoveDirection;
 
     private PlayerInput playerInput;
-    private GunManager gunManager;
+    private GunManagerMulti gunManager;
     private SoundManager soundManager;
 
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        gunManager = FindAnyObjectByType<GunManager>();
+
         soundManager = FindAnyObjectByType<SoundManager>();
     }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         if (!IsOwner) return;
-
+        gunManager = GetComponentInChildren<GunManagerMulti>();
         playerInput = GetComponent<PlayerInput>();
         Debug.Log(playerInput);
         cameraTransform = GameObject.FindGameObjectWithTag("FreeLookCamera").transform;

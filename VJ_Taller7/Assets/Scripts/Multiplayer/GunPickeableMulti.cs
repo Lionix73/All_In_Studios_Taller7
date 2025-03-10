@@ -13,7 +13,7 @@ public class GunPickeableMulti : MonoBehaviour
     [SerializeField] private TextMeshProUGUI magazineText;
 
     private Vector3 spinDirection = new Vector3(0, 1, 0);
-    private GunManager gunManager;
+    private GunManagerMulti gunManager;
     private NetworkObject player;
 
 
@@ -35,7 +35,7 @@ public class GunPickeableMulti : MonoBehaviour
         player = other.GetComponentInParent<NetworkObject>();
         if (player.IsLocalPlayer)
         {
-            gunManager = player.GetComponentInChildren<GunManager>();
+            gunManager = player.GetComponentInChildren<GunManagerMulti>();
             //gunManager = other.gameObject.GetComponentInChildren<GunManager>();
             gunManager.EnterPickeableGun(gunType);
             GunScriptableObject gun = gunManager.GetGun(gunType); //Pa tomar lo que quiran del arma a pickear
