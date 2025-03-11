@@ -65,6 +65,7 @@ public class GunPickeableMulti : MonoBehaviour
         if (player.IsLocalPlayer)
         {
             PickeableUI.SetActive(false);
+            gunManager = null;
         }
     }
 }

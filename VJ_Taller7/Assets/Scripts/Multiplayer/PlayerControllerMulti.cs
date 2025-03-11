@@ -84,8 +84,15 @@ public class PlayerControllerMulti : NetworkBehaviour
     private Vector3 desiredMoveDirection;
 
     private PlayerInput playerInput;
-    private GunManagerMulti gunManager;
+    [SerializeField] private GunManagerMulti gunManager;
+    [SerializeField] GameObject gunManagerPrefab;
+    [SerializeField] NetworkObject Parent;
     private SoundManager soundManager;
+
+    [SerializeField] private GameObject GunManagerFollow;
+
+    private GameObject instanceGunMan;
+    private NetworkObject instanceGunManNet;
 
 
     private void Awake()
@@ -98,7 +105,8 @@ public class PlayerControllerMulti : NetworkBehaviour
     {
         base.OnNetworkSpawn();
         if (!IsOwner) return;
-        gunManager = GetComponentInChildren<GunManagerMulti>();
+        //gunManager = GetComponentInChildren<GunManagerMulti>();
+        SpawnGunManagerRpc();
         playerInput = GetComponent<PlayerInput>();
         Debug.Log(playerInput);
         cameraTransform = GameObject.FindGameObjectWithTag("FreeLookCamera").transform;
@@ -144,7 +152,51 @@ public class PlayerControllerMulti : NetworkBehaviour
         HandleRotation();
 
     }
+    [Rpc(SendTo.Server)]
+    public void SpawnGunManagerRpc()
+    {
+        // Instancia el objeto en el servidor
+        instanceGunMan = Instantiate(gunManagerPrefab);
+        instanceGunManNet = instanceGunMan.GetComponent<NetworkObject>();
+        instanceGunManNet.Spawn();
 
+        // Envía el NetworkObjectId a los clientes
+        SetParentGunManagerRpc(instanceGunManNet.NetworkObjectId);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void SetParentGunManagerRpc(ulong gunManagerNetId)
+    {
+        // Obtén el NetworkObject correspondiente al ID
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(gunManagerNetId, out NetworkObject instanceGunManNet))
+        {
+            // Asigna el padre
+            bool success = instanceGunManNet.TrySetParent(Parent, false);
+            if (success)
+            {
+                Debug.Log("Parent set successfully!");
+            }
+            else
+            {
+                Debug.LogError("Failed to set parent.");
+            }
+
+            // Asigna el GunHold
+            gunManager = instanceGunManNet.GetComponent<GunManagerMulti>();
+            if (gunManager != null)
+            {
+                gunManager.GunHold = GunManagerFollow.transform;
+            }
+            else
+            {
+                Debug.LogError("GunManagerMulti component not found.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Failed to find NetworkObject with ID: " + gunManagerNetId);
+        }
+    }
     private void HandleMovement()
     {
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;

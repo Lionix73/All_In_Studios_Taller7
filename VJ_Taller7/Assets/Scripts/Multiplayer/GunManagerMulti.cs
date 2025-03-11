@@ -24,7 +24,12 @@ public class GunManagerMulti : NetworkBehaviour
     [Header("Gun General Info")]
     [Tooltip("Lista de las armas que existen en el juego")]
     [SerializeField] private List<GunScriptableObject> gunsList;
-    [SerializeField] private Transform gunParent;
+    // Variable para sincronizar el NetworkObjectId
+    private NetworkVariable<ulong> syncedObjectId = new NetworkVariable<ulong>();
+    private NetworkObject parentNetworkObject;
+    private NetworkObject modelNetworkObject;
+    [SerializeField] public NetworkObject GunParent { get; set; }
+    [SerializeField] public Transform GunHold { get; set; }
     [Tooltip("Tipo de arma que posee el jugador, define con cuál empieza")]
     [SerializeField] public GunType Gun; //Tipo de arma que tiene el jugador
     private Transform secondHandGrabPoint; // la posicion a asignar
@@ -41,6 +46,7 @@ public class GunManagerMulti : NetworkBehaviour
     public GunScriptableObject CurrentGun;
     [SerializeField] private GunType CurrentSecondGunType;
     private int CurrentSecondaryGunBulletsLeft;
+    public bool IsLocalPlayer;
 
 
 
@@ -48,11 +54,13 @@ public class GunManagerMulti : NetworkBehaviour
     {
         base.OnNetworkSpawn();
         cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
+
         Camera = cinemachineBrain.GetComponent<Camera>();
         actualTotalAmmo = MaxTotalAmmo;
         inAPickeableGun = false;
         
         if (!IsOwner) return;
+        
         SetUpGunParentRpc();//En caso de no tener asignado el punto de la mano donde aparece el arma, que la sostenga encima
 
         GunScriptableObject gun = gunsList.Find(gun => gun.Type == Gun);
@@ -67,11 +75,12 @@ public class GunManagerMulti : NetworkBehaviour
     [Rpc(SendTo.Server)]
     public void SetUpGunParentRpc()
     {
-        if (gunParent == null) {gunParent = this.transform;}
-
     }
 
 private void Update() {
+        if (!IsLocalPlayer || GunHold == null) return;
+        transform.position = GunHold.position;
+        transform.rotation = GunHold.rotation;
         /*if (totalAmmoDisplay != null) {
             totalAmmoDisplay.SetText(actualTotalAmmo + "/" + MaxTotalAmmo);
             
@@ -141,38 +150,46 @@ private void Update() {
         CurrentGun.TrailPool = new ObjectPool<TrailRenderer>(gun.CreateTrail);
 
         CurrentGun.Model = Instantiate(gun.ModelPrefab);
-        NetworkObject modelNetworkObject = CurrentGun.Model.GetComponent<NetworkObject>();
+        modelNetworkObject = CurrentGun.Model.GetComponent<NetworkObject>();
         if (modelNetworkObject != null)
         {
             // Spawnea el modelo
             modelNetworkObject.Spawn();
 
             // Obtén el NetworkObject del padre (gunParent)
-            NetworkObject parentNetworkObject = gunParent.GetComponent<NetworkObject>();
-            if (parentNetworkObject != null)
-            {
+            
+            SetParentGunRpc();
+
+        }
+        else
+        {
+            Debug.LogError("El modelo no tiene un NetworkObject.");
+        }
+
+        //modelNetworkObject.transform.localPosition = gun.SpawnPoint;
+        //modelNetworkObject.transform.localEulerAngles = gun.SpawnRotation;
+
+        //gun.activeCamera = camera;
+
+    }
+
+    [Rpc(SendTo.Server)]
+    public void SetParentGunRpc()
+    {
+                parentNetworkObject = GetComponent<NetworkObject>();
                 // Intenta asignar el padre
                 bool success = modelNetworkObject.TrySetParent(parentNetworkObject, worldPositionStays: false);
                 if (!success)
                 {
                     Debug.LogError("No se pudo asignar el padre al NetworkObject del modelo.");
                 }
-            }
-            else
-            {
-                Debug.LogError("El gunParent no tiene un NetworkObject.");
-            }
-        }
-        else
-        {
-            Debug.LogError("El modelo no tiene un NetworkObject.");
-        }
-        modelNetworkObject.transform.localPosition = gun.SpawnPoint;
-        modelNetworkObject.transform.localEulerAngles = gun.SpawnRotation;
-
-        //gun.activeCamera = camera;
+                else
+                {
+                    Debug.Log("Arma emparentada");
+                }
 
         CurrentGun.ShootSystem = CurrentGun.Model.GetComponentInChildren<ParticleSystem>();
+
     }
     [Rpc(SendTo.Server)]
     public void DeSpawnRpc(GunType gunType)
