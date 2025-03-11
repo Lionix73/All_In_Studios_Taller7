@@ -592,7 +592,7 @@ public class PlayerController : MonoBehaviour
     private void CheckGround()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 50f))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.5f))
         {
             if (hit.collider.gameObject.layer == 7 && isGrounded == false && hit.distance < 0.1f)
             {
@@ -602,12 +602,22 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                if (hit.distance > 0.05f) isGrounded = false;
+                if (hit.distance > 0.1f) isGrounded = false;
             }
         }
 
-        if (!isGrounded && rb.linearVelocity.y < 0.1f && rb.linearVelocity.y > -0.1f && hit.distance > 5) soundManager.PlaySound("Falling");
+        CheckHeight();
     }
+
+    private void CheckHeight()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 50f))
+        {
+            if (!isGrounded && rb.linearVelocity.y < 0.1f && rb.linearVelocity.y > -0.1f && hit.distance > 5) soundManager.PlaySound("Falling");
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
