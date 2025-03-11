@@ -57,6 +57,8 @@ public class GunManager : MonoBehaviour
         CurrentSecondaryGunBulletsLeft = CurrentGun.MagazineSize;
         CurrentSecondGunType=Gun;
         inAPickeableGun=false;
+
+        secondHandRigTarget = GameObject.Find("SecondHandGripRig_target").GetComponent<Transform>();
     }
 
     private void Update() {
@@ -108,7 +110,8 @@ public class GunManager : MonoBehaviour
     }
 
     private void SetUpGunRigs(){
-        Transform[] chGun = GetComponentsInChildren<Transform>();
+        Transform[] chGun = gunParent.GetComponentsInChildren<Transform>();
+        //secondHandGrabPoint = GameObject.Find("SecondHanGrip").transform;
         for(int i = 0; i < chGun.Length; i++){
             if (chGun[i].name == "SecondHandGrip") {
                 secondHandGrabPoint = chGun[i].transform;
