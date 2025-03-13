@@ -17164,40 +17164,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8037043133455505579, guid: 2d623929b809fcc45a35c2a49115102d, type: 3}
   m_PrefabInstance: {fileID: 1096707665}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &642715779 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2666794559733852778, guid: 2d623929b809fcc45a35c2a49115102d, type: 3}
-  m_PrefabInstance: {fileID: 1096707665}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &642715780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 642715779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df6d006e694eb5c4da9932e996ea4ab9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 960368992}
-  mainCamera: {fileID: 312226504}
-  storeInitialPos: 0
-  numberOfEnemiesToSpawn: 15
-  spawnDelay: 1
-  weightedEnemies:
-  - {fileID: 11400000, guid: 4d88d40cb13b5a5469b7dc8fef6a1cc2, type: 2}
-  - {fileID: 11400000, guid: d10cc44dc90ed7c4192b63da3c74239f, type: 2}
-  - {fileID: 11400000, guid: b089fe1dbca109841a173ed82d34da39, type: 2}
-  - {fileID: 11400000, guid: 9c37f6a7df88bcb4c82c8926d7b63cdf, type: 2}
-  scaling: {fileID: 11400000, guid: e83eeaa20b18f5c4a951a3e5232081ed, type: 2}
-  enemySpawnMethod: 2
-  continousSpawn: 0
-  level: 0
-  scaledEnemies: []
-  weights: []
-  healthBarCanvas: {fileID: 539107200}
 --- !u!1 &647445278
 GameObject:
   m_ObjectHideFlags: 0
@@ -26339,10 +26305,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
-    - target: {fileID: 7021727127881821152, guid: 2d623929b809fcc45a35c2a49115102d, type: 3}
-      propertyPath: _Simulating
-      value: 0
-      objectReference: {fileID: 0}
+    - target: {fileID: 3578752897480326295, guid: 2d623929b809fcc45a35c2a49115102d, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 960368992}
+    - target: {fileID: 3578752897480326295, guid: 2d623929b809fcc45a35c2a49115102d, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 312226504}
+    - target: {fileID: 3578752897480326295, guid: 2d623929b809fcc45a35c2a49115102d, type: 3}
+      propertyPath: healthBarCanvas
+      value: 
+      objectReference: {fileID: 539107200}
     - target: {fileID: 7021727127881821152, guid: 2d623929b809fcc45a35c2a49115102d, type: 3}
       propertyPath: _UiWaveTimer
       value: 
@@ -26351,10 +26325,6 @@ PrefabInstance:
       propertyPath: _UiWaveCounter
       value: 
       objectReference: {fileID: 1861309654}
-    - target: {fileID: 7021727127881821152, guid: 2d623929b809fcc45a35c2a49115102d, type: 3}
-      propertyPath: _BalncingInThis
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7021727127881821152, guid: 2d623929b809fcc45a35c2a49115102d, type: 3}
       propertyPath: _UiEnemyCounter
       value: 
@@ -26410,10 +26380,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2666794559733852778, guid: 2d623929b809fcc45a35c2a49115102d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 642715780}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d623929b809fcc45a35c2a49115102d, type: 3}
 --- !u!1 &1114358725
 GameObject:
