@@ -128,8 +128,9 @@ public class EnemyWaves : MonoBehaviour
         if(poolableObject != null){
             Enemy enemy = poolableObject.GetComponent<Enemy>();
 
-            enemy.OnEnemyDead += _roundManager.EnemyDied; //suscribir al evento
-            enemy.OnEnemyDead += _roundManager.ChangeScore; //suscribir al evento
+            enemy.OnDie += HandleEnemyDeath; //suscribir al evento
+            enemy.OnDie += _roundManager.EnemyDied; //suscribir al evento
+            enemy.OnDie += _roundManager.ChangeScore; //suscribir al evento
             
             int vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
 
@@ -151,6 +152,12 @@ public class EnemyWaves : MonoBehaviour
         else{
             Debug.LogError($"No se logro spawnear un enemigo tipo {spawnIndex} del object pool");
         }
+    }
+    private void HandleEnemyDeath(Enemy enemy){
+
+        enemy.OnDie -= HandleEnemyDeath;
+        enemy.OnDie -= _roundManager.ChangeScore;
+        enemy.OnDie -= _roundManager.EnemyDied;
     }
 
     public void RespawnEnemy(Enemy enemy)

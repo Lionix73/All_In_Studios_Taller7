@@ -11,6 +11,7 @@ public class RoundManager : MonoBehaviour
     [Header("Manejo de Rondas y oleadas")]
     [SerializeField] private int currentWave; //oleadas
     [SerializeField] private int currentRound; //Rondas
+    [SerializeField] private int waveSize; //Tamaño de la oleada en cantidad de enemigos 
     private int waveValue;
     
 
@@ -46,14 +47,17 @@ public class RoundManager : MonoBehaviour
 
     [Header("Managers")]
     private ScoreManager scoreManager;
-    private EnemyWaves enemySpawner;
+    private EnemyWaves enemySpawner; //Si se balancea en este manager
+    private EnemyWavesManager enemyWavesManager; //Si se balancea en el spawner
 
     [SerializeField] private bool _Simulating = false;
+    [SerializeField] private bool _BalncingInThis = false;
 
 
     private void Start() {
         scoreManager = GetComponent<ScoreManager>();
         enemySpawner = GetComponent<EnemyWaves>();
+        enemyWavesManager = GetComponent<EnemyWavesManager>();
 
         SetWaveBalance();
         SetEnemiesInSpawner();
@@ -84,7 +88,7 @@ public class RoundManager : MonoBehaviour
             if (inBetweenRoundsTimer<=0){
             currentWave++;
             SetWaveBalance();
-            SendWave(enemyIndex);
+            if (_BalncingInThis) SendWave(enemyIndex); //sin el balance del manager de Alejo
             inBetweenRounds = false;
             inBetweenRoundsTimer = 60f;
             }
@@ -101,13 +105,21 @@ public class RoundManager : MonoBehaviour
     }
 
     private void SetWaveBalance(){
-        waveValue = currentWave * waveValueScaleMult * currentRound ; //current round en review por balance, seguramente sea un scaleRounsMult
-        waveDuration += currentWave * waveDurationScaleAdd;
+        if (_BalncingInThis){
+            waveValue = currentWave * waveValueScaleMult * currentRound ; //current round en review por balance, seguramente sea un scaleRounsMult
+            waveDuration += currentWave * waveDurationScaleAdd;
 
-        GenerateEnemies();
+            GenerateEnemies();
 
-        spawnInterval = waveDuration/enemiesToSpawn.Count;
-        waveTimer = waveDuration;
+            spawnInterval = waveDuration/enemiesToSpawn.Count;
+            waveTimer = waveDuration;
+        }
+        else {
+            //Aumentar la cantidad de enemigo a generar y enviar al wave spawner
+            waveSize = currentWave+1 * waveValueScaleMult * currentRound;
+            aliveEnemies = waveSize;
+            enemyWavesManager.RecieveWaveOrder(waveSize);
+        }
     }
 
     public void GenerateEnemies(){
@@ -174,11 +186,11 @@ public class RoundManager : MonoBehaviour
 /// </summary>
 /// <param name="sender"></param>
 /// <param name="e"></param>
-    public void ChangeScore(object sender, Enemy.OnEnemyDeadEventArgs e){
-        scoreManager.SetScore(e.score);
+    public void ChangeScore(Enemy enemy){
+        scoreManager.SetScore(enemy.scoreOnKill);
     }
 
-    public void EnemyDied(object sender, Enemy.OnEnemyDeadEventArgs e){
+    public void EnemyDied(Enemy enemy){
         aliveEnemies -=1; 
     }
 #endregion
