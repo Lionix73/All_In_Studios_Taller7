@@ -58,8 +58,7 @@ public class RoundManager : MonoBehaviour
         scoreManager = GetComponent<ScoreManager>();
         enemySpawner = GetComponent<EnemyWaves>();
         enemyWavesManager = GetComponent<EnemyWavesManager>();
-
-        SetWaveBalance();
+        
         SetEnemiesInSpawner();
     }
     private void Update() {
@@ -116,7 +115,7 @@ public class RoundManager : MonoBehaviour
         }
         else {
             //Aumentar la cantidad de enemigo a generar y enviar al wave spawner
-            waveSize = currentWave+1 * waveValueScaleMult * currentRound;
+            waveSize = currentWave + 1 * waveValueScaleMult * currentRound;
             aliveEnemies = waveSize;
             enemyWavesManager.RecieveWaveOrder(waveSize);
         }

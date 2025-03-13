@@ -229,7 +229,7 @@ public class EnemyWavesManager : MonoBehaviour
         enemy.OnDie -= _roundManager.EnemyDied;
         if(enemiesAlive == 0 && enemiesSpawned == numberOfEnemiesToSpawn){
             ScaleUpSpawns();
-            StartCoroutine(SpawnEnemies());
+            //StartCoroutine(SpawnEnemies());
         }
     }
 
