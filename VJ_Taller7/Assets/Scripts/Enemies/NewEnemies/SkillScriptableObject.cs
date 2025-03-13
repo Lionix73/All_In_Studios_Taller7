@@ -35,6 +35,20 @@ public class SkillScriptableObject : ScriptableObject
     }
 
     public virtual bool CanUseSkill(Enemy enemy, PlayerController player, int level){
-        return level >= unlocklevel;
+        return !isActivating && level >= unlocklevel && useTime + cooldown < Time.time;
+    }
+
+    protected void DisableEnemyMovement(Enemy enemy)
+    {
+        enemy.enabled = false;
+        enemy.Agent.enabled = false;
+        enemy.Movement.enabled = false;
+    }
+
+    protected void EnableEnemyMovement(Enemy enemy)
+    {
+        enemy.enabled = true;
+        enemy.Agent.enabled = true;
+        enemy.Movement.enabled = true;
     }
 }

@@ -7,6 +7,7 @@ public class ObjectPool
     private PoolableObject Prefab;
     public int Size {get; private set;}
     private List<PoolableObject> AvailableObjectsPool;
+    private static Dictionary<PoolableObject, ObjectPool> ObjectPools = new Dictionary<PoolableObject, ObjectPool>();
 
     private ObjectPool(PoolableObject Prefab, int Size)
     {
@@ -17,10 +18,20 @@ public class ObjectPool
 
     public static ObjectPool CreateInstance(PoolableObject Prefab, int Size)
     {
-        ObjectPool pool = new ObjectPool(Prefab, Size);
+        ObjectPool pool = null;
 
-        pool.parent = new GameObject(Prefab + " Pool");
-        pool.CreateObjects();
+        if (ObjectPools.ContainsKey(Prefab))
+        {
+            pool = ObjectPools[Prefab];
+        }
+        else{
+            pool = new ObjectPool(Prefab, Size);
+
+            pool.parent = new GameObject(Prefab + " Pool");
+            pool.CreateObjects();
+
+            ObjectPools.Add(Prefab, pool);
+        }
 
         return pool;
     }
