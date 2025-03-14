@@ -81,9 +81,9 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private FloatDampener speedX;
     [SerializeField] private FloatDampener speedY;
 
-    private const string IsWalking = "IsWalking";
-    private const string Jump = "IsJumping";
-    private const string Landed = "Landed";
+    public const string IsWalking = "IsWalking";
+    public const string Jump = "IsJumping";
+    public const string Landed = "Landed";
 
     private void Awake()
     {
@@ -258,7 +258,9 @@ public class EnemyMovement : MonoBehaviour
                 yield break;
             }
 
-            agent.SetDestination(player.transform.position);
+            if(agent.enabled){
+                agent.SetDestination(player.transform.position);
+            }
             yield return wait;
         }
     }

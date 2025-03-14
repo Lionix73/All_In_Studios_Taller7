@@ -53,7 +53,7 @@ public class RangedAttackRadius : AttackRadius
                     OnAttack?.Invoke(damageables[i]);
 
                     if(!enemy.IsStatic)
-                    agent.isStopped = true;
+                    agent.enabled = false;
                     break;
                 }
             }
@@ -70,9 +70,8 @@ public class RangedAttackRadius : AttackRadius
                 }
             }
             else{
-                if(!enemy.IsStatic){
+                if(!enemy.IsStatic && agent.enabled){
                     agent.enabled = true;
-                    agent.isStopped = false;
                 }
             }
 
@@ -81,7 +80,6 @@ public class RangedAttackRadius : AttackRadius
             if(targetDamageable == null || !HasLineOfSight(targetDamageable.GetTransform())){
                 if(!enemy.IsStatic){
                     agent.enabled = true;
-                    agent.isStopped = false;
                 }
             }
 
@@ -90,7 +88,6 @@ public class RangedAttackRadius : AttackRadius
 
         if(!enemy.IsStatic){
             agent.enabled = true;
-            agent.isStopped = false;
         }
 
         attackCoroutine = null;
@@ -102,7 +99,7 @@ public class RangedAttackRadius : AttackRadius
         Vector3 direction = (target.position + bulletSpawnOffset - origin).normalized;
         float distance = Vector3.Distance(origin, target.position + bulletSpawnOffset);
 
-        Debug.DrawRay(origin, direction, Color.red, 1.0f);
+        Debug.DrawRay(origin, direction, Color.red, distance);
 
         if (Physics.SphereCast(origin, sphereCastRadius, direction, out hit, distance, mask)){
             

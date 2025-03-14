@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Skill ScriptableObject", menuName = "Enemies/Skill ScriptableObject")]
 public class SkillScriptableObject : ScriptableObject
 {
     public float cooldown = 10f;

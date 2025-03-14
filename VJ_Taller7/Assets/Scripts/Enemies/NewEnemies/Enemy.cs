@@ -31,7 +31,7 @@ public class Enemy : PoolableObject, IDamageable
     }
 
     [SerializeField] private RagdollEnabler ragdollEnabler;
-    private Collider collider;
+    private Collider colliderEnemy;
     
 
     [Header("Enemy Health")]
@@ -64,7 +64,12 @@ public class Enemy : PoolableObject, IDamageable
 
     [Header("Enemy Animator")]
     [SerializeField] private Animator animator;
-    private const string ATTACK_TRIGGER = "Attack";
+    public Animator Animator{
+        get => animator;
+        set => animator = value;
+    }
+
+    public const string ATTACK_TRIGGER = "Attack";
 
 
     [Header("Enemy UI")]
@@ -92,7 +97,7 @@ public class Enemy : PoolableObject, IDamageable
 
     private void Awake()
     {
-        collider = GetComponent<Collider>();
+        colliderEnemy = GetComponent<Collider>();
         AttackRadius.OnAttack += OnAttack;
         maxHealth = health;
 
@@ -172,7 +177,7 @@ public class Enemy : PoolableObject, IDamageable
         yield return new WaitForSeconds(fadeOutDelay);
 
         if(ragdollEnabler != null){
-            collider.enabled = false;
+            colliderEnemy.enabled = false;
             ragdollEnabler.DisableAllRigidbodies();
         }
 
@@ -217,7 +222,7 @@ public class Enemy : PoolableObject, IDamageable
             faceCamera.Camera = mainCamera;
         }
 
-        healthBar.SetProgress(health / maxHealth, 3);
+        healthBar.SetProgress(Health / maxHealth, 3);
     }
     private void ShowFloatingText(float damage)
     {
