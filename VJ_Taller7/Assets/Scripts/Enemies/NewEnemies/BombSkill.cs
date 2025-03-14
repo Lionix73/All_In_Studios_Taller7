@@ -72,7 +72,7 @@ public class BombSkill : SkillScriptableObject
         instance.transform.rotation = enemy.Agent.transform.rotation;
 
         BombBullet bomb = instance.GetComponent<BombBullet>();
-        bomb.Spawn(player.transform.position, explosionDamage, player.transform);
+        bomb.Spawn(enemy.transform.forward, explosionDamage, player.transform);
 
         yield return wait;
 

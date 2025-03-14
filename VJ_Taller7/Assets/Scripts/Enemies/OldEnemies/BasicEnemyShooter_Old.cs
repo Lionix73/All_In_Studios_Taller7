@@ -6,7 +6,7 @@ public class BasicEnemyShooter_Old : EnemyBase_Old
 {
     [Header("Attack Settings")]
     [SerializeField] private float attackCooldown = 3f;
-    [SerializeField] private float attackDamage = 10.0f;
+    //[SerializeField] private float attackDamage = 10.0f;
     [SerializeField] private float attackRange = 6.0f;
     private float lastAttackTime;
 
