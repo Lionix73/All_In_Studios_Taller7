@@ -13,6 +13,8 @@ public class AttackRadius : MonoBehaviour
 
     [SerializeField] protected float attackDelay = 1f;
     public float AttackDelay { get => attackDelay; set => attackDelay = value; }
+
+    public PlayerController Player { get; set; }
     
     public delegate void AttackEvent(IDamageable target);
     public AttackEvent OnAttack;

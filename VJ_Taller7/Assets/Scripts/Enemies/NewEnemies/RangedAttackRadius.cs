@@ -16,7 +16,9 @@ public class RangedAttackRadius : AttackRadius
     public LayerMask Mask{ get => mask; set => mask = value; }
 
     [SerializeField] private ObjectPool bulletPool;
-    [SerializeField] private float sphereCastRadius = 0.1f;
+    
+    [Tooltip("The radius of the sphere cast used to check for line of sight")]
+    [Range(0.01f, 1f)][SerializeField] private float sphereCastRadius = 0.1f;
 
     [Header("Enemy Settings")]
     [SerializeField] private Enemy enemy;
@@ -70,7 +72,7 @@ public class RangedAttackRadius : AttackRadius
                 }
             }
             else{
-                if(!enemy.IsStatic && agent.enabled){
+                if(!enemy.IsStatic && !agent.enabled){
                     agent.enabled = true;
                 }
             }
@@ -96,30 +98,31 @@ public class RangedAttackRadius : AttackRadius
     private bool HasLineOfSight(Transform target)
     {
         Vector3 origin = transform.position + bulletSpawnOffset;
-        Vector3 direction = (target.position + bulletSpawnOffset - origin).normalized;
+        Vector3 direction = target.position + bulletSpawnOffset - (transform.position + bulletSpawnOffset);
         float distance = Vector3.Distance(origin, target.position + bulletSpawnOffset);
 
-        Debug.DrawRay(origin, direction, Color.red, distance);
+        Debug.DrawLine(origin, origin + direction.normalized * distance, Color.red);
+        Debug.DrawRay(origin, direction.normalized * sphereCastRadius, Color.red);
 
-        if (Physics.SphereCast(origin, sphereCastRadius, direction, out hit, distance, mask)){
+        if (Physics.SphereCast(origin, sphereCastRadius, direction.normalized, out RaycastHit hit, sphereCollider.radius, mask)){
             
             IDamageable damageable;
             
             if(hit.collider.TryGetComponent<IDamageable>(out damageable)){
-                Debug.Log("Line of sight to target: " + (damageable.GetTransform() == target));
+                //Debug.Log("Line of sight to target: " + (damageable.GetTransform() == target));
                 return damageable.GetTransform() == target;
             }
             else
             {
-                Debug.Log($"Hit: {hit.collider.name}, but it is not damageable");
+                //Debug.Log($"Hit: {hit.collider.name}, but it is not damageable");
             }   
         }
         else
         {
-            Debug.Log("SphereCast did not hit anything");
+            //Debug.Log("SphereCast did not hit anything");
         }
 
-        Debug.Log("No line of sight to target");
+        //Debug.Log("No line of sight to target");
         return false;
     }
 

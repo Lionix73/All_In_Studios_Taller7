@@ -97,12 +97,17 @@ public class Enemy : PoolableObject, IDamageable
 
     private void Awake()
     {
+        attackRadius.Player = Player;
         colliderEnemy = GetComponent<Collider>();
         AttackRadius.OnAttack += OnAttack;
-        maxHealth = health;
 
         if(isStatic)
         enemySpawner = FindFirstObjectByType<EnemySpawner>();
+    }
+
+    private void Start()
+    {
+        maxHealth = Health;
     }
 
     private void Update()
@@ -147,16 +152,16 @@ public class Enemy : PoolableObject, IDamageable
     }
 
     public void TakeDamage(int damage){
-        health -= damage;
+        Health -= damage;
         
         if (floatingTextPrefab != null)
         {
             ShowFloatingText(damage);
         }
 
-        healthBar.SetProgress(health / maxHealth, 3);
+        healthBar.SetProgress(Health / maxHealth, 3);
 
-        if (health <= 0){
+        if (Health <= 0){
 
             if(!isStatic){
                 agent.enabled = false;
@@ -222,6 +227,7 @@ public class Enemy : PoolableObject, IDamageable
             faceCamera.Camera = mainCamera;
         }
 
+        Debug.Log("Heatlh: " + Health + " MaxHealth: " + maxHealth);
         healthBar.SetProgress(Health / maxHealth, 3);
     }
     private void ShowFloatingText(float damage)

@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2201402117764995550, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2201402117764995550, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       propertyPath: m_AgentTypeID
@@ -87,70 +87,28 @@ PrefabInstance:
     - target: {fileID: 7390593780845101589, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       propertyPath: attackRadius
       value: 
-      objectReference: {fileID: 3813140971880540846}
+      objectReference: {fileID: 1326101905121315287}
     - target: {fileID: 8557755058062454031, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       propertyPath: m_Radius
       value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 9032037112743138318, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       propertyPath: m_Radius
-      value: 13
+      value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7749417017978051759, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8693135230536093199, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3813140971880540846}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
---- !u!1 &92340831482207095 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8693135230536093199, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
-  m_PrefabInstance: {fileID: 8785457515527361912}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3813140971880540846
+--- !u!114 &1326101905121315287 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 92340831482207095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7e4628ac0f4f1a4eb70ed42e8b6cd21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sphereCollider: {fileID: 338907925071806838}
-  damage: 40
-  attackDelay: 6
-  agent: {fileID: 7449169838366756006}
-  bulletPrefab: {fileID: 8766955747695238976, guid: 5472dbc5f3748b94eb4eddc4e7c960f3, type: 3}
-  bulletSpawnOffset: {x: 0, y: 1, z: 0}
-  mask:
-    serializedVersion: 2
-    m_Bits: 449
-  sphereCastRadius: 0.8
-  enemy: {fileID: 2268863078134224749}
---- !u!135 &338907925071806838 stripped
-SphereCollider:
-  m_CorrespondingSourceObject: {fileID: 9032037112743138318, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
-  m_PrefabInstance: {fileID: 8785457515527361912}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2268863078134224749 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7390593780845101589, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7749417017978051759, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
   m_PrefabInstance: {fileID: 8785457515527361912}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 563b1c5623c4d2c4382ddcc597041cab, type: 3}
+  m_Script: {fileID: 11500000, guid: e89cb5df4e69c08429cf5374462208e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!195 &7449169838366756006 stripped
-NavMeshAgent:
-  m_CorrespondingSourceObject: {fileID: 2201402117764995550, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
-  m_PrefabInstance: {fileID: 8785457515527361912}
-  m_PrefabAsset: {fileID: 0}

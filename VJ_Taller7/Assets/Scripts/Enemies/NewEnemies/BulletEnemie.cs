@@ -32,6 +32,7 @@ public class BulletEnemie : PoolableObject
     public virtual void Spawn(Vector3 forward, int damage, Transform target)
     {
         this.damage = damage;
+        this.target = target;
         Rb.AddForce(forward * moveSpeed, ForceMode.VelocityChange);
     }
 
@@ -48,6 +49,7 @@ public class BulletEnemie : PoolableObject
     }
 
     protected void Disable(){
+        //Debug.Log("Disable");
         CancelInvoke(DISABLE_METHOD_NAME);
         Rb.linearVelocity = Vector3.zero;
         gameObject.SetActive(false);

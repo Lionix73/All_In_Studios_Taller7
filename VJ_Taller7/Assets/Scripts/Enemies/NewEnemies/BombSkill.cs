@@ -86,10 +86,14 @@ public class BombSkill : SkillScriptableObject
         isActivating = false;
     }
 
-    private bool HasLineOfSight(Enemy enemy, Transform player)
+    private bool HasLineOfSight(Enemy enemy, Transform target)
     {
         Vector3 origin = enemy.transform.position + bulletSpawnOffSet;
-        Vector3 direction = (player.position + bulletSpawnOffSet) - origin;
+        Vector3 direction = target.position + bulletSpawnOffSet - origin;
+
+        // Visualize the sphere cast
+        Debug.DrawLine(origin, origin + direction.normalized * range, Color.red);
+        Debug.DrawRay(origin, direction.normalized * bombSize, Color.green);
 
         if (Physics.SphereCast(origin, bombSize, direction.normalized, out RaycastHit hit, range, lineOfSightLayerMask))
         {
@@ -97,7 +101,8 @@ public class BombSkill : SkillScriptableObject
 
             if(hit.collider.TryGetComponent<IDamageable>(out damageable))
             {
-                return damageable.GetTransform() == player;
+                Debug.Log("Line of sight to target: " + (damageable.GetTransform() == hit.transform));
+                return damageable.GetTransform() == target  ;
             }
         }
 
