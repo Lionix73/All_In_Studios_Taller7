@@ -88,7 +88,6 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
-        rb = GetComponent<Rigidbody>();
         gunManager = FindAnyObjectByType<GunManager>();
         soundManager = FindAnyObjectByType<SoundManager>();
     }
@@ -123,10 +122,9 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        CheckGround();
         HandleMovement();
         HandleRotation();
-
-        CheckGround();
     }
 
     private void HandleMovement()
@@ -234,7 +232,7 @@ public class PlayerController : MonoBehaviour
     {
         animator.SetLayerWeight(animationLayerToShow, layersDampener1.TargetValue == 1 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
 
-        for (int i = 0; i < animator.layerCount; i++)
+        for (int i = 0; i < 5; i++)
         {
             if (i != animationLayerToShow && animator.GetLayerWeight(i) > 0.05f)
             {
@@ -357,6 +355,8 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetTrigger("Reload");
 
+            StartCoroutine(ReloadCountdown());
+
             switch (gunManager.Gun)
             {
                 case GunType.Rifle:
@@ -376,6 +376,20 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
+    }
+
+    private IEnumerator ReloadCountdown()
+    {
+        animator.SetLayerWeight(5, 1);
+        float timer = 0f;
+
+        while (timer < 2)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        animator.SetLayerWeight(5, 0);
     }
 
     public void OnEmote(InputAction.CallbackContext context)
@@ -594,7 +608,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.5f))
         {
-            if (hit.collider.gameObject.layer == 7 && isGrounded == false && hit.distance < 0.1f)
+            if (hit.collider.gameObject.layer == 7 && isGrounded == false && hit.distance < 0.2f)
             {
                 isGrounded = true;
                 soundManager.StopSound("Falling");
@@ -602,7 +616,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                if (hit.distance > 0.1f) isGrounded = false;
+                if (hit.distance > 0.1f && isGrounded == true) isGrounded = false;
             }
         }
 
@@ -614,7 +628,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 50f))
         {
-            if (!isGrounded && rb.linearVelocity.y < 0.1f && rb.linearVelocity.y > -0.1f && hit.distance > 5) soundManager.PlaySound("Falling");
+            if (!isGrounded && this.rb.linearVelocity.y < 0.1f && this.rb.linearVelocity.y > -0.1f && hit.distance > 5) soundManager.PlaySound("Falling");
         }
     }
 
