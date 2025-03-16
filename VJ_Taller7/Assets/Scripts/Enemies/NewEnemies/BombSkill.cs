@@ -101,7 +101,7 @@ public class BombSkill : SkillScriptableObject
 
             if(hit.collider.TryGetComponent<IDamageable>(out damageable))
             {
-                Debug.Log("Line of sight to target: " + (damageable.GetTransform() == hit.transform));
+                //Debug.Log("Line of sight to target: " + (damageable.GetTransform() == hit.transform));
                 return damageable.GetTransform() == target  ;
             }
         }

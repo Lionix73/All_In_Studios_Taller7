@@ -1,19 +1,20 @@
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class BombBullet : BulletEnemie
 {
     [SerializeField] private float explosionRadius = 5f;
     public float ExplosionRadius { get => explosionRadius; set => explosionRadius = value; }
-
-    [SerializeField] private LayerMask detectableLayer;
-    public LayerMask DetectableLayer { get => detectableLayer; set => detectableLayer = value; }
     
     [SerializeField] private LayerMask damageableLayer;
     public LayerMask DamageableLayer { get => damageableLayer; set => damageableLayer = value; }
 
     [SerializeField] private float upwardForce = 5f;
     public float UpwardForce { get => upwardForce; set => upwardForce = value; }
+
+    [SerializeField] private float explosionDelay = 2f;
+    public float ExplosionDelay { get => explosionDelay; set => explosionDelay = value; }
 
     public override void Spawn(Vector3 forward, int damage, Transform target)
     {
@@ -42,12 +43,20 @@ public class BombBullet : BulletEnemie
         return velocity * direction.normalized + Vector3.up * upwardForce;
     }
 
+    protected virtual void OnCollisionEnter(Collision collision)
+    {
+        StartCoroutine(DelayedExplosion());
+    }
+
     protected override void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == detectableLayer)
-        {
-            Explode();
-        }
+        //Do nothing
+    }
+
+    private IEnumerator DelayedExplosion()
+    {
+        yield return new WaitForSeconds(explosionDelay);
+        Explode();
     }
 
     private void Explode()

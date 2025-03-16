@@ -32,7 +32,7 @@ public class ProgressBar : MonoBehaviour
 
     public void SetProgress(float progress, float speed){
         if(progress < 0 || progress > 1){
-            Debug.LogWarning($"Progress value must be between 0 and 1, got: {progress}");
+            //Debug.LogWarning($"Progress value must be between 0 and 1, got: {progress}");
             progress = Mathf.Clamp01(progress);
         }
 

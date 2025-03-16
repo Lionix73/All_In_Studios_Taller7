@@ -227,7 +227,7 @@ public class Enemy : PoolableObject, IDamageable
             faceCamera.Camera = mainCamera;
         }
 
-        Debug.Log("Heatlh: " + Health + " MaxHealth: " + maxHealth);
+        //Debug.Log("Heatlh: " + Health + " MaxHealth: " + maxHealth);
         healthBar.SetProgress(Health / maxHealth, 3);
     }
     private void ShowFloatingText(float damage)
