@@ -37,18 +37,18 @@ public class RagdollEnabler : MonoBehaviour
             joint.enableCollision = true;
         }
         foreach(Rigidbody rb in rigidbodies){
+            rb.isKinematic = false;
             rb.linearVelocity = Vector3.zero;
             rb.detectCollisions = true;
             rb.useGravity = true;
-            rb.isKinematic = false;
         }
     }
 
     public void DisableAllRigidbodies(){
         foreach(Rigidbody rb in rigidbodies){
+            rb.isKinematic = true;
             rb.detectCollisions = false;
             rb.useGravity = false;
-            rb.isKinematic = true;
         }
     }
 

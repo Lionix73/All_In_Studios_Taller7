@@ -77,6 +77,8 @@ public class Enemy : PoolableObject, IDamageable
 
     private EnemySpawner enemySpawner;
 
+    [Header("Enemy VFX")]
+    [SerializeField] private ParticleSystem deathVFX;
 
     [Header("Game Manager")]
     //Evento que se llama para el game manager
@@ -179,6 +181,10 @@ public class Enemy : PoolableObject, IDamageable
     }
 
     private IEnumerator FadeOut(){
+        if(deathVFX != null){
+            deathVFX.Play();
+        }
+
         yield return new WaitForSeconds(fadeOutDelay);
 
         if(ragdollEnabler != null){
