@@ -67,6 +67,7 @@ public class BombBullet : BulletEnemie
             IDamageable damageable;
             if (collider.TryGetComponent<IDamageable>(out damageable))
             {
+                Debug.Log("BombBullet: Explode() - Damageable hit: " + damageable);
                 damageable.TakeDamage(damage);
             }
         }
