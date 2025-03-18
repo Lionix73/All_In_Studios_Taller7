@@ -174,6 +174,8 @@ public class PlayerController : MonoBehaviour
             soundManager.StopSound("Walk", "Run");
         }
 
+        rb.useGravity = !OnSlope();
+
         if (OnSlope())
         {
             rb.AddForce(GetSlopeMovement() * speed * 10f, ForceMode.Force);
@@ -464,20 +466,18 @@ public class PlayerController : MonoBehaviour
             if(jumpCount == 0)
             {
                 rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
-                rb.AddForce(desiredMoveDirection * 1.2f, ForceMode.Impulse);
                 
                 animator.SetTrigger("Jump");
             }
             else if (jumpCount == 1)
             {
                 rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
-                rb.AddForce(desiredMoveDirection * 2, ForceMode.Impulse);
 
                 animator.SetTrigger("DoubleJump");
             }
             jumpCount++;
 
-            if(canJump)
+            if (canJump)
             {
                 animator.SetBool("isJumping", true);
                 canJump = false;
@@ -496,6 +496,7 @@ public class PlayerController : MonoBehaviour
             jumpTimer += Time.deltaTime;
             yield return null;
         }
+        
         animator.SetBool("isJumping", false);
         yield return new WaitForSeconds(jumpCooldown);
         canJump = true;
@@ -617,32 +618,20 @@ public class PlayerController : MonoBehaviour
 
     private void CheckGround()
     {
+        bool wasOnGround = isGrounded;
+
         // set sphere position, with offset
-        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
-            transform.position.z);
-        isGrounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
-                QueryTriggerInteraction.Ignore);
-        
-        if(isGrounded)
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
+        isGrounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
+
+        if (isGrounded && !wasOnGround)
         {
             soundManager.StopSound("Falling");
             soundManager.PlaySound("Landing");
         }
+        if (isGrounded) jumpCount = 0;
 
-        //RaycastHit hit;
-        //if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.5f))
-        //{
-        //    if (hit.collider.gameObject.layer == 7 && isGrounded == false && hit.distance < 0.2f)
-        //    {
-        //        isGrounded = true;
-        //        soundManager.StopSound("Falling");
-        //        soundManager.PlaySound("Landing");
-        //    }
-        //    else
-        //    {
-        //        if (hit.distance > 0.1f && isGrounded == true) isGrounded = false;
-        //    }
-        //}
+        wasOnGround = isGrounded;
 
         CheckHeight();
     }
@@ -652,21 +641,13 @@ public class PlayerController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 50f))
         {
-            if (!isGrounded && this.rb.linearVelocity.y < 0.1f && this.rb.linearVelocity.y > -0.1f && hit.distance > 5) soundManager.PlaySound("Falling");
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            jumpCount = 0;
+            if (!isGrounded && this.rb.linearVelocity.y < 0.1f && this.rb.linearVelocity.y > -0.1f && hit.distance > 10) soundManager.PlaySound("Falling");
         }
     }
 
     private bool OnSlope()
     {
-        if (Physics.Raycast(stepRayLower.transform.position, Vector3.down, out slopeHit, playerCollider.height * 0.5f + 0.3f))
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerCollider.height * 0.5f + 0.3f))
         {
             float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
             return angle < maxSlopeAngle && angle != 0;
@@ -677,5 +658,19 @@ public class PlayerController : MonoBehaviour
     private Vector3 GetSlopeMovement()
     {
         return Vector3.ProjectOnPlane(desiredMoveDirection, slopeHit.normal).normalized;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
+        Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
+
+        if (isGrounded) Gizmos.color = transparentGreen;
+        else Gizmos.color = transparentRed;
+
+        // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
+        Gizmos.DrawSphere(
+            new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
+            GroundedRadius);
     }
 }
