@@ -41,6 +41,12 @@ public class Enemy : PoolableObject, IDamageable
         set => health = value;
     }
 
+    private bool isDead = false;
+    public bool IsDead{
+        get => isDead;
+        set => isDead = value;
+    }
+
     [SerializeField] private ProgressBar healthBar;
     public ProgressBar HealthBar{
         get => healthBar;
@@ -114,6 +120,8 @@ public class Enemy : PoolableObject, IDamageable
 
     private void Update()
     {
+        if (isDead) return;
+
         for(int i = 0; i < skills.Length; i++){
             if(skills[i].CanUseSkill(this, Player, Level)){
                 skills[i].UseSkill(this, Player);
@@ -138,7 +146,9 @@ public class Enemy : PoolableObject, IDamageable
         float time = 0f;
 
         while(time < 1f){
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, time);
+            Quaternion targetRotation = Quaternion.Slerp(transform.rotation, lookRotation, time);
+            transform.rotation = Quaternion.Euler(transform.rotation.x, targetRotation.eulerAngles.y, transform.rotation.z);
+            
             time += Time.deltaTime * 2f;
             yield return null;
         }
@@ -150,10 +160,13 @@ public class Enemy : PoolableObject, IDamageable
         if(!isStatic){
             base.OnDisable();
             agent.enabled = false;
+            OnDie = null;
         }
     }
 
     public void TakeDamage(int damage){
+        if (isDead) return;
+
         Health -= damage;
         
         if (floatingTextPrefab != null)
@@ -164,6 +177,8 @@ public class Enemy : PoolableObject, IDamageable
         healthBar.SetProgress(Health / maxHealth, 3);
 
         if (Health <= 0){
+
+            isDead = true;
 
             if(!isStatic){
                 agent.enabled = false;
@@ -208,6 +223,7 @@ public class Enemy : PoolableObject, IDamageable
         return transform;
     }
 
+    /*
     private void OnDied(){
         float destroyDelay = UnityEngine.Random.value;
         gameObject.SetActive(false);
@@ -223,6 +239,7 @@ public class Enemy : PoolableObject, IDamageable
 
         OnEnemyDead?.Invoke(this, new OnEnemyDeadEventArgs{score = scoreOnKill});
     }
+    */
 
     public void SetUpHealthBar(Canvas canvas, Camera mainCamera){
         healthBar.transform.SetParent(canvas.transform);

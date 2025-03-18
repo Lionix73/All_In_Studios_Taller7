@@ -48,6 +48,15 @@ public class RangedAttackRadius : AttackRadius
         yield return wait;
 
         while(damageables.Count > 0){
+
+            if(enemy.IsDead){
+                StopAllCoroutines();
+                targetDamageable = null;
+                damageables.RemoveAll(DisabledDamageables);
+                attackCoroutine = null;
+                yield break;
+            }
+
             for (int i = 0; i < damageables.Count; i++)
             {
                 if(HasLineOfSight(damageables[i].GetTransform())){
@@ -97,8 +106,12 @@ public class RangedAttackRadius : AttackRadius
 
     private bool HasLineOfSight(Transform target)
     {
+        if(enemy.IsDead){
+            return false;
+        }
+
         Vector3 origin = transform.position + bulletSpawnOffset;
-        Vector3 direction = target.position + bulletSpawnOffset - (transform.position + bulletSpawnOffset);
+        Vector3 direction = target.position + new Vector3(0, 1, 0) - (transform.position + new Vector3(0, 1, 0));
         float distance = Vector3.Distance(origin, target.position + bulletSpawnOffset);
 
         Debug.DrawLine(origin, origin + direction.normalized * distance, Color.red);

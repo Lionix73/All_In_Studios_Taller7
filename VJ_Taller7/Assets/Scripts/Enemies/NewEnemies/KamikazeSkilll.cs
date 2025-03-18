@@ -75,13 +75,11 @@ public class KamikazeSkilll : SkillScriptableObject
 
         yield return wait;
 
-        instance.gameObject.SetActive(false);
-
         useTime = Time.time;
+        isActivating = false;
 
         EnableEnemyMovement(enemy);
         enemy.Movement.State = EnemyState.Chase;
 
-        isActivating = false;
     }
 }

@@ -19,14 +19,22 @@ public class AttackRadius : MonoBehaviour
     public delegate void AttackEvent(IDamageable target);
     public AttackEvent OnAttack;
     protected Coroutine attackCoroutine;
+    private Enemy enemy;
 
     protected virtual void Awake()
     {
+        enemy = GetComponentInParent<Enemy>();
         sphereCollider = GetComponent<SphereCollider>();
     }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
+        if(enemy.IsDead){
+            StopAllCoroutines();
+            attackCoroutine = null;
+            return;
+        } 
+
         IDamageable damageable = other.GetComponent<IDamageable>();
         if(damageable != null)
         {
@@ -40,6 +48,12 @@ public class AttackRadius : MonoBehaviour
 
     protected virtual void OnTriggerExit(Collider other)
     {
+        if(enemy.IsDead){
+            StopAllCoroutines();
+            attackCoroutine = null;
+            return;
+        } 
+
         IDamageable damageable = other.GetComponent<IDamageable>();
         if(damageable != null)
         {
@@ -59,10 +73,18 @@ public class AttackRadius : MonoBehaviour
         yield return wait;
 
         IDamageable closestDamageable = null;
-        float closestDistance = 2f;
+        float closestDistance = float.MaxValue;
 
         while(damageables.Count > 0)
         {
+            if(enemy.IsDead){
+                StopAllCoroutines();
+                closestDamageable = null;
+                damageables.RemoveAll(DisabledDamageables);
+                attackCoroutine = null;
+                yield break;
+            }
+
             for(int i = 0; i < damageables.Count; i++)
             {
                 Transform damageablesTransform = damageables[i].GetTransform();
@@ -82,7 +104,7 @@ public class AttackRadius : MonoBehaviour
             }
 
             closestDamageable = null;
-            closestDistance = 2f;
+            closestDistance = float.MaxValue;
 
             yield return wait;
 
