@@ -53,6 +53,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10f;
     private bool wasAiming;
 
+    [Header("Player Grounded")]
+    [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
+    public bool isGrounded;
+
+    [Tooltip("Useful for rough ground")]
+    public float GroundedOffset = -0.14f;
+
+    [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
+    public float GroundedRadius = 0.28f;
+
+    [Tooltip("What layers the character uses as ground")]
+    public LayerMask GroundLayers;
+
     [SerializeField] private MultiAimConstraint aimRig;
     [SerializeField] private TwoBoneIKConstraint gripRig;
 
@@ -69,7 +82,6 @@ public class PlayerController : MonoBehaviour
     private bool isAiming = false;
     private bool usingRifle = true;
 
-    private bool isGrounded;
     private int jumpCount = 0;
 
     private bool isDashing = false;
@@ -605,20 +617,32 @@ public class PlayerController : MonoBehaviour
 
     private void CheckGround()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.5f))
+        // set sphere position, with offset
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
+            transform.position.z);
+        isGrounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
+                QueryTriggerInteraction.Ignore);
+        
+        if(isGrounded)
         {
-            if (hit.collider.gameObject.layer == 7 && isGrounded == false && hit.distance < 0.2f)
-            {
-                isGrounded = true;
-                soundManager.StopSound("Falling");
-                soundManager.PlaySound("Landing");
-            }
-            else
-            {
-                if (hit.distance > 0.1f && isGrounded == true) isGrounded = false;
-            }
+            soundManager.StopSound("Falling");
+            soundManager.PlaySound("Landing");
         }
+
+        //RaycastHit hit;
+        //if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.5f))
+        //{
+        //    if (hit.collider.gameObject.layer == 7 && isGrounded == false && hit.distance < 0.2f)
+        //    {
+        //        isGrounded = true;
+        //        soundManager.StopSound("Falling");
+        //        soundManager.PlaySound("Landing");
+        //    }
+        //    else
+        //    {
+        //        if (hit.distance > 0.1f && isGrounded == true) isGrounded = false;
+        //    }
+        //}
 
         CheckHeight();
     }
