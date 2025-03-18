@@ -70,6 +70,11 @@ public class RoundManager : MonoBehaviour
             inBetweenRounds = true; //Next round
         }
 
+        if (currentWave > 3){
+            currentRound++;
+            currentWave = 0;
+        }
+
         if (_Simulating) UpdateTimers();
 
         UISet();
@@ -115,9 +120,11 @@ public class RoundManager : MonoBehaviour
         }
         else {
             //Aumentar la cantidad de enemigo a generar y enviar al wave spawner
-            waveSize = currentWave + 1 * waveValueScaleMult * currentRound;
+            waveSize = (currentWave + 1) * waveValueScaleMult * currentRound;
+            waveDuration += currentWave * waveDurationScaleAdd;
             aliveEnemies = waveSize;
             enemyWavesManager.RecieveWaveOrder(waveSize);
+            waveTimer = waveDuration;
         }
     }
 

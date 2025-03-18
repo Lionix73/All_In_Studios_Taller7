@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using Unity.Cinemachine;
-using System.Runtime.InteropServices;
 
 [RequireComponent(typeof(CrosshairManager))]
 public class GunManager : MonoBehaviour
 {
     [Header("Camera")]
-    public Camera Camera; public CinemachineBrain cinemachineBrain;  
+    public Camera Camera; public CinemachineBrain cinemachineBrain;
+    [Header("Managers")]
+    public CrosshairManager crosshairManager;  
     [Header("Ammo Info")]
     public int actualTotalAmmo; //Cuanta municion tiene el jugador
     [SerializeField] private int MaxTotalAmmo; //Cuanta municion puede llevar el jugador
@@ -38,6 +39,8 @@ public class GunManager : MonoBehaviour
     public GunScriptableObject CurrentGun;
     [SerializeField] private GunType CurrentSecondGunType;
     private int CurrentSecondaryGunBulletsLeft;
+
+    private Vector3 dondePegaElRayDelArma;
     
 
 
@@ -59,6 +62,8 @@ public class GunManager : MonoBehaviour
         inAPickeableGun=false;
 
         secondHandRigTarget = GameObject.Find("SecondHandGripRig_target").GetComponent<Transform>();
+
+        crosshairManager = GetComponent<CrosshairManager>();
     }
 
     private void Update() {
@@ -100,6 +105,10 @@ public class GunManager : MonoBehaviour
         }
 
         SetUpGunRigs();
+
+        if (crosshairManager == null) return;
+        if (CurrentGun.CrosshairImage == null) return;
+        crosshairManager.SetCrosshairImage(CurrentGun.CrosshairImage);
     }
 
     public void DespawnActiveGun(){
@@ -206,5 +215,15 @@ public class GunManager : MonoBehaviour
 /// <returns></returns>
     public GunScriptableObject GetGun(GunType gunToFind){
         return gunsList.Find(gun => gun.Type == gunToFind);
+    }
+
+    private void OnDrawGizmos() {
+        if (CurrentGun == null) return;
+        Gizmos.color = Color.red;
+        dondePegaElRayDelArma = CurrentGun.dondePegaElRayoPaDisparar;
+        Gizmos.DrawRay(CurrentGun.GetRaycastOrigin(), CurrentGun.GetGunForward() * CurrentGun.TrailConfig.MissDistance);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(dondePegaElRayDelArma, 0.3f);
     }
 }

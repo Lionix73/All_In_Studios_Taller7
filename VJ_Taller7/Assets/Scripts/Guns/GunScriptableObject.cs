@@ -7,6 +7,7 @@ public class GunScriptableObject : ScriptableObject {
     public GunType Type;
     public string Name;
     public Sprite UIImage;
+    public Sprite CrosshairImage;
     public GameObject ModelPrefab;
     public Vector3 SpawnPoint;
     public Vector3 SpawnRotation;
@@ -36,6 +37,8 @@ public class GunScriptableObject : ScriptableObject {
     public ParticleSystem ShootSystem;
     public ObjectPool<TrailRenderer> TrailPool;
     public ObjectPool<Bullet> BulletPool;
+
+    public Vector3 dondePegaElRayoPaDisparar;
 
     private void Awake() {
         bulletsLeft = MagazineSize;
@@ -110,6 +113,7 @@ public class GunScriptableObject : ScriptableObject {
                             ShootConfig.HitMask))
                 {
                 ActiveMonoBehaviour.StartCoroutine(PlayTrail(TrailOrigin, hit.point, hit));
+                dondePegaElRayoPaDisparar = hit.point;
                 if (hit.collider.TryGetComponent(out Enemy enemey)){
                     enemey.TakeDamage(Damage);
                 }
@@ -217,7 +221,6 @@ public class GunScriptableObject : ScriptableObject {
     ///NOTA: Me encantaría explicar a detalle la magia negra que hace esta función, 
     ///      pero no tengo idea real de como funciona. aunque si siguen los saltos que da
     ///      todo tiene sentido...
-    ///
     ///</summary>
 
     public object Clone() {
@@ -232,6 +235,7 @@ public class GunScriptableObject : ScriptableObject {
         clone.Type = Type;
         clone.Name = Name;
         clone.UIImage = UIImage;
+        clone.CrosshairImage = CrosshairImage;
         clone.ModelPrefab = ModelPrefab;
         clone.SpawnPoint = SpawnPoint;
         clone.SpawnRotation = SpawnRotation;

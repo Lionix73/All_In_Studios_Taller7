@@ -285,6 +285,37 @@ Transform:
   - {fileID: 7441446251278187911}
   m_Father: {fileID: 3524814285209358872}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &521303489116642128
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8349299271820966256}
+  m_Layer: 0
+  m_Name: SecondHandGripRigTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8349299271820966256
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 521303489116642128}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.000000037176804, y: 0.000000016552915, z: -0.0000000019936124, w: 1}
+  m_LocalPosition: {x: 0.7378292, y: 1.4356537, z: -0.061714172}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3814042167893611884}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &649634023727992680
 GameObject:
   m_ObjectHideFlags: 0
@@ -1022,6 +1053,12 @@ MonoBehaviour:
   aimFOV: 55
   tFOV: 0.001
   rotationSpeed: 10
+  isGrounded: 0
+  GroundedOffset: -0.14
+  GroundedRadius: 0.28
+  GroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   aimRig: {fileID: 1565206832815787800}
   gripRig: {fileID: 5692192436221640593}
 --- !u!114 &4273197550237101772
@@ -1407,7 +1444,7 @@ Transform:
   m_GameObject: {fileID: 2623306489877163312}
   serializedVersion: 2
   m_LocalRotation: {x: 0.07163772, y: 4.467615e-16, z: -3.2087415e-17, w: 0.99743074}
-  m_LocalPosition: {x: 26.692657, y: -8.354774, z: -20.251932}
+  m_LocalPosition: {x: 28.187088, y: -8.070774, z: -22.37474}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1570,8 +1607,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6370193692199859154}
   - {fileID: 3814042167893611884}
+  - {fileID: 6370193692199859154}
   m_Father: {fileID: 353403930743934515}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7201395455643500998
@@ -4872,8 +4909,8 @@ MonoBehaviour:
         transform: {fileID: 0}
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
-    m_MinLimit: -20
-    m_MaxLimit: 20
+    m_MinLimit: -90
+    m_MaxLimit: 90
     m_AimAxis: 2
     m_UpAxis: 1
     m_WorldUpType: 0
@@ -4882,7 +4919,7 @@ MonoBehaviour:
     m_MaintainOffset: 0
     m_ConstrainedAxes:
       x: 1
-      y: 1
+      y: 0
       z: 1
 --- !u!1 &8166264329926664441
 GameObject:
@@ -5020,6 +5057,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3814042167893611884}
+  - component: {fileID: 6997749666471184456}
   - component: {fileID: 5692192436221640593}
   m_Layer: 0
   m_Name: SecondHandGripRig
@@ -5041,9 +5079,61 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8349299271820966256}
   - {fileID: 6709338211799461067}
   m_Father: {fileID: 4439750279110178550}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6997749666471184456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8456778744263534947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8935e03361a14ec4b8edc872f76bc822, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Weight: 1
+  m_Data:
+    m_ConstrainedObject: {fileID: 8349299271820966256}
+    m_SourceObjects:
+      m_Length: 1
+      m_Item0:
+        transform: {fileID: 5410966196327914760}
+        weight: 1
+      m_Item1:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item2:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item3:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item4:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item5:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item6:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item7:
+        transform: {fileID: 0}
+        weight: 0
+    m_ConstrainedPositionAxes:
+      x: 1
+      y: 1
+      z: 1
+    m_ConstrainedRotationAxes:
+      x: 1
+      y: 1
+      z: 1
+    m_MaintainPositionOffset: 0
+    m_MaintainRotationOffset: 0
 --- !u!114 &5692192436221640593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5314,12 +5404,7 @@ PrefabInstance:
       propertyPath: gunParent
       value: 
       objectReference: {fileID: 5535448352066537065}
-    - target: {fileID: 7857538833840811330, guid: 3a86f6857b16dda45b04b2520db434cc, type: 3}
-      propertyPath: secondHandRigTarget
-      value: 
-      objectReference: {fileID: 5410966196327914760}
-    m_RemovedComponents:
-    - {fileID: 3070749591246278766, guid: 3a86f6857b16dda45b04b2520db434cc, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

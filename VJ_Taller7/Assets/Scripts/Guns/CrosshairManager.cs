@@ -10,12 +10,16 @@ public class CrosshairManager : MonoBehaviour
     private void Awake() {
         gunManager = GetComponent<GunManager>();
         aimTarget = GameObject.Find("GunAimPoint").transform;
+        crosshairImage = GameObject.Find("CrossHair").GetComponent<Image>();
     }
 
     private void Update() {
         UpdateCrosshair();
     }
 
+    /// <summary>
+    /// Actualiza la posición del target que tiene rigueado el apuntar del arma, y la posición del crosshair.
+    /// </summary>
     private void UpdateCrosshair(){
         Vector3 gunTipPoint = gunManager.CurrentGun.GetRaycastOrigin();
         //Vector3 forward = gunManager.CurrentGun.GetGunForward();
@@ -32,5 +36,9 @@ public class CrosshairManager : MonoBehaviour
 
         if (crosshairImage == null) return;
         crosshairImage.rectTransform.anchoredPosition = Vector2.zero;
+    }
+
+    public void SetCrosshairImage(Sprite image){
+        crosshairImage.sprite = image;
     }
 }
