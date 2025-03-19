@@ -4,7 +4,6 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Animations.Rigging;
-//using static UnityEditor.Experimental.GraphView.GraphView;
 
 
 public class PlayerController : MonoBehaviour
@@ -17,7 +16,8 @@ public class PlayerController : MonoBehaviour
     public float normalHeight = 1.8f;
 
     [Header("Jump Settings")]
-    public float jumpForce = 5f;
+    public float jumpVerticalForce = 10f;
+    public float jumpHorizontalForce = 5f;
     public int maxJumps = 2;
 
     [Header("Animator")]
@@ -458,32 +458,24 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.performed && jumpCount < maxJumps)
+        if(isGrounded) 
+        { 
+            canJump = true;
+            jumpCount = 0;
+        }
+
+        if(jumpCount > 1 || aimInput > 0.05f) return;
+
+        if (context.performed && jumpCount < maxJumps && canJump)
         {
-            soundManager.StopSound("Walk", "Run");
-            soundManager.PlaySound("Jump");
+            animator.applyRootMotion = false;
 
-            if(jumpCount == 0)
-            {
-                rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
-                
-                animator.SetTrigger("Jump");
-            }
-            else if (jumpCount == 1)
-            {
-                rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
-
-                animator.SetTrigger("DoubleJump");
-            }
             jumpCount++;
+            animator.SetTrigger("Jump");
+            animator.SetBool("isJumping", true);
+            canJump = false;
 
-            if (canJump)
-            {
-                animator.SetBool("isJumping", true);
-                canJump = false;
-
-                StartCoroutine(Jump());
-            }
+            StartCoroutine(Jump());
         }
     }
 
@@ -491,14 +483,21 @@ public class PlayerController : MonoBehaviour
     {
         float jumpTimer = 0f;
 
+        soundManager.StopSound("Walk", "Run");
+        soundManager.PlaySound("Jump");
+
+        rb.linearVelocity = Vector3.zero;
+        rb.AddForce((desiredMoveDirection * jumpHorizontalForce) + (jumpVerticalForce * Vector3.up), ForceMode.Impulse);
+
         while (jumpTimer < jumpDuration)
         {
+            rb.AddForce(cameraTransform.forward * jumpHorizontalForce, ForceMode.Force);
+
             jumpTimer += Time.deltaTime;
             yield return null;
         }
-        
+
         animator.SetBool("isJumping", false);
-        yield return new WaitForSeconds(jumpCooldown);
         canJump = true;
     }
 
@@ -574,7 +573,6 @@ public class PlayerController : MonoBehaviour
     {
         isSliding = true;
         canSlide = false;
-        animator.applyRootMotion = true;
     }
 
     private void ResetCrouchFlag()
@@ -601,10 +599,11 @@ public class PlayerController : MonoBehaviour
     {
         float dashTime = 0f;
 
+        rb.AddForce(dashDirection * dashSpeed, ForceMode.Impulse);
+        
         while (dashTime < dashDuration)
         {
             rb.useGravity = false;
-            rb.AddForce(dashDirection * dashSpeed, ForceMode.Impulse);
             dashTime += Time.deltaTime;
             yield return null;
         }
@@ -628,8 +627,9 @@ public class PlayerController : MonoBehaviour
         {
             soundManager.StopSound("Falling");
             soundManager.PlaySound("Landing");
+
+            animator.applyRootMotion = true;
         }
-        if (isGrounded) jumpCount = 0;
 
         wasOnGround = isGrounded;
 
