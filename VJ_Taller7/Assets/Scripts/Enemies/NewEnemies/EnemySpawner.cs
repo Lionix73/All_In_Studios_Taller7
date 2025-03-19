@@ -177,16 +177,29 @@ public class EnemySpawner : MonoBehaviour
             if(NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out hit, 2f, -1)){
                 enemy.Agent.Warp(hit.position);
 
+                //Enable Collider and Disable Ragdoll
+                enemy.RagdollEnabler.EnableAnimator();
+                enemy.RagdollEnabler.DisableAllRigidbodies();
+                enemy.ColliderEnemy.enabled = true;
+                enemy.IsDead = false;
+
+                //Set Enemy Properties
                 enemy.MainCamera = mainCamera;
+                enemy.Player = player;
+
+                //Set Enemy Movement
                 enemy.Movement.Triangulation = navMeshTriangulation;
                 enemy.Movement.Player = player.transform;
-                enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
                 enemy.Agent.enabled = true;
+
+                //Set Enemy Health
+                enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
+
+                //Set Enemy Skills
                 enemy.Movement.Spawn();
                 enemy.OnDie += HandleEnemyDeath;
                 enemy.Level = level;
                 enemy.Skills = scaledEnemies[spawnIndex].skills;
-                enemy.Player = player;
 
                 enemiesAlive++;
             }

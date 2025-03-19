@@ -31,7 +31,15 @@ public class Enemy : PoolableObject, IDamageable
     }
 
     [SerializeField] private RagdollEnabler ragdollEnabler;
+    public RagdollEnabler RagdollEnabler{
+        get => ragdollEnabler;
+        set => ragdollEnabler = value;
+    }
     private Collider colliderEnemy;
+    public Collider ColliderEnemy{
+        get => colliderEnemy;
+        set => colliderEnemy = value;
+    }
     
 
     [Header("Enemy Health")]
