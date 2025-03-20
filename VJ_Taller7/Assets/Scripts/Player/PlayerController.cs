@@ -8,7 +8,9 @@ using UnityEngine.Animations.Rigging;
 
 public class PlayerController : MonoBehaviour
 {
+    #region VariablesAndComponents
     [Header("Movement Settings")]
+    public bool canMove = true;
     public float walkSpeed = 2f;
     public float runSpeed = 5f;
     public float slideDuration = 3f;
@@ -96,6 +98,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private GunManager gunManager;
     private SoundManager soundManager;
+    #endregion
 
     private void Awake()
     {
@@ -141,6 +144,8 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
+        if (!canMove) return;
+
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
 
         desiredMoveDirection = (transform.right * moveDirection.x + transform.forward * moveDirection.z);
@@ -198,6 +203,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    #region Animation
     private void HandleAnimations()
     {
         speedX.Update();
@@ -299,6 +305,30 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    private IEnumerator AnimLayerCountdown(int layerI, float sec)
+    {
+        float timer = 0f;
+        animator.SetLayerWeight(layerI, 1);
+
+        while (timer < sec)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        animator.SetLayerWeight(layerI, 0);
+
+        //Math.Clamp(timer, 0, 1);
+        //while(animator.GetLayerWeight(layerI) > 0)
+        //{
+        //    timer -= Time.deltaTime;
+
+        //    animator.SetLayerWeight(layerI, timer);
+        //    yield return null;
+        //}
+    }
+
+    #endregion
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -362,14 +392,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     public void OnReload(InputAction.CallbackContext context)
     {
         if(context.performed)
         {
             animator.SetTrigger("Reload");
 
-            StartCoroutine(ReloadCountdown());
+            StartCoroutine(AnimLayerCountdown(5, 4f));
 
             switch (gunManager.Gun)
             {
@@ -390,20 +419,6 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
-    }
-
-    private IEnumerator ReloadCountdown()
-    {
-        animator.SetLayerWeight(5, 1);
-        float timer = 0f;
-
-        while (timer < 2)
-        {
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-        animator.SetLayerWeight(5, 0);
     }
 
     public void OnEmote(InputAction.CallbackContext context)
@@ -456,6 +471,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    #region Jump
     public void OnJump(InputAction.CallbackContext context)
     {
         if(isGrounded) 
@@ -464,7 +480,12 @@ public class PlayerController : MonoBehaviour
             jumpCount = 0;
         }
 
-        if(jumpCount > 1 || aimInput > 0.05f) return;
+        if (jumpCount > 1 || aimInput > 0.05f)
+        {
+            canJump = false;
+            return;
+        }
+        else { canJump = true;}
 
         if (context.performed && jumpCount < maxJumps && canJump)
         {
@@ -500,6 +521,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isJumping", false);
         canJump = true;
     }
+    #endregion
 
     public void OnRun(InputAction.CallbackContext context)
     {
@@ -528,6 +550,35 @@ public class PlayerController : MonoBehaviour
             Invoke(nameof(ResetCrouchFlag), 0.5f);
         }
     }
+
+    #region Melee
+    public void OnMelee(InputAction.CallbackContext context) 
+    {
+        if(context.performed)
+        {
+            StartCoroutine(Melee());
+        }
+    }
+
+    private IEnumerator Melee()
+    {
+        animator.SetTrigger("Melee");
+        StartCoroutine(AnimLayerCountdown(6, 1.2f));
+        
+        canMove = false;
+        GetComponentInChildren<Melee>().ActivateMelee();
+
+        float timer = 0f;
+        while (timer < 1.1f)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        canMove = true;
+        GetComponentInChildren<Melee>().DeactivateMelee();
+    }
+    #endregion
 
     private void ExchangeColliders()
     {
@@ -613,7 +664,6 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
-
 
     private void CheckGround()
     {
