@@ -75,10 +75,9 @@ public class BombSkill : SkillScriptableObject
         bomb.Spawn(enemy.transform.forward, explosionDamage, player.transform);
 
         yield return wait;
-
-        instance.gameObject.SetActive(false);
-
+        
         useTime = Time.time;
+        instance.gameObject.SetActive(false);
 
         EnableEnemyMovement(enemy);
         enemy.Movement.State = EnemyState.Chase;

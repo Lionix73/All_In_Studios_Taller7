@@ -16,6 +16,8 @@ public class BombBullet : BulletEnemie
     [SerializeField] private float explosionDelay = 2f;
     public float ExplosionDelay { get => explosionDelay; set => explosionDelay = value; }
 
+    [SerializeField] private ParticleSystem explosionEffect;
+
     public override void Spawn(Vector3 forward, int damage, Transform target)
     {
         this.damage = damage;
@@ -45,6 +47,7 @@ public class BombBullet : BulletEnemie
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Hit");
         StartCoroutine(DelayedExplosion());
     }
 
@@ -55,12 +58,13 @@ public class BombBullet : BulletEnemie
 
     private IEnumerator DelayedExplosion()
     {
-        yield return new WaitForSeconds(explosionDelay);
+        yield return new WaitForSeconds(ExplosionDelay);
         Explode();
     }
 
     private void Explode()
     {
+        explosionEffect.Play();
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, damageableLayer);
         foreach (Collider collider in colliders)
         {
