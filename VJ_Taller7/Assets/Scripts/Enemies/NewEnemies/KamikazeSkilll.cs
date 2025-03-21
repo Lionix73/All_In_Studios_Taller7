@@ -47,6 +47,8 @@ public class KamikazeSkilll : SkillScriptableObject
 
     private IEnumerator ShootBomb(Enemy enemy, PlayerController player)
     {
+        WaitForSeconds wait = new WaitForSeconds(delay);
+
         enemy.Animator.SetBool(EnemyMovement.IsWalking, false);
 
         DisableEnemyMovement(enemy);
@@ -58,11 +60,8 @@ public class KamikazeSkilll : SkillScriptableObject
             yield return null;
         }
 
-
-        ObjectPool pool = ObjectPool.CreateInstance(prefab, 5);
+        ObjectPool pool = ObjectPool.CreateInstance(prefab, 10);
         PoolableObject instance = pool.GetObject();
-
-        WaitForSeconds wait = new WaitForSeconds(delay);
 
         enemy.Animator.SetTrigger(Enemy.ATTACK_TRIGGER);
 

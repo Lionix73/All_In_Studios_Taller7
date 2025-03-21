@@ -48,6 +48,8 @@ public class BombSkill : SkillScriptableObject
 
     private IEnumerator ShootBomb(Enemy enemy, PlayerController player)
     {
+        WaitForSeconds wait = new WaitForSeconds(delay);
+
         enemy.Animator.SetBool(EnemyMovement.IsWalking, false);
 
         DisableEnemyMovement(enemy);
@@ -59,13 +61,10 @@ public class BombSkill : SkillScriptableObject
             yield return null;
         }
 
+        enemy.Animator.SetTrigger(Enemy.ATTACK_TRIGGER);
 
         ObjectPool pool = ObjectPool.CreateInstance(prefab, 5);
         PoolableObject instance = pool.GetObject();
-
-        WaitForSeconds wait = new WaitForSeconds(delay);
-
-        enemy.Animator.SetTrigger(Enemy.ATTACK_TRIGGER);
 
         instance.transform.SetParent(enemy.transform, false);
         instance.transform.localPosition = bulletSpawnOffSet;
@@ -77,12 +76,10 @@ public class BombSkill : SkillScriptableObject
         yield return wait;
         
         useTime = Time.time;
-        instance.gameObject.SetActive(false);
+        isActivating = false;
 
         EnableEnemyMovement(enemy);
         enemy.Movement.State = EnemyState.Chase;
-
-        isActivating = false;
     }
 
     private bool HasLineOfSight(Enemy enemy, Transform target)

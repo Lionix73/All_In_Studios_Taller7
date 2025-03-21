@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class BulletEnemie : PoolableObject
@@ -12,11 +13,14 @@ public class BulletEnemie : PoolableObject
     [SerializeField] protected int damage = 10;
     public int Damage { get => damage; set => damage = value; }
 
+    [SerializeField] protected float waitForDisable = 3f;
+
     public Rigidbody Rb { get; private set; }
 
     protected Transform target;
 
     protected const string DISABLE_METHOD_NAME = "Disable";
+
 
     private void Awake()
     {
@@ -45,6 +49,11 @@ public class BulletEnemie : PoolableObject
             damageable.TakeDamage(damage);
         }
 
+        StartCoroutine(WaitForDisable());
+    }
+
+    protected virtual IEnumerator WaitForDisable(){
+        yield return new WaitForSeconds(waitForDisable);
         Disable();
     }
 

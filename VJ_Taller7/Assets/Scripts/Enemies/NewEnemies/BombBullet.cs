@@ -16,7 +16,12 @@ public class BombBullet : BulletEnemie
     [SerializeField] private float explosionDelay = 2f;
     public float ExplosionDelay { get => explosionDelay; set => explosionDelay = value; }
 
-    [SerializeField] private ParticleSystem explosionEffect;
+    [SerializeField] private GameObject explosionEffect;
+    [SerializeField] private MeshRenderer bombModel;
+
+    protected override void OnEnable(){
+        base.OnEnable();
+    }
 
     public override void Spawn(Vector3 forward, int damage, Transform target)
     {
@@ -64,7 +69,12 @@ public class BombBullet : BulletEnemie
 
     private void Explode()
     {
-        explosionEffect.Play();
+        if(explosionEffect != null && bombModel != null){
+            transform.rotation = new Quaternion(0, 0, 0, 0);
+            explosionEffect.SetActive(true);
+            bombModel.enabled = false;
+        }
+
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, damageableLayer);
         foreach (Collider collider in colliders)
         {
@@ -75,12 +85,7 @@ public class BombBullet : BulletEnemie
                 damageable.TakeDamage(damage);
             }
         }
-        Disable();
-    }
-
-    protected new void Disable(){
-        CancelInvoke(DISABLE_METHOD_NAME);
-        Rb.linearVelocity = Vector3.zero;
-        gameObject.SetActive(false);
+        
+        StartCoroutine(WaitForDisable());
     }
 }
