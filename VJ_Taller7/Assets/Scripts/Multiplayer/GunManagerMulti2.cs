@@ -27,7 +27,7 @@ public class GunManagerMulti2 : NetworkBehaviour
 
     [Header("Gun General Info")]
     [Tooltip("Lista de las armas que existen en el juego")]
-    private WeaponLogic weapon;
+    public WeaponLogic weapon;
     [SerializeField] private List<GunScriptableObject> gunsList;
     [SerializeField] private Transform gunParent;
     [SerializeField] private Transform gunRig;
@@ -35,7 +35,7 @@ public class GunManagerMulti2 : NetworkBehaviour
     [SerializeField] public GunType Gun; //Tipo de arma que tiene el jugador
     private NetworkVariable<GunType> GunNet = new NetworkVariable<GunType>(0, NetworkVariableReadPermission.Everyone);
     private Transform secondHandGrabPoint; // la posicion a asignar
-    private Transform secondHandRigTarget; //el Rig en sí
+    [SerializeField] private Transform secondHandRigTarget; //el Rig en sí
 
     [SerializeField] private bool inAPickeableGun;
     private GunType gunToPick;
@@ -73,6 +73,7 @@ public class GunManagerMulti2 : NetworkBehaviour
             SpawnGunRpc(Gun);
             camera = Camera.main;
 
+            //secondHandRigTarget = GameObject.Find("SecondHandGripRig_target").GetComponent<Transform>();
             ChangeGunTypeRpc(Gun);
             //SetUpGunRpc(GunNet.Value);
             SendSecondaryGunBulletsLeftRpc(CurrentGun.MagazineSize);
@@ -81,7 +82,6 @@ public class GunManagerMulti2 : NetworkBehaviour
             ChangeSecondGunTypeRpc(CurrentSecondGunTypeNet.Value);
             inAPickeableGun = false;
 
-            secondHandRigTarget = GameObject.Find("SecondHandGripRig_target").GetComponent<Transform>();
 
     }
 
@@ -194,7 +194,7 @@ public class GunManagerMulti2 : NetworkBehaviour
         {
             Debug.LogError("Failed to find NetworkObject with ID: " + modelNetworkObjectId);
         }
-        CurrentGun.ShootSystem = CurrentGun.Model.GetComponentInChildren<ParticleSystem>();
+       // CurrentGun.ShootSystem = CurrentGun.Model.GetComponentInChildren<ParticleSystem>();
         weapon = spawnGun.gameObject.GetComponent<WeaponLogic>();
         gunRig = CurrentGun.Model.transform;
 

@@ -46,6 +46,7 @@ public class WeaponLogic : NetworkBehaviour
 
     private void Awake()
     {
+        activeCamera = Camera.main;
         /*currentGun = gunManager.CurrentGun;
 
 

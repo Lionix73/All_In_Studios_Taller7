@@ -90,8 +90,6 @@ public class PlayerControllerMulti : NetworkBehaviour
     [SerializeField] NetworkObject Parent;
     private SoundManager soundManager;
 
-    [SerializeField] private GameObject HandConstraint;
-
     private GameObject instanceGunMan;
     private NetworkObject instanceGunManNet;
 
