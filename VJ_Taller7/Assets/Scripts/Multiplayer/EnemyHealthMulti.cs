@@ -21,13 +21,16 @@ public class EnemyHealthMulti : NetworkBehaviour
 
 
     private int maxHealth;
+    public NetworkVariable<int> MaxHealth = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void OnNetworkSpawn()
     {
+        if (!IsServer) return;
         HealthNet.Value = health;
         maxHealth = HealthNet.Value;
+        MaxHealth.Value = maxHealth;
 
     }
 
@@ -52,7 +55,7 @@ public class EnemyHealthMulti : NetworkBehaviour
             ShowFloatingText(damage);
         }
 
-        healthBar.SetProgress(HealthNet.Value / maxHealth, 3);
+        healthBar.SetProgress(HealthNet.Value / MaxHealth.Value, 3);
     }
     public void SetUpHealthBar(Canvas canvas, Camera mainCamera)
     {

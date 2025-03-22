@@ -835,8 +835,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Look[/Mouse/delta,/Pen/delta]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GunManager, Assembly-CSharp
+      - m_Target: {fileID: 6274603480792431093}
+        m_TargetAssemblyTypeName: GunManagerMulti2, Assembly-CSharp
         m_MethodName: OnShoot
         m_Mode: 0
         m_Arguments:
@@ -851,8 +851,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Attack[/Mouse/leftButton,/Keyboard/enter]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GunManager, Assembly-CSharp
+      - m_Target: {fileID: 6274603480792431093}
+        m_TargetAssemblyTypeName: GunManagerMulti2, Assembly-CSharp
         m_MethodName: OnGrabGun
         m_Mode: 0
         m_Arguments:
@@ -907,8 +907,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Next[/Keyboard/2]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 3951267400713598900}
+        m_TargetAssemblyTypeName: PlayerControllerMulti, Assembly-CSharp
         m_MethodName: OnRun
         m_Mode: 0
         m_Arguments:
@@ -963,8 +963,8 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 3951267400713598900}
+        m_TargetAssemblyTypeName: PlayerControllerMulti, Assembly-CSharp
         m_MethodName: OnAim
         m_Mode: 0
         m_Arguments:
@@ -983,8 +983,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Slide[/Keyboard/c,/Keyboard/ctrl]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GunManager, Assembly-CSharp
+      - m_Target: {fileID: 6274603480792431093}
+        m_TargetAssemblyTypeName: GunManagerMulti2, Assembly-CSharp
         m_MethodName: OnReload
         m_Mode: 0
         m_Arguments:
@@ -995,8 +995,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 3951267400713598900}
+        m_TargetAssemblyTypeName: PlayerControllerMulti, Assembly-CSharp
         m_MethodName: OnReload
         m_Mode: 0
         m_Arguments:
@@ -1011,9 +1011,9 @@ MonoBehaviour:
     m_ActionName: 'Player/Reload[/Keyboard/r]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2504184262613002398}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnDash
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1027,8 +1027,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Dash[/Keyboard/f]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 3951267400713598900}
+        m_TargetAssemblyTypeName: PlayerControllerMulti, Assembly-CSharp
         m_MethodName: OnEmote
         m_Mode: 0
         m_Arguments:
@@ -1043,8 +1043,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Emote[/Keyboard/t]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GunManager, Assembly-CSharp
+      - m_Target: {fileID: 6274603480792431093}
+        m_TargetAssemblyTypeName: GunManagerMulti2, Assembly-CSharp
         m_MethodName: OnWeaponChange
         m_Mode: 0
         m_Arguments:
@@ -1055,8 +1055,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 3951267400713598900}
+        m_TargetAssemblyTypeName: PlayerControllerMulti, Assembly-CSharp
         m_MethodName: OnChangeGun
         m_Mode: 0
         m_Arguments:
@@ -1101,6 +1101,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RigLayers:
+  - m_Rig: {fileID: 4117758039209053204}
+    m_Active: 1
   - m_Rig: {fileID: 7201395455643500998}
     m_Active: 1
   m_Effectors: []
@@ -1152,10 +1154,10 @@ MonoBehaviour:
   rotationSpeed: 10
   aimRig: {fileID: 1565206832815787800}
   gripRig: {fileID: 5692192436221640593}
-  gunManager: {fileID: 0}
+  gunManager: {fileID: 6274603480792431093}
   gunManagerPrefab: {fileID: 1386519045764041058, guid: 8910093eadfd1b847a55225d8507383e, type: 3}
   Parent: {fileID: 4356260809616859532}
-  GunManagerFollow: {fileID: 4475888442046788061}
+  HandConstraint: {fileID: 4475888442046788061}
 --- !u!114 &2388046720383461067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1276,13 +1278,6 @@ MonoBehaviour:
     TransitionDuration: 0.038596354
     TriggerNameHash: 129565385
     TransitionIndex: 2
-  - IsCrossFadeExit: 0
-    Layer: 2
-    OriginatingState: 1748754976
-    DestinationState: -1564946859
-    TransitionDuration: 0.16645066
-    TriggerNameHash: -1525363869
-    TransitionIndex: 1
   - IsCrossFadeExit: 0
     Layer: 2
     OriginatingState: 125937960
@@ -1986,6 +1981,7 @@ Transform:
   m_Children:
   - {fileID: 5519746454959993719}
   - {fileID: 353403930743934515}
+  - {fileID: 1027142627032648680}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4356260809616859532
@@ -2320,7 +2316,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5535448352066537065}
   - component: {fileID: 4905057751436500502}
-  - component: {fileID: 4532721422253943934}
+  - component: {fileID: 2518252818475882209}
   m_Layer: 0
   m_Name: GunHoldParent
   m_TagString: Untagged
@@ -2364,7 +2360,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: -0.45, y: 0, z: 0}
---- !u!114 &4532721422253943934
+--- !u!114 &2518252818475882209
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2373,10 +2369,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4475888442046788061}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4b3734dadf7c9e4ba9e42387ee7369c, type: 3}
+  m_Script: {fileID: 11500000, guid: 6da1fc5c5fe75414a86e837f56476445, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunManager: {fileID: 0}
+  gunManager: {fileID: 6274603480792431093}
 --- !u!1 &4566057235329805289
 GameObject:
   m_ObjectHideFlags: 0
@@ -3390,6 +3386,93 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6924850106113614395}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6903108681162083449
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1027142627032648680}
+  - component: {fileID: 6274603480792431093}
+  - component: {fileID: 7405740265945685322}
+  m_Layer: 0
+  m_Name: GunManagerMulti 1
+  m_TagString: Gun Manager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1027142627032648680
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6903108681162083449}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.50000036, y: 0.49999967, z: -0.49999967, w: 0.50000036}
+  m_LocalPosition: {x: 0.73782957, y: 1.4356539, z: -0.061713602}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4468175175659240506}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6274603480792431093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6903108681162083449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 320b5cb7d9cf63b45add2224dafdce0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  camera: {fileID: 0}
+  cinemachineBrain: {fileID: 0}
+  MaxTotalAmmo: 300
+  totalAmmoDisplay: {fileID: 0}
+  ammunitionDisplay: {fileID: 0}
+  gunsList:
+  - {fileID: 11400000, guid: 1946b533a57ce3e4abf0f9a5db71c215, type: 2}
+  - {fileID: 11400000, guid: 1a73ca6d4ea9fee46a126562e1cb1062, type: 2}
+  gunParent: {fileID: 4468175175659240506}
+  gunRig: {fileID: 0}
+  Gun: 0
+  inAPickeableGun: 0
+  CurrentGun: {fileID: 0}
+  CurrentSecondGunType: 0
+--- !u!1773428102 &7405740265945685322
+ParentConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6903108681162083449}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0.73782957, y: 1.4356539, z: -0.061713602}
+  m_RotationAtRest: {x: 89.96574, y: 0, z: -89.99993}
+  m_TranslationOffsets:
+  - {x: 0, y: 0, z: 0}
+  m_RotationOffsets:
+  - {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_AffectRotationX: 1
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 1
+  m_Active: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 5535448352066537065}
+    weight: 1
 --- !u!1 &7157211270248834674
 GameObject:
   m_ObjectHideFlags: 0
@@ -3794,6 +3877,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4344186569974037707}
+  - component: {fileID: 4117758039209053204}
   m_Layer: 0
   m_Name: mixamorig:Hips
   m_TagString: Untagged
@@ -3819,6 +3903,20 @@ Transform:
   - {fileID: 1907981648529018091}
   m_Father: {fileID: 353403930743934515}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4117758039209053204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8039306352082435462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70b342d8ce5c2fd48b8fa3147d48d1d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Weight: 1
+  m_Effectors: []
 --- !u!1 &8123759235630563612
 GameObject:
   m_ObjectHideFlags: 0

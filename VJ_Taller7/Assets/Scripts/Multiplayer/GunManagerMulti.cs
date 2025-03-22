@@ -8,8 +8,10 @@ using System.Runtime.InteropServices;
 using Unity.Netcode;
 using UnityEngine.Pool;
 using Unity.VisualScripting;
+using UnityEngine.Animations;
+using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 
-[RequireComponent(typeof(CrosshairManager))]
+//[RequireComponent(typeof(CrosshairManager))]
 public class GunManagerMulti : NetworkBehaviour
 {
     [Header("Camera")]
@@ -29,7 +31,7 @@ public class GunManagerMulti : NetworkBehaviour
     private NetworkObject parentNetworkObject;
     private NetworkObject modelNetworkObject;
     [SerializeField] public NetworkObject GunParent { get; set; }
-    [SerializeField] public Transform GunHold { get; set; }
+    [SerializeField] public ParentConstraint GunHold { get; set; }
     [Tooltip("Tipo de arma que posee el jugador, define con cuál empieza")]
     [SerializeField] public GunType Gun; //Tipo de arma que tiene el jugador
     private Transform secondHandGrabPoint; // la posicion a asignar
@@ -59,17 +61,18 @@ public class GunManagerMulti : NetworkBehaviour
         actualTotalAmmo = MaxTotalAmmo;
         inAPickeableGun = false;
         
-        if (!IsOwner) return;
-        
         SetUpGunParentRpc();//En caso de no tener asignado el punto de la mano donde aparece el arma, que la sostenga encima
 
-        GunScriptableObject gun = gunsList.Find(gun => gun.Type == Gun);
-        if (gun == null)
+        if(IsServer)
         {
-            Debug.LogError($"No se ha encontrado el arma: {CurrentGun}");
-            return;
+            GunScriptableObject gun = gunsList.Find(gun => gun.Type == Gun);
+            if (gun == null)
+            {
+                Debug.LogError($"No se ha encontrado el arma: {CurrentGun}");
+                return;
+            }
+            SetUpGunRpc(Gun);
         }
-        SetUpGunRpc(Gun);
     }
 
     [Rpc(SendTo.Server)]
@@ -78,9 +81,9 @@ public class GunManagerMulti : NetworkBehaviour
     }
 
 private void Update() {
-        if (!IsLocalPlayer || GunHold == null) return;
+        /*if (!IsLocalPlayer || GunHold == null) return;
         transform.position = GunHold.position;
-        transform.rotation = GunHold.rotation;
+        transform.rotation = GunHold.rotation;*/
         /*if (totalAmmoDisplay != null) {
             totalAmmoDisplay.SetText(actualTotalAmmo + "/" + MaxTotalAmmo);
             
@@ -109,7 +112,7 @@ private void Update() {
             actualTotalAmmo=MaxTotalAmmo;
         }*/
     }
-    [Rpc(SendTo.Server)]
+    [Rpc(SendTo.Everyone)]
     public void SetUpGunRpc(GunType gunType){
         // Busca el GunScriptableObject en la lista de armas
         GunScriptableObject gun = gunsList.Find(g => g.Type == gunType);
@@ -121,7 +124,7 @@ private void Update() {
         CurrentGun = gun.Clone() as GunScriptableObject;
         CurrentSecondaryGunBulletsLeft = CurrentGun.MagazineSize;
         CurrentSecondGunType = Gun;
-        SpawnRpc(gunType);
+        GetCurrentGunRpc(gunType);
         if (UIManager.Singleton != null)
         {
             UIManager.Singleton.GetPlayerGunInfo(CurrentGun.BulletsLeft, CurrentGun.MagazineSize, CurrentGun);
@@ -129,8 +132,9 @@ private void Update() {
 
         SetUpGunRigs();
     }
-    [Rpc(SendTo.Server)]
-    public void SpawnRpc(GunType gunType)
+
+    [Rpc(SendTo.Everyone)]
+    public void GetCurrentGunRpc(GunType gunType)
     {
         // Busca el GunScriptableObject en la lista de armas
         GunScriptableObject gun = gunsList.Find(g => g.Type == gunType);
@@ -139,7 +143,6 @@ private void Update() {
             Debug.LogError($"No se encontró el arma con tipo: {gunType}");
             return;
         }
-
         //gun.ActiveMonoBehaviour = ActiveMonoBehaviour;
         CurrentGun.LastShootTime = 0f;
         if (CurrentGun.bulletsLeft == 0)
@@ -148,6 +151,21 @@ private void Update() {
         }
         CurrentGun.realoading = false;
         CurrentGun.TrailPool = new ObjectPool<TrailRenderer>(gun.CreateTrail);
+        SpawnRpc(gunType);
+
+    }
+    [Rpc(SendTo.Server)]
+    public void SpawnRpc(GunType gunType)
+    {
+
+        // Busca el GunScriptableObject en la lista de armas
+        GunScriptableObject gun = gunsList.Find(g => g.Type == gunType);
+        if (gun == null)
+        {
+            Debug.LogError($"No se encontró el arma con tipo: {gunType}");
+            return;
+        }
+
 
         CurrentGun.Model = Instantiate(gun.ModelPrefab);
         modelNetworkObject = CurrentGun.Model.GetComponent<NetworkObject>();
@@ -158,7 +176,7 @@ private void Update() {
 
             // Obtén el NetworkObject del padre (gunParent)
             
-            SetParentGunRpc();
+            SetParentGunRpc(modelNetworkObject.NetworkObjectId);
 
         }
         else
@@ -173,21 +191,30 @@ private void Update() {
 
     }
 
-    [Rpc(SendTo.Server)]
-    public void SetParentGunRpc()
+    [Rpc(SendTo.Everyone)]
+    public void SetParentGunRpc(ulong modelNetworkObjectId)
     {
-                parentNetworkObject = GetComponent<NetworkObject>();
-                // Intenta asignar el padre
-                bool success = modelNetworkObject.TrySetParent(parentNetworkObject, worldPositionStays: false);
-                if (!success)
-                {
-                    Debug.LogError("No se pudo asignar el padre al NetworkObject del modelo.");
-                }
-                else
-                {
-                    Debug.Log("Arma emparentada");
-                }
 
+        // Obtén el NetworkObject correspondiente al ID
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(modelNetworkObjectId, out NetworkObject instanceGunManNet))
+        {
+            // Asigna el padre
+            bool success = instanceGunManNet.TrySetParent(transform, false);
+            if (success)
+            {
+                Debug.Log("Parent set successfully!");
+            }
+            else
+            {
+                Debug.LogError("Failed to set parent.");
+            }
+
+        }
+        else
+        {
+            Debug.LogError("Failed to find NetworkObject with ID: " + modelNetworkObjectId);
+        }
+        CurrentGun.Model = instanceGunManNet.GameObject();
         CurrentGun.ShootSystem = CurrentGun.Model.GetComponentInChildren<ParticleSystem>();
 
     }

@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using Unity.Netcode;
 
-public class GunPickeableMulti : MonoBehaviour
+public class GunPickeableMulti : NetworkBehaviour
 {
     [SerializeField] private GunType gunType;
     [SerializeField] private GameObject PickeableUI;
@@ -13,7 +13,7 @@ public class GunPickeableMulti : MonoBehaviour
     [SerializeField] private TextMeshProUGUI magazineText;
 
     private Vector3 spinDirection = new Vector3(0, 1, 0);
-    private GunManagerMulti gunManager;
+    private GunManagerMulti2 gunManager;
     private NetworkObject player;
 
 
@@ -35,7 +35,7 @@ public class GunPickeableMulti : MonoBehaviour
         player = other.GetComponentInParent<NetworkObject>();
         if (player.IsLocalPlayer)
         {
-            gunManager = player.GetComponentInChildren<GunManagerMulti>();
+            gunManager = player.GetComponentInChildren<GunManagerMulti2>();
             //gunManager = other.gameObject.GetComponentInChildren<GunManager>();
             gunManager.EnterPickeableGun(gunType);
             GunScriptableObject gun = gunManager.GetGun(gunType); //Pa tomar lo que quiran del arma a pickear
@@ -66,6 +66,7 @@ public class GunPickeableMulti : MonoBehaviour
         {
             PickeableUI.SetActive(false);
             gunManager = null;
+
         }
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Animations.Rigging;
 using Unity.Netcode;
+using UnityEngine.Animations;
 //using static UnityEditor.Experimental.GraphView.GraphView;
 
 
@@ -84,12 +85,12 @@ public class PlayerControllerMulti : NetworkBehaviour
     private Vector3 desiredMoveDirection;
 
     private PlayerInput playerInput;
-    [SerializeField] private GunManagerMulti gunManager;
+    [SerializeField] private GunManagerMulti2 gunManager;
     [SerializeField] GameObject gunManagerPrefab;
     [SerializeField] NetworkObject Parent;
     private SoundManager soundManager;
 
-    [SerializeField] private GameObject GunManagerFollow;
+    [SerializeField] private GameObject HandConstraint;
 
     private GameObject instanceGunMan;
     private NetworkObject instanceGunManNet;
@@ -104,9 +105,10 @@ public class PlayerControllerMulti : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+     
+        
         if (!IsOwner) return;
-        //gunManager = GetComponentInChildren<GunManagerMulti>();
-        SpawnGunManagerRpc();
+        //SpawnGunManagerRpc();
         playerInput = GetComponent<PlayerInput>();
         Debug.Log(playerInput);
         cameraTransform = GameObject.FindGameObjectWithTag("FreeLookCamera").transform;
@@ -152,6 +154,7 @@ public class PlayerControllerMulti : NetworkBehaviour
         HandleRotation();
 
     }
+
     [Rpc(SendTo.Server)]
     public void SpawnGunManagerRpc()
     {
@@ -160,20 +163,28 @@ public class PlayerControllerMulti : NetworkBehaviour
         instanceGunManNet = instanceGunMan.GetComponent<NetworkObject>();
         instanceGunManNet.Spawn();
 
-        // Envía el NetworkObjectId a los clientes
-        SetParentGunManagerRpc(instanceGunManNet.NetworkObjectId);
-    }
+        GetGunManagerRpc(instanceGunManNet.NetworkObjectId);
 
+    }
     [Rpc(SendTo.Everyone)]
-    public void SetParentGunManagerRpc(ulong gunManagerNetId)
+    public void GetGunManagerRpc(ulong networkObjectId)
     {
         // Obtén el NetworkObject correspondiente al ID
-        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(gunManagerNetId, out NetworkObject instanceGunManNet))
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject spawnedGunManNet))
         {
             // Asigna el padre
-            bool success = instanceGunManNet.TrySetParent(Parent, false);
+            bool success = spawnedGunManNet.TrySetParent(GetComponentInParent<NetworkObject>().transform, false);
             if (success)
             {
+                gunManager = spawnedGunManNet.GetComponent<GunManagerMulti2>();
+                if (gunManager != null)
+                {
+                    // Configura el GunManager si es necesario
+                }
+                else
+                {
+                    Debug.LogError("GunManagerMulti component not found.");
+                }
                 Debug.Log("Parent set successfully!");
             }
             else
@@ -181,22 +192,14 @@ public class PlayerControllerMulti : NetworkBehaviour
                 Debug.LogError("Failed to set parent.");
             }
 
-            // Asigna el GunHold
-            gunManager = instanceGunManNet.GetComponent<GunManagerMulti>();
-            if (gunManager != null)
-            {
-                gunManager.GunHold = GunManagerFollow.transform;
-            }
-            else
-            {
-                Debug.LogError("GunManagerMulti component not found.");
-            }
         }
         else
         {
-            Debug.LogError("Failed to find NetworkObject with ID: " + gunManagerNetId);
+            Debug.LogError("Failed to find NetworkObject with ID: " + networkObjectId);
         }
+
     }
+
     private void HandleMovement()
     {
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
@@ -369,6 +372,7 @@ public class PlayerControllerMulti : NetworkBehaviour
 
     public void OnAim(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         aimInput = context.ReadValue<float>();
 
         if (aimInput > 0.1f)
@@ -383,6 +387,7 @@ public class PlayerControllerMulti : NetworkBehaviour
 
     public void OnChangeGun(InputAction.CallbackContext context)
     {
+        if(!IsOwner) return;
         if(context.performed) 
         {
             animator.SetTrigger("ChangeGun");
@@ -391,6 +396,7 @@ public class PlayerControllerMulti : NetworkBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         if (context.started)
         {
             switch(gunManager.Gun)
@@ -422,7 +428,9 @@ public class PlayerControllerMulti : NetworkBehaviour
 
     public void OnReload(InputAction.CallbackContext context)
     {
-        if(context.performed)
+        if (!IsOwner) return;
+
+        if (context.performed)
         {
             animator.SetTrigger("Reload");
 
@@ -449,7 +457,8 @@ public class PlayerControllerMulti : NetworkBehaviour
 
     public void OnEmote(InputAction.CallbackContext context)
     {
-        if(context.performed && moveInput.magnitude < 0.05f)
+        if (!IsOwner) return;
+        if (context.performed && moveInput.magnitude < 0.05f)
         {
             if(!isEmoting) 
             { 
@@ -547,6 +556,7 @@ public class PlayerControllerMulti : NetworkBehaviour
 
     public void OnRun(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         if (context.performed)
         {
             isRunning = !isRunning;
@@ -556,6 +566,7 @@ public class PlayerControllerMulti : NetworkBehaviour
 
     public void OnCrouch(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         if (context.performed && canCrouch && isGrounded)
         {
             ExchangeCollidersRpc();

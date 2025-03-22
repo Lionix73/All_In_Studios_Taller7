@@ -10,11 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4805349299299929843}
   - component: {fileID: -3485526055732716882}
-  - component: {fileID: 6033036497570050079}
-  - component: {fileID: -6882765982433256812}
   - component: {fileID: 8113669603406393399}
+  - component: {fileID: -7213924498665407250}
   m_Layer: 0
-  m_Name: GunManagerMulti
+  m_Name: GunManagerMulti 1
   m_TagString: Gun Manager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,10 +46,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2511475201
+  GlobalObjectIdHash: 2987890299
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
-  Ownership: 2
+  Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -60,71 +59,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 1
---- !u!114 &6033036497570050079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1386519045764041058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a7cf56fe8c54f7489e170564bb5d147, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  Camera: {fileID: 0}
-  cinemachineBrain: {fileID: 0}
-  actualTotalAmmo: 0
-  MaxTotalAmmo: 500
-  totalAmmoDisplay: {fileID: 0}
-  ammunitionDisplay: {fileID: 0}
-  gunsList:
-  - {fileID: 11400000, guid: 1946b533a57ce3e4abf0f9a5db71c215, type: 2}
-  - {fileID: 11400000, guid: bdb2fbb6410586b48bec8d8b462c8248, type: 2}
-  - {fileID: 11400000, guid: 1d47203ce74508a45bef38a7c467cadc, type: 2}
-  - {fileID: 11400000, guid: dad2d973a9349f14ca3f690c0d2e33cb, type: 2}
-  Gun: 0
-  inAPickeableGun: 0
-  CurrentGun: {fileID: 0}
-  CurrentSecondGunType: 0
-  IsLocalPlayer: 0
---- !u!114 &-6882765982433256812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1386519045764041058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da52bf8bbc1de48cfb221a6ff30f7972, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkTransformExpanded: 0
-  AuthorityMode: 0
-  TickSyncChildren: 0
-  UseUnreliableDeltas: 0
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 1
-  SyncRotAngleX: 1
-  SyncRotAngleY: 1
-  SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
-  UseQuaternionSynchronization: 0
-  UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 0
-  InLocalSpace: 0
-  SwitchTransformSpaceWhenParented: 0
-  Interpolate: 1
-  SlerpPosition: 0
 --- !u!1773428102 &8113669603406393399
 ParentConstraint:
   m_ObjectHideFlags: 0
@@ -148,3 +82,30 @@ ParentConstraint:
   m_Active: 0
   m_IsLocked: 0
   m_Sources: []
+--- !u!114 &-7213924498665407250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1386519045764041058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 320b5cb7d9cf63b45add2224dafdce0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  Camera: {fileID: 0}
+  cinemachineBrain: {fileID: 0}
+  actualTotalAmmo: 0
+  MaxTotalAmmo: 0
+  totalAmmoDisplay: {fileID: 0}
+  ammunitionDisplay: {fileID: 0}
+  gunsList:
+  - {fileID: 11400000, guid: 1946b533a57ce3e4abf0f9a5db71c215, type: 2}
+  - {fileID: 11400000, guid: dad2d973a9349f14ca3f690c0d2e33cb, type: 2}
+  gunParent: {fileID: 0}
+  Gun: 0
+  inAPickeableGun: 0
+  CurrentGun: {fileID: 0}
+  CurrentSecondGunType: 0
