@@ -96,14 +96,14 @@ public class Enemy : PoolableObject, IDamageable
 
     [Header("Game Manager")]
     //Evento que se llama para el game manager
-    [SerializeField] public int scoreOnKill { get; private set; }
+    public int scoreOnKill;
     public event EventHandler<OnEnemyDeadEventArgs> OnEnemyDead;
     public class OnEnemyDeadEventArgs : EventArgs{
         public int score;
     }
     
     public delegate void DeathEvent(Enemy enemy);
-    public DeathEvent OnDie;
+    public DeathEvent OnDie; //Evento que se llama
 
 
     [Header("External Calls")]

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class EnemyWavesManager : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class EnemyWavesManager : MonoBehaviour
 
     [Space]
     [Header("Read At Runtime")]
-    [SerializeField] private int level = 0;
+    [SerializeField] private int level = 1;
     [SerializeField] private List<EnemyScriptableObject> scaledEnemies = new List<EnemyScriptableObject>();
     [SerializeField] private float[] weights;
 
@@ -43,9 +44,15 @@ public class EnemyWavesManager : MonoBehaviour
     private RoundManager _roundManager;
     private ScoreManager _scoreManager;
 
+    public delegate void EnemySpawned();
+    public event EnemySpawned OnEnemySpawned;
+
 
     private void Awake()
     {
+        GameManager.Instance.PlayerSpawned += GetPlayer;
+        OnEnemySpawned += GameManager.Instance.roundManager.enemyHaveSpawn;
+
         for (int i = 0; i < weightedEnemies.Count; i++)
         {
             EnemyObjectPools.Add(i, ObjectPool.CreateInstance(weightedEnemies[i].enemy.prefab, numberOfEnemiesToSpawn));
@@ -60,6 +67,7 @@ public class EnemyWavesManager : MonoBehaviour
     {
         _roundManager = GetComponent<RoundManager>();
         _scoreManager = GetComponent<ScoreManager>();
+        GameObject.Find("HealthBarCanvas").TryGetComponent(out healthBarCanvas);
 
         navMeshTriangulation = NavMesh.CalculateTriangulation();
 
@@ -87,14 +95,17 @@ public class EnemyWavesManager : MonoBehaviour
         }
     }
 
-    public void RecieveWaveOrder(int amountOfEnemiesToSpawn){
-        numberOfEnemiesToSpawn = amountOfEnemiesToSpawn;
+    public void RecieveWaveOrder(int actualWave, int amountOfEnemiesToSpawn){
+        //numberOfEnemiesToSpawn = amountOfEnemiesToSpawn;
+        level = actualWave;
         Debug.Log($"Recibiendo oleada de {numberOfEnemiesToSpawn} enemigos");
+        ScaleUpSpawns();
         StartCoroutine(SpawnEnemies());
+        GameManager.Instance.roundManager.recieveWaveData(numberOfEnemiesToSpawn);
     }
 
     private IEnumerator SpawnEnemies(){
-        level++;
+        level++; //Creo que quitare este porque hace la funcion de la current wave
 
         enemiesAlive = 0;
         enemiesSpawned = 0;
@@ -190,22 +201,32 @@ public class EnemyWavesManager : MonoBehaviour
             if(NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out hit, 2f, -1)){
                 enemy.Agent.Warp(hit.position);
 
+                //Enable Collider and Disable Ragdoll
+                enemy.RagdollEnabler.EnableAnimator();
+                enemy.RagdollEnabler.DisableAllRigidbodies();
+                enemy.ColliderEnemy.enabled = true;
+                enemy.IsDead = false;
+
                 enemy.MainCamera = mainCamera;
+                enemy.Player = player;
+
                 enemy.Movement.Triangulation = navMeshTriangulation;
                 enemy.Movement.Player = player.transform;
-                enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
                 enemy.Agent.enabled = true;
-                enemy.Movement.Spawn();
-                enemy.OnDie += HandleEnemyDeath;
 
+                enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
+
+
+                enemy.Movement.Spawn();
                 enemy.OnDie += _roundManager.ChangeScore;
                 enemy.OnDie += _roundManager.EnemyDied;
+                enemy.OnDie += HandleEnemyDeath;
 
                 enemy.Level = level;
                 enemy.Skills = scaledEnemies[spawnIndex].skills;
-                enemy.Player = player;
 
                 enemiesAlive++;
+                OnEnemySpawned?.Invoke();
             }
             else{
                 Debug.LogError($"No se pudo poner el NavMeshAgent en el navmesh, usando {navMeshTriangulation.vertices[vertexIndex]}");
@@ -227,9 +248,8 @@ public class EnemyWavesManager : MonoBehaviour
         enemy.OnDie -= HandleEnemyDeath;
         enemy.OnDie -= _roundManager.ChangeScore;
         enemy.OnDie -= _roundManager.EnemyDied;
-        if(enemiesAlive == 0 && enemiesSpawned == numberOfEnemiesToSpawn){
-            ScaleUpSpawns();
-            //StartCoroutine(SpawnEnemies());
+        if(enemiesAlive == 0 && enemiesSpawned == numberOfEnemiesToSpawn){ //Si la ronda acaba antes del tiempo
+            //ScaleUpSpawns(); Ya se escalan cuando se manda la ronda
         }
     }
 
@@ -252,5 +272,11 @@ public class EnemyWavesManager : MonoBehaviour
         Roundrobin,
         Random,
         WeightedRandom
+    }
+
+    private void GetPlayer (GameObject activePlayer)
+    {
+        player = activePlayer.GetComponentInChildren<PlayerController>();
+        mainCamera = activePlayer.GetComponentInChildren<Camera>();
     }
 }
