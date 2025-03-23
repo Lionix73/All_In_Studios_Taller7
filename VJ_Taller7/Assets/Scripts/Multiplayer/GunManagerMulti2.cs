@@ -76,7 +76,7 @@ public class GunManagerMulti2 : NetworkBehaviour
             //secondHandRigTarget = GameObject.Find("SecondHandGripRig_target").GetComponent<Transform>();
             ChangeGunTypeRpc(Gun);
             //SetUpGunRpc(GunNet.Value);
-            SendSecondaryGunBulletsLeftRpc(CurrentGun.MagazineSize);
+            SendSecondaryGunBulletsLeftRpc(weapon.MagazineSize);
             ChangeSecondGunTypeRpc(Gun);
             //CurrentSecondGunType = Gun;
             ChangeSecondGunTypeRpc(CurrentSecondGunTypeNet.Value);
@@ -98,7 +98,7 @@ public class GunManagerMulti2 : NetworkBehaviour
         if (shooting && weapon.BulletsLeft > 0) {
             weapon.Shoot();
         }
-        else if (CurrentGun.bulletsLeft<=0 && !CurrentGun.realoading){
+        else if (weapon.bulletsLeft<=0 && !weapon.realoading){
             RealoadGun();
         }
 
@@ -127,13 +127,13 @@ public class GunManagerMulti2 : NetworkBehaviour
         }
         //CurrentGun.ActiveMonoBehaviour = this;
         CurrentGun = gun.Clone() as GunScriptableObject;
-        CurrentGun.LastShootTime = 0f;
+       /* CurrentGun.LastShootTime = 0f;
         if (CurrentGun.bulletsLeft == 0)
         { //En revision porque no se recarga al recoger el arma, ni la primera vez que aparece.
             CurrentGun.bulletsLeft = CurrentGun.MagazineSize;
         }
         CurrentGun.realoading = false;
-        CurrentGun.TrailPool = new ObjectPool<TrailRenderer>(gun.CreateTrail);
+        CurrentGun.TrailPool = new ObjectPool<TrailRenderer>(gun.CreateTrail);*/
         if(IsServer)
         {
             SpawnGunRpc(gunType);
@@ -144,7 +144,7 @@ public class GunManagerMulti2 : NetworkBehaviour
 
         if (UIManager.Singleton != null)
         {
-            UIManager.Singleton.GetPlayerGunInfo(CurrentGun.BulletsLeft, CurrentGun.MagazineSize, CurrentGun);
+            UIManager.Singleton.GetPlayerGunInfo(weapon.BulletsLeft, weapon.MagazineSize, CurrentGun);
         }
         if(IsOwner)
         {
@@ -224,9 +224,9 @@ public class GunManagerMulti2 : NetworkBehaviour
     [Rpc(SendTo.Server)]
     public void DespawnRpc()
     {
-        CurrentGun.Model.SetActive(false);
-        CurrentGun.Model.GetComponent<NetworkObject>().Despawn();
-        Destroy(CurrentGun.Model);
+        weapon.gameObject.SetActive(false);
+        weapon.GetComponent<NetworkObject>().Despawn();
+        Destroy(weapon);
 
     }
 
@@ -327,15 +327,14 @@ public class GunManagerMulti2 : NetworkBehaviour
     public void OnReload(InputAction.CallbackContext context){
         if (!IsOwner) { return; }
         if (context.started){
-            if (!CurrentGun.Realoading){
+            if (!weapon.Realoading){
                 RealoadGun();
             }
         }
     }
     private void RealoadGun(){
-        if (IsOwner) return;
-        CurrentGun.Reload();
-        actualTotalAmmo.Value -= CurrentGun.MagazineSize - CurrentGun.BulletsLeft;
+        weapon.Reload();
+        actualTotalAmmo.Value -= weapon.MagazineSize - weapon.BulletsLeft;
     }
     #endregion
 

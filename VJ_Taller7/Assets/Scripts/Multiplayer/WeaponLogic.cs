@@ -5,7 +5,7 @@ using UnityEngine.Pool;
 
 public class WeaponLogic : NetworkBehaviour
 {
-    GunManager gunManager;
+    GunManagerMulti2 gunManager;
     public GunScriptableObject currentGun;
 
     public GunType Type;
@@ -44,10 +44,11 @@ public class WeaponLogic : NetworkBehaviour
     public ObjectPool<TrailRenderer> TrailPool;
     public ObjectPool<Bullet> BulletPool;
 
-    private void Awake()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
+    
         activeCamera = Camera.main;
-        /*currentGun = gunManager.CurrentGun;
 
 
         bulletsLeft = currentGun.bulletsLeft;
@@ -66,14 +67,11 @@ public class WeaponLogic : NetworkBehaviour
         TrailConfig = currentGun.TrailConfig;
 
         //ActiveMonoBehaviour = currentGun.ActiveMonoBehaviour; //Este es el que entiendo que debe dar porblemas
-        Model = currentGun.Model;
-        activeCamera = currentGun.activeCamera;
         LastShootTime = currentGun.LastShootTime;
         
         realoading = currentGun.Realoading;
-        ShootSystem = currentGun.ShootSystem;
         TrailPool = currentGun.TrailPool;
-        BulletPool = currentGun.BulletPool;*/
+        BulletPool = currentGun.BulletPool;
     }
 
     public void Spawn(Transform Parent, MonoBehaviour ActiveMonoBehaviour, Camera camera = null)
@@ -200,7 +198,7 @@ public class WeaponLogic : NetworkBehaviour
     {
         realoading = true;
         //Invoke("FinishedReload", ReloadTime);
-        ActiveMonoBehaviour.StartCoroutine(ReloadingCoroutine());
+        StartCoroutine(ReloadingCoroutine());
     }
     private IEnumerator ReloadingCoroutine()
     {
