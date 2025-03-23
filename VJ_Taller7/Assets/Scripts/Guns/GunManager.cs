@@ -94,6 +94,10 @@ public class GunManager : MonoBehaviour
         if (actualTotalAmmo>MaxTotalAmmo){
             actualTotalAmmo=MaxTotalAmmo;
         }
+
+
+        if (secondHandRigTarget==null) return;
+        secondHandRigTarget.position = secondHandGrabPoint.position;
     }
 
     private void SetUpGun(GunScriptableObject gun){
@@ -126,8 +130,7 @@ public class GunManager : MonoBehaviour
                 secondHandGrabPoint = chGun[i].transform;
             }
         }
-        if (secondHandRigTarget==null) return;
-        secondHandRigTarget.position = secondHandGrabPoint.position;
+        
     }
 
     public void OnShoot(InputAction.CallbackContext context) { //RECORDAR ASIGNAR MANUALMENTE EN LOS EVENTOS DEL INPUT

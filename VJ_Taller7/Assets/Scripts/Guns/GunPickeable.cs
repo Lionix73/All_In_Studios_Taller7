@@ -5,6 +5,7 @@ public class GunPickeable : MonoBehaviour
 {
     [SerializeField] private GunType gunType;
     [SerializeField] private GameObject PickeableUI;
+    [SerializeField] private GameObject GunModel;
     [SerializeField] private ObjectLookAtCamera lookCamera;
     [SerializeField] private TextMeshProUGUI gunNameText;
     [SerializeField] private TextMeshProUGUI damageText;
@@ -17,13 +18,30 @@ public class GunPickeable : MonoBehaviour
 
     private void Awake() {
         //gunName.SetText(gunType.ToString() + "\n" + "Press E to pick up");
+
+        PickeableUI = GetComponentInChildren<ObjectLookAtCamera>().gameObject;
+
+        TextMeshProUGUI[] uiTexts = PickeableUI.GetComponentsInChildren<TextMeshProUGUI>();
+
+        foreach (TextMeshProUGUI text in uiTexts) {
+            if (text.name == "GunName") {
+                gunNameText = text;
+            } else if (text.name == "GunDamage") {
+                damageText = text;
+            } else if (text.name == "GunFireRate") {
+                fireRateText = text;
+            } else if (text.name == "GunMagazine") {
+                magazineText = text;
+            }
+        }
+
         gunNameText.SetText(gunType.ToString());
         PickeableUI.SetActive(false);
 
     }
 
     private void Update() {
-        transform.Rotate(spinDirection);
+        GunModel.transform.Rotate(spinDirection);
     }
 
     private void OnTriggerEnter(Collider other) {
