@@ -29,10 +29,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private FloatDampener layersDampener1;
     [SerializeField] private FloatDampener layersDampener2;
 
-    [Header("Movimiento y Dash")]
+    [Header("Dash")]
     [SerializeField] private float dashSpeed = 15f;
     [SerializeField] private float dashDuration = 0.2f;
     [SerializeField] private float dashCooldown = 1f;
+    
+    [Header("Jump")]
     [SerializeField] private float jumpDuration = 1.4f;
     [SerializeField] private float jumpCooldown = 1f;
 
@@ -92,7 +94,6 @@ public class PlayerController : MonoBehaviour
 
     private int animationLayerToShow = 0;
 
-    private Vector3 dashDirection;
     private Vector3 slideDirection;
     private Vector3 desiredMoveDirection;
 
@@ -122,7 +123,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Cursor.visible = !Cursor.visible;
+            //Cursor.visible = !Cursor.visible;
             Cursor.lockState = CursorLockMode.None;
             if (Cursor.visible)
                 InputSystem.PauseHaptics();
@@ -133,6 +134,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        animator.SetBool("ShortGun", gunManager.Gun == GunType.BasicPistol || gunManager.Gun == GunType.Revolver ? true : false);
         AdjustRigs();
     }
 
@@ -150,7 +152,6 @@ public class PlayerController : MonoBehaviour
             soundManager.StopSound("Walk", "Run");
             return;
         }
-
 
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
 
@@ -185,7 +186,7 @@ public class PlayerController : MonoBehaviour
             soundManager.StopSound("Walk", "Run");
         }
 
-        rb.useGravity = !OnSlope();
+        if(isGrounded) rb.useGravity = !OnSlope();
 
         if (OnSlope())
         {
@@ -381,10 +382,11 @@ public class PlayerController : MonoBehaviour
                     break;
                 case GunType.BasicPistol:
                     soundManager.PlaySound("pistolFire");
-
+                    animator.SetTrigger("ShootOnce");
                     break;
                 case GunType.Revolver:
                     soundManager.PlaySound("revolverFire");
+                    animator.SetTrigger("ShootOnce");
                     break;
                 case GunType.Shotgun:
                     soundManager.PlaySound("shotgunFire");
@@ -648,7 +650,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnDash()
     {
-        if (!canDash || isCrouching || isSliding || moveInput.magnitude < 0.05f) return;
+        if (!canDash || isCrouching || isSliding) return;
 
         canDash = false;
         isDashing = true;
@@ -656,26 +658,22 @@ public class PlayerController : MonoBehaviour
         soundManager.StopSound("Walk", "Run");
         soundManager.PlaySound("Dash");
 
-        dashDirection = desiredMoveDirection;
-
         StartCoroutine(DashCoroutine());
     }
 
     private IEnumerator DashCoroutine()
     {
-        float dashTime = 0f;
+        animator.applyRootMotion = false;
+        rb.useGravity = false;
 
-        rb.AddForce(dashDirection * dashSpeed, ForceMode.Impulse);
-        
-        while (dashTime < dashDuration)
-        {
-            rb.useGravity = false;
-            dashTime += Time.deltaTime;
-            yield return null;
-        }
+        rb.linearVelocity = Vector3.zero;
+        rb.AddForce(desiredMoveDirection.normalized * dashSpeed, ForceMode.Impulse);
 
+        yield return new WaitForSeconds(dashDuration);
+        animator.applyRootMotion = true;
         isDashing = false;
         rb.useGravity = true;
+
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
