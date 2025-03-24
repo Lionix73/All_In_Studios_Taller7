@@ -91,6 +91,8 @@ public class PlayerController : MonoBehaviour
     private bool isDashing = false;
     private bool canDash = true;
     private bool canMelee = true;
+    private bool canShoot = true;
+    private bool canReload = true;
 
     private int animationLayerToShow = 0;
 
@@ -312,13 +314,13 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    private IEnumerator AnimLayerCountdown(string layer, float sec)
+    private IEnumerator AnimLayerCountdown(string layer, float delay)
     {
         float timer = 0f;
         int layerI = animator.GetLayerIndex(layer);
         animator.SetLayerWeight(layerI, 1);
 
-        while (timer < sec)
+        while (timer < delay)
         {
             timer += Time.deltaTime;
             yield return null;
@@ -372,6 +374,8 @@ public class PlayerController : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
+        if (!canShoot) return;
+
         if (context.started)
         {
             switch(gunManager.Gun)
@@ -408,7 +412,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnReload(InputAction.CallbackContext context)
     {
-        if(context.performed)
+        if(context.performed && canReload)
         {
             animator.SetTrigger("Reload");
 
@@ -418,21 +422,38 @@ public class PlayerController : MonoBehaviour
             {
                 case GunType.Rifle:
                     soundManager.PlaySound("rifleReload");
+                    StartCoroutine(Reload(2));
                     break;
                 case GunType.BasicPistol:
                     soundManager.PlaySound("pistolReload");
+                    StartCoroutine(Reload(2.12f));
                     break;
                 case GunType.Revolver:
                     soundManager.PlaySound("revolverReload");
+                    StartCoroutine(Reload(4.3f));
                     break;
                 case GunType.Shotgun:
                     soundManager.PlaySound("shotgunReload");
+                    StartCoroutine(Reload(5.4f));
                     break;
                 case GunType.Sniper:
                     soundManager.PlaySound("sniperReload");
+                    StartCoroutine(Reload(1.45f));
                     break;
             }
         }
+    }
+
+    private IEnumerator Reload(float delay)
+    {
+        soundManager.StopSound("rifleFire");
+        animator.SetBool("ShootBurst", false);
+
+        canReload = false;
+        canShoot = false;
+        yield return new WaitForSeconds(delay);
+        canShoot = true;
+        canReload = true;
     }
 
     public void OnEmote(InputAction.CallbackContext context)

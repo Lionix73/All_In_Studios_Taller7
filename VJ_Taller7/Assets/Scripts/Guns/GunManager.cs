@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using Unity.Cinemachine;
+using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 
 [RequireComponent(typeof(CrosshairManager))]
 public class GunManager : MonoBehaviour
@@ -33,6 +34,7 @@ public class GunManager : MonoBehaviour
     private GunType gunToPick;
 
     private bool shooting;
+    private bool canShoot = true;
 
     [Space]
     [Header("Active Guns Info")]
@@ -145,6 +147,7 @@ public class GunManager : MonoBehaviour
         //    shooting = context.performed;
         //}
         //else { shooting = context.started; }
+        if (!canShoot) return;
 
         if (context.started && CurrentGun.ShootConfig.IsAutomatic) 
             shooting=true;
@@ -215,14 +218,41 @@ public class GunManager : MonoBehaviour
     private void RealoadGun(){
         CurrentGun.Reload();
         actualTotalAmmo -= CurrentGun.MagazineSize - CurrentGun.BulletsLeft;
+
+        switch (Gun)
+        {
+            case GunType.Rifle:
+                StartCoroutine(Reload(2));
+                break;
+            case GunType.BasicPistol:
+                StartCoroutine(Reload(2.12f));
+                break;
+            case GunType.Revolver:
+                StartCoroutine(Reload(4.3f));
+                break;
+            case GunType.Shotgun:
+                StartCoroutine(Reload(5.4f));
+                break;
+            case GunType.Sniper:
+                StartCoroutine(Reload(1.45f));
+                break;
+        }
+    }
+
+    private IEnumerator Reload(float delay)
+    {
+        if(shooting) shooting = false;
+        canShoot = false;
+        yield return new WaitForSeconds(delay);
+        canShoot = true;
     }
     #endregion
 
-/// <summary>
-/// Devuelve el arma que se le pida
-/// </summary>
-/// <param name="gunToFind">Tipo del arma que se quiere encontrar.</param>
-/// <returns></returns>
+    /// <summary>
+    /// Devuelve el arma que se le pida
+    /// </summary>
+    /// <param name="gunToFind">Tipo del arma que se quiere encontrar.</param>
+    /// <returns></returns>
     public GunScriptableObject GetGun(GunType gunToFind){
         return gunsList.Find(gun => gun.Type == gunToFind);
     }
