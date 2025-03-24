@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Animations.Rigging;
+using FMOD;
 
 
 public class PlayerController : MonoBehaviour
@@ -466,6 +466,10 @@ public class PlayerController : MonoBehaviour
             wasAiming = false;
         }
 
+    }
+    public void SetAimFOV(float gunAimFOV){
+        aimFOV = gunAimFOV;
+        UnityEngine.Debug.Log(gunAimFOV);
     }
 
     /// <summary>

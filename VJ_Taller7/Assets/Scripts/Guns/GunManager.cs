@@ -10,6 +10,7 @@ public class GunManager : MonoBehaviour
 {
     [Header("Camera")]
     public Camera Camera; public CinemachineBrain cinemachineBrain;
+    private PlayerController player;
     [Header("Managers")]
     public CrosshairManager crosshairManager;  
     [Header("Ammo Info")]
@@ -48,6 +49,7 @@ public class GunManager : MonoBehaviour
     private void Awake() {
         cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
         Camera = cinemachineBrain.GetComponent<Camera>();
+        GameManager.Instance.PlayerSpawned += GetPlayer;
         actualTotalAmmo=MaxTotalAmmo;
         if (gunParent == null) {gunParent = this.transform;} //En caso de no tener asignado el punto de la mano donde aparece el arma, que la sostenga encima
 
@@ -113,6 +115,11 @@ public class GunManager : MonoBehaviour
         if (crosshairManager == null) return;
         if (CurrentGun.CrosshairImage == null) return;
         crosshairManager.SetCrosshairImage(CurrentGun.CrosshairImage);
+
+        if (player!= null)
+        player.SetAimFOV(CurrentGun.aimFov);
+
+        Debug.Log($"Zoom set to: {CurrentGun.aimFov}");
     }
 
     public void DespawnActiveGun(){
@@ -218,6 +225,10 @@ public class GunManager : MonoBehaviour
 /// <returns></returns>
     public GunScriptableObject GetGun(GunType gunToFind){
         return gunsList.Find(gun => gun.Type == gunToFind);
+    }
+
+    private void GetPlayer(GameObject activePlayer){
+        player = activePlayer.GetComponentInChildren<PlayerController>();
     }
 
     private void OnDrawGizmos() {

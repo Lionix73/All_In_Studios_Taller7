@@ -1,10 +1,11 @@
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public GameObject activePlayer { get; private set; }
+    public GameObject activePlayer { get; private set; } //Depronto toca hacer una lista de esto para el multi
+    
+    [Tooltip("Este es el player como tal, su codigo y funciones")] 
+    public PlayerController playerController;
     private Transform playerPos;
     private Health playerHealth;
     public GunManager gunManager { get; private set; }
@@ -27,6 +28,7 @@ public class PlayerManager : MonoBehaviour
             Debug.LogError("Player not found");
             return;
         }
+        playerController = activePlayer.GetComponentInChildren<PlayerController>(); //No es game object sino el player comom tal
         gunManager = activePlayer.GetComponentInChildren<GunManager>();
 
         playerPos = activePlayer.GetComponentInChildren<PlayerController>().gameObject.transform;
