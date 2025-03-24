@@ -15,6 +15,8 @@ public class BulletEnemie : PoolableObject
 
     [SerializeField] protected float waitForDisable = 3f;
 
+    [SerializeField] private GameObject bulletCollisionEffect;
+
     public Rigidbody Rb { get; private set; }
 
     protected Transform target;
@@ -43,6 +45,10 @@ public class BulletEnemie : PoolableObject
     protected virtual void OnTriggerEnter(Collider other)
     {
         IDamageable damageable;
+
+        if(bulletCollisionEffect != null){
+            bulletCollisionEffect.SetActive(true);
+        }
 
         if (other.TryGetComponent<IDamageable>(out damageable))
         {

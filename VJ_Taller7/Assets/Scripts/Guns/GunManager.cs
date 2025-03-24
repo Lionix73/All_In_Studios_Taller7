@@ -4,12 +4,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using Unity.Cinemachine;
+using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 
 [RequireComponent(typeof(CrosshairManager))]
 public class GunManager : MonoBehaviour
 {
     [Header("Camera")]
     public Camera Camera; public CinemachineBrain cinemachineBrain;
+    private PlayerController player;
     [Header("Managers")]
     public CrosshairManager crosshairManager;  
     [Header("Ammo Info")]
@@ -32,6 +34,7 @@ public class GunManager : MonoBehaviour
     private GunType gunToPick;
 
     private bool shooting;
+    private bool canShoot = true;
 
     [Space]
     [Header("Active Guns Info")]
@@ -48,6 +51,7 @@ public class GunManager : MonoBehaviour
     private void Awake() {
         cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
         Camera = cinemachineBrain.GetComponent<Camera>();
+        GameManager.Instance.PlayerSpawned += GetPlayer;
         actualTotalAmmo=MaxTotalAmmo;
         if (gunParent == null) {gunParent = this.transform;} //En caso de no tener asignado el punto de la mano donde aparece el arma, que la sostenga encima
 
@@ -94,6 +98,10 @@ public class GunManager : MonoBehaviour
         if (actualTotalAmmo>MaxTotalAmmo){
             actualTotalAmmo=MaxTotalAmmo;
         }
+
+
+        if (secondHandRigTarget==null) return;
+        secondHandRigTarget.position = secondHandGrabPoint.position;
     }
 
     private void SetUpGun(GunScriptableObject gun){
@@ -109,6 +117,11 @@ public class GunManager : MonoBehaviour
         if (crosshairManager == null) return;
         if (CurrentGun.CrosshairImage == null) return;
         crosshairManager.SetCrosshairImage(CurrentGun.CrosshairImage);
+
+        if (player!= null)
+        player.SetAimFOV(CurrentGun.aimFov);
+
+        Debug.Log($"Zoom set to: {CurrentGun.aimFov}");
     }
 
     public void DespawnActiveGun(){
@@ -126,8 +139,7 @@ public class GunManager : MonoBehaviour
                 secondHandGrabPoint = chGun[i].transform;
             }
         }
-        if (secondHandRigTarget==null) return;
-        secondHandRigTarget.position = secondHandGrabPoint.position;
+        
     }
 
     public void OnShoot(InputAction.CallbackContext context) { //RECORDAR ASIGNAR MANUALMENTE EN LOS EVENTOS DEL INPUT
@@ -135,6 +147,7 @@ public class GunManager : MonoBehaviour
         //    shooting = context.performed;
         //}
         //else { shooting = context.started; }
+        if (!canShoot) return;
 
         if (context.started && CurrentGun.ShootConfig.IsAutomatic) 
             shooting=true;
@@ -205,16 +218,47 @@ public class GunManager : MonoBehaviour
     private void RealoadGun(){
         CurrentGun.Reload();
         actualTotalAmmo -= CurrentGun.MagazineSize - CurrentGun.BulletsLeft;
+
+        switch (Gun)
+        {
+            case GunType.Rifle:
+                StartCoroutine(Reload(2));
+                break;
+            case GunType.BasicPistol:
+                StartCoroutine(Reload(2.12f));
+                break;
+            case GunType.Revolver:
+                StartCoroutine(Reload(4.3f));
+                break;
+            case GunType.Shotgun:
+                StartCoroutine(Reload(5.4f));
+                break;
+            case GunType.Sniper:
+                StartCoroutine(Reload(1.45f));
+                break;
+        }
+    }
+
+    private IEnumerator Reload(float delay)
+    {
+        if(shooting) shooting = false;
+        canShoot = false;
+        yield return new WaitForSeconds(delay);
+        canShoot = true;
     }
     #endregion
 
-/// <summary>
-/// Devuelve el arma que se le pida
-/// </summary>
-/// <param name="gunToFind">Tipo del arma que se quiere encontrar.</param>
-/// <returns></returns>
+    /// <summary>
+    /// Devuelve el arma que se le pida
+    /// </summary>
+    /// <param name="gunToFind">Tipo del arma que se quiere encontrar.</param>
+    /// <returns></returns>
     public GunScriptableObject GetGun(GunType gunToFind){
         return gunsList.Find(gun => gun.Type == gunToFind);
+    }
+
+    private void GetPlayer(GameObject activePlayer){
+        player = activePlayer.GetComponentInChildren<PlayerController>();
     }
 
     private void OnDrawGizmos() {

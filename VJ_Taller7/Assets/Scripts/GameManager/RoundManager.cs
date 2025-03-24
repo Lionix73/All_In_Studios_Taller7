@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(ScoreManager),typeof(EnemyWaves))]
 public class RoundManager : MonoBehaviour
 {
     [Header("Seteo de enemigos")]
@@ -32,28 +31,47 @@ public class RoundManager : MonoBehaviour
     [Tooltip("Tiempo de duración base de las oleadas")]
     public float waveDuration;
     private float waveTimer;
-    private float spawnInterval; //Time between each enemy
     [Tooltip("Tiempo entre oleadas")]
-    [SerializeField] private float inBetweenRoundsTimer; //Tiempo entre oleadas
+    [SerializeField] private float inBetweenRoundsWaitTime; //Tiempo entre oleadas
+    private float inBetweenRoundsTimer = 10f; //Tiempo entre oleadas
     private bool inBetweenRounds=true;
     private int aliveEnemies;
 
     [Header("Cosas de Interfaz")]
-    [SerializeField] private TextMeshProUGUI _UiWaveTimer;
-    [SerializeField] private TextMeshProUGUI _UiBetweenWavesTimer;
-    [SerializeField] private TextMeshProUGUI _UiWaveCounter;
-    [SerializeField] private TextMeshProUGUI _UiRoundCounter;
-    [SerializeField] private TextMeshProUGUI _UiEnemyCounter;
+    [SerializeField] [Tooltip("Mientras encuentre este encuentra todos")]
+    private GameObject _RoundUI;
+    private TextMeshProUGUI _UiWaveTimer;
+    private TextMeshProUGUI _UiBetweenWavesTimer;
+    private TextMeshProUGUI _UiWaveCounter;
+    private TextMeshProUGUI _UiRoundCounter;
+    private TextMeshProUGUI _UiEnemyCounter;
 
     [Header("Managers")]
     private ScoreManager scoreManager;
     private EnemyWaves enemySpawner; //Si se balancea en este manager
     private EnemyWavesManager enemyWavesManager; //Si se balancea en el spawner
-
+    
+    [Space]
     [SerializeField] private bool _Simulating = false;
     [SerializeField] private bool _BalncingInThis = false;
 
+    //[Header("Eventos")]
+    public delegate void WaveComplete();
+    public delegate void RoundComplete();
+    public event WaveComplete OnWaveComplete;
+    public event RoundComplete OnRoundComplete;
 
+    private void Awake() {
+        _RoundUI = GameObject.Find("RoundsCanva");
+
+        if (_RoundUI==null) return;
+
+        _UiWaveTimer = _RoundUI.transform.Find("WaveTimer").GetComponent<TextMeshProUGUI>();
+        _UiBetweenWavesTimer = _RoundUI.transform.Find("BetweenWavesTimer").GetComponent<TextMeshProUGUI>();
+        _UiWaveCounter = _RoundUI.transform.Find("WaveCounter").GetComponent<TextMeshProUGUI>();
+        _UiRoundCounter = _RoundUI.transform.Find("RoundCounter").GetComponent<TextMeshProUGUI>();
+        _UiEnemyCounter = _RoundUI.transform.Find("EnemyCounter").GetComponent<TextMeshProUGUI>();
+    }
     private void Start() {
         scoreManager = GetComponent<ScoreManager>();
         enemySpawner = GetComponent<EnemyWaves>();
@@ -94,7 +112,7 @@ public class RoundManager : MonoBehaviour
             SetWaveBalance();
             if (_BalncingInThis) SendWave(enemyIndex); //sin el balance del manager de Alejo
             inBetweenRounds = false;
-            inBetweenRoundsTimer = 60f;
+            inBetweenRoundsTimer = inBetweenRoundsWaitTime;
             }
         }
         else {
@@ -115,17 +133,22 @@ public class RoundManager : MonoBehaviour
 
             GenerateEnemies();
 
-            spawnInterval = waveDuration/enemiesToSpawn.Count;
             waveTimer = waveDuration;
         }
         else {
             //Aumentar la cantidad de enemigo a generar y enviar al wave spawner
-            waveSize = (currentWave + 1) * waveValueScaleMult * currentRound;
+            //waveSize = (currentWave + 1) * waveValueScaleMult * currentRound; aliveEnemies = waveSize; //antes del uso de curvas
             waveDuration += currentWave * waveDurationScaleAdd;
-            aliveEnemies = waveSize;
-            enemyWavesManager.RecieveWaveOrder(waveSize);
+            enemyWavesManager.RecieveWaveOrder(currentWave, waveSize);
             waveTimer = waveDuration;
         }
+    }
+
+    public void recieveWaveData(int enemiesToSpawn){
+        waveSize = enemiesToSpawn;
+    }
+    public void enemyHaveSpawn(){
+        aliveEnemies += 1;
     }
 
     public void GenerateEnemies(){

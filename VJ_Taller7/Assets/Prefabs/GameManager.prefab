@@ -9,10 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8037043133455505579}
+  - component: {fileID: 2653383136801732615}
   - component: {fileID: 7021727127881821152}
+  - component: {fileID: 3578752897480326295}
   - component: {fileID: 1888077375328469363}
   - component: {fileID: 6924568299356480614}
-  - component: {fileID: 3578752897480326295}
+  - component: {fileID: 8759641817701630382}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -32,9 +34,32 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3865444026879066620}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2653383136801732615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2666794559733852778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9921feb33acf1eb4faf5c1832400cf96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPaused: 0
+  isGameOver: 0
+  spawnPlayerWithManager: 1
+  spawntPoint: {fileID: 3865444026879066620}
+  playerPrefab: {fileID: 3839446492626894175, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
+  playerManager: {fileID: 0}
+  roundManager: {fileID: 0}
+  enemyWavesManager: {fileID: 0}
+  scoreManager: {fileID: 0}
+  gunManager: {fileID: 0}
 --- !u!114 &7021727127881821152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,14 +88,41 @@ MonoBehaviour:
   waveDurationScaleAdd: 20
   enemiesToSpawn: []
   waveDuration: 10
-  inBetweenRoundsTimer: 10
-  _UiWaveTimer: {fileID: 0}
-  _UiBetweenWavesTimer: {fileID: 0}
-  _UiWaveCounter: {fileID: 0}
-  _UiRoundCounter: {fileID: 0}
-  _UiEnemyCounter: {fileID: 0}
+  inBetweenRoundsWaitTime: 30
+  _RoundUI: {fileID: 0}
   _Simulating: 0
   _BalncingInThis: 0
+--- !u!114 &3578752897480326295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2666794559733852778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df6d006e694eb5c4da9932e996ea4ab9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  storeInitialPos: 0
+  numberOfEnemiesToSpawn: 12
+  spawnDelay: 1
+  weightedEnemies:
+  - {fileID: 11400000, guid: d10cc44dc90ed7c4192b63da3c74239f, type: 2}
+  - {fileID: 11400000, guid: b089fe1dbca109841a173ed82d34da39, type: 2}
+  - {fileID: 11400000, guid: 9c37f6a7df88bcb4c82c8926d7b63cdf, type: 2}
+  - {fileID: 11400000, guid: 3c1719aaf03aaab49ad077f09abbd94c, type: 2}
+  - {fileID: 11400000, guid: 4d88d40cb13b5a5469b7dc8fef6a1cc2, type: 2}
+  - {fileID: 11400000, guid: 9d557fb21a9ee854596734d8aa72a2a4, type: 2}
+  scaling: {fileID: 11400000, guid: e83eeaa20b18f5c4a951a3e5232081ed, type: 2}
+  enemySpawnMethod: 2
+  continousSpawn: 0
+  level: 0
+  scaledEnemies: []
+  weights: []
+  healthBarCanvas: {fileID: 0}
 --- !u!114 &1888077375328469363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,7 +157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 0
   _UIscoreText: {fileID: 0}
---- !u!114 &3578752897480326295
+--- !u!114 &8759641817701630382
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -114,25 +166,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 2666794559733852778}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df6d006e694eb5c4da9932e996ea4ab9, type: 3}
+  m_Script: {fileID: 11500000, guid: 205cb65513164e84f9cf42f53712404a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  mainCamera: {fileID: 0}
-  storeInitialPos: 0
-  numberOfEnemiesToSpawn: 12
-  spawnDelay: 1
-  weightedEnemies:
-  - {fileID: 11400000, guid: d10cc44dc90ed7c4192b63da3c74239f, type: 2}
-  - {fileID: 11400000, guid: b089fe1dbca109841a173ed82d34da39, type: 2}
-  - {fileID: 11400000, guid: 9c37f6a7df88bcb4c82c8926d7b63cdf, type: 2}
-  - {fileID: 11400000, guid: 3c1719aaf03aaab49ad077f09abbd94c, type: 2}
-  - {fileID: 11400000, guid: 4d88d40cb13b5a5469b7dc8fef6a1cc2, type: 2}
-  - {fileID: 11400000, guid: 9d557fb21a9ee854596734d8aa72a2a4, type: 2}
-  scaling: {fileID: 11400000, guid: e83eeaa20b18f5c4a951a3e5232081ed, type: 2}
-  enemySpawnMethod: 2
-  continousSpawn: 0
-  level: 0
-  scaledEnemies: []
-  weights: []
-  healthBarCanvas: {fileID: 0}
+  playerStartingHealth: 100
+  healPerRound: 20
+  maxHealthIncreasePerRound: 100
+--- !u!1 &7147567092717446138
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3865444026879066620}
+  m_Layer: 0
+  m_Name: PlayerSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3865444026879066620
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7147567092717446138}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.3, y: 1.58, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8037043133455505579}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

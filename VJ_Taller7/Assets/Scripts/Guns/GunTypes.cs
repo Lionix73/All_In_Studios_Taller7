@@ -3,7 +3,15 @@ public enum GunType{
     Revolver,
     Rifle,
     Shotgun,
-    Sniper
+    Sniper,
+    GranadeLaucher,
+    AncientTome,
+    Crossbow,
+
+    //Special weapons
+    MysticCanon,
+    GoldenFeather,
+    ShinelessFeather
 }
 
 public enum ShootType{

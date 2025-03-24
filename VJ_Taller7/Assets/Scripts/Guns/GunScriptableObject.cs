@@ -14,6 +14,8 @@ public class GunScriptableObject : ScriptableObject {
     public int Damage;
     public int MagazineSize;
     public float ReloadTime;
+    [Tooltip("Especificar el zoom que tiene cada arma")]
+    public float aimFov;
 
     public ShootConfigScriptableObjtect ShootConfig;
     public TrailConfigScriptableObject TrailConfig;
@@ -114,12 +116,12 @@ public class GunScriptableObject : ScriptableObject {
                 {
                 ActiveMonoBehaviour.StartCoroutine(PlayTrail(TrailOrigin, hit.point, hit));
                 dondePegaElRayoPaDisparar = hit.point;
-                if (hit.collider.TryGetComponent(out Enemy enemey)){
-                    enemey.TakeDamage(Damage);
+                if (hit.collider.TryGetComponent(out IDamageable enemy)){
+                    enemy.TakeDamage(Damage); //simplemente saber si se puede hacer daño, me falta por ver si específicar los críticos
                 }
-                else if(hit.collider.TryGetComponent(out EnemyHealthMulti enemy))
+                else if(hit.collider.TryGetComponent(out EnemyHealthMulti enemyM))
                 {
-                    enemy.TakeDamageRpc(Damage);
+                    enemyM.TakeDamageRpc(Damage);
                 
                 }
 
@@ -239,6 +241,7 @@ public class GunScriptableObject : ScriptableObject {
         clone.ModelPrefab = ModelPrefab;
         clone.SpawnPoint = SpawnPoint;
         clone.SpawnRotation = SpawnRotation;
+        clone.aimFov = aimFov;
         return clone;
     }
 }

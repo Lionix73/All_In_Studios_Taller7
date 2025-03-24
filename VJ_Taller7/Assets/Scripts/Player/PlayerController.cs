@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Animations.Rigging;
+using FMOD;
 
 
 public class PlayerController : MonoBehaviour
@@ -29,10 +29,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private FloatDampener layersDampener1;
     [SerializeField] private FloatDampener layersDampener2;
 
-    [Header("Movimiento y Dash")]
+    [Header("Dash")]
     [SerializeField] private float dashSpeed = 15f;
     [SerializeField] private float dashDuration = 0.2f;
     [SerializeField] private float dashCooldown = 1f;
+    
+    [Header("Jump")]
     [SerializeField] private float jumpDuration = 1.4f;
     [SerializeField] private float jumpCooldown = 1f;
 
@@ -88,10 +90,12 @@ public class PlayerController : MonoBehaviour
 
     private bool isDashing = false;
     private bool canDash = true;
+    private bool canMelee = true;
+    private bool canShoot = true;
+    private bool canReload = true;
 
     private int animationLayerToShow = 0;
 
-    private Vector3 dashDirection;
     private Vector3 slideDirection;
     private Vector3 desiredMoveDirection;
 
@@ -121,7 +125,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Cursor.visible = !Cursor.visible;
+            //Cursor.visible = !Cursor.visible;
             Cursor.lockState = CursorLockMode.None;
             if (Cursor.visible)
                 InputSystem.PauseHaptics();
@@ -132,6 +136,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        animator.SetBool("ShortGun", gunManager.Gun == GunType.BasicPistol || gunManager.Gun == GunType.Revolver ? true : false);
         AdjustRigs();
     }
 
@@ -144,7 +149,11 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
-        if (!canMove) return;
+        if (!canMove)
+        {
+            soundManager.StopSound("Walk", "Run");
+            return;
+        }
 
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
 
@@ -179,7 +188,7 @@ public class PlayerController : MonoBehaviour
             soundManager.StopSound("Walk", "Run");
         }
 
-        rb.useGravity = !OnSlope();
+        if(isGrounded) rb.useGravity = !OnSlope();
 
         if (OnSlope())
         {
@@ -305,12 +314,13 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    private IEnumerator AnimLayerCountdown(int layerI, float sec)
+    private IEnumerator AnimLayerCountdown(string layer, float delay)
     {
         float timer = 0f;
+        int layerI = animator.GetLayerIndex(layer);
         animator.SetLayerWeight(layerI, 1);
 
-        while (timer < sec)
+        while (timer < delay)
         {
             timer += Time.deltaTime;
             yield return null;
@@ -364,24 +374,31 @@ public class PlayerController : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
+        if (!canShoot) return;
+
         if (context.started)
         {
             switch(gunManager.Gun)
             {
                 case GunType.Rifle:
                     soundManager.PlaySound("rifleFire");
+                    animator.SetBool("ShootBurst", true);
                     break;
                 case GunType.BasicPistol:
                     soundManager.PlaySound("pistolFire");
+                    animator.SetTrigger("ShootOnce");
                     break;
                 case GunType.Revolver:
                     soundManager.PlaySound("revolverFire");
+                    animator.SetTrigger("ShootOnce");
                     break;
                 case GunType.Shotgun:
                     soundManager.PlaySound("shotgunFire");
+                    animator.SetTrigger("ShootOnce");
                     break;
                 case GunType.Sniper:
                     soundManager.PlaySound("sniperFire");
+                    animator.SetTrigger("ShootOnce");
                     break;
             }
         }
@@ -389,36 +406,54 @@ public class PlayerController : MonoBehaviour
         if (context.canceled)
         {
             soundManager.StopSound("rifleFire");
+            animator.SetBool("ShootBurst", false);
         }
     }
 
     public void OnReload(InputAction.CallbackContext context)
     {
-        if(context.performed)
+        if(context.performed && canReload)
         {
             animator.SetTrigger("Reload");
 
-            StartCoroutine(AnimLayerCountdown(5, 4f));
+            StartCoroutine(AnimLayerCountdown("Reload", 4f));
 
             switch (gunManager.Gun)
             {
                 case GunType.Rifle:
                     soundManager.PlaySound("rifleReload");
+                    StartCoroutine(Reload(2));
                     break;
                 case GunType.BasicPistol:
                     soundManager.PlaySound("pistolReload");
+                    StartCoroutine(Reload(2.12f));
                     break;
                 case GunType.Revolver:
                     soundManager.PlaySound("revolverReload");
+                    StartCoroutine(Reload(4.3f));
                     break;
                 case GunType.Shotgun:
                     soundManager.PlaySound("shotgunReload");
+                    StartCoroutine(Reload(5.4f));
                     break;
                 case GunType.Sniper:
                     soundManager.PlaySound("sniperReload");
+                    StartCoroutine(Reload(1.45f));
                     break;
             }
         }
+    }
+
+    private IEnumerator Reload(float delay)
+    {
+        soundManager.StopSound("rifleFire");
+        animator.SetBool("ShootBurst", false);
+
+        canReload = false;
+        canShoot = false;
+        yield return new WaitForSeconds(delay);
+        canShoot = true;
+        canReload = true;
     }
 
     public void OnEmote(InputAction.CallbackContext context)
@@ -452,6 +487,10 @@ public class PlayerController : MonoBehaviour
             wasAiming = false;
         }
 
+    }
+    public void SetAimFOV(float gunAimFOV){
+        aimFOV = gunAimFOV;
+        UnityEngine.Debug.Log(gunAimFOV);
     }
 
     /// <summary>
@@ -554,7 +593,7 @@ public class PlayerController : MonoBehaviour
     #region Melee
     public void OnMelee(InputAction.CallbackContext context) 
     {
-        if(context.performed)
+        if(context.performed && canMelee)
         {
             StartCoroutine(Melee());
         }
@@ -563,9 +602,11 @@ public class PlayerController : MonoBehaviour
     private IEnumerator Melee()
     {
         animator.SetTrigger("Melee");
-        StartCoroutine(AnimLayerCountdown(6, 1.2f));
+        StartCoroutine(AnimLayerCountdown("Melee", 1.2f));
         
         canMove = false;
+        canMelee = false;
+
         GetComponentInChildren<Melee>().ActivateMelee();
 
         float timer = 0f;
@@ -576,6 +617,7 @@ public class PlayerController : MonoBehaviour
         }
 
         canMove = true;
+        canMelee = true;
         GetComponentInChildren<Melee>().DeactivateMelee();
     }
     #endregion
@@ -633,7 +675,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnDash()
     {
-        if (!canDash || isCrouching || isSliding || moveInput.magnitude < 0.05f) return;
+        if (!canDash || isCrouching || isSliding) return;
 
         canDash = false;
         isDashing = true;
@@ -641,26 +683,22 @@ public class PlayerController : MonoBehaviour
         soundManager.StopSound("Walk", "Run");
         soundManager.PlaySound("Dash");
 
-        dashDirection = desiredMoveDirection;
-
         StartCoroutine(DashCoroutine());
     }
 
     private IEnumerator DashCoroutine()
     {
-        float dashTime = 0f;
+        animator.applyRootMotion = false;
+        rb.useGravity = false;
 
-        rb.AddForce(dashDirection * dashSpeed, ForceMode.Impulse);
-        
-        while (dashTime < dashDuration)
-        {
-            rb.useGravity = false;
-            dashTime += Time.deltaTime;
-            yield return null;
-        }
+        rb.linearVelocity = Vector3.zero;
+        rb.AddForce(desiredMoveDirection.normalized * dashSpeed, ForceMode.Impulse);
 
+        yield return new WaitForSeconds(dashDuration);
+        animator.applyRootMotion = true;
         isDashing = false;
         rb.useGravity = true;
+
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }

@@ -94,16 +94,16 @@ public class Enemy : PoolableObject, IDamageable
     [Header("Enemy VFX")]
     [SerializeField] private ParticleSystem deathVFX;
 
-    [Header("Game Manager")]
-    //Evento que se llama para el game manager
-    [SerializeField] public int scoreOnKill { get; private set; }
+    //Evento que se llama para el game manager --Antigua referencia, esta con el balancing in this del manager (ignorar perop dejar quieto)
     public event EventHandler<OnEnemyDeadEventArgs> OnEnemyDead;
     public class OnEnemyDeadEventArgs : EventArgs{
         public int score;
     }
     
     public delegate void DeathEvent(Enemy enemy);
-    public DeathEvent OnDie;
+    public DeathEvent OnDie; //Evento que se llama
+    [Header("Game Manager")]
+    public int scoreOnKill;
 
 
     [Header("External Calls")]
@@ -230,24 +230,6 @@ public class Enemy : PoolableObject, IDamageable
     public Transform GetTransform(){
         return transform;
     }
-
-    /*
-    private void OnDied(){
-        float destroyDelay = UnityEngine.Random.value;
-        gameObject.SetActive(false);
-
-        if(!isStatic){
-            healthBar.gameObject.SetActive(false);
-        }
-
-        if (isStatic && enemySpawner != null)
-        {
-            enemySpawner.RespawnEnemy(this);
-        }
-
-        OnEnemyDead?.Invoke(this, new OnEnemyDeadEventArgs{score = scoreOnKill});
-    }
-    */
 
     public void SetUpHealthBar(Canvas canvas, Camera mainCamera){
         healthBar.transform.SetParent(canvas.transform);

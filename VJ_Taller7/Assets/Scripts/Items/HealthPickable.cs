@@ -17,7 +17,7 @@ public class HealthPickable : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            playerHealth.GetHealth = amountOfHealing;
+            playerHealth.TakeHeal(amountOfHealing);
             soundManager.PlaySound("Health");
 
             Destroy(gameObject);
