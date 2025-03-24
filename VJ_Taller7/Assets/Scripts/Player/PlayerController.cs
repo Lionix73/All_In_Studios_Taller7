@@ -88,6 +88,7 @@ public class PlayerController : MonoBehaviour
 
     private bool isDashing = false;
     private bool canDash = true;
+    private bool canMelee = true;
 
     private int animationLayerToShow = 0;
 
@@ -144,7 +145,12 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
-        if (!canMove) return;
+        if (!canMove)
+        {
+            soundManager.StopSound("Walk", "Run");
+            return;
+        }
+
 
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
 
@@ -305,9 +311,10 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    private IEnumerator AnimLayerCountdown(int layerI, float sec)
+    private IEnumerator AnimLayerCountdown(string layer, float sec)
     {
         float timer = 0f;
+        int layerI = animator.GetLayerIndex(layer);
         animator.SetLayerWeight(layerI, 1);
 
         while (timer < sec)
@@ -370,18 +377,22 @@ public class PlayerController : MonoBehaviour
             {
                 case GunType.Rifle:
                     soundManager.PlaySound("rifleFire");
+                    animator.SetBool("ShootBurst", true);
                     break;
                 case GunType.BasicPistol:
                     soundManager.PlaySound("pistolFire");
+
                     break;
                 case GunType.Revolver:
                     soundManager.PlaySound("revolverFire");
                     break;
                 case GunType.Shotgun:
                     soundManager.PlaySound("shotgunFire");
+                    animator.SetTrigger("ShootOnce");
                     break;
                 case GunType.Sniper:
                     soundManager.PlaySound("sniperFire");
+                    animator.SetTrigger("ShootOnce");
                     break;
             }
         }
@@ -389,6 +400,7 @@ public class PlayerController : MonoBehaviour
         if (context.canceled)
         {
             soundManager.StopSound("rifleFire");
+            animator.SetBool("ShootBurst", false);
         }
     }
 
@@ -398,7 +410,7 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetTrigger("Reload");
 
-            StartCoroutine(AnimLayerCountdown(5, 4f));
+            StartCoroutine(AnimLayerCountdown("Reload", 4f));
 
             switch (gunManager.Gun)
             {
@@ -554,7 +566,7 @@ public class PlayerController : MonoBehaviour
     #region Melee
     public void OnMelee(InputAction.CallbackContext context) 
     {
-        if(context.performed)
+        if(context.performed && canMelee)
         {
             StartCoroutine(Melee());
         }
@@ -563,9 +575,11 @@ public class PlayerController : MonoBehaviour
     private IEnumerator Melee()
     {
         animator.SetTrigger("Melee");
-        StartCoroutine(AnimLayerCountdown(6, 1.2f));
+        StartCoroutine(AnimLayerCountdown("Melee", 1.2f));
         
         canMove = false;
+        canMelee = false;
+
         GetComponentInChildren<Melee>().ActivateMelee();
 
         float timer = 0f;
@@ -576,6 +590,7 @@ public class PlayerController : MonoBehaviour
         }
 
         canMove = true;
+        canMelee = true;
         GetComponentInChildren<Melee>().DeactivateMelee();
     }
     #endregion

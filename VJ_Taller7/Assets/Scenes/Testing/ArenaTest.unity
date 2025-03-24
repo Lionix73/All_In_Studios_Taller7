@@ -9398,78 +9398,6 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
---- !u!4 &395690897 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5518358658486620987, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-  m_PrefabInstance: {fileID: 4858076400073079446}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &401852869
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 401852870}
-  - component: {fileID: 401852871}
-  - component: {fileID: 401852872}
-  m_Layer: 0
-  m_Name: GunCollider :P
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &401852870
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 401852869}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 395690897}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &401852871
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 401852869}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 0.36, y: 0.82551825, z: 0.22}
-  m_Center: {x: -0.0000011472963, y: 0.45132217, z: -0.00000020964731}
---- !u!114 &401852872
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 401852869}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ca91921b5b90c2448c1d1f46c6e1866, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 100
 --- !u!1 &431714002
 GameObject:
   m_ObjectHideFlags: 0
@@ -41382,6 +41310,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RiflePickUp
       objectReference: {fileID: 0}
+    - target: {fileID: 1685464149988593329, guid: a80dd2e160c02624582292cd5fed26fb, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5133050817365643618, guid: a80dd2e160c02624582292cd5fed26fb, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.7116833
@@ -50908,58 +50840,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      propertyPath: m_ActionEvents.Array.size
-      value: 26
-      objectReference: {fileID: 0}
-    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      propertyPath: m_ActionEvents.Array.data[25].m_ActionId
-      value: 8ee4792f-48b1-499c-8851-ec9ab0ece1c7
-      objectReference: {fileID: 0}
-    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      propertyPath: m_ActionEvents.Array.data[25].m_ActionName
-      value: 'Player/Melee[/Mouse/middleButton]'
-      objectReference: {fileID: 0}
-    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      propertyPath: m_ActionEvents.Array.data[25].m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      propertyPath: m_ActionEvents.Array.data[25].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      propertyPath: m_ActionEvents.Array.data[25].m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 4858076400073079447}
-    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      propertyPath: m_ActionEvents.Array.data[25].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      propertyPath: m_ActionEvents.Array.data[25].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnMelee
-      objectReference: {fileID: 0}
-    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      propertyPath: m_ActionEvents.Array.data[25].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: PlayerController, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 197367228027467263, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      propertyPath: m_ActionEvents.Array.data[25].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 400843914493450719, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.011087418
-      objectReference: {fileID: 0}
-    - target: {fileID: 400843914493450719, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.6852255
-      objectReference: {fileID: 0}
-    - target: {fileID: 400843914493450719, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -4.05974
-      objectReference: {fileID: 0}
     - target: {fileID: 3839446492626894175, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
       propertyPath: m_Name
       value: PlayerController
@@ -51004,58 +50884,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6034622846790848197, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      propertyPath: jumpDuration
-      value: 0.5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 5518358658486620987, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 401852870}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2504184262613002398, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-      insertIndex: 8
-      addedObject: {fileID: 4858076400073079449}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
 --- !u!114 &4858076400073079447 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6034622846790848197, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
   m_PrefabInstance: {fileID: 4858076400073079446}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4858076400073079448}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b003f968fc1f2034eb7122d8cf0ce343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &4858076400073079448 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2504184262613002398, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
-  m_PrefabInstance: {fileID: 4858076400073079446}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4858076400073079449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4858076400073079448}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5119ef8a7dd0bb45b0f990291a5a6e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activeTime: 0.2
-  meshRefreshRate: 0.1
-  destroyTime: 0.5
-  positionToSpawn: {fileID: 960368987}
-  mat: {fileID: 2100000, guid: 5a3e7dc865291b747a4b7c8241ddcf74, type: 2}
-  propertyName: _Alpha
-  shaderVarRate: 0.01
-  shaderVarRefresh: 0.1
-  IsTrailActive: 0
 --- !u!1001 &7075865610933971414
 PrefabInstance:
   m_ObjectHideFlags: 0
