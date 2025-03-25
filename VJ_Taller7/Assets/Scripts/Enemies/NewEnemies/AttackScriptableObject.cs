@@ -7,6 +7,7 @@ public class AttackScriptableObject : ScriptableObject
     public int damage = 5;
     public float attackRadius = 1f;
     public float attackDelay = 1f;
+    public OnRangeBehvaior OnRangeBehvaior = OnRangeBehvaior.Stop;
 
     //Ranged
     public BulletEnemie bulletPrefab;
@@ -20,6 +21,7 @@ public class AttackScriptableObject : ScriptableObject
         scaledAttack.damage = Mathf.FloorToInt(damage * scaling.damageCurve.Evaluate(level));
         scaledAttack.attackRadius = attackRadius;
         scaledAttack.attackDelay = attackDelay;
+        scaledAttack.OnRangeBehvaior = OnRangeBehvaior;
 
         scaledAttack.bulletPrefab = bulletPrefab;
         scaledAttack.bulletSpawnOffSet = bulletSpawnOffSet;
@@ -32,6 +34,7 @@ public class AttackScriptableObject : ScriptableObject
         (enemy.AttackRadius.sphereCollider == null ? enemy.AttackRadius.GetComponent<SphereCollider>() : enemy.AttackRadius.sphereCollider).radius = attackRadius;
         enemy.AttackRadius.AttackDelay = attackDelay;
         enemy.AttackRadius.Damage = damage;
+        enemy.AttackRadius.OnRangeBehvaior = OnRangeBehvaior;
 
         if(isRanged){
             RangedAttackRadius rangedAttackRadius = enemy.AttackRadius.GetComponent<RangedAttackRadius>();

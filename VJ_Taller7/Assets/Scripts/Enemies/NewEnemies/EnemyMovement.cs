@@ -265,6 +265,19 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    public void StopMovement(){
+        Debug.Log("Stop Movement");
+    }
+
+    public void MoveInCircles(){
+        Debug.Log("Move In Circles");
+    }
+
+    public void MoveAround(){
+        Debug.Log("Move Around");
+    }
+
+
     private void OnDrawGizmosSelected()
     {
         for(int i = 0; i < waypoints.Length; i++){

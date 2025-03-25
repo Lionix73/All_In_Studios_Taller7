@@ -14,6 +14,9 @@ public class AttackRadius : MonoBehaviour
     [SerializeField] protected float attackDelay = 1f;
     public float AttackDelay { get => attackDelay; set => attackDelay = value; }
 
+    [SerializeField] private OnRangeBehvaior onRangeBehvaiorMethod = OnRangeBehvaior.Stop;
+    public OnRangeBehvaior OnRangeBehvaior { get => onRangeBehvaiorMethod; set => onRangeBehvaiorMethod = value; }
+
     public PlayerController Player { get; set; }
     
     public delegate void AttackEvent(IDamageable target);
@@ -73,7 +76,9 @@ public class AttackRadius : MonoBehaviour
         yield return wait;
 
         IDamageable closestDamageable = null;
-        float closestDistance = float.MaxValue;
+
+        //Closest distance to enemy is 90% of their attack radius
+        float closestDistance = sphereCollider.radius;
 
         while(damageables.Count > 0)
         {
@@ -92,8 +97,27 @@ public class AttackRadius : MonoBehaviour
 
                 if(distance < closestDistance)
                 {
-                    closestDistance = distance;
-                    closestDamageable = damageables[i];
+                    if(onRangeBehvaiorMethod == OnRangeBehvaior.Stop)
+                    {
+                        enemy.Movement.StopMovement();
+                        closestDamageable = damageables[i];
+                    }
+                    else if(onRangeBehvaiorMethod == OnRangeBehvaior.Circles)
+                    {
+                        enemy.Movement.MoveInCircles();
+                        closestDamageable = damageables[i];
+                    }
+                    else if(onRangeBehvaiorMethod == OnRangeBehvaior.Around)
+                    {
+                        enemy.Movement.MoveAround();
+                        closestDamageable = damageables[i];
+                    }
+                    else if(onRangeBehvaiorMethod == OnRangeBehvaior.Follow)
+                    {
+                        closestDamageable = damageables[i];
+                    }
+
+                    //closestDistance = distance;
                 }
             }
 
@@ -104,7 +128,7 @@ public class AttackRadius : MonoBehaviour
             }
 
             closestDamageable = null;
-            closestDistance = float.MaxValue;
+            closestDistance = sphereCollider.radius;
 
             yield return wait;
 

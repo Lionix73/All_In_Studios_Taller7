@@ -10,6 +10,8 @@ public class LineOfSightChecker : MonoBehaviour
     [SerializeField] private LayerMask lineOfSightMask;
     public LayerMask LineOfSightMask{ get => lineOfSightMask; set => lineOfSightMask = value; }
 
+    [SerializeField] private const string playerTag = "Player";
+
     private SphereCollider sphereCollider;
     public SphereCollider SphereCollider{ get => sphereCollider; set => sphereCollider = value; }
 
@@ -29,7 +31,21 @@ public class LineOfSightChecker : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         PlayerController player;
-        if(other.TryGetComponent<PlayerController>(out player)){
+          if(other.gameObject.tag == playerTag){
+            other.TryGetComponent<PlayerController>(out player);
+
+            if(!CheckLineOfSight(player)){
+                CheckForlineOfSightCoroutine = StartCoroutine(CheckForLineOfSight(player));
+            }
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        PlayerController player;
+        if(other.gameObject.tag == playerTag){
+            other.TryGetComponent<PlayerController>(out player);
+
             if(!CheckLineOfSight(player)){
                 CheckForlineOfSightCoroutine = StartCoroutine(CheckForLineOfSight(player));
             }
@@ -39,7 +55,8 @@ public class LineOfSightChecker : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         PlayerController player;
-        if(other.TryGetComponent<PlayerController>(out player)){
+        if(other.gameObject.tag == playerTag){
+            other.TryGetComponent<PlayerController>(out player);
 
             OnLoseSight?.Invoke(player);
             if(CheckLineOfSight(player)){
@@ -52,6 +69,8 @@ public class LineOfSightChecker : MonoBehaviour
 
     private bool CheckLineOfSight(PlayerController player){
         Vector3 direction = (player.transform.position - transform.position).normalized;
+
+        Debug.DrawRay(transform.position, direction * sphereCollider.radius, Color.red);
 
         if(Vector3.Dot(transform.forward, direction) >= Mathf.Cos(fov)){
             RaycastHit hit;

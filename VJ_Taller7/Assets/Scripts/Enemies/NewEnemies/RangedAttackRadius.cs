@@ -60,6 +60,19 @@ public class RangedAttackRadius : AttackRadius
             for (int i = 0; i < damageables.Count; i++)
             {
                 if(HasLineOfSight(damageables[i].GetTransform())){
+                    if(OnRangeBehvaior == OnRangeBehvaior.Stop){
+                        enemy.Movement.StopMovement();
+                    }
+                    else if (OnRangeBehvaior == OnRangeBehvaior.Follow){
+                        
+                    }
+                    else if (OnRangeBehvaior == OnRangeBehvaior.Circles){
+                        enemy.Movement.MoveInCircles();
+                    }
+                    else if (OnRangeBehvaior == OnRangeBehvaior.Around){
+                        enemy.Movement.MoveAround();
+                    }
+                    
                     targetDamageable = damageables[i];
                     OnAttack?.Invoke(damageables[i]);
 
