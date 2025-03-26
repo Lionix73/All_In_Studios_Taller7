@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using UnityEngine.Animations;
 using Unity.VisualScripting;
 using System;
+using System.Runtime.CompilerServices;
 
 
 //[RequireComponent(typeof(CrosshairManager))]
@@ -17,7 +18,7 @@ public class GunManagerMulti2 : NetworkBehaviour
 {
     MonoBehaviour m_MonoBehaviour;
     [Header("Camera")]
-    public Camera camera; public CinemachineBrain cinemachineBrain;  
+    public Camera camera; public CinemachineBrain cinemachineBrain;
     [Header("Ammo Info")]
     private NetworkVariable<int> actualTotalAmmo = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
     //public int actualTotalAmmo; //Cuanta municion tiene el jugador
@@ -76,18 +77,18 @@ public class GunManagerMulti2 : NetworkBehaviour
             SendCurrentGunBulletsLeftRpc(CurrentGun.MagazineSize);
         }
         if (!IsLocalPlayer) return;
-            SpawnGunRpc(Gun);
-            camera = Camera.main;
+        SpawnGunRpc();
+        camera = Camera.main;
 
-            //secondHandRigTarget = GameObject.Find("SecondHandGripRig_target").GetComponent<Transform>();
-            ChangeGunTypeRpc(Gun);
-            //SetUpGunRpc(GunNet.Value);
-            ChangeSecondGunTypeRpc(Gun);
-            //CurrentSecondGunType = Gun;
-            ChangeSecondGunTypeRpc(CurrentSecondGunTypeNet.Value);
-            inAPickeableGun = false;
-            ammunitionDisplay = GameObject.Find("AmmoGun").GetComponent<TextMeshProUGUI>();
-            totalAmmoDisplay = GameObject.Find("TotalAmmo").GetComponent<TextMeshProUGUI>();
+        //secondHandRigTarget = GameObject.Find("SecondHandGripRig_target").GetComponent<Transform>();
+        ChangeGunTypeRpc(Gun);
+        //SetUpGunRpc(GunNet.Value);
+        ChangeSecondGunTypeRpc(Gun);
+        //CurrentSecondGunType = Gun;
+        //ChangeSecondGunTypeRpc(CurrentSecondGunTypeNet.Value);
+        inAPickeableGun = false;
+        ammunitionDisplay = GameObject.Find("AmmoGun").GetComponent<TextMeshProUGUI>();
+        totalAmmoDisplay = GameObject.Find("TotalAmmo").GetComponent<TextMeshProUGUI>();
 
 
     }
@@ -96,16 +97,16 @@ public class GunManagerMulti2 : NetworkBehaviour
         if (!IsOwner || weapon == null) return;
         if (totalAmmoDisplay != null) {
             totalAmmoDisplay.SetText(actualTotalAmmo.Value + "/" + MaxTotalAmmo);
-            
+
         }
-        if (UIManager.Singleton !=null)
+        if (UIManager.Singleton != null)
         {
             UIManager.Singleton.GetPlayerTotalAmmo(actualTotalAmmo.Value);
         }
         if (shooting && weapon.BulletsLeft > 0) {
             weapon.Shoot();
         }
-        else if (weapon.bulletsLeft<=0 && !weapon.realoading){
+        else if (weapon.bulletsLeft <= 0 && !weapon.realoading) {
             RealoadGun();
         }
 
@@ -118,12 +119,12 @@ public class GunManagerMulti2 : NetworkBehaviour
             UIManager.Singleton.GetPlayerActualAmmo(weapon.bulletsLeft, weapon.MagazineSize);
         }
 
-        if (actualTotalAmmo.Value >MaxTotalAmmo){
+        if (actualTotalAmmo.Value > MaxTotalAmmo) {
             SendActualAmmoRpc(MaxTotalAmmo);
         }
     }
     [Rpc(SendTo.Everyone)]
-    private void SetUpGunRpc(GunType gunType){
+    private void SetUpGunRpc(GunType gunType) {
         if (gunParent == null) { gunParent = GetComponentInParent<NetworkObject>().transform; } //En caso de no tener asignado el punto de la mano donde aparece el arma, que la sostenga encima
 
         GunScriptableObject gun = gunsList.Find(gun => gun.Type == gunType);
@@ -134,16 +135,16 @@ public class GunManagerMulti2 : NetworkBehaviour
         }
         //CurrentGun.ActiveMonoBehaviour = this;
         CurrentGun = gun.Clone() as GunScriptableObject;
-       /* CurrentGun.LastShootTime = 0f;
-        if (CurrentGun.bulletsLeft == 0)
-        { //En revision porque no se recarga al recoger el arma, ni la primera vez que aparece.
-            CurrentGun.bulletsLeft = CurrentGun.MagazineSize;
-        }
-        CurrentGun.realoading = false;
-        CurrentGun.TrailPool = new ObjectPool<TrailRenderer>(gun.CreateTrail);*/
-        if(IsServer)
+        /* CurrentGun.LastShootTime = 0f;
+         if (CurrentGun.bulletsLeft == 0)
+         { //En revision porque no se recarga al recoger el arma, ni la primera vez que aparece.
+             CurrentGun.bulletsLeft = CurrentGun.MagazineSize;
+         }
+         CurrentGun.realoading = false;
+         CurrentGun.TrailPool = new ObjectPool<TrailRenderer>(gun.CreateTrail);*/
+        if (IsServer)
         {
-            SpawnGunRpc(gunType);
+            SpawnGunRpc();
         }
 
 
@@ -153,18 +154,20 @@ public class GunManagerMulti2 : NetworkBehaviour
         {
             UIManager.Singleton.GetPlayerGunInfo(weapon.BulletsLeft, weapon.MagazineSize, CurrentGun);
         }
-        if(IsOwner)
+        if (IsOwner)
         {
             SetUpGunRigsRpc();
         }
     }
     [Rpc(SendTo.Server)]
-    public void SpawnGunRpc(GunType gunType)
+    public void SpawnGunRpc()
     {
         Debug.Log("spawn Arma");
         CurrentGun.Model = Instantiate(CurrentGun.ModelPrefab);
         NetworkObject modelNetworkObject = CurrentGun.Model.GetComponent<NetworkObject>();
+
         modelNetworkObject.Spawn();
+        GunNet.Value = CurrentGun.Type;
         bool success = modelNetworkObject.TrySetParent(gunParent, false);
         if (success)
         {
@@ -201,9 +204,9 @@ public class GunManagerMulti2 : NetworkBehaviour
         {
             Debug.LogError("Failed to find NetworkObject with ID: " + modelNetworkObjectId);
         }
-       // CurrentGun.ShootSystem = CurrentGun.Model.GetComponentInChildren<ParticleSystem>();
-        weapon = spawnGun.gameObject.GetComponent<WeaponLogic>();
+        // CurrentGun.ShootSystem = CurrentGun.Model.GetComponentInChildren<ParticleSystem>();
         gunRig = CurrentGun.Model.transform;
+        weapon = spawnGun.gameObject.GetComponent<WeaponLogic>();
     }
     [Rpc(SendTo.Server)]
     public void SendActualAmmoRpc(int actualAmmo)
@@ -214,21 +217,21 @@ public class GunManagerMulti2 : NetworkBehaviour
     public void SendSecondaryGunBulletsLeftRpc(int bulletsLeft)
     {
         CurrentSecondaryGunBulletsLeft.Value = bulletsLeft;
-    }    
+    }
     [Rpc(SendTo.Server)]
     public void SendCurrentGunBulletsLeftRpc(int bulletsLeft)
     {
         CurrentGunBulletsLeft.Value = bulletsLeft;
     }
     [Rpc(SendTo.Everyone)]
-    public void DespawnActiveGunRpc(){
-        if (CurrentGun!=null){
+    public void DespawnActiveGunRpc() {
+        if (CurrentGun != null) {
             DespawnRpc();
         }
         //CurrentGun.TrailPool.Clear();
         //if (CurrentGun.BulletPool != null)
         //{
-          //  CurrentGun.BulletPool.Clear();
+        //  CurrentGun.BulletPool.Clear();
         //}
         Destroy(CurrentGun);
     }
@@ -242,15 +245,15 @@ public class GunManagerMulti2 : NetworkBehaviour
     }
 
     [Rpc(SendTo.Everyone)]
-    private void SetUpGunRigsRpc(){
+    private void SetUpGunRigsRpc() {
         Transform[] chGun = gunRig.GetComponentsInChildren<Transform>();
         //secondHandGrabPoint = GameObject.Find("SecondHanGrip").transform;
-        for(int i = 0; i < chGun.Length; i++){
+        for (int i = 0; i < chGun.Length; i++) {
             if (chGun[i].name == "SecondHandGrip") {
                 secondHandGrabPoint = chGun[i].transform;
             }
         }
-        if (secondHandRigTarget==null) return;
+        if (secondHandRigTarget == null) return;
         secondHandRigTarget.position = secondHandGrabPoint.position;
     }
 
@@ -269,27 +272,31 @@ public class GunManagerMulti2 : NetworkBehaviour
         {
             //weapon.Shoot();
             shooting = context.started;
-        } 
-        
+        }
+
         if (context.canceled && weapon.ShootConfig.IsAutomatic)
         {
-            shooting = false; 
+            shooting = false;
         }
         //Debug.Log("Fase: " + shooting);
     }
 
-    public void OnWeaponChange(InputAction.CallbackContext context){
+    public void OnWeaponChange(InputAction.CallbackContext context) {
         if (!IsOwner) return;
-        if (context.started){
-            if (CurrentSecondGunType!=CurrentGun.Type){
+        if (context.started) {
+            if (CurrentSecondGunTypeNet.Value != GunNet.Value) {
                 ChangeWeapon();
             }
         }
     }
 
-    public void ChangeWeapon(){
-        GunType temp = CurrentGun.Type;
-        SendCurrentGunBulletsLeftRpc(CurrentSecondaryGunBulletsLeft.Value);
+    public void ChangeWeapon() {
+        GunType tempType = CurrentGun.Type;
+        int tempAmmo = weapon.bulletsLeft;
+
+        ChangeWeaponRpc(tempType,tempAmmo);
+        
+        /*SendCurrentGunBulletsLeftRpc(CurrentSecondaryGunBulletsLeft.Value);
         SendSecondaryGunBulletsLeftRpc(weapon.bulletsLeft);
         DespawnRpc();
         //CurrentSecondaryGunBulletsLeft.Value = CurrentGun.BulletsLeft;
@@ -299,14 +306,53 @@ public class GunManagerMulti2 : NetworkBehaviour
         ChangeGunTypeRpc(CurrentSecondGunType);
         Gun = CurrentSecondGunType;
         CurrentSecondGunType = temp;
-        ChangeSecondGunTypeRpc(CurrentSecondGunType);
+        ChangeSecondGunTypeRpc(CurrentSecondGunType);*/
     }
 
+    [Rpc(SendTo.Server)]
+    private void ChangeWeaponRpc(GunType currentGunType,int currentAmmo)
+    {
+        CurrentGunBulletsLeft.Value = CurrentSecondaryGunBulletsLeft.Value;
+
+        CurrentSecondaryGunBulletsLeft.Value = currentAmmo;
+
+        StartCoroutine(SwitchWeaponCoroutine(CurrentGunBulletsLeft.Value));
+
+        CurrentSecondGunTypeNet.Value = currentGunType;
+
+    }
+
+    private IEnumerator SwitchWeaponCoroutine(int newAmmo)
+    {
+        DespawnRpc();
+        Debug.Log("WeaponCoroutine");
+
+        SetUpGunRpc(CurrentSecondGunTypeNet.Value);
+
+        yield return new WaitUntil(() => weapon != null);
+
+        if (IsServer)
+        {
+            weapon.SetBullets(newAmmo);
+            SyncWeaponAmmoClientRpc(newAmmo);
+        }
+
+    }
+
+    [Rpc(SendTo.Owner)]
+    private void SyncWeaponAmmoClientRpc(int ammo)
+    {
+        weapon.bulletsLeft = ammo;
+        
+    }
+
+
     public void GrabGun(GunType gunPicked){
-        if (CurrentSecondGunType != gunPicked){
-            if (CurrentSecondGunType == CurrentGun.Type){
-                CurrentSecondGunType = CurrentGun.Type;
+        if (CurrentSecondGunTypeNet.Value != gunPicked){
+            if (CurrentSecondGunTypeNet.Value == CurrentGun.Type){
+                CurrentSecondGunTypeNet.Value = CurrentGun.Type;
             }
+            ChangeSecondGunTypeRpc(CurrentGun.Type);
             SendSecondaryGunBulletsLeftRpc(weapon.bulletsLeft);
             DespawnRpc();
             Gun = gunPicked;

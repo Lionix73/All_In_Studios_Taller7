@@ -44,6 +44,13 @@ public class WeaponLogic : NetworkBehaviour
     public ObjectPool<TrailRenderer> TrailPool;
     public ObjectPool<Bullet> BulletPool;
 
+    public void SetBullets(int amount)
+    {
+        if (IsServer)
+        {
+            bulletsLeft = amount;
+        }
+    }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -70,7 +77,8 @@ public class WeaponLogic : NetworkBehaviour
         LastShootTime = currentGun.LastShootTime;
         
         realoading = currentGun.Realoading;
-        TrailPool = currentGun.TrailPool;
+        //TrailPool = currentGun.TrailPool;
+        TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
         BulletPool = currentGun.BulletPool;
     }
 
@@ -83,7 +91,7 @@ public class WeaponLogic : NetworkBehaviour
             bulletsLeft = MagazineSize;
         }
         realoading = false;
-        TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
+        
 
         Model = Instantiate(ModelPrefab);
         Model.transform.SetParent(Parent, false);
@@ -155,7 +163,7 @@ public class WeaponLogic : NetworkBehaviour
                             float.MaxValue,
                             ShootConfig.HitMask))
         {
-            //ActiveMonoBehaviour.StartCoroutine(PlayTrail(TrailOrigin, hit.point, hit));
+            StartCoroutine(PlayTrail(TrailOrigin, hit.point, hit));
 
             if (hit.collider.TryGetComponent(out EnemyHealthMulti enemy))
             {
@@ -166,11 +174,11 @@ public class WeaponLogic : NetworkBehaviour
         }
         else
         {
-            /*ActiveMonoBehaviour.StartCoroutine(PlayTrail(
+                StartCoroutine(PlayTrail(
                 TrailOrigin,
                 TrailOrigin + (shootDirection * TrailConfig.MissDistance),
                 new RaycastHit())
-                );*/
+                );
         }
     }
 
@@ -263,33 +271,4 @@ public class WeaponLogic : NetworkBehaviour
         return trail;
     }
 
-    ///<summary>
-    ///Funcion de copia manual, asignar valores del objeto general a una instancia nueva
-    ///evita errores de referencias compartidas.
-    ///RECORDAR: Si se añaden nuevos valores al objeto, añadirlos a esta función.
-    ///          Si se añaden nuevos objetos, añadirlos a esta función.
-    ///NOTA: Me encantaría explicar a detalle la magia negra que hace esta función, 
-    ///      pero no tengo idea real de como funciona. aunque si siguen los saltos que da
-    ///      todo tiene sentido...
-    ///
-    ///</summary>
-
-   /* public object Clone()
-    {
-        GunScriptableObject clone = CreateInstance<GunScriptableObject>();
-
-        clone.ShootConfig = ShootConfig.Clone() as ShootConfigScriptableObjtect;
-        clone.TrailConfig = TrailConfig.Clone() as TrailConfigScriptableObject;
-
-        clone.MagazineSize = MagazineSize;
-        clone.Damage = Damage;
-        clone.ReloadTime = ReloadTime;
-        clone.Type = Type;
-        clone.Name = Name;
-        clone.UIImage = UIImage;
-        clone.ModelPrefab = ModelPrefab;
-        clone.SpawnPoint = SpawnPoint;
-        clone.SpawnRotation = SpawnRotation;
-        return clone;
-    }*/
 }
