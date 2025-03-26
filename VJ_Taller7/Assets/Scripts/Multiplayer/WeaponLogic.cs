@@ -11,9 +11,6 @@ public class WeaponLogic : NetworkBehaviour
     public GunType Type;
     public string Name;
     public Sprite UIImage;
-    public GameObject ModelPrefab;
-    public Vector3 SpawnPoint;
-    public Vector3 SpawnRotation;
     public int Damage;
     public int MagazineSize;
     public float ReloadTime;
@@ -64,9 +61,6 @@ public class WeaponLogic : NetworkBehaviour
         Type = currentGun.Type;
         name = currentGun.Name;
         UIImage = currentGun.UIImage;
-        ModelPrefab = currentGun.ModelPrefab;
-        SpawnPoint = currentGun.SpawnPoint;
-        SpawnRotation = currentGun.SpawnRotation;
         Damage = currentGun.Damage;
         ReloadTime = currentGun.ReloadTime;
 
@@ -82,38 +76,7 @@ public class WeaponLogic : NetworkBehaviour
         BulletPool = currentGun.BulletPool;
     }
 
-    public void Spawn(Transform Parent, MonoBehaviour ActiveMonoBehaviour, Camera camera = null)
-    {
-        this.ActiveMonoBehaviour = ActiveMonoBehaviour;
-        LastShootTime = 0f;
-        if (bulletsLeft == 0)
-        { //En revision porque no se recarga al recoger el arma, ni la primera vez que aparece.
-            bulletsLeft = MagazineSize;
-        }
-        realoading = false;
-        
 
-        Model = Instantiate(ModelPrefab);
-        Model.transform.SetParent(Parent, false);
-        Model.transform.localPosition = SpawnPoint;
-        Model.transform.localEulerAngles = SpawnRotation;
-
-        activeCamera = camera;
-
-        ShootSystem = Model.GetComponentInChildren<ParticleSystem>();
-    }
-
-    public void DeSpawn()
-    {
-        //Destroy(Model);
-        Model.SetActive(false);
-        Destroy(Model);
-        TrailPool.Clear();
-        if (BulletPool != null)
-        {
-            BulletPool.Clear();
-        }
-    }
 
     public void Shoot()
     {

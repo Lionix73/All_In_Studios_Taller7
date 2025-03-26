@@ -11,6 +11,7 @@ public class CrosshairManagerMulti : NetworkBehaviour
 
     private void Update() {
         if (!IsOwner) return;
+        if (gunManager == null) return;
         UpdateCrosshair();
     }
 

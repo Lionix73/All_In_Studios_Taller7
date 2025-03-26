@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.AI;
-using UnityEditor.EditorTools;
+//using UnityEditor.EditorTools;
 
 public class EnemySpawner : MonoBehaviour
 {

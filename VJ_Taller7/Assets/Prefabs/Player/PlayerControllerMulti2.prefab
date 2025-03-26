@@ -660,6 +660,7 @@ GameObject:
   - component: {fileID: 2388046720383461067}
   - component: {fileID: 2523499608115504786}
   - component: {fileID: 7668294324850234261}
+  - component: {fileID: 5314064248248460490}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -774,7 +775,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthDisplay: {fileID: 0}
-  currentHealth: 20
   maxHealth: 100
 --- !u!114 &197367228027467263
 MonoBehaviour:
@@ -1219,17 +1219,10 @@ MonoBehaviour:
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: 765711723
-    DestinationState: -407257665
-    TransitionDuration: 0.42229655
-    TriggerNameHash: -1525363869
-    TransitionIndex: 5
-  - IsCrossFadeExit: 0
-    Layer: 0
-    OriginatingState: 765711723
     DestinationState: -392525052
     TransitionDuration: 0.3537178
     TriggerNameHash: -1525363869
-    TransitionIndex: 6
+    TransitionIndex: 5
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -2015693266
@@ -1247,17 +1240,10 @@ MonoBehaviour:
   - IsCrossFadeExit: 0
     Layer: 1
     OriginatingState: 765711723
-    DestinationState: -407257665
-    TransitionDuration: 0.42229655
-    TriggerNameHash: -1525363869
-    TransitionIndex: 1
-  - IsCrossFadeExit: 0
-    Layer: 1
-    OriginatingState: 765711723
     DestinationState: -2027287457
     TransitionDuration: 0.15941326
     TriggerNameHash: -1218818084
-    TransitionIndex: 5
+    TransitionIndex: 4
   - IsCrossFadeExit: 0
     Layer: 1
     OriginatingState: -2015693266
@@ -1266,14 +1252,14 @@ MonoBehaviour:
     TriggerNameHash: -1525363869
     TransitionIndex: 0
   - IsCrossFadeExit: 0
-    Layer: 5
+    Layer: 6
     OriginatingState: -499022955
     DestinationState: -1564946859
     TransitionDuration: 0.1
     TriggerNameHash: -1525363869
     TransitionIndex: 0
   - IsCrossFadeExit: 0
-    Layer: 6
+    Layer: 7
     OriginatingState: -499022955
     DestinationState: -1383311792
     TransitionDuration: 0
@@ -1297,6 +1283,20 @@ MonoBehaviour:
   UseRigidBodyForMotion: 0
   AutoUpdateKinematicState: 1
   AutoSetKinematicOnDespawn: 1
+--- !u!114 &5314064248248460490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2504184262613002398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a4f32d8ecc602b49ab5531bf5fe073f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  healthDisplay: {fileID: 0}
 --- !u!1 &2687636305568152448
 GameObject:
   m_ObjectHideFlags: 0
@@ -1948,7 +1948,7 @@ GameObject:
   - component: {fileID: 4356260809616859532}
   m_Layer: 0
   m_Name: PlayerControllerMulti2
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3429,6 +3429,8 @@ MonoBehaviour:
   gunsList:
   - {fileID: 11400000, guid: 1946b533a57ce3e4abf0f9a5db71c215, type: 2}
   - {fileID: 11400000, guid: 1a73ca6d4ea9fee46a126562e1cb1062, type: 2}
+  - {fileID: 11400000, guid: 696055e10ec058541b1671800dc4ea3c, type: 2}
+  - {fileID: 11400000, guid: 549b3a55cd6e82144bd845f6e7b6576d, type: 2}
   gunParent: {fileID: 4468175175659240506}
   gunRig: {fileID: 0}
   Gun: 0

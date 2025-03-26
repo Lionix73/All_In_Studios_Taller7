@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using UnityEngine.Animations;
 using Unity.VisualScripting;
 using System;
-using System.Runtime.CompilerServices;
+
 
 
 //[RequireComponent(typeof(CrosshairManager))]
@@ -350,7 +350,7 @@ public class GunManagerMulti2 : NetworkBehaviour
     public void GrabGun(GunType gunPicked){
         if (CurrentSecondGunTypeNet.Value != gunPicked){
             if (CurrentSecondGunTypeNet.Value == CurrentGun.Type){
-                CurrentSecondGunTypeNet.Value = CurrentGun.Type;
+                ChangeSecondGunTypeRpc(CurrentGun.Type);
             }
             ChangeSecondGunTypeRpc(CurrentGun.Type);
             SendSecondaryGunBulletsLeftRpc(weapon.bulletsLeft);
@@ -386,7 +386,8 @@ public class GunManagerMulti2 : NetworkBehaviour
 
     #region Ammo management //Aqui recibimos el input de recarga y llamamos a la funciond de recarga
     public void OnReload(InputAction.CallbackContext context){
-        if (!IsOwner) { return; }
+        if (!IsOwner) return;
+
         if (context.started){
             if (!weapon.Realoading){
                 RealoadGun();
@@ -400,6 +401,10 @@ public class GunManagerMulti2 : NetworkBehaviour
     }
     #endregion
 
+    public void GainAmmo(int amount)
+    {
+        actualTotalAmmo.Value += amount;
+    }
 /// <summary>
 /// Devuelve el arma que se le pida
 /// </summary>

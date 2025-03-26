@@ -5,7 +5,10 @@ public class FaceCamera : MonoBehaviour
     public Camera Camera { get; set; }
 
     private void Awake() {
-        GameManager.Instance.PlayerSpawned += GetPlayer;
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.PlayerSpawned += GetPlayer;
+        }
     }
     private void Start()
     {
