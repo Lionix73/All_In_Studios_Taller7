@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
     public bool canMove = true;
     public float walkSpeed = 2f;
     public float runSpeed = 5f;
-    public float slideDuration = 3f;
     public float crouchHeight = 0.9f;
     public float normalHeight = 1.8f;
 
@@ -28,6 +27,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private FloatDampener speedY;
     [SerializeField] private FloatDampener layersDampener1;
     [SerializeField] private FloatDampener layersDampener2;
+
+    [Header("Slide")]
+    [SerializeField] private float slideDuration = 3f;
+    [SerializeField] private float slideCooldown = 0.5f;
 
     [Header("Dash")]
     [SerializeField] private float dashSpeed = 15f;
@@ -49,6 +52,8 @@ public class PlayerController : MonoBehaviour
     public CapsuleCollider crouchCollider;
     public Transform cameraTransform;
     [System.Obsolete] public CinemachineCamera freeLookCamera;
+    [SerializeField] private ParticleSystem SlideVFX;
+    [SerializeField] private ParticleSystem DashVFX;
 
     [Header("Camera Settings")]
     [SerializeField] private float currentFOV = 65;
@@ -541,21 +546,13 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator Jump()
     {
-        float jumpTimer = 0f;
-
         soundManager.StopSound("Walk", "Run");
         soundManager.PlaySound("Jump");
 
         rb.linearVelocity = Vector3.zero;
         rb.AddForce((desiredMoveDirection * jumpHorizontalForce) + (jumpVerticalForce * Vector3.up), ForceMode.Impulse);
 
-        while (jumpTimer < jumpDuration)
-        {
-            rb.AddForce(cameraTransform.forward * jumpHorizontalForce, ForceMode.Force);
-
-            jumpTimer += Time.deltaTime;
-            yield return null;
-        }
+        yield return new WaitForSeconds(jumpDuration);
 
         animator.SetBool("isJumping", false);
         canJump = true;
@@ -641,20 +638,17 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator Slide()
     {
+        SlideVFX.Play();
+
         if (isSliding)
         {
-            float slideTimer = 0f;
-
-            while (slideTimer < slideDuration)
-            {
-                soundManager.StopSound("Run");
-                slideTimer += Time.deltaTime;
-                yield return null;
-            }
+            soundManager.StopSound("Run");
+            
+            yield return new WaitForSeconds(slideDuration);
 
             isSliding = false;
             isCrouching = false;
-            yield return new WaitForSeconds(dashCooldown);
+            yield return new WaitForSeconds(slideCooldown);
 
             canSlide = true;
             ResetCrouchFlag();
