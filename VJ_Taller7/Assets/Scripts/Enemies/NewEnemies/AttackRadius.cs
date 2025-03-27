@@ -42,6 +42,7 @@ public class AttackRadius : MonoBehaviour
         if(damageable != null)
         {
             damageables.Add(damageable);
+
             if(attackCoroutine == null)
             {
                 attackCoroutine = StartCoroutine(Attack());
@@ -64,6 +65,7 @@ public class AttackRadius : MonoBehaviour
             if(damageables.Count == 0)
             {
                 StopCoroutine(attackCoroutine);
+                enemy.Movement.ResumeMovement();
                 attackCoroutine = null;
             }
         }
@@ -71,6 +73,7 @@ public class AttackRadius : MonoBehaviour
 
     protected virtual IEnumerator Attack()
     {
+
         WaitForSeconds wait = new WaitForSeconds(attackDelay);
 
         yield return wait;
@@ -79,7 +82,6 @@ public class AttackRadius : MonoBehaviour
 
         //Closest distance to enemy is 90% of their attack radius
         float closestDistance = sphereCollider.radius;
-
         while(damageables.Count > 0)
         {
             if(enemy.IsDead){
@@ -95,8 +97,13 @@ public class AttackRadius : MonoBehaviour
                 Transform damageablesTransform = damageables[i].GetTransform();
                 float distance = Vector3.Distance(transform.position, damageablesTransform.position);
 
+                Debug.Log("Distance: " + distance + " - ClosestDistance: " + closestDistance);
+
                 if(distance < closestDistance)
                 {
+                    Debug.Log("Attacking");
+
+
                     if(onRangeBehvaiorMethod == OnRangeBehvaior.Stop)
                     {
                         enemy.Movement.StopMovement();

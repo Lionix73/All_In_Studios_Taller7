@@ -4,6 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class BombBullet : BulletEnemie
 {
+    [Header("Bomb Settings")]
     [SerializeField] private float explosionRadius = 5f;
     public float ExplosionRadius { get => explosionRadius; set => explosionRadius = value; }
     
@@ -13,11 +14,11 @@ public class BombBullet : BulletEnemie
     [SerializeField] private float upwardForce = 5f;
     public float UpwardForce { get => upwardForce; set => upwardForce = value; }
 
+    [Tooltip("Delay before the bomb explodes after being launched")]
     [SerializeField] private float explosionDelay = 2f;
     public float ExplosionDelay { get => explosionDelay; set => explosionDelay = value; }
 
     [SerializeField] private GameObject explosionEffect;
-    [SerializeField] private MeshRenderer bombModel;
 
     protected override void OnEnable(){
         base.OnEnable();
@@ -69,10 +70,10 @@ public class BombBullet : BulletEnemie
 
     private void Explode()
     {
-        if(explosionEffect != null && bombModel != null){
+        if(explosionEffect != null && bulletModel != null){
             transform.rotation = new Quaternion(0, 0, 0, 0);
             explosionEffect.SetActive(true);
-            bombModel.enabled = false;
+            bulletModel.enabled = false;
         }
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, damageableLayer);

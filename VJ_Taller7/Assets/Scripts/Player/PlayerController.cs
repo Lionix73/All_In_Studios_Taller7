@@ -52,8 +52,9 @@ public class PlayerController : MonoBehaviour
     public CapsuleCollider crouchCollider;
     public Transform cameraTransform;
     [System.Obsolete] public CinemachineCamera freeLookCamera;
-    [SerializeField] private ParticleSystem SlideVFX;
-    [SerializeField] private ParticleSystem DashVFX;
+    [SerializeField] private ParticleSystem slideVFX;
+    [SerializeField] private ParticleSystem jumpVFX;
+    [SerializeField] private MeshTrail dashVFX;
 
     [Header("Camera Settings")]
     [SerializeField] private float currentFOV = 65;
@@ -546,6 +547,8 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator Jump()
     {
+        jumpVFX.Play();
+
         soundManager.StopSound("Walk", "Run");
         soundManager.PlaySound("Jump");
 
@@ -638,7 +641,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator Slide()
     {
-        SlideVFX.Play();
+        slideVFX.Play();
 
         if (isSliding)
         {
@@ -676,6 +679,8 @@ public class PlayerController : MonoBehaviour
 
         soundManager.StopSound("Walk", "Run");
         soundManager.PlaySound("Dash");
+
+        dashVFX.StartTrail();
 
         StartCoroutine(DashCoroutine());
     }

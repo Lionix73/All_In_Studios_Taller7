@@ -14,6 +14,8 @@ public class KamikazeSkilll : SkillScriptableObject
     public float bombSize = 0.8f;
     public Vector3 bulletSpawnOffSet = new Vector3(0, 1, 0);
 
+    private bool bombLaunched = false;
+
     public override SkillScriptableObject scaleUpForLevel(ScalingScriptableObject scaling, int level)
     {
         BombSkill scaledSkill = CreateInstance<BombSkill>();
@@ -42,6 +44,7 @@ public class KamikazeSkilll : SkillScriptableObject
     {
         base.UseSkill(enemy, player);
 
+        if (bombLaunched) return;
         enemy.StartCoroutine(ShootBomb(enemy, player));
     }
 
@@ -71,6 +74,8 @@ public class KamikazeSkilll : SkillScriptableObject
 
         BombBullet bomb = instance.GetComponent<BombBullet>();
         bomb.Spawn(enemy.transform.forward, explosionDamage, player.transform);
+
+        bombLaunched = true;
 
         yield return wait;
 

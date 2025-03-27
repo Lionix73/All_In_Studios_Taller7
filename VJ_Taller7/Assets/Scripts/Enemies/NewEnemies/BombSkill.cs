@@ -57,7 +57,7 @@ public class BombSkill : SkillScriptableObject
 
         for (float time = 0; time < 1f; time += Time.deltaTime * 2f)
         {
-            enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, Quaternion.LookRotation(player.transform.position - enemy.transform.position), time);
+            enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, Quaternion.LookRotation(player.transform.position - enemy.transform.position), enemy.Agent.angularSpeed *time);
             yield return null;
         }
 

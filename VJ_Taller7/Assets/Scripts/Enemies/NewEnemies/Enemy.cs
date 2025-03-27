@@ -176,6 +176,8 @@ public class Enemy : PoolableObject, IDamageable
         if (isDead) return;
 
         Health -= damage;
+
+        movement.State = EnemyState.Chase;
         
         if (floatingTextPrefab != null)
         {

@@ -15,7 +15,7 @@ public class MeshTrail : MonoBehaviour
     [SerializeField] private float shaderVarRate = 0.01f;
     [SerializeField] private float shaderVarRefresh = 0.1f;
 
-    private SkinnedMeshRenderer[] skinnedMeshRenderers;
+    [SerializeField] private SkinnedMeshRenderer[] skinnedMeshRenderers;
     public bool IsTrailActive = false;
 
     private void Start()
@@ -24,7 +24,16 @@ public class MeshTrail : MonoBehaviour
         positionToSpawn = transform;
     }
 
-    IEnumerator ActivateTrail(float timeActive)
+    public void StartTrail()
+    {
+        if(!IsTrailActive)
+        {
+            IsTrailActive = true;
+            StartCoroutine(ActivateTrail(activeTime));
+        }
+    }
+
+    public IEnumerator ActivateTrail(float timeActive)
     {
         while(timeActive > 0)
         {
@@ -37,7 +46,7 @@ public class MeshTrail : MonoBehaviour
 
             for(int i = 0; i < skinnedMeshRenderers.Length; i++)
             {
-                GameObject obj = new GameObject("Trail");
+                GameObject obj = new GameObject("Dash");
                 obj.transform.SetPositionAndRotation(positionToSpawn.position, positionToSpawn.rotation);
 
                 MeshRenderer mr = obj.AddComponent<MeshRenderer>();

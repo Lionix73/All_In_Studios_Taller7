@@ -4,6 +4,9 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class BulletEnemie : PoolableObject
 {
+
+    [Header("Bullet Settings")]
+    [Tooltip("Tiempo en segundos que el bullet se destruye automaticamente si no colisiona con nada")]
     [SerializeField] protected float autoDestroyTime = 5f;
     public float AutoDestroyTime { get => autoDestroyTime; set => autoDestroyTime = value; }
 
@@ -13,9 +16,14 @@ public class BulletEnemie : PoolableObject
     [SerializeField] protected int damage = 10;
     public int Damage { get => damage; set => damage = value; }
 
+    [Tooltip("Tiempo en segundos que el bullet espera para desactivarse tras colisionar con algo")]
     [SerializeField] protected float waitForDisable = 3f;
 
+
+    [Header("Effects")]
     [SerializeField] private GameObject bulletCollisionEffect;
+
+    [SerializeField] protected MeshRenderer bulletModel;
 
     public Rigidbody Rb { get; private set; }
 
@@ -55,6 +63,7 @@ public class BulletEnemie : PoolableObject
             damageable.TakeDamage(damage);
         }
 
+        bulletModel.enabled = false;
         StartCoroutine(WaitForDisable());
     }
 

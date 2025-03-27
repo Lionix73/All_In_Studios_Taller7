@@ -266,7 +266,19 @@ public class EnemyMovement : MonoBehaviour
     }
 
     public void StopMovement(){
-        Debug.Log("Stop Movement");
+        if (agent != null && agent.enabled)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+        }
+    }
+
+    public void ResumeMovement(){
+        if (agent != null && agent.enabled)
+        {
+            agent.isStopped = false;
+            agent.ResetPath();
+        }
     }
 
     public void MoveInCircles(){

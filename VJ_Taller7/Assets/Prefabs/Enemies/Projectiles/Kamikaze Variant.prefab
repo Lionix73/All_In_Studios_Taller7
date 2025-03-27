@@ -138,10 +138,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c34b10e83a96aa448ba6c3432209f8dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoDestroyTime: 4
+  autoDestroyTime: 10
   moveSpeed: 0.1
   damage: 35
-  waitForDisable: 4
+  waitForDisable: 3
+  bulletCollisionEffect: {fileID: 0}
+  bulletModel: {fileID: 4390139236360449951}
   explosionRadius: 3
   damageableLayer:
     serializedVersion: 2
@@ -149,7 +151,6 @@ MonoBehaviour:
   upwardForce: 0.1
   explosionDelay: 0
   explosionEffect: {fileID: 8441963758225538964}
-  bombModel: {fileID: 4390139236360449951}
 --- !u!23 &4390139236360449951 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 3297269915966290220, guid: b3a62e98da1604449b38caa074d6a808, type: 3}
