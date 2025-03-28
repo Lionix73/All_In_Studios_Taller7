@@ -278,17 +278,40 @@ public class EnemyMovement : MonoBehaviour
         {
             agent.isStopped = false;
             agent.ResetPath();
+
+            state = EnemyState.Chase;
         }
     }
 
-    public void MoveInCircles(){
-        Debug.Log("Move In Circles");
+public void MoveInCircles()
+{
+    float radius = 2f;
+    Vector3 randomPoint = GenerateRandomPointInRadius(transform.position, radius);
+
+    if (agent.isOnNavMesh && agent.enabled)
+    {
+        StopCoroutine(followCoroutine);
+        agent.SetDestination(randomPoint);
     }
+}
 
     public void MoveAround(){
         Debug.Log("Move Around");
     }
 
+    private Vector3 GenerateRandomPointInRadius(Vector3 center, float radius)
+    {
+        Vector2 randomCirclePoint = Random.insideUnitCircle * radius;
+        Vector3 randomPoint = new Vector3(center.x + randomCirclePoint.x, center.y, center.z + randomCirclePoint.y);
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(randomPoint, out hit, radius, agent.areaMask))
+        {
+            return hit.position;
+        }
+
+        return center;
+    }
 
     private void OnDrawGizmosSelected()
     {

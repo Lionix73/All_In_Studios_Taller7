@@ -64,7 +64,7 @@ public class RangedAttackRadius : AttackRadius
                         enemy.Movement.StopMovement();
                     }
                     else if (OnRangeBehvaior == OnRangeBehvaior.Follow){
-                        
+                        enemy.Movement.State = EnemyState.Chase;
                     }
                     else if (OnRangeBehvaior == OnRangeBehvaior.Circles){
                         enemy.Movement.MoveInCircles();
@@ -76,8 +76,6 @@ public class RangedAttackRadius : AttackRadius
                     targetDamageable = damageables[i];
                     OnAttack?.Invoke(damageables[i]);
 
-                    if(!enemy.IsStatic)
-                    agent.enabled = false;
                     break;
                 }
             }
