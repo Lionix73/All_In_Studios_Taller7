@@ -22,7 +22,7 @@ public class AttackRadius : MonoBehaviour
     public delegate void AttackEvent(IDamageable target);
     public AttackEvent OnAttack;
     protected Coroutine attackCoroutine;
-    private Enemy enemy;
+    protected Enemy enemy;
 
     protected virtual void Awake()
     {
@@ -80,7 +80,7 @@ public class AttackRadius : MonoBehaviour
 
         IDamageable closestDamageable = null;
 
-        //Closest distance to enemy is 90% of their attack radius
+        //Closest distance to enemy is 100% of their attack radius
         float closestDistance = sphereCollider.radius;
         while(damageables.Count > 0)
         {

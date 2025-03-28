@@ -154,11 +154,11 @@ public class Enemy : PoolableObject, IDamageable
         float time = 0f;
 
         while(time < 1f){
-            Quaternion targetRotation = Quaternion.Slerp(transform.rotation, lookRotation, time);
-            transform.rotation = Quaternion.Euler(transform.rotation.x, targetRotation.eulerAngles.y, transform.rotation.z);
-            
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, time);
             time += Time.deltaTime * 2f;
             yield return null;
+
         }
 
         transform.rotation = lookRotation;

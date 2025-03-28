@@ -168,7 +168,7 @@ public class EnemyMovement : MonoBehaviour
             animator.SetFloat("Horizontal", speedX.CurrentValue);
             animator.SetFloat("Vertical", speedY.CurrentValue);
 
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir), 180 * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir), 180 * Time.deltaTime);        
         }
         else{
             animator.SetFloat("Horizontal", 0, 0.25f, Time.deltaTime);
@@ -279,24 +279,32 @@ public class EnemyMovement : MonoBehaviour
             agent.isStopped = false;
             agent.ResetPath();
 
+            StartCoroutine(FollowTarget());
             state = EnemyState.Chase;
         }
     }
 
-public void MoveInCircles()
-{
-    float radius = 2f;
-    Vector3 randomPoint = GenerateRandomPointInRadius(transform.position, radius);
-
-    if (agent.isOnNavMesh && agent.enabled)
+    public void MoveInCircles()
     {
-        StopCoroutine(followCoroutine);
-        agent.SetDestination(randomPoint);
+        float radius = 2f;
+        Vector3 randomPoint = GenerateRandomPointInRadius(transform.position, radius);
+
+        if (agent.isOnNavMesh && agent.enabled)
+        {
+            StopCoroutine(followCoroutine);
+            agent.SetDestination(randomPoint);
+        }
     }
-}
 
     public void MoveAround(){
-        Debug.Log("Move Around");
+        float radius = 3f;
+        if (player != null && agent.isOnNavMesh && agent.enabled)
+        {
+            Vector3 randomPoint = GenerateRandomPointInRadius(player.position, radius);
+
+            StopCoroutine(followCoroutine); 
+            agent.SetDestination(randomPoint);
+        }
     }
 
     private Vector3 GenerateRandomPointInRadius(Vector3 center, float radius)

@@ -20,9 +20,6 @@ public class RangedAttackRadius : AttackRadius
     [Tooltip("The radius of the sphere cast used to check for line of sight")]
     [Range(0.01f, 1f)][SerializeField] private float sphereCastRadius = 0.1f;
 
-    [Header("Enemy Settings")]
-    [SerializeField] private Enemy enemy;
-
     private RaycastHit hit;
     private IDamageable targetDamageable;
     private BulletEnemie bullet;
@@ -88,7 +85,7 @@ public class RangedAttackRadius : AttackRadius
                     bullet.transform.position = transform.position + bulletSpawnOffset;
                     bullet.transform.rotation = agent.transform.rotation;
 
-                    bullet.Spawn(agent.transform.forward, damage, targetDamageable.GetTransform());
+                    bullet.Spawn(enemy.transform.forward, damage, targetDamageable.GetTransform());
                 }
             }
             else{
