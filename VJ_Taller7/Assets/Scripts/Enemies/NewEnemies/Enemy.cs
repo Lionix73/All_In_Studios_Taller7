@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-
+using TMPro;
 public class Enemy : PoolableObject, IDamageable
 {
     [Header("Enemy Components")]
@@ -248,6 +248,6 @@ public class Enemy : PoolableObject, IDamageable
     private void ShowFloatingText(float damage)
     {
         var go = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity, transform);
-        go.GetComponent<TextMesh>().text = damage.ToString();
+        go.GetComponent<TextMeshPro>().text = damage.ToString();
     }
 }

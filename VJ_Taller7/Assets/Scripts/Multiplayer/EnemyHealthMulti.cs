@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
-
+using TMPro;
 public class EnemyHealthMulti : NetworkBehaviour
 {
     [Header("Enemy UI")]
@@ -72,6 +72,6 @@ public class EnemyHealthMulti : NetworkBehaviour
     private void ShowFloatingText(float damage)
     {
         var go = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity);
-        go.GetComponent<TextMesh>().text = damage.ToString();
+        go.GetComponentInChildren<TextMeshPro>().text = damage.ToString();
     }
 }
