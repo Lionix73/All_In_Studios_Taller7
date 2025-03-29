@@ -13,6 +13,10 @@ public class CharacterMenu : MonoBehaviour
     CharacterManager characterManager;
     GameObject characterToDisplay;
 
+    [SerializeField] private float rotationSpeed = 10f;
+    private bool isRotating = false;
+    private Vector3 lastMousePosition;
+
     private void OnEnable()
     {
 
@@ -24,6 +28,11 @@ public class CharacterMenu : MonoBehaviour
     {
         Destroy(characterToDisplay);
     }
+    private void Update()
+    {
+        HandleCharacterRotation();
+    }
+
     public void SelectSkin()
     {
         if (characterManager.characters[_currentIndex].unlocked == true)
@@ -77,7 +86,43 @@ public class CharacterMenu : MonoBehaviour
             _selectionText.text = "Select";
         }
     }
+    private void HandleCharacterRotation()
+    {
+        if (characterToDisplay == null) return;
 
+        // 1. Cuando se presiona el botón del mouse
+        if (Input.GetMouseButtonDown(0))
+        {
+            // Lanzamos un rayo desde la cámara hacia la posición del mouse
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            // 2. Comprobamos si el rayo golpea al personaje
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider.gameObject == characterToDisplay ||
+                    hit.collider.transform.IsChildOf(characterToDisplay.transform))
+                {
+                    isRotating = true;
+                    lastMousePosition = Input.mousePosition;
+                }
+            }
+        }
+
+        // 3. Cuando se suelta el botón del mouse
+        if (Input.GetMouseButtonUp(0))
+        {
+            isRotating = false;
+        }
+
+        // 4. Si está rotando, aplicamos la rotación en el eje Y
+        if (isRotating && Input.GetMouseButton(0))
+        {
+            Vector3 delta = Input.mousePosition - lastMousePosition;
+            characterToDisplay.transform.Rotate(Vector3.up, -delta.x * rotationSpeed * Time.deltaTime);
+            lastMousePosition = Input.mousePosition;
+        }
+    }
     public void SelectAvatar()
     {
         //Debug.Log($"Has seleccionado el {_availableAvatars[_currentIndex]}");
