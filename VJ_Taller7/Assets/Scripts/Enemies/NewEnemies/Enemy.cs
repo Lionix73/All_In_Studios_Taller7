@@ -87,7 +87,8 @@ public class Enemy : PoolableObject, IDamageable
 
 
     [Header("Enemy UI")]
-    [SerializeField] GameObject floatingTextPrefab;
+    public GameObject floatingTextPrefab;
+    public GameObject floatingTextCriticPrefab;
 
     private EnemySpawner enemySpawner;
 
@@ -247,9 +248,9 @@ public class Enemy : PoolableObject, IDamageable
         //Debug.Log("Heatlh: " + Health + " MaxHealth: " + maxHealth);
         healthBar.SetProgress(Health / maxHealth, 3);
     }
-    private void ShowFloatingText(float damage)
+    public void ShowFloatingText(float damage, GameObject floatingTextPrefab)
     {
         var go = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity, transform);
-        go.GetComponent<TextMeshPro>().text = damage.ToString();
+        go.GetComponentInChildren<TextMeshPro>().text = damage.ToString();
     }
 }

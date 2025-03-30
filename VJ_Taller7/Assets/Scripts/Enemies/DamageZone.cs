@@ -15,6 +15,15 @@ public class DamageZone : MonoBehaviour, IDamageable
     
     if (enemyWhoIsFrom==null)return;
     enemyWhoIsFrom.TakeDamage(damageToTake);
+        
+        if(damageMult <= 1)
+        {
+            enemyWhoIsFrom.ShowFloatingText(damageToTake, enemyWhoIsFrom.floatingTextPrefab);
+        }
+        else
+        {
+            enemyWhoIsFrom.ShowFloatingText(damageToTake, enemyWhoIsFrom.floatingTextCriticPrefab);
+        }
    }
    public Transform GetTransform(){
     return transform;
