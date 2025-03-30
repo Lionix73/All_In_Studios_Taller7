@@ -20,6 +20,8 @@ public class BombBullet : BulletEnemie
 
     [SerializeField] private GameObject explosionEffect;
 
+    private bool hasExploded = false;
+
     protected override void OnEnable(){
         base.OnEnable();
     }
@@ -70,6 +72,9 @@ public class BombBullet : BulletEnemie
 
     private void Explode()
     {
+        if (hasExploded) return;
+        hasExploded = true;
+
         if(explosionEffect != null && bulletModel != null){
             transform.rotation = new Quaternion(0, 0, 0, 0);
             explosionEffect.SetActive(true);

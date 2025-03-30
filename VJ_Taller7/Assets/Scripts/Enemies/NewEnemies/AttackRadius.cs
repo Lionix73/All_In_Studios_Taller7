@@ -101,7 +101,7 @@ public class AttackRadius : MonoBehaviour
 
                 if(distance < closestDistance)
                 {
-                    Debug.Log("Attacking");
+                    //Debug.Log("Attacking");
 
 
                     if(onRangeBehvaiorMethod == OnRangeBehvaior.Stop)

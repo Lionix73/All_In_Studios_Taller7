@@ -237,7 +237,7 @@ public class EnemySpawner : MonoBehaviour
     private void HandleEnemyDeath(Enemy enemy){
          enemiesAlive--;
 
-        if(enemiesAlive == 0 && enemiesSpawned == numberOfEnemiesToSpawn){
+        if(enemiesAlive <= 0 && enemiesSpawned == numberOfEnemiesToSpawn){
             ScaleUpSpawns();
             StartCoroutine(SpawnEnemies());
         }
