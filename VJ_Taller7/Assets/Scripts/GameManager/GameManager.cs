@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public bool isGameOver;
     [Tooltip("Si queremos que spawnee un jugador, mas que nada para el editor")]
     public bool spawnPlayerWithManager = true;
+    public bool spawnPlayerWithMenu = false;
 
     public Transform spawntPoint;
     public GameObject playerPrefab;
@@ -49,6 +50,8 @@ public class GameManager : MonoBehaviour
         // Start the game
         if (spawnPlayerWithManager) SpawnPlayer();
 
+        if (spawnPlayerWithMenu) SpawnPlayerWithMenu();
+
         // Crear la logica para el juego en si
 
     }
@@ -66,6 +69,15 @@ public class GameManager : MonoBehaviour
     public void PlayerSpawn(){
         PlayerSpawned?.Invoke(playerManager.activePlayer); 
     }
-
-    
+    public void SpawnPlayerWithMenu()
+    {
+        // spawn player\
+        playerManager.SpawnPlayer(SelectedPlayer(), spawntPoint);
+        gunManager = playerManager.gunManager;
+    }
+    public GameObject SelectedPlayer()
+    {
+        int selectedIndex = CharacterManager.Instance.selectedIndexCharacter;
+        return CharacterManager.Instance.characters[selectedIndex].playableCharacter;
+    }
 }

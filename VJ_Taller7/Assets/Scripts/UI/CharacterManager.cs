@@ -6,7 +6,7 @@ using UnityEngine;
 public class CharacterManager : MonoBehaviour
 {
     public static CharacterManager Instance;
-    public int selectedIndexCharacter;
+    public int selectedIndexCharacter = 0;
     public List<Characters> characters;
 
 
