@@ -63,7 +63,7 @@ public class BulletEnemie : PoolableObject
             damageable.TakeDamage(damage);
         }
 
-        bulletModel.enabled = false;
+        if (bulletModel!=null) bulletModel.enabled = false;
         StartCoroutine(WaitForDisable());
     }
 

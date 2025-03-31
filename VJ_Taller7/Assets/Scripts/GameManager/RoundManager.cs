@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RoundManager : MonoBehaviour
@@ -12,6 +13,7 @@ public class RoundManager : MonoBehaviour
     [SerializeField] private int currentRound; //Rondas
     [SerializeField] private int waveSize; //Tamaño de la oleada en cantidad de enemigos 
     private int waveValue;
+    private int enemiesKilledOnWave = 0;
     
 
     [Space]
@@ -80,17 +82,23 @@ public class RoundManager : MonoBehaviour
         SetEnemiesInSpawner();
     }
     private void Update() {
-        if (aliveEnemies == 1){
+        if (enemiesKilledOnWave == waveSize - 1 && lastEnemyOfWave == null){ //Todavia no funciona... pero casi
             //setear al enemigo con el loot, o activar el loot en su muerte, algo...
+            lastEnemyOfWave= FindFirstObjectByType<Enemy>().gameObject;
+            enemiesKilledOnWave = 0;
         }
-        if (aliveEnemies == 0 && !inBetweenRounds){
+        if (aliveEnemies == 0 && !inBetweenRounds && enemiesKilledOnWave>1){
             
             inBetweenRounds = true; //Next round
+
+            OnWaveComplete?.Invoke(); //Se completo exitosamente la oleada, solo cuando acaba por matar a todos los enemigos
         }
 
         if (currentWave > 3){
             currentRound++;
             currentWave = 0;
+
+            OnRoundComplete?.Invoke(); // Se completo la ronda, avisar para escalados y eso, aqui solo importa sobrevivir
         }
 
         if (_Simulating) UpdateTimers();
@@ -110,7 +118,7 @@ public class RoundManager : MonoBehaviour
             if (inBetweenRoundsTimer<=0){
             currentWave++;
             SetWaveBalance();
-            if (_BalncingInThis) SendWave(enemyIndex); //sin el balance del manager de Alejo
+            if (_BalncingInThis) SendWave(enemyIndex); //sin el balance del manager de Alejo (no lo usaremos pero dejemoslo ahi '.')
             inBetweenRounds = false;
             inBetweenRoundsTimer = inBetweenRoundsWaitTime;
             }
@@ -136,9 +144,9 @@ public class RoundManager : MonoBehaviour
             waveTimer = waveDuration;
         }
         else {
-            //Aumentar la cantidad de enemigo a generar y enviar al wave spawner
-            //waveSize = (currentWave + 1) * waveValueScaleMult * currentRound; aliveEnemies = waveSize; //antes del uso de curvas
             waveDuration += currentWave * waveDurationScaleAdd;
+            //List<WeightedSpawnScriptableObject> temp = GameManager.Instance.GetBalanceWave(currentWave);
+            //enemyWavesManager.RecieveWaveLimits(temp);
             enemyWavesManager.RecieveWaveOrder(currentWave, waveSize);
             waveTimer = waveDuration;
         }
@@ -220,7 +228,8 @@ public class RoundManager : MonoBehaviour
     }
 
     public void EnemyDied(Enemy enemy){
-        aliveEnemies -=1; 
+        aliveEnemies -=1;
+        enemiesKilledOnWave = waveSize - aliveEnemies; 
     }
 #endregion
 
