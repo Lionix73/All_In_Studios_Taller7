@@ -74,11 +74,12 @@ public class PlayerManager : MonoBehaviour
 
     public void RespawnPlayerOrder(GameObject playerPrefab, Transform spawntPoint){
         StartCoroutine(RespawnPlayer(playerPrefab,spawntPoint));
-        
-        
     }
     private IEnumerator RespawnPlayer(GameObject playerPrefab, Transform spawntPoint){
         yield return new WaitForSeconds(respawnCD);
+        activePlayer.SetActive(false);
+        //Destroy(activePlayer); //Toca desasignarlo de todas partes... osea, nos embalamos
+        activePlayer =null;
         SpawnPlayer(playerPrefab,spawntPoint);
     }
 }

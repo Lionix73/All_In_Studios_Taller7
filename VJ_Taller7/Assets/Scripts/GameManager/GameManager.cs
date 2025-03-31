@@ -74,12 +74,10 @@ public class GameManager : MonoBehaviour
     }
     public void PlayerDied(GameObject player) {
         PlayerDie?.Invoke(player);
-        player.SetActive(false);
         isGameOver = true; //Primero saber si el otro jugador esta vivo y depues si confirmar el game over
 
-        playerManager.RespawnPlayerOrder(playerPrefab,spawntPoint); //Por ahora no funciona el respawn
-
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        playerManager.RespawnPlayerOrder(playerPrefab,spawntPoint);
+        
     }
     //Para que todo lo que necesite al player lo encuentre una vez que se haya creado; NOTA: Siempre al final de la función
     public void PlayerSpawn(){
@@ -90,6 +88,10 @@ public class GameManager : MonoBehaviour
     {
         int selectedIndex = CharacterManager.Instance.selectedIndexCharacter;
         return CharacterManager.Instance.characters[selectedIndex].playableCharacter;
+    }
+
+    public void RestartScene(){
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     /*
