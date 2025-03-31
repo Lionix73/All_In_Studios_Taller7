@@ -94,6 +94,12 @@ public class Enemy : PoolableObject, IDamageable
 
     [Header("Enemy VFX")]
     [SerializeField] private ParticleSystem deathVFX;
+    [SerializeField] private SkinnedMeshRenderer[] skinnedMeshRenderers;
+    [SerializeField] private float blinkIntensity;
+    [SerializeField] private float blinkDuration;
+
+    private float blinkTimer;
+
 
     //Evento que se llama para el game manager --Antigua referencia, esta con el balancing in this del manager (ignorar perop dejar quieto)
     public event EventHandler<OnEnemyDeadEventArgs> OnEnemyDead;
@@ -118,6 +124,10 @@ public class Enemy : PoolableObject, IDamageable
         colliderEnemy = GetComponent<Collider>();
         AttackRadius.OnAttack += OnAttack;
 
+        if(skinnedMeshRenderers == null){
+            skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        }
+
         if(isStatic)
         enemySpawner = FindFirstObjectByType<EnemySpawner>();
     }
@@ -130,6 +140,8 @@ public class Enemy : PoolableObject, IDamageable
     private void Update()
     {
         if (isDead) return;
+
+        BlinkEffect();
 
         for(int i = 0; i < skills.Length; i++){
             if(skills[i].CanUseSkill(this, Player, Level)){
@@ -177,6 +189,7 @@ public class Enemy : PoolableObject, IDamageable
         if (isDead) return;
 
         Health -= damage;
+        blinkTimer = blinkDuration;
 
         movement.State = EnemyState.Chase;
         
@@ -248,9 +261,24 @@ public class Enemy : PoolableObject, IDamageable
         //Debug.Log("Heatlh: " + Health + " MaxHealth: " + maxHealth);
         healthBar.SetProgress(Health / maxHealth, 3);
     }
+
     public void ShowFloatingText(float damage, GameObject floatingTextPrefab)
     {
         var go = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity, transform);
         go.GetComponentInChildren<TextMeshPro>().text = damage.ToString();
+    }
+
+    public void BlinkEffect(){
+        if (skinnedMeshRenderers == null || skinnedMeshRenderers.Length == 0) return;
+
+        blinkTimer -= Time.deltaTime;
+
+        float lerp = Mathf.Clamp01(blinkTimer / blinkDuration);
+        float intensity = (lerp * blinkIntensity) + 1.0f;
+        
+        foreach (var skinnedMeshRenderer in skinnedMeshRenderers)
+        {
+            skinnedMeshRenderer.material.color = Color.white * intensity;
+        }
     }
 }
