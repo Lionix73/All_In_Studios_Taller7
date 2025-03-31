@@ -11,8 +11,12 @@ public class Health : MonoBehaviour, IDamageable
 
     public delegate void PlayerDeath(GameObject player);
     public event PlayerDeath OnPlayerDeath; //Este evento es para avisar al player manager, luego ese avisa a todos
+
+    public Animator animator;
+
     void Update()
     {
+        Debug.Log(currentHealth);
         if (UIManager.Singleton !=null)
         {
             UIManager.Singleton.GetPlayerHealth(currentHealth, maxHealth);
@@ -36,7 +40,12 @@ public class Health : MonoBehaviour, IDamageable
         HealthChange();
         if (currentHealth <= 0)
         {
+            animator.SetTrigger("Dead");
             OnPlayerDeath?.Invoke(gameObject);
+        }
+        else
+        {
+            animator.SetTrigger("Hit");
         }
     }
     /// <summary>

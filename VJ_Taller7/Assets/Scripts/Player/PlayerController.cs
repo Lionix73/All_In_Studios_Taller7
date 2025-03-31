@@ -129,14 +129,7 @@ public class PlayerController : MonoBehaviour
         UpdateAnimLayer();
         adjustFOV();
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            //Cursor.visible = !Cursor.visible;
-            Cursor.lockState = CursorLockMode.None;
-
-        }
-
-        animator.SetBool("ShortGun", gunManager.Gun == GunType.BasicPistol || gunManager.Gun == GunType.Revolver ? true : false);
+        animator.SetBool("ShortGun", gunManager.CurrentGun.Type == GunType.BasicPistol || gunManager.CurrentGun.Type == GunType.Revolver ? true : false);
         AdjustRigs();
     }
 
@@ -277,7 +270,7 @@ public class PlayerController : MonoBehaviour
 
     private int SelectAnimLayer()
     {
-        if (gunManager.Gun == GunType.BasicPistol || gunManager.Gun == GunType.Revolver)
+        if (gunManager.CurrentGun.Type == GunType.BasicPistol || gunManager.CurrentGun.Type == GunType.Revolver)
         {
             if (isRunning)
             {
@@ -378,7 +371,7 @@ public class PlayerController : MonoBehaviour
 
         if (context.started)
         {
-            switch(gunManager.Gun)
+            switch(gunManager.CurrentGun.Type)
             {
                 case GunType.Rifle:
                     soundManager.PlaySound("rifleFire");
@@ -418,7 +411,7 @@ public class PlayerController : MonoBehaviour
 
             StartCoroutine(AnimLayerCountdown("Reload", 4f));
 
-            switch (gunManager.Gun)
+            switch (gunManager.CurrentGun.Type)
             {
                 case GunType.Rifle:
                     soundManager.PlaySound("rifleReload");
