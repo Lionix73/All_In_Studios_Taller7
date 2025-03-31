@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Linq;
 
 public class EnemyWavesManager : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class EnemyWavesManager : MonoBehaviour
     [SerializeField] private int level = 1;
     [SerializeField] private List<EnemyScriptableObject> scaledEnemies = new List<EnemyScriptableObject>();
     [SerializeField] private float[] weights;
+    [SerializeField] private int[] availableEnemiesToSpawn;
 
 
     private int enemiesAlive = 0;
@@ -103,6 +105,8 @@ public class EnemyWavesManager : MonoBehaviour
         ScaleUpSpawns();
         StartCoroutine(SpawnEnemies());
         GameManager.Instance.roundManager.recieveWaveData(numberOfEnemiesToSpawn);
+
+        availableEnemiesToSpawn = GameManager.Instance.availableEnemiesForWave[actualWave-1].availableEnemies;
     }
 
     private IEnumerator SpawnEnemies(){
@@ -130,8 +134,6 @@ public class EnemyWavesManager : MonoBehaviour
             else if(enemySpawnMethod == SpawnMethod.WeightedRandom){
                 SpawnWeightedRandomEnemy();
             }
-
-            enemiesSpawned++;
 
             yield return wait;
         }
@@ -190,6 +192,8 @@ public class EnemyWavesManager : MonoBehaviour
     }
 
     public void DoSpawnEnemy(int spawnIndex, Vector3 spawnPosition){
+        if (!availableEnemiesToSpawn.Contains(spawnIndex)) return; //Saber si esta permitido o no ese enemigo
+
         PoolableObject poolableObject = EnemyObjectPools[spawnIndex].GetObject();
 
         if(poolableObject != null){
@@ -227,6 +231,7 @@ public class EnemyWavesManager : MonoBehaviour
                 enemy.Skills = scaledEnemies[spawnIndex].skills;
 
                 enemiesAlive++;
+                enemiesSpawned++;
                 OnEnemySpawned?.Invoke();
             }
             else{

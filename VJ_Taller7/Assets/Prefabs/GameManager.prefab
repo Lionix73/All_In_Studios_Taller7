@@ -52,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPaused: 0
   isGameOver: 0
-  spawnPlayerWithManager: 1
+  spawnPlayerWithMenu: 0
   spawntPoint: {fileID: 3865444026879066620}
   playerPrefab: {fileID: 3839446492626894175, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
   playerManager: {fileID: 0}
@@ -60,6 +60,13 @@ MonoBehaviour:
   enemyWavesManager: {fileID: 0}
   scoreManager: {fileID: 0}
   gunManager: {fileID: 0}
+  availableEnemiesForWave:
+  - waveToSet: 1
+    availableEnemies: 000000000100000004000000
+  - waveToSet: 2
+    availableEnemies: 0000000001000000020000000400000005000000
+  - waveToSet: 3
+    availableEnemies: 000000000100000002000000030000000400000005000000
 --- !u!114 &7021727127881821152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,7 +94,7 @@ MonoBehaviour:
   waveValueScaleMult: 8
   waveDurationScaleAdd: 20
   enemiesToSpawn: []
-  waveDuration: 10
+  waveDuration: 30
   inBetweenRoundsWaitTime: 30
   _RoundUI: {fileID: 0}
   _Simulating: 0
@@ -107,7 +114,8 @@ MonoBehaviour:
   player: {fileID: 0}
   mainCamera: {fileID: 0}
   storeInitialPos: 0
-  numberOfEnemiesToSpawn: 12
+  initialPoolSize: 30
+  numberOfEnemiesToSpawn: 8
   spawnDelay: 1
   weightedEnemies:
   - {fileID: 11400000, guid: d10cc44dc90ed7c4192b63da3c74239f, type: 2}
@@ -122,6 +130,7 @@ MonoBehaviour:
   level: 0
   scaledEnemies: []
   weights: []
+  availableEnemiesToSpawn: 
   healthBarCanvas: {fileID: 0}
 --- !u!114 &1888077375328469363
 MonoBehaviour:
@@ -130,7 +139,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2666794559733852778}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 74fe9ed270302974f8a2b51754204b8f, type: 3}
   m_Name: 
@@ -169,9 +178,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 205cb65513164e84f9cf42f53712404a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerController: {fileID: 0}
   playerStartingHealth: 100
   healPerRound: 20
   maxHealthIncreasePerRound: 100
+  respawnCD: 3
 --- !u!1 &7147567092717446138
 GameObject:
   m_ObjectHideFlags: 0

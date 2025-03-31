@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,7 +15,6 @@ public class GameManager : MonoBehaviour
     public bool isPaused;
     public bool isGameOver;
     [Tooltip("Si queremos que spawnee un jugador, mas que nada para el editor")]
-    public bool spawnPlayerWithManager = true;
     public bool spawnPlayerWithMenu = false;
 
     public Transform spawntPoint;
@@ -34,6 +34,10 @@ public class GameManager : MonoBehaviour
     public event OnPlayerSpawn PlayerSpawned;
     public event OnPlayerDeath PlayerDie;
 
+    //[Header("Balance")]
+    [SerializeField] public List<WaveRestriction> availableEnemiesForWave = new List<WaveRestriction>();
+    //[SerializeField]private List<WaveDificulty> wavesBalance = new List<WaveDificulty>();
+
     private void Awake() {
         if (Instance == null) {
             Instance = this;
@@ -49,9 +53,7 @@ public class GameManager : MonoBehaviour
 
     private void Start() {
         // Start the game
-        if (spawnPlayerWithManager) SpawnPlayer();
-
-        if (spawnPlayerWithMenu) SpawnPlayerWithMenu();
+        SpawnPlayer();
 
         // Crear la logica para el juego en si
 
@@ -60,16 +62,15 @@ public class GameManager : MonoBehaviour
     [ContextMenu("SpawnPlayer")]
     public void SpawnPlayer() {
         // spawn player\
-        playerManager.SpawnPlayer(playerPrefab, spawntPoint);
-        gunManager = playerManager.gunManager;
-
+        if (spawnPlayerWithMenu){
+            playerManager.SpawnPlayer(SelectedPlayer(), spawntPoint);
+            gunManager = playerManager.gunManager;
+        }
+        else{
+            playerManager.SpawnPlayer(playerPrefab, spawntPoint);
+            gunManager = playerManager.gunManager;
+        }
         isGameOver = false;
-    }
-    public void SpawnPlayerWithMenu()
-    {
-        // spawn player\
-        playerManager.SpawnPlayer(SelectedPlayer(), spawntPoint);
-        gunManager = playerManager.gunManager;
     }
     public void PlayerDied(GameObject player) {
         PlayerDie?.Invoke(player);
@@ -90,4 +91,24 @@ public class GameManager : MonoBehaviour
         int selectedIndex = CharacterManager.Instance.selectedIndexCharacter;
         return CharacterManager.Instance.characters[selectedIndex].playableCharacter;
     }
+
+    /*
+    public List<WeightedSpawnScriptableObject> GetBalanceWave(int wave){
+        if (wavesBalance[wave-1].enemiesForTheWave == null) return null;
+        return wavesBalance[wave-1].enemiesForTheWave;
+    }
+    */
+}
+
+/*
+[System.Serializable]
+public class WaveDificulty{
+    public int waveToSet;
+    public List<WeightedSpawnScriptableObject> enemiesForTheWave;
+}
+*/
+[System.Serializable]
+public class WaveRestriction{
+    public int waveToSet;
+    public int[] availableEnemies;
 }

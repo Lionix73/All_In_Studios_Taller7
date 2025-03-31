@@ -87,7 +87,7 @@ public class RoundManager : MonoBehaviour
             lastEnemyOfWave= FindFirstObjectByType<Enemy>().gameObject;
             enemiesKilledOnWave = 0;
         }
-        if (aliveEnemies == 0 && !inBetweenRounds){
+        if (aliveEnemies == 0 && !inBetweenRounds && enemiesKilledOnWave>1){
             
             inBetweenRounds = true; //Next round
 
@@ -144,9 +144,9 @@ public class RoundManager : MonoBehaviour
             waveTimer = waveDuration;
         }
         else {
-            //Aumentar la cantidad de enemigo a generar y enviar al wave spawner
-            //waveSize = (currentWave + 1) * waveValueScaleMult * currentRound; aliveEnemies = waveSize; //antes del uso de curvas
             waveDuration += currentWave * waveDurationScaleAdd;
+            //List<WeightedSpawnScriptableObject> temp = GameManager.Instance.GetBalanceWave(currentWave);
+            //enemyWavesManager.RecieveWaveLimits(temp);
             enemyWavesManager.RecieveWaveOrder(currentWave, waveSize);
             waveTimer = waveDuration;
         }
