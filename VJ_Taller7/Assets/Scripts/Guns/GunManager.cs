@@ -14,6 +14,7 @@ public class GunManager : MonoBehaviour
     private PlayerController player;
     [Header("Managers")]
     public CrosshairManager crosshairManager;  
+    private SoundManager soundManager; private Animator playerAnimator;
     [Header("Ammo Info")]
     public int actualTotalAmmo; //Cuanta municion tiene el jugador
     [SerializeField] private int MaxTotalAmmo; //Cuanta municion puede llevar el jugador
@@ -67,7 +68,8 @@ public class GunManager : MonoBehaviour
 
         secondHandRigTarget = GameObject.Find("SecondHandGripRig_target").GetComponent<Transform>();
 
-        crosshairManager = GetComponent<CrosshairManager>();
+        crosshairManager = GetComponent<CrosshairManager>(); 
+        soundManager = FindAnyObjectByType<SoundManager>();
     }
 
     private void Update() {
@@ -152,9 +154,11 @@ public class GunManager : MonoBehaviour
         if (context.started && CurrentGun.ShootConfig.IsAutomatic) 
             shooting=true;
         else if (!CurrentGun.ShootConfig.IsAutomatic) shooting = context.started;
+
         if (context.canceled && CurrentGun.ShootConfig.IsAutomatic)
             shooting = false; 
         //Debug.Log("Fase: " + shooting);
+
     }
 
     public void OnWeaponChange(InputAction.CallbackContext context){
@@ -218,7 +222,8 @@ public class GunManager : MonoBehaviour
     private void RealoadGun(){
         CurrentGun.Reload();
         actualTotalAmmo -= CurrentGun.MagazineSize - CurrentGun.BulletsLeft;
-
+        StartCoroutine(Reload(CurrentGun.ReloadTime));
+        /*
         switch (Gun)
         {
             case GunType.Rifle:
@@ -237,6 +242,7 @@ public class GunManager : MonoBehaviour
                 StartCoroutine(Reload(1.45f));
                 break;
         }
+        */
     }
 
     private IEnumerator Reload(float delay)
@@ -259,6 +265,7 @@ public class GunManager : MonoBehaviour
 
     private void GetPlayer(GameObject activePlayer){
         player = activePlayer.GetComponentInChildren<PlayerController>();
+        playerAnimator = activePlayer.GetComponentInChildren<Animator>();
     }
 
     private void OnDrawGizmos() {
@@ -269,5 +276,41 @@ public class GunManager : MonoBehaviour
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(dondePegaElRayDelArma, 0.3f);
+    }
+
+    private void ShootingFeedback(bool flag){
+        if (flag){
+        switch(CurrentGun.Type)
+            {
+                case GunType.Rifle:
+                    soundManager.PlaySound("rifleFire");
+                    playerAnimator.SetBool("ShootBurst", true);
+                    break;
+                case GunType.BasicPistol:
+                    soundManager.PlaySound("pistolFire");
+                    playerAnimator.SetTrigger("ShootOnce");
+                    break;
+                case GunType.Revolver:
+                    soundManager.PlaySound("revolverFire");
+                    playerAnimator.SetTrigger("ShootOnce");
+                    break;
+                case GunType.Shotgun:
+                    soundManager.PlaySound("shotgunFire");
+                    playerAnimator.SetTrigger("ShootOnce");
+                    break;
+                case GunType.Sniper:
+                    soundManager.PlaySound("sniperFire");
+                    playerAnimator.SetTrigger("ShootOnce");
+                    break;
+            }
+        }
+        else StopFeedback();
+    }
+    private void StopFeedback(){
+        soundManager.StopSound("rifleFire");
+        playerAnimator.SetBool("ShootBurst", false);
+    }
+    private void ReloadingSound(){
+
     }
 }
