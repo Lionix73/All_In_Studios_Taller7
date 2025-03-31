@@ -1,10 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
     public GameObject activePlayer { get; private set; } //Depronto toca hacer una lista de esto para el multi
     
-    [Tooltip("Este es el player como tal, su codigo y funciones")] 
+    [Tooltip("Este es el player como tal, su codigo y funciones. Dejar vacio en el inspector")] 
     public PlayerController playerController;
     private Transform playerPos;
     private Health playerHealth;
@@ -16,10 +18,14 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private float playerStartingHealth; //Tengo que ver para cambiarla desde el spawn
     [SerializeField] private float healPerRound;
     [SerializeField] private float maxHealthIncreasePerRound;
+
+    [Header("Respawn")]
+    [SerializeField] private float respawnCD;
     public void SpawnPlayer(GameObject playerPrefab, Transform spawntPoint) {
         // spawn player
         if (GameObject.Find("PlayerController") != null) {
             activePlayer = GameObject.Find("PlayerController");
+            activePlayer.SetActive(true);//no funciona el desactivados xd
         }
         else {
             activePlayer = Instantiate(playerPrefab, spawntPoint.position, Quaternion.identity);
@@ -64,5 +70,15 @@ public class PlayerManager : MonoBehaviour
     public void PlayerDie(GameObject player){
         //Logica de la muerte del jugador
         GameManager.Instance.PlayerDied(player);
+    }
+
+    public void RespawnPlayerOrder(GameObject playerPrefab, Transform spawntPoint){
+        StartCoroutine(RespawnPlayer(playerPrefab,spawntPoint));
+        
+        
+    }
+    private IEnumerator RespawnPlayer(GameObject playerPrefab, Transform spawntPoint){
+        yield return new WaitForSeconds(respawnCD);
+        SpawnPlayer(playerPrefab,spawntPoint);
     }
 }

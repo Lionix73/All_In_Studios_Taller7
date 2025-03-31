@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(PlayerManager))]
 [RequireComponent(typeof(RoundManager))]
@@ -61,13 +62,8 @@ public class GameManager : MonoBehaviour
         // spawn player\
         playerManager.SpawnPlayer(playerPrefab, spawntPoint);
         gunManager = playerManager.gunManager;
-    }
-    public void PlayerDied(GameObject player) {
-        PlayerDie?.Invoke(player);
-    }
-    //Para que todo lo que necesite al player lo encuentre una vez que se haya creado; NOTA: Siempre al final de la función
-    public void PlayerSpawn(){
-        PlayerSpawned?.Invoke(playerManager.activePlayer); 
+
+        isGameOver = false;
     }
     public void SpawnPlayerWithMenu()
     {
@@ -75,6 +71,20 @@ public class GameManager : MonoBehaviour
         playerManager.SpawnPlayer(SelectedPlayer(), spawntPoint);
         gunManager = playerManager.gunManager;
     }
+    public void PlayerDied(GameObject player) {
+        PlayerDie?.Invoke(player);
+        player.SetActive(false);
+        isGameOver = true; //Primero saber si el otro jugador esta vivo y depues si confirmar el game over
+
+        playerManager.RespawnPlayerOrder(playerPrefab,spawntPoint); //Por ahora no funciona el respawn
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    //Para que todo lo que necesite al player lo encuentre una vez que se haya creado; NOTA: Siempre al final de la función
+    public void PlayerSpawn(){
+        PlayerSpawned?.Invoke(playerManager.activePlayer); 
+    }
+    
     public GameObject SelectedPlayer()
     {
         int selectedIndex = CharacterManager.Instance.selectedIndexCharacter;

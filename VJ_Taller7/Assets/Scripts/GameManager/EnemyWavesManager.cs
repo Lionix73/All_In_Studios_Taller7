@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 public class EnemyWavesManager : MonoBehaviour
 {
@@ -12,6 +11,8 @@ public class EnemyWavesManager : MonoBehaviour
 
     [Header("Spawn Settings")]
     [SerializeField] private bool storeInitialPos = false;
+    [Tooltip("Tamaño inicial de las pools de enemigos")][SerializeField] private int initialPoolSize;
+    [Tooltip("Numero inicial de enemigos de oleadas, se cálcula el balance según este número")]
     [SerializeField] private int numberOfEnemiesToSpawn = 1;
     [SerializeField] private float spawnDelay = 1f;
     [SerializeField] private List<WeightedSpawnScriptableObject> weightedEnemies = new List<WeightedSpawnScriptableObject>();
@@ -55,7 +56,7 @@ public class EnemyWavesManager : MonoBehaviour
 
         for (int i = 0; i < weightedEnemies.Count; i++)
         {
-            EnemyObjectPools.Add(i, ObjectPool.CreateInstance(weightedEnemies[i].enemy.prefab, numberOfEnemiesToSpawn));
+            EnemyObjectPools.Add(i, ObjectPool.CreateInstance(weightedEnemies[i].enemy.prefab, initialPoolSize));
         }
 
         weights = new float[weightedEnemies.Count];
