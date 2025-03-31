@@ -44,11 +44,6 @@ public class UIManager : MonoBehaviour
         {
             PauseGame(4);
         }
-        if (screens[0].activeSelf)
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
 
     }
 

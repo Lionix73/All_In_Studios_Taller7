@@ -133,13 +133,7 @@ public class PlayerController : MonoBehaviour
         {
             //Cursor.visible = !Cursor.visible;
             Cursor.lockState = CursorLockMode.None;
-            if (Cursor.visible)
-                InputSystem.PauseHaptics();
-            else
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                InputSystem.ResumeHaptics();
-            }
+
         }
 
         animator.SetBool("ShortGun", gunManager.Gun == GunType.BasicPistol || gunManager.Gun == GunType.Revolver ? true : false);
