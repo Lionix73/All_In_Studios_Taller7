@@ -208,7 +208,7 @@ public class RoundManager : MonoBehaviour
     private void UISet(){
         if (_UiEnemyCounter!=null) _UiEnemyCounter.text = $" Enemigos restantes: \n {aliveEnemies}";
         if (_UiWaveCounter!=null) _UiWaveCounter.text = $"Oleada: {currentWave} /3";
-        if (_UiRoundCounter!=null) _UiRoundCounter.text = $"Ronda {currentRound}";
+        if (_UiRoundCounter!=null) _UiRoundCounter.text = $"RONDA {currentRound}";
 
         if (inBetweenRounds){ //depronto hacer un timer general que rote
             if (_UiBetweenWavesTimer!=null) _UiBetweenWavesTimer.text = $"Siguiente ronda en: \n {Mathf.FloorToInt(inBetweenRoundsTimer/60)} : {Mathf.FloorToInt(inBetweenRoundsTimer % 60)}";
@@ -274,7 +274,8 @@ public class RoundManager : MonoBehaviour
 
     public void EnemyDied(Enemy enemy){
         aliveEnemies -=1;
-        enemiesKilledOnWave = waveSize - aliveEnemies; 
+        enemiesKilledOnWave = waveSize - aliveEnemies;
+        scoreManager.AddEnemyKilled(1);
     }
 #endregion
 
