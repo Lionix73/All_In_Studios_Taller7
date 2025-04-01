@@ -79,7 +79,11 @@ public class RoundManager : MonoBehaviour
         scoreManager = GetComponent<ScoreManager>();
         enemySpawner = GetComponent<EnemyWaves>();
         enemyWavesManager = GetComponent<EnemyWavesManager>();
-        actualRoundDisplay = true;
+
+        if (UIManager.Singleton)
+        {
+            UIManager.Singleton.UIChangeRound(currentRound);
+        }
         
         SetEnemiesInSpawner();
     }
@@ -99,6 +103,12 @@ public class RoundManager : MonoBehaviour
         if (currentWave > 3){
             currentRound++;
             currentWave = 0;
+            
+            if (UIManager.Singleton) 
+            { 
+                UIManager.Singleton.actualRoundDisplay = true;
+                UIManager.Singleton.UIChangeRound(currentRound);
+            }
 
             OnRoundComplete?.Invoke(); // Se completo la ronda, avisar para escalados y eso, aqui solo importa sobrevivir
         }
@@ -116,19 +126,21 @@ public class RoundManager : MonoBehaviour
     /// </summary>
     private void UpdateTimers(){
         if (inBetweenRounds) {
-            UIChangeRound();
-            UIBetweenWavesTimer();
+            if (UIManager.Singleton) UIManager.Singleton.UIBetweenWavesTimer(inBetweenRoundsTimer);
             inBetweenRoundsTimer -= Time.deltaTime;
             if (inBetweenRoundsTimer<=0){
             currentWave++;
             SetWaveBalance();
+
+            if(UIManager.Singleton) UIManager.Singleton.UIActualWave(currentWave);
+
             if (_BalncingInThis) SendWave(enemyIndex); //sin el balance del manager de Alejo (no lo usaremos pero dejemoslo ahi '.')
             inBetweenRounds = false;
             inBetweenRoundsTimer = inBetweenRoundsWaitTime;
             }
         }
         else {
-            UIBetweenWaves();
+            if (UIManager.Singleton) UIManager.Singleton.UIBetweenWaves(waveTimer);
             waveTimer -= Time.deltaTime;
             if (waveTimer <= 0){
             //End round
@@ -146,7 +158,7 @@ public class RoundManager : MonoBehaviour
             waveDuration += currentWave * waveDurationScaleAdd;
 
             GenerateEnemies();
-
+            
             waveTimer = waveDuration;
         }
         else {
@@ -163,6 +175,7 @@ public class RoundManager : MonoBehaviour
     }
     public void enemyHaveSpawn(){
         aliveEnemies += 1;
+        if (UIManager.Singleton) UIManager.Singleton.UIEnemiesAlive(aliveEnemies);
     }
 
     public void GenerateEnemies(){
@@ -222,45 +235,6 @@ public class RoundManager : MonoBehaviour
         }
         
     }
-    private void UIBetweenWavesTimer()
-    {
-        Dialogue roundDialogue = _UiRoundCounter.GetComponent<Dialogue>();
-        if (roundDialogue.FinishDialogue)
-        {
-            if (_UiBetweenWavesTimer != null) _UiBetweenWavesTimer.text = $"Siguiente ronda en: \n {Mathf.FloorToInt(inBetweenRoundsTimer / 60)} : {Mathf.FloorToInt(inBetweenRoundsTimer % 60)}";
-            if (_UiWaveCounter != null) _UiWaveCounter.text = "";
-            if (_UiEnemyCounter != null) _UiEnemyCounter.text = "";
-            _UiBetweenWavesTimer.gameObject.SetActive(true);
-            _UiWaveTimer.gameObject.SetActive(false);
-        }
-    }
-    private void UIBetweenWaves()
-    {
-        if (_UiWaveTimer != null) _UiWaveTimer.text = $"Tiempo restante: \n {Mathf.FloorToInt(waveTimer / 60)} : {Mathf.FloorToInt(waveTimer % 60)}";
-        if (_UiWaveCounter != null) _UiWaveCounter.text = $"Oleada: {currentWave} /3";
-        if (_UiEnemyCounter != null) _UiEnemyCounter.text = $" Enemigos restantes: \n {aliveEnemies}";
-        _UiBetweenWavesTimer.gameObject.SetActive(false);
-        _UiWaveTimer.gameObject.SetActive(true);
-    }
-    private void UIChangeRound()
-    {
-        if (!actualRoundDisplay) return;
-
-        if (_UiWaveTimer != null) _UiWaveTimer.text = "";
-        if (_UiBetweenWavesTimer != null) _UiBetweenWavesTimer.text = "";
-        if (_UiWaveCounter != null) _UiWaveCounter.text = "";
-        if (_UiEnemyCounter != null) _UiEnemyCounter.text = "";
-
-        if (_UiRoundCounter != null)
-            {
-                Dialogue roundDialogue = _UiRoundCounter.GetComponent<Dialogue>();
-                roundDialogue.Lines[0] = $"Ronda {currentRound}";
-                roundDialogue.Delays[0] = (roundDialogue.TextSpeed * 9);
-                roundDialogue.StartDialogue();
-                actualRoundDisplay = false;
-            }
-
-    }
 
     #region FUNCIONES SUSCRITAS A EVENTOS
     /// <summary>
@@ -276,6 +250,8 @@ public class RoundManager : MonoBehaviour
         aliveEnemies -=1;
         enemiesKilledOnWave = waveSize - aliveEnemies;
         scoreManager.AddEnemyKilled(1);
+        
+        if(UIManager.Singleton) UIManager.Singleton.UIEnemiesAlive(aliveEnemies);
     }
 #endregion
 

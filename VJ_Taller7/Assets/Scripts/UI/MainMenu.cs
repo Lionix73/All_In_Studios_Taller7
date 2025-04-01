@@ -52,16 +52,23 @@ public class UIManager : MonoBehaviour
     private float killedEnemiesUI = 0;
     [SerializeField] private bool IsPaused = false;
     [SerializeField] private bool IsDead = false;
+    public bool actualRoundDisplay = true;
     [SerializeField] GameObject[] screens;
     [SerializeField] int activeScene;
     [SerializeField] Image healthBar;
 
-    [SerializeField] Image gunImage;
-    [SerializeField] TextMeshProUGUI gunTypeText;
-    [SerializeField] TextMeshProUGUI ammoText;
-    [SerializeField] TextMeshProUGUI maxTotalAmmoText;
-    [SerializeField] TextMeshProUGUI enemiesKilledText;
-    [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] private Image gunImage;
+    [SerializeField] private TextMeshProUGUI gunTypeText;
+    [SerializeField] private TextMeshProUGUI ammoText;
+    [SerializeField] private TextMeshProUGUI maxTotalAmmoText;
+    [SerializeField] private TextMeshProUGUI enemiesKilledText;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI UiWaveTimer;
+    [SerializeField] private TextMeshProUGUI UiBetweenWavesTimer;
+    [SerializeField] private TextMeshProUGUI UiWaveCounter;
+    [SerializeField] private TextMeshProUGUI UiRoundCounter;
+    [SerializeField] private TextMeshProUGUI UiEnemyCounter;
+    [SerializeField] private GameObject UIWaves;
 
     public void SelectedScene(string scene)
     {
@@ -155,4 +162,43 @@ public class UIManager : MonoBehaviour
     {
         scoreText.text = actualScore.ToString();
     }
+
+    public void UIChangeRound(int currentRound)
+    {
+        if (!actualRoundDisplay) return;
+
+        UiWaveTimer.text = "";
+        UiWaveCounter.text = "";
+        UiEnemyCounter.text = "";
+        Dialogue roundDialogue = UiRoundCounter.GetComponent<Dialogue>();
+        roundDialogue.Lines[0] = $"Ronda {currentRound}";
+        roundDialogue.Delays[0] = (roundDialogue.TextSpeed * 9);
+        roundDialogue.StartDialogue();
+        actualRoundDisplay = false;
+
+    }
+
+    public void UIBetweenWavesTimer(float inBetweenRoundsTimer)
+    {
+        Dialogue roundDialogue = UiRoundCounter.GetComponent<Dialogue>();
+        if (roundDialogue.FinishDialogue)
+        {
+            UiBetweenWavesTimer.text = $"Siguiente ronda en: \n {Mathf.FloorToInt(inBetweenRoundsTimer / 60)} : {Mathf.FloorToInt(inBetweenRoundsTimer % 60)}";
+        }
+    }
+    public void UIBetweenWaves(float waveTimer)
+    {
+        UiWaveTimer.text = $"Tiempo restante: \n {Mathf.FloorToInt(waveTimer / 60)} : {Mathf.FloorToInt(waveTimer % 60)}";
+    }
+
+    public void UIActualWave(int currentWave)
+    {
+        UiWaveCounter.text = $"Oleada: {currentWave} /3";
+    }
+
+    public void UIEnemiesAlive(int enemiesAlive)
+    {
+        UiEnemyCounter.text = $"Enemigos Restantes: {enemiesAlive}";
+    }
+
 }
