@@ -19,10 +19,11 @@ public class GameManager : MonoBehaviour
 
     public Transform spawntPoint;
     public GameObject playerPrefab;
-    
+
     //public List<GameObject> activePlayers = new List<GameObject>();
 
     [Header("Managers")]
+    public UIManager UIManager;
     public PlayerManager playerManager;
     public RoundManager roundManager;
     public EnemyWavesManager enemyWavesManager;
@@ -75,6 +76,9 @@ public class GameManager : MonoBehaviour
     public void PlayerDied(GameObject player) {
         PlayerDie?.Invoke(player);
         isGameOver = true; //Primero saber si el otro jugador esta vivo y depues si confirmar el game over
+        if(UIManager.Singleton != null) UIManager.Singleton.DiedUI(6);
+
+        if (spawnPlayerWithMenu) return;
 
         playerManager.RespawnPlayerOrder(playerPrefab,spawntPoint);
         

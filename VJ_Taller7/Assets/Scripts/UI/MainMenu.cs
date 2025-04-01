@@ -19,7 +19,9 @@ public class UIManager : MonoBehaviour
             }
             else if (_singleton != value)
             {
-                Destroy(value);
+                Destroy(value.gameObject);
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
                 Debug.LogError($"There should only ever be one instance of {nameof(UIManager)}");
             }
         }
@@ -74,11 +76,30 @@ public class UIManager : MonoBehaviour
     }
     public void PauseGame(int indexPauseScreen)
     {
+
         IsPaused = !IsPaused;
+        Cursor.visible = IsPaused;
         screens[indexPauseScreen].SetActive(IsPaused);
+        if(IsPaused)
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
 
     }
-
+    public void DiedUI(int indexDiedUI)
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        screens[indexDiedUI].SetActive(true);
+    }
+    public void SetCameraCanva()
+    {
+        screens[2].GetComponent<Canvas>().worldCamera = Camera.main;
+    }
     public void PlayScene(int indexInGameUI)
     {
         screens[0].SetActive(false);
@@ -88,13 +109,17 @@ public class UIManager : MonoBehaviour
     {
         screens[0].SetActive(true);
         screens[indexInGameUI].SetActive(false);
+
     }
 
     public void GetPlayerHealth(float playerHealth, float maxHealth)
     {
         healthBar.fillAmount = Mathf.Clamp(playerHealth / maxHealth, 0, 1);
     }
-
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
     public void GetPlayerGunInfo(int actualAmmo,int maxActualAmmo, GunScriptableObject equippedGun)
     {
         GetPlayerActualAmmo(actualAmmo, maxActualAmmo);

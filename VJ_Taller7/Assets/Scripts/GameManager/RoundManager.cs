@@ -47,6 +47,7 @@ public class RoundManager : MonoBehaviour
     private TextMeshProUGUI _UiWaveCounter;
     private TextMeshProUGUI _UiRoundCounter;
     private TextMeshProUGUI _UiEnemyCounter;
+    private bool actualRoundDisplay = false;
 
     [Header("Managers")]
     private ScoreManager scoreManager;
@@ -78,6 +79,7 @@ public class RoundManager : MonoBehaviour
         scoreManager = GetComponent<ScoreManager>();
         enemySpawner = GetComponent<EnemyWaves>();
         enemyWavesManager = GetComponent<EnemyWavesManager>();
+        actualRoundDisplay = true;
         
         SetEnemiesInSpawner();
     }
@@ -102,7 +104,8 @@ public class RoundManager : MonoBehaviour
         }
 
         if (_Simulating) UpdateTimers();
-
+        
+        if (GameManager.Instance.spawnPlayerWithMenu) return;
         UISet();
 
     }
@@ -113,8 +116,9 @@ public class RoundManager : MonoBehaviour
     /// </summary>
     private void UpdateTimers(){
         if (inBetweenRounds) {
+            UIChangeRound();
+            UIBetweenWavesTimer();
             inBetweenRoundsTimer -= Time.deltaTime;
-
             if (inBetweenRoundsTimer<=0){
             currentWave++;
             SetWaveBalance();
@@ -124,10 +128,12 @@ public class RoundManager : MonoBehaviour
             }
         }
         else {
+            UIBetweenWaves();
             waveTimer -= Time.deltaTime;
             if (waveTimer <= 0){
             //End round
             inBetweenRounds = true;
+            
             //castigar por no completar
             //aumentar el escalado de los enemigos o repetir
             }
@@ -216,13 +222,52 @@ public class RoundManager : MonoBehaviour
         }
         
     }
+    private void UIBetweenWavesTimer()
+    {
+        Dialogue roundDialogue = _UiRoundCounter.GetComponent<Dialogue>();
+        if (roundDialogue.FinishDialogue)
+        {
+            if (_UiBetweenWavesTimer != null) _UiBetweenWavesTimer.text = $"Siguiente ronda en: \n {Mathf.FloorToInt(inBetweenRoundsTimer / 60)} : {Mathf.FloorToInt(inBetweenRoundsTimer % 60)}";
+            if (_UiWaveCounter != null) _UiWaveCounter.text = "";
+            if (_UiEnemyCounter != null) _UiEnemyCounter.text = "";
+            _UiBetweenWavesTimer.gameObject.SetActive(true);
+            _UiWaveTimer.gameObject.SetActive(false);
+        }
+    }
+    private void UIBetweenWaves()
+    {
+        if (_UiWaveTimer != null) _UiWaveTimer.text = $"Tiempo restante: \n {Mathf.FloorToInt(waveTimer / 60)} : {Mathf.FloorToInt(waveTimer % 60)}";
+        if (_UiWaveCounter != null) _UiWaveCounter.text = $"Oleada: {currentWave} /3";
+        if (_UiEnemyCounter != null) _UiEnemyCounter.text = $" Enemigos restantes: \n {aliveEnemies}";
+        _UiBetweenWavesTimer.gameObject.SetActive(false);
+        _UiWaveTimer.gameObject.SetActive(true);
+    }
+    private void UIChangeRound()
+    {
+        if (!actualRoundDisplay) return;
 
-#region FUNCIONES SUSCRITAS A EVENTOS
-/// <summary>
-/// Decirle al score manager ocurrio algo que cambio la puntación
-/// </summary>
-/// <param name="sender"></param>
-/// <param name="e"></param>
+        if (_UiWaveTimer != null) _UiWaveTimer.text = "";
+        if (_UiBetweenWavesTimer != null) _UiBetweenWavesTimer.text = "";
+        if (_UiWaveCounter != null) _UiWaveCounter.text = "";
+        if (_UiEnemyCounter != null) _UiEnemyCounter.text = "";
+
+        if (_UiRoundCounter != null)
+            {
+                Dialogue roundDialogue = _UiRoundCounter.GetComponent<Dialogue>();
+                roundDialogue.Lines[0] = $"Ronda {currentRound}";
+                roundDialogue.Delays[0] = (roundDialogue.TextSpeed * 9);
+                roundDialogue.StartDialogue();
+                actualRoundDisplay = false;
+            }
+
+    }
+
+    #region FUNCIONES SUSCRITAS A EVENTOS
+    /// <summary>
+    /// Decirle al score manager ocurrio algo que cambio la puntación
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     public void ChangeScore(Enemy enemy){
         scoreManager.SetScore(enemy.scoreOnKill);
     }
