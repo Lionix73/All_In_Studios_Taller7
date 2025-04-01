@@ -168,7 +168,7 @@ public class EnemyMovement : MonoBehaviour
             animator.SetFloat("Horizontal", speedX.CurrentValue);
             animator.SetFloat("Vertical", speedY.CurrentValue);
 
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir), 180 * Time.deltaTime);        
+            //transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir), 180 * Time.deltaTime);        
         }
         else{
             animator.SetFloat("Horizontal", 0, 0.25f, Time.deltaTime);

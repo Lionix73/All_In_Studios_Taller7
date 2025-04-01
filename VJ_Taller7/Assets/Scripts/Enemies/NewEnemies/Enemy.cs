@@ -195,12 +195,12 @@ public class Enemy : PoolableObject, IDamageable
         
         if (floatingTextPrefab != null)
         {
-            //ShowFloatingText(damage);
+            //ShowFloatingText(damage, floatingTextPrefab);
         }
 
         healthBar.SetProgress(Health / maxHealth, 3);
 
-        Debug.Log("Enemy Health: " + Health);
+        //Debug.Log("Enemy Health: " + Health);
 
         if (Health <= 0){
 

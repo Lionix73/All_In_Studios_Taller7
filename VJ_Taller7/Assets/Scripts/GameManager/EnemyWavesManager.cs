@@ -53,6 +53,7 @@ public class EnemyWavesManager : MonoBehaviour
 
     private void Awake()
     {
+        ObjectPool.ClearPools();
         GameManager.Instance.PlayerSpawned += GetPlayer;
         OnEnemySpawned += GameManager.Instance.roundManager.enemyHaveSpawn;
 

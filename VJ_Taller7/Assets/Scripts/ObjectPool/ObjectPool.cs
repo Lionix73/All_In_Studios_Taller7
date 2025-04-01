@@ -52,7 +52,7 @@ public class ObjectPool
 
     public PoolableObject GetObject()
     {
-        if (AvailableObjectsPool.Count == 0)
+        if (AvailableObjectsPool.Count <= 0)
         {
             CreateObject();
         } 
@@ -69,5 +69,17 @@ public class ObjectPool
     public void ReturnObjectToPool(PoolableObject Object)
     {
         AvailableObjectsPool.Add(Object);
+    }
+
+    public static void ClearPools()
+    {
+        foreach (var pool in ObjectPools.Values)
+        {
+            if (pool.parent != null)
+            {
+                GameObject.Destroy(pool.parent);
+            }
+        }
+        ObjectPools.Clear();
     }
 }
