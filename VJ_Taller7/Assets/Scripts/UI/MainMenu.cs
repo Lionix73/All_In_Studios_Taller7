@@ -49,7 +49,9 @@ public class UIManager : MonoBehaviour
 
     }
 
+    private float killedEnemiesUI = 0;
     [SerializeField] private bool IsPaused = false;
+    [SerializeField] private bool IsDead = false;
     [SerializeField] GameObject[] screens;
     [SerializeField] int activeScene;
     [SerializeField] Image healthBar;
@@ -58,6 +60,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI gunTypeText;
     [SerializeField] TextMeshProUGUI ammoText;
     [SerializeField] TextMeshProUGUI maxTotalAmmoText;
+    [SerializeField] TextMeshProUGUI enemiesKilledText;
+    [SerializeField] TextMeshProUGUI scoreText;
 
     public void SelectedScene(string scene)
     {
@@ -76,6 +80,7 @@ public class UIManager : MonoBehaviour
     }
     public void PauseGame(int indexPauseScreen)
     {
+        if (IsDead) return;
 
         IsPaused = !IsPaused;
         Cursor.visible = IsPaused;
@@ -92,9 +97,13 @@ public class UIManager : MonoBehaviour
     }
     public void DiedUI(int indexDiedUI)
     {
+        IsDead = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         screens[indexDiedUI].SetActive(true);
+        screens[5].SetActive(false);
+        if (!IsPaused) return;
+        PauseGame(4);
     }
     public void SetCameraCanva()
     {
@@ -109,6 +118,7 @@ public class UIManager : MonoBehaviour
     {
         screens[0].SetActive(true);
         screens[indexInGameUI].SetActive(false);
+        IsDead = false;
 
     }
 
@@ -119,6 +129,7 @@ public class UIManager : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        IsDead = false;
     }
     public void GetPlayerGunInfo(int actualAmmo,int maxActualAmmo, GunScriptableObject equippedGun)
     {
@@ -135,4 +146,13 @@ public class UIManager : MonoBehaviour
         maxTotalAmmoText.text = $"{totalAmmo}";
     }
 
+    public void GetPlayerActualKills(float actualKills)
+    {
+        enemiesKilledText.text = actualKills.ToString();
+    }
+
+    public void GetPlayerActualScore(float actualScore)
+    {
+        scoreText.text = actualScore.ToString();
+    }
 }
