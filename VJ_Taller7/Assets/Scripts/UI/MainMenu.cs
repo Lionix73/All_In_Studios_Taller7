@@ -70,6 +70,17 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI UiEnemyCounter;
     [SerializeField] private GameObject UIWaves;
 
+    public void StartGameUI()
+    {
+        screens[5].SetActive(true);
+        actualRoundDisplay = true;
+        UiWaveTimer.text = "";
+        UiWaveCounter.text = "";
+        UiEnemyCounter.text = "";
+        UiRoundCounter.gameObject.SetActive(true);
+        UiRoundCounter.text = "";
+
+    }
     public void SelectedScene(string scene)
     {
         SceneManager.LoadScene(scene);
@@ -104,13 +115,16 @@ public class UIManager : MonoBehaviour
     }
     public void DiedUI(int indexDiedUI)
     {
+        if (IsPaused)
+        {
+            PauseGame(4);
+        }
+
         IsDead = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         screens[indexDiedUI].SetActive(true);
         screens[5].SetActive(false);
-        if (!IsPaused) return;
-        PauseGame(4);
     }
     public void SetCameraCanva()
     {
@@ -135,6 +149,7 @@ public class UIManager : MonoBehaviour
     }
     public void RestartGame()
     {
+        StartGameUI();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         IsDead = false;
     }
