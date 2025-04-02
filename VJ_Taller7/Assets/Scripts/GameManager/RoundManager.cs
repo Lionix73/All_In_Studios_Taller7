@@ -99,9 +99,12 @@ public class RoundManager : MonoBehaviour
             inBetweenRounds = true; //Next round
 
             OnWaveComplete?.Invoke(); //Se completo exitosamente la oleada, solo cuando acaba por matar a todos los enemigos
+            enemiesKilledOnWave = 0;
         }
 
         if (currentWave > 3){
+            //POR AHORA: AQUI TERMINARA LA ALPHA
+
             currentRound++;
             currentWave = 0;
             
