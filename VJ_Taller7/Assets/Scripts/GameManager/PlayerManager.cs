@@ -14,6 +14,8 @@ public class PlayerManager : MonoBehaviour
 
     [Header("Health Scale")]
     private float playerCurrentHealth; //Solo es reflejo de la vida del jugador, no cambiar
+    public float PlayerCurrentHealth { get { return playerCurrentHealth; } private set { playerCurrentHealth = value; } }
+
     private float playerMaxHealth; //Solo es el reflejo de la vida del jugador, no cambiar
     [SerializeField] private float playerStartingHealth; //Tengo que ver para cambiarla desde el spawn
     [SerializeField] private float healPerRound;
