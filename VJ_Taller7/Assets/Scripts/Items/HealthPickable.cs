@@ -9,7 +9,10 @@ public class HealthPickable : MonoBehaviour
 
     private void Awake()
     {
-        playerHealth = FindAnyObjectByType(typeof(Health)).GetComponent<Health>();
+        if (GameManager.Instance!=null){
+            GameManager.Instance.PlayerSpawned += GetPlayer;
+        }
+        
         soundManager = FindAnyObjectByType<SoundManager>();
     }
 
@@ -22,5 +25,10 @@ public class HealthPickable : MonoBehaviour
 
             Destroy(gameObject);
         }
+    }
+
+    private void GetPlayer(GameObject player){
+        //playerHealth = FindAnyObjectByType(typeof(Health)).GetComponent<Health>();
+        playerHealth = player.GetComponentInChildren<Health>();
     }
 }

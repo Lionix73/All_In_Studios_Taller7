@@ -9,7 +9,10 @@ public class AmmoPickable : MonoBehaviour
 
     private void Awake()
     {
-        playerAmmo = FindAnyObjectByType(typeof(GunManager)).GetComponent<GunManager>();
+        if (GameManager.Instance!=null){
+            GameManager.Instance.PlayerSpawned += GetPlayer;
+        }
+        
         soundManager = FindAnyObjectByType<SoundManager>();
     }
 
@@ -22,5 +25,10 @@ public class AmmoPickable : MonoBehaviour
 
             Destroy(gameObject);
         }
+    }
+
+    private void GetPlayer(GameObject player){
+        //playerAmmo = FindAnyObjectByType(typeof(GunManager)).GetComponent<GunManager>();
+        playerAmmo = player.GetComponentInChildren<GunManager>();
     }
 }
