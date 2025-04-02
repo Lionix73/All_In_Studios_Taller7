@@ -77,7 +77,8 @@ public class GunScriptableObject : ScriptableObject {
     public void Shoot(){
         if (Time.time > ShootConfig.FireRate + LastShootTime && bulletsLeft > 0 && !realoading){
             LastShootTime = Time.time;
-            ShootSystem.Play();
+            ShootSystem.Play(); 
+            ActiveMonoBehaviour.StartCoroutine(ShootingFeedback());
             bulletsLeft -= ShootConfig.BulletsPerShot;
 
             for (int i = 0; i < ShootConfig.BulletsPerShot; i++){
@@ -213,6 +214,35 @@ public class GunScriptableObject : ScriptableObject {
         trail.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 
         return trail;
+    }
+
+    private IEnumerator ShootingFeedback(){
+        SoundManager soundManager = FindFirstObjectByType<SoundManager>();
+        switch(Type)
+            {
+                case GunType.Rifle:
+                    soundManager.PlaySound("rifleFire");
+                    
+                    break;
+                case GunType.BasicPistol:
+                    soundManager.PlaySound("pistolFire");
+                   
+                    break;
+                case GunType.Revolver:
+                    soundManager.PlaySound("revolverFire");
+                    
+                    break;
+                case GunType.Shotgun:
+                    soundManager.PlaySound("shotgunFire");
+                   
+                    break;
+                case GunType.Sniper:
+                    soundManager.PlaySound("sniperFire");
+                    
+                    break;
+            }
+            yield return new WaitForSeconds(ShootConfig.FireRate);
+            //StopFeedback();
     }
 
     ///<summary>

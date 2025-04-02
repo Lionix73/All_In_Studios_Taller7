@@ -45,8 +45,6 @@ public class GunManager : MonoBehaviour
     private int CurrentSecondaryGunBulletsLeft;
 
     private Vector3 dondePegaElRayDelArma;
-    
-
 
 
     private void Awake() {
@@ -83,6 +81,7 @@ public class GunManager : MonoBehaviour
         }
         if (shooting && CurrentGun.BulletsLeft > 0) {
             CurrentGun.Shoot();
+
         }
         else if (CurrentGun.BulletsLeft<=0 && !CurrentGun.Realoading){
             RealoadGun();
@@ -155,10 +154,12 @@ public class GunManager : MonoBehaviour
             shooting=true;
         else if (!CurrentGun.ShootConfig.IsAutomatic) shooting = context.started;
 
-        if (context.canceled && CurrentGun.ShootConfig.IsAutomatic)
-            shooting = false; 
-        //Debug.Log("Fase: " + shooting);
+        if (context.canceled && CurrentGun.ShootConfig.IsAutomatic){
+            shooting = false; StopFeedback();
+            //Debug.Log("Fase: " + shooting);
+        }
 
+        if (context.started) ShootingFeedback();
     }
 
     public void OnWeaponChange(InputAction.CallbackContext context){
@@ -220,9 +221,11 @@ public class GunManager : MonoBehaviour
         }
     }
     private void RealoadGun(){
+        StopFeedback();
         CurrentGun.Reload();
         actualTotalAmmo -= CurrentGun.MagazineSize - CurrentGun.BulletsLeft;
-        StartCoroutine(Reload(CurrentGun.ReloadTime));
+        ReloadingFeedback();
+        //StartCoroutine(Reload(CurrentGun.ReloadTime)); //Deberia cordinarse la animacion al tiempo de recarga de las armas
         /*
         switch (Gun)
         {
@@ -250,6 +253,7 @@ public class GunManager : MonoBehaviour
         if(shooting) shooting = false;
         canShoot = false;
         yield return new WaitForSeconds(delay);
+        StopFeedback();
         canShoot = true;
     }
     #endregion
@@ -278,39 +282,94 @@ public class GunManager : MonoBehaviour
         Gizmos.DrawWireSphere(dondePegaElRayDelArma, 0.3f);
     }
 
-    private void ShootingFeedback(bool flag){
-        if (flag){
+    private void ShootingFeedback(){
         switch(CurrentGun.Type)
             {
                 case GunType.Rifle:
-                    soundManager.PlaySound("rifleFire");
+                    
                     playerAnimator.SetBool("ShootBurst", true);
                     break;
                 case GunType.BasicPistol:
-                    soundManager.PlaySound("pistolFire");
+                    
                     playerAnimator.SetTrigger("ShootOnce");
                     break;
                 case GunType.Revolver:
-                    soundManager.PlaySound("revolverFire");
+                    
                     playerAnimator.SetTrigger("ShootOnce");
                     break;
                 case GunType.Shotgun:
-                    soundManager.PlaySound("shotgunFire");
+                    
                     playerAnimator.SetTrigger("ShootOnce");
                     break;
                 case GunType.Sniper:
-                    soundManager.PlaySound("sniperFire");
+                    
                     playerAnimator.SetTrigger("ShootOnce");
                     break;
             }
-        }
-        else StopFeedback();
     }
     private void StopFeedback(){
         soundManager.StopSound("rifleFire");
         playerAnimator.SetBool("ShootBurst", false);
-    }
-    private void ReloadingSound(){
 
+        soundManager.StopSound("rifleReload");
+        soundManager.StopSound("pistolReload");
+        soundManager.StopSound("revolverReload");
+        soundManager.StopSound("shotgunReload");
+        soundManager.StopSound("sniperReload");
+    }
+    private void ReloadingFeedback(){
+        
+            playerAnimator.SetTrigger("Reload");
+
+            StartCoroutine(AnimLayerCountdown("Reload", 4.5f));
+
+            switch (CurrentGun.Type)
+            {
+                case GunType.Rifle:
+                    soundManager.PlaySound("rifleReload");
+                    //StartCoroutine(Reload(2));
+                    break;
+                case GunType.BasicPistol:
+                    soundManager.PlaySound("pistolReload");
+                    //StartCoroutine(Reload(2.12f));
+                    break;
+                case GunType.Revolver:
+                    soundManager.PlaySound("revolverReload");
+                    //StartCoroutine(Reload(4.3f));
+                    break;
+                case GunType.Shotgun:
+                    soundManager.PlaySound("shotgunReload");
+                    //StartCoroutine(Reload(5.4f));
+                    break;
+                case GunType.Sniper:
+                    soundManager.PlaySound("sniperReload");
+                    //StartCoroutine(Reload(1.45f));
+                    break;
+            }
+            StartCoroutine(Reload(CurrentGun.ReloadTime));
+        
+    }
+    private IEnumerator AnimLayerCountdown(string layer, float delay)
+    {
+        float timer = 0f;
+        int layerI = playerAnimator.GetLayerIndex(layer);
+        playerAnimator.SetLayerWeight(layerI, 1);
+
+        while (timer < delay)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        playerAnimator.SetLayerWeight(layerI, 0);
+
+        //Math.Clamp(timer, 0, 1);
+        //while(animator.GetLayerWeight(layerI) > 0)
+        //{
+        //    timer -= Time.deltaTime;
+
+        //    animator.SetLayerWeight(layerI, timer);
+        //    yield return null;
+        //}
     }
 }

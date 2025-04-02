@@ -364,7 +364,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnFire(InputAction.CallbackContext context)
+    public void OnFire(InputAction.CallbackContext context) //Lo pase al game manager ATT: Jacobo
     {
         if (!canShoot) return;
 
@@ -402,7 +402,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnReload(InputAction.CallbackContext context)
+    public void OnReload(InputAction.CallbackContext context) //Lo pase al game manager ATT: Jacobo
     {
         if(context.performed && canReload)
         {

@@ -65,7 +65,6 @@ public class RoundManager : MonoBehaviour
     public event RoundComplete OnRoundComplete;
 
     private void Awake() {
-        if (_RoundUI !=null) return;
         _RoundUI = GameObject.Find("RoundsCanva");
 
 
