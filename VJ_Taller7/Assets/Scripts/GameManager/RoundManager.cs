@@ -66,7 +66,7 @@ public class RoundManager : MonoBehaviour
 
     private void Awake() {
         _RoundUI = GameObject.Find("RoundsCanva");
-
+       
 
         _UiWaveTimer = _RoundUI.transform.Find("WaveTimer").GetComponent<TextMeshProUGUI>();
         _UiBetweenWavesTimer = _RoundUI.transform.Find("BetweenWavesTimer").GetComponent<TextMeshProUGUI>();
@@ -105,6 +105,7 @@ public class RoundManager : MonoBehaviour
         if (currentWave > 3){
             //POR AHORA: AQUI TERMINARA LA ALPHA
             if (UIManager.Singleton) UIManager.Singleton.WinUI(7);
+            _Simulating= false;
             currentRound++;
             currentWave = 0;
             

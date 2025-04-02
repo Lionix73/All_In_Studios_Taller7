@@ -241,7 +241,7 @@ public class UIManager : MonoBehaviour
         UiWaveCounter.text = "";
         UiEnemyCounter.text = "";
         Dialogue roundDialogue = UiRoundCounter.GetComponent<Dialogue>();
-        roundDialogue.Lines[0] = $"Ronda {currentRound}";
+        roundDialogue.Lines[0] = $"RONDA {currentRound}";
         roundDialogue.Delays[0] = (roundDialogue.TextSpeed * 9);
         roundDialogue.StartDialogue();
         actualRoundDisplay = false;
