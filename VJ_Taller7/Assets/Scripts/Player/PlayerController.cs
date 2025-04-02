@@ -354,6 +354,9 @@ public class PlayerController : MonoBehaviour
         {
             isAiming = false;
         }
+
+        if (context.started) gunManager.CheckZoomIn();
+        if (context.canceled) gunManager.CheckZoomOut();
     }
 
     public void OnChangeGun(InputAction.CallbackContext context)

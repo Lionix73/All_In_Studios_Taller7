@@ -362,14 +362,12 @@ public class GunManager : MonoBehaviour
         }
 
         playerAnimator.SetLayerWeight(layerI, 0);
+    }
 
-        //Math.Clamp(timer, 0, 1);
-        //while(animator.GetLayerWeight(layerI) > 0)
-        //{
-        //    timer -= Time.deltaTime;
-
-        //    animator.SetLayerWeight(layerI, timer);
-        //    yield return null;
-        //}
+    public void CheckZoomIn(){
+        if (CurrentGun.Type == GunType.Sniper) crosshairManager.AimingZoomIn(); 
+    }
+    public void CheckZoomOut(){
+        crosshairManager.AimingZoomOut();
     }
 }

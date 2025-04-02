@@ -41,4 +41,11 @@ public class CrosshairManager : MonoBehaviour
     public void SetCrosshairImage(Sprite image){
         crosshairImage.sprite = image;
     }
+
+    public void AimingZoomIn(){
+        crosshairImage.rectTransform.localScale = new Vector3(20,20,1);
+    }
+    public void AimingZoomOut(){
+        crosshairImage.rectTransform.localScale = new Vector3(1,1,1);
+    }
 }
