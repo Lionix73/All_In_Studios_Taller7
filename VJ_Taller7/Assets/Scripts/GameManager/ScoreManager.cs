@@ -19,10 +19,10 @@ public class ScoreManager : MonoBehaviour
 
     public void SetScore(int sco){
         score += sco;
+        if(UIManager.Singleton) UIManager.Singleton.GetPlayerActualScore(score);
         if (_UIscoreText==null) return;
         _UIscoreText.text = $"{score}";
 
-        if(UIManager.Singleton) UIManager.Singleton.GetPlayerActualScore(score);
     }
 
     public void AddEnemyKilled(int killedEnemy)

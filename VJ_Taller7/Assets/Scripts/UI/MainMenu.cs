@@ -58,6 +58,7 @@ public class UIManager : MonoBehaviour
                 Debug.LogWarning($"El GameObject {sceneGO.name} no tiene un componente SceneInfoButton");
             }
         }
+        IsMainMenu = true;
     }
 
     private void OnDestroy()
@@ -76,8 +77,10 @@ public class UIManager : MonoBehaviour
     }
 
     private float killedEnemiesUI = 0;
+    [SerializeField] private bool hasWon = false;
     [SerializeField] private bool IsPaused = false;
     [SerializeField] private bool IsDead = false;
+    [SerializeField] private bool IsMainMenu = false;
     public bool actualRoundDisplay = true;
     [SerializeField] GameObject[] screens;
     [SerializeField] int activeScene;
@@ -92,6 +95,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI maxTotalAmmoText;
     [SerializeField] private TextMeshProUGUI enemiesKilledText;
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI characterNameText;
+    [SerializeField] private TextMeshProUGUI scoreInGameText;
     [SerializeField] private TextMeshProUGUI UiWaveTimer;
     [SerializeField] private TextMeshProUGUI UiBetweenWavesTimer;
     [SerializeField] private TextMeshProUGUI UiWaveCounter;
@@ -102,13 +107,16 @@ public class UIManager : MonoBehaviour
 
     public void StartGameUI()
     {
+        IsMainMenu = false;
         screens[5].SetActive(true);
         actualRoundDisplay = true;
         UiWaveTimer.text = "";
         UiWaveCounter.text = "";
         UiEnemyCounter.text = "";
         UiRoundCounter.gameObject.SetActive(true);
+        characterNameText.text = CharacterManager.Instance.characters[CharacterManager.Instance.selectedIndexCharacter].name;
         UiRoundCounter.text = "";
+        scoreInGameText.text = "Score: ";
 
     }
     public void SelectedScene(string scene)
@@ -129,7 +137,8 @@ public class UIManager : MonoBehaviour
     public void PauseGame(int indexPauseScreen)
     {
         if (IsDead) return;
-
+        if (hasWon) return;
+        if (IsMainMenu) return;
         IsPaused = !IsPaused;
         Cursor.visible = IsPaused;
         screens[indexPauseScreen].SetActive(IsPaused);
@@ -156,6 +165,19 @@ public class UIManager : MonoBehaviour
         screens[indexDiedUI].SetActive(true);
         screens[5].SetActive(false);
     }
+    public void WinUI(int indexWinUI)
+    {
+        if (IsPaused)
+        {
+            PauseGame(4);
+        }
+
+        hasWon = true;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        screens[indexWinUI].SetActive(true);
+        screens[5].SetActive(false);
+    }
     public void SetCameraCanva()
     {
         screens[2].GetComponent<Canvas>().worldCamera = Camera.main;
@@ -167,9 +189,11 @@ public class UIManager : MonoBehaviour
     }
     public void BackToMenu(int indexInGameUI)
     {
+        IsMainMenu = true;
         screens[0].SetActive(true);
         screens[indexInGameUI].SetActive(false);
         IsDead = false;
+        hasWon = false;
 
     }
 
@@ -206,6 +230,7 @@ public class UIManager : MonoBehaviour
     public void GetPlayerActualScore(float actualScore)
     {
         scoreText.text = actualScore.ToString();
+        scoreInGameText.text = $"Score: {actualScore}";
     }
 
     public void UIChangeRound(int currentRound)

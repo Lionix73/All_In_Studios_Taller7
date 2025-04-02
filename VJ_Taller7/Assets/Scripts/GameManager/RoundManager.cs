@@ -104,7 +104,7 @@ public class RoundManager : MonoBehaviour
 
         if (currentWave > 3){
             //POR AHORA: AQUI TERMINARA LA ALPHA
-
+            if (UIManager.Singleton) UIManager.Singleton.WinUI(7);
             currentRound++;
             currentWave = 0;
             

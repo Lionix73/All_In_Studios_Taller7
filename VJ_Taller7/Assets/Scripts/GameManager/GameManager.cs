@@ -54,9 +54,9 @@ public class GameManager : MonoBehaviour
 
     private void Start() {
         // Start the game
+        if (UIManager.Singleton) spawnPlayerWithMenu = true;
         SpawnPlayer();
 
-        if (UIManager.Singleton) spawnPlayerWithMenu = true;
         // Crear la logica para el juego en si
 
     }
