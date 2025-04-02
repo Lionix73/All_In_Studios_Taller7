@@ -13,13 +13,6 @@ public class PlayerController : MonoBehaviour
     public bool canMove = true;
     public float walkSpeed = 2f;
     public float runSpeed = 5f;
-    public float crouchHeight = 0.9f;
-    public float normalHeight = 1.8f;
-
-    [Header("Jump Settings")]
-    public float jumpVerticalForce = 10f;
-    public float jumpHorizontalForce = 5f;
-    public int maxJumps = 2;
 
     [Header("Animator")]
     public Animator animator;
@@ -38,8 +31,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashCooldown = 1f;
     
     [Header("Jump")]
+    public int maxJumps = 2;
+    public float jumpVerticalForce = 10f;
+    public float jumpHorizontalForce = 5f;
     [SerializeField] private float jumpDuration = 1.4f;
     [SerializeField] private float jumpCooldown = 1f;
+    [SerializeField] private float SlopeJumpDownforce = 50f;
 
     [Header("Slope Handling")]
     [SerializeField] private float maxSlopeAngle;
@@ -47,7 +44,7 @@ public class PlayerController : MonoBehaviour
     private RaycastHit slopeHit;
 
     [Header("Components")]
-    public Rigidbody rb;
+    private Rigidbody rb;
     public CapsuleCollider playerCollider;
     public CapsuleCollider crouchCollider;
     public Transform cameraTransform;
@@ -91,6 +88,7 @@ public class PlayerController : MonoBehaviour
     private bool isEmoting = false;
     private bool isAiming = false;
     private bool usingRifle = true;
+    private bool isJumping;
 
     private int jumpCount = 0;
 
@@ -112,6 +110,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         gunManager = FindAnyObjectByType<GunManager>();
         soundManager = FindAnyObjectByType<SoundManager>();
@@ -181,15 +180,15 @@ public class PlayerController : MonoBehaviour
             soundManager.StopSound("Walk", "Run");
         }
 
-        if(isGrounded) rb.useGravity = !OnSlope();
+        rb.useGravity = !OnSlope();
 
-        if (OnSlope())
+        if (OnSlope() && !isJumping)
         {
             rb.AddForce(GetSlopeMovement() * speed * 10f, ForceMode.Force);
 
             if (rb.linearVelocity.y > 0)
             {
-                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+                rb.AddForce(Vector3.down * SlopeJumpDownforce, ForceMode.Force);
             }
         }
     }
@@ -527,6 +526,7 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger("Jump");
             animator.SetBool("isJumping", true);
             canJump = false;
+            isJumping = true;
 
             StartCoroutine(Jump());
         }
@@ -545,6 +545,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(jumpDuration);
 
         animator.SetBool("isJumping", false);
+        isJumping = false;
         canJump = true;
     }
     #endregion
@@ -715,7 +716,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 50f))
         {
-            if (!isGrounded && this.rb.linearVelocity.y < 0.1f && this.rb.linearVelocity.y > -0.1f && hit.distance > 10) soundManager.PlaySound("Falling");
+            if (!isGrounded && this.rb.linearVelocity.y < 0.1f && this.rb.linearVelocity.y > -0.1f && hit.distance > 30) soundManager.PlaySound("Falling");
         }
     }
 
