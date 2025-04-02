@@ -1026,11 +1026,6 @@ MonoBehaviour:
   canMove: 1
   walkSpeed: 2
   runSpeed: 5
-  crouchHeight: 1
-  normalHeight: 2
-  jumpVerticalForce: 10
-  jumpHorizontalForce: 5
-  maxJumps: 2
   animator: {fileID: 5980219158352977901}
   speedX:
     smoothTime: 0.4
@@ -1045,11 +1040,14 @@ MonoBehaviour:
   dashSpeed: 100
   dashDuration: 0.1
   dashCooldown: 1
+  maxJumps: 2
+  jumpVerticalForce: 10
+  jumpHorizontalForce: 5
   jumpDuration: 0.5
   jumpCooldown: 0.1
+  SlopeJumpDownforce: 50
   maxSlopeAngle: 45
   stepRayLower: {fileID: 5360242663938076797}
-  rb: {fileID: 1003677143700119856}
   playerCollider: {fileID: 6623556822215707918}
   crouchCollider: {fileID: 6219980612350337670}
   cameraTransform: {fileID: 5529684897146147932}
@@ -1083,6 +1081,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthDisplay: {fileID: 0}
   maxHealth: 100
+  isDead: 0
   animator: {fileID: 5980219158352977901}
 --- !u!114 &197367228027467263
 MonoBehaviour:
@@ -1146,18 +1145,6 @@ MonoBehaviour:
       - m_Target: {fileID: 5148926526768909708}
         m_TargetAssemblyTypeName: GunManager, Assembly-CSharp
         m_MethodName: OnShoot
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 6034622846790848197}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnFire
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1305,18 +1292,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5148926526768909708}
         m_TargetAssemblyTypeName: GunManager, Assembly-CSharp
-        m_MethodName: OnReload
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 6034622846790848197}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: OnReload
         m_Mode: 0
         m_Arguments:

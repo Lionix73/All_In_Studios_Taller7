@@ -1,3 +1,5 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -32,6 +34,30 @@ public class UIManager : MonoBehaviour
     public void Awake()
     {
         Singleton = this;
+
+        // Asegúrate de que ambas listas tengan la misma cantidad de elementos
+        if (sceneList.Count != gameObjectsScenes.Count)
+        {
+            Debug.LogError("Las listas sceneList y gameObjectsScenes no tienen la misma cantidad de elementos!");
+            return;
+        }
+
+        for (int i = 0; i < sceneList.Count; i++)
+        {
+            SceneScriptableObject sceneData = sceneList[i];
+            GameObject sceneGO = gameObjectsScenes[i];
+
+            SceneInfoButton button = sceneGO.GetComponent<SceneInfoButton>();
+
+            if (button != null)
+            {
+                button.SetSceneData(sceneData);
+            }
+            else
+            {
+                Debug.LogWarning($"El GameObject {sceneGO.name} no tiene un componente SceneInfoButton");
+            }
+        }
     }
 
     private void OnDestroy()
@@ -57,6 +83,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] int activeScene;
     [SerializeField] Image healthBar;
 
+    [SerializeField] private List<SceneScriptableObject> sceneList = new List<SceneScriptableObject>();
+    [SerializeField] private List<GameObject> gameObjectsScenes = new List<GameObject>();
+
     [SerializeField] private Image gunImage;
     [SerializeField] private TextMeshProUGUI gunTypeText;
     [SerializeField] private TextMeshProUGUI ammoText;
@@ -69,6 +98,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI UiRoundCounter;
     [SerializeField] private TextMeshProUGUI UiEnemyCounter;
     [SerializeField] private GameObject UIWaves;
+
 
     public void StartGameUI()
     {

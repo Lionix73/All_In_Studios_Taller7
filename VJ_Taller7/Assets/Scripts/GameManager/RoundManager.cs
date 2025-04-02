@@ -67,7 +67,6 @@ public class RoundManager : MonoBehaviour
     private void Awake() {
         _RoundUI = GameObject.Find("RoundsCanva");
 
-        if (_RoundUI==null) return;
 
         _UiWaveTimer = _RoundUI.transform.Find("WaveTimer").GetComponent<TextMeshProUGUI>();
         _UiBetweenWavesTimer = _RoundUI.transform.Find("BetweenWavesTimer").GetComponent<TextMeshProUGUI>();
@@ -82,6 +81,8 @@ public class RoundManager : MonoBehaviour
 
         if (UIManager.Singleton)
         {
+            _RoundUI.SetActive(false);
+            _Simulating = true;
             UIManager.Singleton.UIChangeRound(currentRound);
         }
         
