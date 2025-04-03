@@ -44,7 +44,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1159201576650167091}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 106d13935a449e043b8d7448d122cffc, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: a2249e532b248d3438ff8696a5854af4, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -64,7 +64,7 @@ VideoPlayer:
   - 1
   m_Url: 
   m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
+  m_DirectAudioMutes: 01
   m_ControlledAudioTrackCount: 1
   m_PlayOnAwake: 1
   m_SkipOnDrop: 1
@@ -332,6 +332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cinematicDuration: 145
   startWithCinematic: 1
+  dialogueSound: {fileID: 4341161147919456561}
 --- !u!1 &4491643120121878523
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,8 +559,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textComp: {fileID: 5026708674539375439}
-  dialogueSound: {fileID: 4341161147919456561}
-  videoplayer: {fileID: 3805557968843279805}
   textSpeed: 0.04
   lines:
   - Many years ago, before human tongues could wag, the wisest of Arcania told a
