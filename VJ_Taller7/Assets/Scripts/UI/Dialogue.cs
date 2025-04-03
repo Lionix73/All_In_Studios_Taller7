@@ -22,7 +22,7 @@ public class Dialogue : MonoBehaviour
     private void Start()
     {
         textComp.text = string.Empty;
-        //StartDialogue();
+        StartDialogue();
     }
 
     public void StartDialogue()
