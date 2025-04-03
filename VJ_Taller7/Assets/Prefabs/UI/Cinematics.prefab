@@ -44,7 +44,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1159201576650167091}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: f40401d9545532145a4c684927dff8e5, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 106d13935a449e043b8d7448d122cffc, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -72,6 +72,73 @@ VideoPlayer:
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
+--- !u!1 &1605628664511392300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8517741197145692815}
+  - component: {fileID: 4341161147919456561}
+  m_Layer: 0
+  m_Name: DialogueSound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8517741197145692815
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1605628664511392300}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 42927842454606602}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4341161147919456561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1605628664511392300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 2070662527
+      Data2: 1336265007
+      Data3: 1068441528
+      Data4: 2074986088
+    Path: event:/UI/Cinematic1
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &3805557968843279805
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,6 +245,7 @@ RectTransform:
   - {fileID: 7350955423270756175}
   - {fileID: 6574925304184581374}
   - {fileID: 6510877291048829379}
+  - {fileID: 8517741197145692815}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -348,7 +416,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -474,12 +542,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textComp: {fileID: 5026708674539375439}
-  textSpeed: 0.01
+  dialogueSound: {fileID: 4341161147919456561}
+  videoplayer: {fileID: 3805557968843279805}
+  textSpeed: 0.04
   lines:
-  - yo skibiddi aaaaaaaaaaaaa aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa
-    aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaaaaaa
-  - what a sigma
+  - Many years ago, before human tongues could wag, the wisest of Arcania told a
+    prophecy
+  - The arrival of a new race
+  - "a being stronger than six elephants, smarter than twenty-three dolphins, and
+    swifter than eleven cheetahs\u2026"
+  - a creature fit to rule them all.
+  - It shall not rise from the earth, nor sail upon the waves, but descend from the
+    heavens, where its destiny lies.
+  - "Those blessed by the winds shall bring forth\u2026 the Golden Egg."
+  - Or so the legend went.
+  - But centuries passed, and the prophecy never seemed to come true.
+  - "Then again, the Girds were favored with each generation growing sharper than
+    the last, rising as Arcania\u2019s leaders thanks to their cutting-edge tech"
+  - especially our genius protagonists, Nyx and Umbra
+  - who, alongside their mother, were all set to steer these lands into the future.
+  - Or so they thought.
+  - "Because just as everything was smooth sailing\u2026 the long-forgotten prophecy
+    decided to force itself back into memory."
+  - "The dreaded Golden Egg\u2014with strength to tame the mightiest storm, speed
+    to outrun any gale, and a mind clearer than the eye of a hurricane\u2014was coming."
+  - The end of Arcania loomed for all.
+  - "Well\u2026 "
+  - almost all.
+  - "To Nyx and Umbra, it wasn\u2019t doom. Just another sibling\u2014one they\u2019d
+    gladly raise to rule beside them."
+  - "And so, Arcania\u2019s age of peace would meet its end. the tiny band of Golden
+    Phoenixes would stand against the might of the Manapati\u2026"
+  - "an all-or-nothing fight for their brother\u2019s life."
+  - "An all-or-nothing fight for Arcania\u2019s future."
   delays:
+  - 7.5
+  - 2.1
+  - 10
+  - 4
+  - 10
   - 8
   - 3
+  - 5
+  - 12
+  - 6
+  - 7
+  - 2
+  - 9
+  - 15
+  - 4.6
+  - 1.5
+  - 1.5
+  - 9
+  - 12
+  - 4
+  - 6
   finishDialogue: 0
