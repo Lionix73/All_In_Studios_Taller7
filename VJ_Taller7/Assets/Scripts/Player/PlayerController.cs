@@ -89,6 +89,7 @@ public class PlayerController : MonoBehaviour
     private bool isAiming = false;
     private bool usingRifle = true;
     private bool isJumping;
+    private bool wasOnGround;
 
     private int jumpCount = 0;
 
@@ -179,7 +180,8 @@ public class PlayerController : MonoBehaviour
             soundManager.StopSound("Walk", "Run");
         }
 
-        rb.useGravity = !OnSlope();
+        rb.useGravity = !isGrounded ? true : !OnSlope();
+
 
         if (OnSlope() && !isJumping)
         {
@@ -691,21 +693,22 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
-
     private void CheckGround()
     {
-        bool wasOnGround = isGrounded;
+        wasOnGround = isGrounded;
 
-        // set sphere position, with offset
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
         isGrounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
 
         if (isGrounded && !wasOnGround)
         {
             soundManager.StopSound("Falling");
-            soundManager.PlaySound("Landing");
-
             animator.applyRootMotion = true;
+        }
+
+        if(isGrounded && Mathf.Abs(rb.linearVelocity.y) > 10)
+        {
+            soundManager.PlaySound("Landing");
         }
 
         wasOnGround = isGrounded;
