@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f62f4d20996609a44815d53c4b4b6b2a, type: 2}
+  - {fileID: 2100000, guid: 41c9cc3ed81f4a9499e85ccb44830442, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,6 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5091264654343801261}
   - component: {fileID: 8694336497470198872}
+  - component: {fileID: 7408913862812194988}
   m_Layer: 0
   m_Name: HealthPickable
   m_TagString: Untagged
@@ -133,6 +134,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   respawnCooldown: 20
   model: {fileID: 7891894803900502876}
+--- !u!114 &7408913862812194988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3385714859154527558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9c6f6a54da910f47a8cd9899d31b045, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amplitude: 0.4
+  frequency: 0.6
+  rotationSpeed: 30
+  rotationAxis: {x: 0, y: 0, z: 1}
 --- !u!1 &7891894803900502876
 GameObject:
   m_ObjectHideFlags: 0
