@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        ObjectPool.ClearPools();
         playerManager = GetComponent<PlayerManager>();
         roundManager = GetComponent<RoundManager>();
         enemyWavesManager = GetComponent<EnemyWavesManager>();

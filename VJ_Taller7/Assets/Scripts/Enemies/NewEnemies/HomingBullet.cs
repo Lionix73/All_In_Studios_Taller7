@@ -27,7 +27,15 @@ public class HomingBullet : BulletEnemie
         Vector3 startPos = transform.position;
         Vector2 noise = new Vector2(Random.Range(MinNoise.x, MaxNoise.x), Random.Range(MinNoise.y, MaxNoise.y));
 
-        Vector3 bulletDirectionVector = new Vector3(target.position.x, target.position.y + yOffSet, target.position.z) - startPos;
+        Vector3 randomOffset = new Vector3(
+            Random.Range(-2f, 2f), // Adjust these values to control horizontal inaccuracy
+            Random.Range(-2f, 2f), // Adjust these values to control vertical inaccuracy
+            Random.Range(-2, 2f)  // Adjust these values to control depth inaccuracy
+        );
+
+        Vector3 targetWithOffset = target.position + new Vector3(0, yOffSet, 0) + randomOffset;
+
+        Vector3 bulletDirectionVector = targetWithOffset - startPos;
         Vector3 horizontalNoiseVector = Vector3.Cross(bulletDirectionVector, Vector3.up).normalized;
         float noisePosition = 0;
 
