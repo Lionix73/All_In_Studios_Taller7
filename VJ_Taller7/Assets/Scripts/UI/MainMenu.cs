@@ -89,6 +89,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private List<SceneScriptableObject> sceneList = new List<SceneScriptableObject>();
     [SerializeField] private List<GameObject> gameObjectsScenes = new List<GameObject>();
 
+    [SerializeField] private TMP_InputField inputFieldName;
+
     [SerializeField] private Image gunImage;
     [SerializeField] private TextMeshProUGUI gunTypeText;
     [SerializeField] private TextMeshProUGUI ammoText;
@@ -102,6 +104,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI UiWaveCounter;
     [SerializeField] private TextMeshProUGUI UiRoundCounter;
     [SerializeField] private TextMeshProUGUI UiEnemyCounter;
+    [SerializeField] private  List<GameObject> playerNameText = new List<GameObject>();
     [SerializeField] private GameObject UIWaves;
 
 
@@ -271,4 +274,13 @@ public class UIManager : MonoBehaviour
         UiEnemyCounter.text = $"Enemigos Restantes: {enemiesAlive}";
     }
 
+    public void SetPlayerName()
+    {
+        foreach (var playerNameGO in playerNameText)
+        {
+            TextMeshProUGUI playerName = playerNameGO.GetComponent<TextMeshProUGUI>();
+            playerName.text = inputFieldName.text;
+
+        }
+    }
 }
