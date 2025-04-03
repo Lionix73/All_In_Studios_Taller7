@@ -64,6 +64,10 @@ public class RoundManager : MonoBehaviour
     public event WaveComplete OnWaveComplete;
     public event RoundComplete OnRoundComplete;
 
+    public void PauseGame(bool state){
+        _Simulating = !state;
+    }
+
     private void Awake() {
         _RoundUI = GameObject.Find("RoundsCanva");
        

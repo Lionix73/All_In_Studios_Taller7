@@ -100,6 +100,11 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    public void PauseGame(){
+        isPaused = !isPaused;
+        if (UIManager.Singleton) roundManager.PauseGame(isPaused);
+    }
+
     /*
     public List<WeightedSpawnScriptableObject> GetBalanceWave(int wave){
         if (wavesBalance[wave-1].enemiesForTheWave == null) return null;
