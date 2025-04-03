@@ -107,7 +107,6 @@ public class PlayerController : MonoBehaviour
     private GunManager gunManager;
     private SoundManager soundManager;
     #endregion
-
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
