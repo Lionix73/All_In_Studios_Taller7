@@ -35,7 +35,7 @@ public class UIManager : MonoBehaviour
     {
         Singleton = this;
 
-        // Asegúrate de que ambas listas tengan la misma cantidad de elementos
+        // Asegï¿½rate de que ambas listas tengan la misma cantidad de elementos
         if (sceneList.Count != gameObjectsScenes.Count)
         {
             Debug.LogError("Las listas sceneList y gameObjectsScenes no tienen la misma cantidad de elementos!");
@@ -142,6 +142,9 @@ public class UIManager : MonoBehaviour
         if (IsDead) return;
         if (hasWon) return;
         if (IsMainMenu) return;
+
+        if (GameManager.Instance!=null) GameManager.Instance.PauseGame();
+        
         IsPaused = !IsPaused;
         Cursor.visible = IsPaused;
         screens[indexPauseScreen].SetActive(IsPaused);
