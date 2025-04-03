@@ -6,6 +6,7 @@ public class HealthPickable : MonoBehaviour
     [SerializeField] private float amountOfHealing;
     private Health playerHealth;
     private SoundManager soundManager;
+    private RespawnInteractables respawn;
 
     private void Awake()
     {
@@ -14,6 +15,7 @@ public class HealthPickable : MonoBehaviour
         }
         
         soundManager = FindAnyObjectByType<SoundManager>();
+        respawn = GetComponentInParent<RespawnInteractables>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -23,7 +25,8 @@ public class HealthPickable : MonoBehaviour
             playerHealth.TakeHeal(amountOfHealing);
             soundManager.PlaySound("Health");
 
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            respawn.StartCountdown();
         }
     }
 

@@ -6,6 +6,7 @@ public class AmmoPickable : MonoBehaviour
     [SerializeField] private int amountOfAmmo;
     private GunManager playerAmmo;
     private SoundManager soundManager;
+    private RespawnInteractables respawn;
 
     private void Awake()
     {
@@ -14,6 +15,7 @@ public class AmmoPickable : MonoBehaviour
         }
         
         soundManager = FindAnyObjectByType<SoundManager>();
+        respawn = GetComponentInParent<RespawnInteractables>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -23,7 +25,8 @@ public class AmmoPickable : MonoBehaviour
             playerAmmo.actualTotalAmmo += amountOfAmmo;
             soundManager.PlaySound("Ammo");
 
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            respawn.StartCountdown();
         }
     }
 
