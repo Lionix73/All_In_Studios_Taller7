@@ -9,8 +9,6 @@ using UnityEngine.Video;
 public class Dialogue : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI textComp;
-    [SerializeField] private StudioEventEmitter dialogueSound;
-    [SerializeField] private GameObject videoplayer;
     [SerializeField] private float textSpeed;
     [SerializeField] private string[] lines;
     [SerializeField] private float[] delays;
@@ -26,7 +24,6 @@ public class Dialogue : MonoBehaviour
     private void Start()
     {
         textComp.text = string.Empty;
-        dialogueSound.Play();
         StartDialogue();
     }
 
@@ -60,7 +57,6 @@ public class Dialogue : MonoBehaviour
         {
             StopAllCoroutines();
             finishDialogue = true;
-            videoplayer.SetActive(false);
             gameObject.SetActive(false);
         }
     }

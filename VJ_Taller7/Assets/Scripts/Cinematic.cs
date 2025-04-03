@@ -1,3 +1,4 @@
+using FMODUnity;
 using System.Collections;
 using UnityEngine;
 
@@ -5,17 +6,24 @@ public class Cinematic : MonoBehaviour
 {
     [SerializeField] private float cinematicDuration;
     [SerializeField] private bool startWithCinematic;
+    [SerializeField] private StudioEventEmitter dialogueSound;
 
     void Start(){
         if (startWithCinematic) {
             gameObject.SetActive(true);
+            dialogueSound.Play();
             StartCoroutine(WaitForCinematic());
         }
         else gameObject.SetActive(false);
     }
 
     private void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape)) EndCinematic();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            dialogueSound.Stop();
+            EndCinematic();
+        }
+
     }
     private IEnumerator WaitForCinematic(){
         yield return new WaitForSeconds(cinematicDuration);
