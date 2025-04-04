@@ -5,7 +5,7 @@ public class Health : MonoBehaviour, IDamageable
 {
     [SerializeField] private TextMeshProUGUI healthDisplay;
     [SerializeField] private float currentHealth { get; set; }
-    [SerializeField] private float maxHealth; 
+    [SerializeField] private float maxHealth { get; set; } 
     public delegate void HealthChanged(float currentHealth, float maxHealth);
     public event HealthChanged OnHealthChanged;
 
@@ -80,5 +80,15 @@ public class Health : MonoBehaviour, IDamageable
     public Transform GetTransform()
     {
         return transform;
+    }
+
+    public float GetMaxHeath
+    {
+        get { return maxHealth; }
+    }
+
+    public float GetCurrentHeath
+    {
+        get { return currentHealth; }
     }
 }

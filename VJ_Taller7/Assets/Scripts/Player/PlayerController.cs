@@ -669,7 +669,6 @@ public class PlayerController : MonoBehaviour
         canDash = false;
         isDashing = true;
 
-        soundManager.StopSound("Walk", "Run");
         soundManager.PlaySound("Dash");
 
         dashVFX.StartTrail();
@@ -685,7 +684,14 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = Vector3.zero;
         rb.AddForce(desiredMoveDirection.normalized * dashSpeed, ForceMode.Impulse);
 
-        yield return new WaitForSeconds(dashDuration);
+        float timer = 0;
+
+        while (timer < dashDuration)
+        {
+            soundManager.StopSound("Run");
+            timer += Time.deltaTime;
+            yield return null;
+        }
         animator.applyRootMotion = true;
         isDashing = false;
         rb.useGravity = true;
