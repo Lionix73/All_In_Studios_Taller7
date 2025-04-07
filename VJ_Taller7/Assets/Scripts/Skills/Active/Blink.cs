@@ -16,10 +16,11 @@ public class Blink : SkillBase
     {
         rb = GetComponentInParent<Rigidbody>();
         animator = GetComponentInParent<Animator>();
-        cooldown = cooldownThisSkill;
     }
     public override IEnumerator Execute()
     {
+        cooldown = cooldownThisSkill;
+
         animator.applyRootMotion = false;
         rb.useGravity = false;
 

@@ -17,6 +17,7 @@ public class Health : MonoBehaviour, IDamageable
 
     void Update()
     {
+        Debug.Log(maxHealth);
         if (UIManager.Singleton !=null)
         {
             UIManager.Singleton.GetPlayerHealth(currentHealth, maxHealth);
@@ -70,6 +71,7 @@ public class Health : MonoBehaviour, IDamageable
 
     public void ScaleHealth(float amount){
         maxHealth += amount;
+        if (currentHealth > maxHealth) currentHealth = maxHealth;
         HealthChange();
     }
     //Invoke the evento de que cambio la vida, llamar cada vez que ocurre un cambio

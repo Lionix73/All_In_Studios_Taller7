@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class PassiveSkillBase : MonoBehaviour, IPassiveSkill
 {
-    [SerializeField] protected float cooldown = 10f;
+    protected float cooldown;
     protected bool isOnCooldown = false;
 
     public bool IsOnCooldown => isOnCooldown;

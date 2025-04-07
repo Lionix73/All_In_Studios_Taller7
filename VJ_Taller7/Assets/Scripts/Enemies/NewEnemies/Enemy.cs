@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
+using Unity.VisualScripting;
+
 public class Enemy : PoolableObject, IDamageable
 {
     [Header("Enemy Components")]
@@ -206,7 +208,17 @@ public class Enemy : PoolableObject, IDamageable
 
             isDead = true;
 
-            if(!isStatic){
+            #region CarnivoroTemporal Skill
+            // Check if carnivoro skill is active
+            CarnivoroTemporal skill = FindAnyObjectByType(typeof(CarnivoroTemporal)).GetComponent<CarnivoroTemporal>();
+            
+            if(skill != null && skill.Carnivoro)
+            {
+                skill.HealthForKill();
+            }
+            #endregion
+
+            if (!isStatic){
                 agent.enabled = false;
             }
 

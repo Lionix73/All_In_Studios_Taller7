@@ -5,16 +5,11 @@ public class SkillManager : MonoBehaviour
     [SerializeField] private SkillBase[] skills;
     [SerializeField] private int activeSkillIndex;
 
-    private void Start()
+    public void ActivateSkill()
     {
-        ActivateSkill(activeSkillIndex);    
-    }
-
-    public void ActivateSkill(int index)
-    {
-        if (index >= 0 && index < skills.Length)
+        if (activeSkillIndex >= 0 && activeSkillIndex < skills.Length)
         {
-            skills[index].Activate();
+            skills[activeSkillIndex].Activate();
         }
         else
         {

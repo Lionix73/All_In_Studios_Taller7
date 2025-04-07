@@ -31,7 +31,7 @@ public class CarnivoroTemporal : SkillBase
         Carnivoro = false;
     }
 
-    private void HealthForKill()
+    public void HealthForKill()
     {
         float healthAmountToRecover = playerHealth.GetMaxHeath * (healthPerecentageToRecover / 100);
 
