@@ -12,15 +12,12 @@ using UnityEngine.Animations;
 public class PlayerControllerMulti : NetworkBehaviour
 {
     [Header("Movement Settings")]
+    public bool canMove = true;
     public float walkSpeed = 2f;
     public float runSpeed = 5f;
-    public float slideDuration = 3f;
     public float crouchHeight = 0.9f;
     public float normalHeight = 1.8f;
 
-    [Header("Jump Settings")]
-    public float jumpForce = 5f;
-    public int maxJumps = 2;
 
     [Header("Animator")]
     public Animator animator;
@@ -29,12 +26,22 @@ public class PlayerControllerMulti : NetworkBehaviour
     [SerializeField] private FloatDampener layersDampener1;
     [SerializeField] private FloatDampener layersDampener2;
 
+    [Header("Slide")]
+    [SerializeField] private float slideDuration = 3f;
+    [SerializeField] private float slideCooldown = 0.5f;
+
     [Header("Movimiento y Dash")]
     [SerializeField] private float dashSpeed = 15f;
     [SerializeField] private float dashDuration = 0.2f;
     [SerializeField] private float dashCooldown = 1f;
     [SerializeField] private float jumpDuration = 1.4f;
     [SerializeField] private float jumpCooldown = 1f;
+
+    [Header("Jump Settings")]
+
+    public int maxJumps = 2;
+    [SerializeField] private float jumpVerticalForce = 10f;
+    [SerializeField] private float jumpHorizontalForce = 5f;
 
     [Header("Slope Handling")]
     [SerializeField] private float maxSlopeAngle;
@@ -47,6 +54,11 @@ public class PlayerControllerMulti : NetworkBehaviour
     public CapsuleCollider crouchCollider;
     public Transform cameraTransform;
     [System.Obsolete] public CinemachineCamera freeLookCamera;
+    [SerializeField] private ParticleSystem slideVFX;
+    [SerializeField] private ParticleSystem jumpVFX;
+    [SerializeField] private MeshTrail dashVFX;
+
+
 
     [Header("Camera Settings")]
     [SerializeField] private Transform camTarget;
@@ -55,6 +67,19 @@ public class PlayerControllerMulti : NetworkBehaviour
     [SerializeField] private float tFOV = 1;
     [SerializeField] private float rotationSpeed = 10f;
     private bool wasAiming;
+
+    [Header("Player Grounded")]
+    [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
+    public bool isGrounded;
+
+    [Tooltip("Useful for rough ground")]
+    public float GroundedOffset = -0.14f;
+
+    [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
+    public float GroundedRadius = 0.28f;
+
+    [Tooltip("What layers the character uses as ground")]
+    public LayerMask GroundLayers;
 
     [SerializeField] private MultiAimConstraint aimRig;
     [SerializeField] private TwoBoneIKConstraint gripRig;
@@ -71,16 +96,19 @@ public class PlayerControllerMulti : NetworkBehaviour
     private bool isEmoting = false;
     private bool isAiming = false;
     private bool usingRifle = true;
+    private bool isJumping;
+    private bool wasOnGround;
 
-    private bool isGrounded;
     private int jumpCount = 0;
 
     private bool isDashing = false;
     private bool canDash = true;
+    private bool canMelee = true;
+    private bool canShoot = true;
+    private bool canReload = true;
 
     private int animationLayerToShow = 0;
 
-    private Vector3 dashDirection;
     private Vector3 slideDirection;
     private Vector3 desiredMoveDirection;
 
@@ -97,14 +125,15 @@ public class PlayerControllerMulti : NetworkBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-
         soundManager = FindAnyObjectByType<SoundManager>();
+        if (!IsOwner) return;
+        playerInput = GetComponent<PlayerInput>();
     }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-     
-        
+
+
         if (!IsOwner) return;
         //SpawnGunManagerRpc();
         playerInput = GetComponent<PlayerInput>();
@@ -124,22 +153,12 @@ public class PlayerControllerMulti : NetworkBehaviour
     private void Update()
     {
         if (!IsOwner) return;
+
         HandleAnimations();
         UpdateAnimLayer();
         adjustFOV();
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Cursor.visible = !Cursor.visible;
-            Cursor.lockState = CursorLockMode.None;
-            if (Cursor.visible)
-                InputSystem.PauseHaptics();
-            else
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                InputSystem.ResumeHaptics();
-            }
-        }
+        animator.SetBool("ShortGun", gunManager.CurrentGun.Type == GunType.BasicPistol || gunManager.CurrentGun.Type == GunType.Revolver ? true : false);
 
         AdjustRigs();
     }
@@ -147,59 +166,21 @@ public class PlayerControllerMulti : NetworkBehaviour
     private void FixedUpdate()
     {
         if (!IsOwner) return;
+
         CheckGround();
         HandleMovement();
         HandleRotation();
 
     }
 
-    [Rpc(SendTo.Server)]
-    public void SpawnGunManagerRpc()
-    {
-        // Instancia el objeto en el servidor
-        instanceGunMan = Instantiate(gunManagerPrefab);
-        instanceGunManNet = instanceGunMan.GetComponent<NetworkObject>();
-        instanceGunManNet.Spawn();
-
-        GetGunManagerRpc(instanceGunManNet.NetworkObjectId);
-
-    }
-    [Rpc(SendTo.Everyone)]
-    public void GetGunManagerRpc(ulong networkObjectId)
-    {
-        // Obtén el NetworkObject correspondiente al ID
-        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject spawnedGunManNet))
-        {
-            // Asigna el padre
-            bool success = spawnedGunManNet.TrySetParent(GetComponentInParent<NetworkObject>().transform, false);
-            if (success)
-            {
-                gunManager = spawnedGunManNet.GetComponent<GunManagerMulti2>();
-                if (gunManager != null)
-                {
-                    // Configura el GunManager si es necesario
-                }
-                else
-                {
-                    Debug.LogError("GunManagerMulti component not found.");
-                }
-                Debug.Log("Parent set successfully!");
-            }
-            else
-            {
-                Debug.LogError("Failed to set parent.");
-            }
-
-        }
-        else
-        {
-            Debug.LogError("Failed to find NetworkObject with ID: " + networkObjectId);
-        }
-
-    }
-
     private void HandleMovement()
     {
+        if (!canMove)
+        {
+            soundManager.StopSound("Walk", "Run");
+            return;
+        }
+
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
 
         desiredMoveDirection = (transform.right * moveDirection.x + transform.forward * moveDirection.z);
@@ -217,7 +198,7 @@ public class PlayerControllerMulti : NetworkBehaviour
                 soundManager.PlaySound("Run");
                 soundManager.StopSound("Walk");
             }
-            else if(isGrounded)
+            else if (isGrounded)
             {
                 soundManager.PlaySound("Walk");
                 soundManager.StopSound("Run");
@@ -232,6 +213,8 @@ public class PlayerControllerMulti : NetworkBehaviour
             isRunning = false;
             soundManager.StopSound("Walk", "Run");
         }
+
+        rb.useGravity = !isGrounded ? true : !OnSlope();
 
         if (OnSlope())
         {
@@ -280,13 +263,15 @@ public class PlayerControllerMulti : NetworkBehaviour
 
     private void ChangeAnimLayer(int index)
     {
+        if (!IsOwner) return;
+
         if (animationLayerToShow == index) return;
 
         animationLayerToShow = index;
 
-        if(Mathf.Abs(layersDampener1.TargetValue - layersDampener1.CurrentValue) <= 0.05f)
+        if (Mathf.Abs(layersDampener1.TargetValue - layersDampener1.CurrentValue) <= 0.05f)
         {
-            if(layersDampener1.TargetValue == 0)
+            if (layersDampener1.TargetValue == 0)
             {
                 layersDampener1.TargetValue = 1;
                 layersDampener2.TargetValue = 0;
@@ -356,15 +341,42 @@ public class PlayerControllerMulti : NetworkBehaviour
             }
         }
     }
+    private IEnumerator AnimLayerCountdown(string layer, float delay)
+    {
+        float timer = 0f;
+        int layerI = animator.GetLayerIndex(layer);
+        animator.SetLayerWeight(layerI, 1);
+
+        while (timer < delay)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        animator.SetLayerWeight(layerI, 0);
+
+        //Math.Clamp(timer, 0, 1);
+        //while(animator.GetLayerWeight(layerI) > 0)
+        //{
+        //    timer -= Time.deltaTime;
+
+        //    animator.SetLayerWeight(layerI, timer);
+        //    yield return null;
+        //}
+    }
+
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        Debug.Log("Mover");
+        if (!IsOwner) return;
+
         moveInput = context.ReadValue<Vector2>();
     }
 
     public void OnLook(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
+
         lookInput = context.ReadValue<Vector2>();
     }
 
@@ -385,8 +397,9 @@ public class PlayerControllerMulti : NetworkBehaviour
 
     public void OnChangeGun(InputAction.CallbackContext context)
     {
-        if(!IsOwner) return;
-        if(context.performed) 
+        if (!IsOwner) return;
+
+        if (context.performed)
         {
             animator.SetTrigger("ChangeGun");
         }
@@ -395,24 +408,32 @@ public class PlayerControllerMulti : NetworkBehaviour
     public void OnFire(InputAction.CallbackContext context)
     {
         if (!IsOwner) return;
+
+        if (!canShoot) return;
+
         if (context.started)
         {
-            switch(gunManager.Gun)
+            switch (gunManager.Gun)
             {
                 case GunType.Rifle:
                     soundManager.PlaySound("rifleFire");
+                    animator.SetBool("ShootBurst", true);
                     break;
                 case GunType.BasicPistol:
                     soundManager.PlaySound("pistolFire");
+                    animator.SetTrigger("ShootOnce");
                     break;
                 case GunType.Revolver:
                     soundManager.PlaySound("revolverFire");
+                    animator.SetTrigger("ShootOnce");
                     break;
                 case GunType.Shotgun:
                     soundManager.PlaySound("shotgunFire");
+                    animator.SetTrigger("ShootOnce");
                     break;
                 case GunType.Sniper:
                     soundManager.PlaySound("sniperFire");
+                    animator.SetTrigger("ShootOnce");
                     break;
             }
         }
@@ -420,6 +441,7 @@ public class PlayerControllerMulti : NetworkBehaviour
         if (context.canceled)
         {
             soundManager.StopSound("rifleFire");
+            animator.SetBool("ShootBurst", false);
         }
     }
 
@@ -458,15 +480,15 @@ public class PlayerControllerMulti : NetworkBehaviour
         if (!IsOwner) return;
         if (context.performed && moveInput.magnitude < 0.05f)
         {
-            if(!isEmoting) 
-            { 
-                soundManager.PlaySound("GangamStyle"); 
+            if (!isEmoting)
+            {
+                soundManager.PlaySound("GangamStyle");
             }
-            else 
-            { 
-                soundManager.StopSound("GangamStyle"); 
+            else
+            {
+                soundManager.StopSound("GangamStyle");
             }
-            
+
             isEmoting = !isEmoting;
         }
     }
@@ -491,15 +513,15 @@ public class PlayerControllerMulti : NetworkBehaviour
     /// Ajusta los rigs que se tienen para el agarre del arma
     /// con la otra mano y el punto donde se apunta
     /// </summary>
-    private void AdjustRigs(){
-        if (aimRig==null || gripRig == null) return;
-        else if (wasAiming){
-            aimRig.weight=1.0f;
+    private void AdjustRigs() {
+        if (aimRig == null || gripRig == null) return;
+        else if (wasAiming) {
+            aimRig.weight = 1.0f;
             gripRig.weight = 1.0f;
         }
-        else {aimRig.weight=0; gripRig.weight = 0.5f;}
+        else { aimRig.weight = 0; gripRig.weight = 0.5f; }
 
-        if (moveInput.magnitude!=0){
+        if (moveInput.magnitude != 0) {
             aimRig.weight = 1.0f;
         }
     }
@@ -507,49 +529,55 @@ public class PlayerControllerMulti : NetworkBehaviour
     public void OnJump(InputAction.CallbackContext context)
     {
         if (!IsOwner) return;
-        if (context.performed && jumpCount < maxJumps)
+
+        if (isGrounded)
         {
-            soundManager.StopSound("Walk", "Run");
-            soundManager.PlaySound("Jump");
+            canJump = true;
+            jumpCount = 0;
+        }
 
-            if(jumpCount == 0)
-            {
-                rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
-                rb.AddForce(desiredMoveDirection * 1.2f, ForceMode.Impulse);
-                
-                animator.SetTrigger("Jump");
-            }
-            else if (jumpCount == 1)
-            {
-                rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
-                rb.AddForce(desiredMoveDirection * 2, ForceMode.Impulse);
+        if (jumpCount > 1 || aimInput > 0.05f)
+        {
+            canJump = false;
+            return;
+        }
+        else { canJump = true; }
 
-                animator.SetTrigger("DoubleJump");
-            }
+        if (context.performed && jumpCount < maxJumps && canJump)
+        {
+            animator.applyRootMotion = false;
+
             jumpCount++;
+            animator.SetTrigger("Jump");
+            animator.SetBool("isJumping", true);
+            canJump = false;
+            isJumping = true;
 
-            if(canJump)
-            {
-                animator.SetBool("isJumping", true);
-                canJump = false;
-
-                StartCoroutine(Jump());
-            }
+            StartCoroutine(Jump());
         }
     }
 
     private IEnumerator Jump()
     {
-        float jumpTimer = 0f;
+        JumpVFXRpc();
+        Debug.Log("Reproducir Efecto");
+        soundManager.StopSound("Walk", "Run");
+        soundManager.PlaySound("Jump");
 
-        while (jumpTimer < jumpDuration)
-        {
-            jumpTimer += Time.deltaTime;
-            yield return null;
-        }
+        rb.linearVelocity = Vector3.zero;
+        rb.AddForce((desiredMoveDirection * jumpHorizontalForce) + (jumpVerticalForce * Vector3.up), ForceMode.Impulse);
+
+        yield return new WaitForSeconds(jumpDuration);
+
         animator.SetBool("isJumping", false);
-        yield return new WaitForSeconds(jumpCooldown);
+        isJumping = false;
         canJump = true;
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void JumpVFXRpc()
+    {
+        jumpVFX.Play();
     }
 
     public void OnRun(InputAction.CallbackContext context)
@@ -581,6 +609,39 @@ public class PlayerControllerMulti : NetworkBehaviour
             Invoke(nameof(ResetCrouchFlag), 0.5f);
         }
     }
+
+    #region Melee
+    public void OnMelee(InputAction.CallbackContext context)
+    {
+        if (context.performed && canMelee)
+        {
+            StartCoroutine(Melee());
+        }
+    }
+
+    private IEnumerator Melee()
+    {
+        animator.SetTrigger("Melee");
+        StartCoroutine(AnimLayerCountdown("Melee", 1.2f));
+
+        canMove = false;
+        canMelee = false;
+
+        GetComponentInChildren<Melee>().ActivateMelee();
+
+        float timer = 0f;
+        while (timer < 1.1f)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        canMove = true;
+        canMelee = true;
+        GetComponentInChildren<Melee>().DeactivateMelee();
+    }
+    #endregion
+
     [Rpc(SendTo.Everyone)]
     private void ExchangeCollidersRpc()
     {
@@ -602,20 +663,17 @@ public class PlayerControllerMulti : NetworkBehaviour
 
     private IEnumerator Slide()
     {
+        SlideVFXRpc();
+
         if (isSliding)
         {
-            float slideTimer = 0f;
+            soundManager.StopSound("Run");
 
-            while (slideTimer < slideDuration)
-            {
-                soundManager.StopSound("Run");
-                slideTimer += Time.deltaTime;
-                yield return null;
-            }
+            yield return new WaitForSeconds(slideDuration);
 
             isSliding = false;
             isCrouching = false;
-            yield return new WaitForSeconds(dashCooldown);
+            yield return new WaitForSeconds(slideCooldown);
 
             canSlide = true;
             ResetCrouchFlag();
@@ -627,7 +685,13 @@ public class PlayerControllerMulti : NetworkBehaviour
     {
         isSliding = true;
         canSlide = false;
-        animator.applyRootMotion = true;
+       // animator.applyRootMotion = true;
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void SlideVFXRpc()
+    {
+        slideVFX.Play();
     }
 
     private void ResetCrouchFlag()
@@ -637,7 +701,9 @@ public class PlayerControllerMulti : NetworkBehaviour
 
     public void OnDash()
     {
-        if (!canDash || isCrouching || isSliding || moveInput.magnitude < 0.05f) return;
+        if (!IsOwner) return;
+
+        if (!canDash || isCrouching || isSliding) return;
 
         canDash = false;
         isDashing = true;
@@ -645,25 +711,29 @@ public class PlayerControllerMulti : NetworkBehaviour
         soundManager.StopSound("Walk", "Run");
         soundManager.PlaySound("Dash");
 
-        dashDirection = desiredMoveDirection;
+        DashVFXRpc();
 
         StartCoroutine(DashCoroutine());
     }
 
+    [Rpc(SendTo.Everyone)]
+    public void DashVFXRpc()
+    {
+        dashVFX.StartTrail();
+    }
     private IEnumerator DashCoroutine()
     {
-        float dashTime = 0f;
+        animator.applyRootMotion = false;
+        rb.useGravity = false;
 
-        while (dashTime < dashDuration)
-        {
-            rb.useGravity = false;
-            rb.AddForce(dashDirection * dashSpeed, ForceMode.Impulse);
-            dashTime += Time.deltaTime;
-            yield return null;
-        }
+        rb.linearVelocity = Vector3.zero;
+        rb.AddForce(desiredMoveDirection.normalized * dashSpeed, ForceMode.Impulse);
 
+        yield return new WaitForSeconds(dashDuration);
+        animator.applyRootMotion = true;
         isDashing = false;
         rb.useGravity = true;
+
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
@@ -671,28 +741,33 @@ public class PlayerControllerMulti : NetworkBehaviour
 
     private void CheckGround()
     {
+        wasOnGround = isGrounded;
+
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
+        isGrounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
+
+        if (isGrounded && !wasOnGround)
+        {
+            soundManager.StopSound("Falling");
+            animator.applyRootMotion = true;
+        }
+
+        if (isGrounded && Mathf.Abs(rb.linearVelocity.y) > 10)
+        {
+            soundManager.PlaySound("Landing");
+        }
+
+        wasOnGround = isGrounded;
+
+        CheckHeight();
+    }
+
+    private void CheckHeight()
+    {
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 50f))
         {
-            if (hit.collider.gameObject.layer == 7 && isGrounded == false && hit.distance < 0.1f)
-            {
-                isGrounded = true;
-                soundManager.StopSound("Falling");
-                soundManager.PlaySound("Landing");
-            }
-            else
-            {
-                if (hit.distance > 0.05f) isGrounded = false;
-            }
-        }
-
-        if (!isGrounded && rb.linearVelocity.y < 0.1f && rb.linearVelocity.y > -0.1f && hit.distance > 5) soundManager.PlaySound("Falling");
-    }
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            jumpCount = 0;
+            if (!isGrounded && this.rb.linearVelocity.y < 0.1f && this.rb.linearVelocity.y > -0.1f && hit.distance > 30) soundManager.PlaySound("Falling");
         }
     }
 
@@ -709,5 +784,19 @@ public class PlayerControllerMulti : NetworkBehaviour
     private Vector3 GetSlopeMovement()
     {
         return Vector3.ProjectOnPlane(desiredMoveDirection, slopeHit.normal).normalized;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
+        Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
+
+        if (isGrounded) Gizmos.color = transparentGreen;
+        else Gizmos.color = transparentRed;
+
+        // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
+        Gizmos.DrawSphere(
+            new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
+            GroundedRadius);
     }
 }

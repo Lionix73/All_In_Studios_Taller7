@@ -17,7 +17,7 @@ public class WeaponLogic : NetworkBehaviour
 
     public ShootConfigScriptableObjtect ShootConfig;
     public TrailConfigScriptableObject TrailConfig;
-
+    public Sprite CrosshairImage;
 
     public MonoBehaviour ActiveMonoBehaviour;
     public GameObject Model;
@@ -66,6 +66,7 @@ public class WeaponLogic : NetworkBehaviour
 
         ShootConfig = currentGun.ShootConfig;
         TrailConfig = currentGun.TrailConfig;
+        CrosshairImage = currentGun.CrosshairImage;
 
         //ActiveMonoBehaviour = currentGun.ActiveMonoBehaviour; //Este es el que entiendo que debe dar porblemas
         LastShootTime = currentGun.LastShootTime;
