@@ -13,13 +13,17 @@ using System;
 
 
 
-//[RequireComponent(typeof(CrosshairManager))]
+[RequireComponent(typeof(CrosshairManagerMulti))]
 public class GunManagerMulti2 : NetworkBehaviour
 {
     MonoBehaviour m_MonoBehaviour;
     [Header("Camera")]
     public Camera camera; public CinemachineBrain cinemachineBrain;
+    private PlayerController player;
     [Header("Ammo Info")]
+    [Header("Managers")]
+    public CrosshairManager crosshairManager;
+    private SoundManager soundManager; private Animator playerAnimator;
     private NetworkVariable<int> actualTotalAmmo = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
     //public int actualTotalAmmo; //Cuanta municion tiene el jugador
     [SerializeField] private int MaxTotalAmmo; //Cuanta municion puede llevar el jugador
@@ -43,6 +47,7 @@ public class GunManagerMulti2 : NetworkBehaviour
     private GunType gunToPick;
 
     private bool shooting;
+    private bool canShoot = true;
 
     [Space]
     [Header("Active Guns Info")]
@@ -54,6 +59,7 @@ public class GunManagerMulti2 : NetworkBehaviour
     private NetworkVariable<int> CurrentGunBulletsLeft = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
     public event Action<int> OnBulletsChanged;
 
+    private Vector3 dondePegaElRayDelArma;
     //private int CurrentSecondaryGunBulletsLeft;
 
 
@@ -148,7 +154,7 @@ public class GunManagerMulti2 : NetworkBehaviour
         }
 
 
-
+        
 
         if (UIManager.Singleton != null)
         {
@@ -156,6 +162,7 @@ public class GunManagerMulti2 : NetworkBehaviour
         }
         if (IsOwner)
         {
+            crosshairManager.SetCrosshairImage(weapon.CrosshairImage);
             SetUpGunRigsRpc();
         }
     }
@@ -399,6 +406,14 @@ public class GunManagerMulti2 : NetworkBehaviour
         SendActualAmmoRpc(actualTotalAmmo.Value - (weapon.MagazineSize - weapon.bulletsLeft));
         //actualTotalAmmo.Value -= weapon.MagazineSize - weapon.BulletsLeft;
     }
+    private IEnumerator Reload(float delay)
+    {
+        if (shooting) shooting = false;
+        canShoot = false;
+        yield return new WaitForSeconds(delay);
+        StopFeedback();
+        canShoot = true;
+    }
     #endregion
 
     public void GainAmmo(int amount)
@@ -412,5 +427,100 @@ public class GunManagerMulti2 : NetworkBehaviour
 /// <returns></returns>
     public GunScriptableObject GetGun(GunType gunToFind){
         return gunsList.Find(gun => gun.Type == gunToFind);
+    }
+
+    private void ShootingFeedback()
+    {
+        switch (CurrentGun.Type)
+        {
+            case GunType.Rifle:
+
+                playerAnimator.SetBool("ShootBurst", true);
+                break;
+            case GunType.BasicPistol:
+
+                playerAnimator.SetTrigger("ShootOnce");
+                break;
+            case GunType.Revolver:
+
+                playerAnimator.SetTrigger("ShootOnce");
+                break;
+            case GunType.Shotgun:
+
+                playerAnimator.SetTrigger("ShootOnce");
+                break;
+            case GunType.Sniper:
+
+                playerAnimator.SetTrigger("ShootOnce");
+                break;
+        }
+    }
+    private void StopFeedback()
+    {
+        soundManager.StopSound("rifleFire");
+        playerAnimator.SetBool("ShootBurst", false);
+
+        soundManager.StopSound("rifleReload");
+        soundManager.StopSound("pistolReload");
+        soundManager.StopSound("revolverReload");
+        soundManager.StopSound("shotgunReload");
+        soundManager.StopSound("sniperReload");
+    }
+    private void ReloadingFeedback()
+    {
+
+        playerAnimator.SetTrigger("Reload");
+
+        StartCoroutine(AnimLayerCountdown("Reload", 4.5f));
+
+        switch (CurrentGun.Type)
+        {
+            case GunType.Rifle:
+                soundManager.PlaySound("rifleReload");
+                //StartCoroutine(Reload(2));
+                break;
+            case GunType.BasicPistol:
+                soundManager.PlaySound("pistolReload");
+                //StartCoroutine(Reload(2.12f));
+                break;
+            case GunType.Revolver:
+                soundManager.PlaySound("revolverReload");
+                //StartCoroutine(Reload(4.3f));
+                break;
+            case GunType.Shotgun:
+                soundManager.PlaySound("shotgunReload");
+                //StartCoroutine(Reload(5.4f));
+                break;
+            case GunType.Sniper:
+                soundManager.PlaySound("sniperReload");
+                //StartCoroutine(Reload(1.45f));
+                break;
+        }
+        StartCoroutine(Reload(weapon.ReloadTime));
+
+    }
+
+    private IEnumerator AnimLayerCountdown(string layer, float delay)
+    {
+        float timer = 0f;
+        int layerI = playerAnimator.GetLayerIndex(layer);
+        playerAnimator.SetLayerWeight(layerI, 1);
+
+        while (timer < delay)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        playerAnimator.SetLayerWeight(layerI, 0);
+    }
+
+    public void CheckZoomIn()
+    {
+        if (CurrentGun.Type == GunType.Sniper) crosshairManager.AimingZoomIn();
+    }
+    public void CheckZoomOut()
+    {
+        crosshairManager.AimingZoomOut();
     }
 }

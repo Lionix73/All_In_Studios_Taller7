@@ -8,7 +8,11 @@ public class CrosshairManagerMulti : NetworkBehaviour
     [SerializeField] private Transform aimTarget;
     [SerializeField] private GunManagerMulti2 gunManager;
 
-
+    private void Awake()
+    {
+        if (!IsOwner) return;
+        crosshairImage = GameObject.Find("CrossHair").GetComponent<Image>();
+    }
     private void Update() {
         if (!IsOwner) return;
         if (gunManager == null) return;
@@ -42,6 +46,20 @@ public class CrosshairManagerMulti : NetworkBehaviour
         aimTarget.transform.position =hitpoint;
     }
     public void SetCrosshairImage(Sprite image){
+        if (!IsOwner) return;
+
         crosshairImage.sprite = image;
+    }
+    public void AimingZoomIn()
+    {
+        if (!IsOwner) return;
+
+        crosshairImage.rectTransform.localScale = new Vector3(20, 20, 1);
+    }
+    public void AimingZoomOut()
+    {
+        if (!IsOwner) return;
+
+        crosshairImage.rectTransform.localScale = new Vector3(1, 1, 1);
     }
 }
