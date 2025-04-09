@@ -64,6 +64,7 @@ public class BulletEnemie : PoolableObject
         }
 
         if (bulletModel!=null) bulletModel.enabled = false;
+        gameObject.GetComponent<Collider>().enabled = false;
         StartCoroutine(WaitForDisable());
     }
 

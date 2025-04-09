@@ -63,7 +63,9 @@ public class AgentLinkMover : MonoBehaviour
                     }
                 }
 
-                agent.CompleteOffMeshLink();
+                if (agent.isOnOffMeshLink){
+                    agent.CompleteOffMeshLink();
+                }
             }
             yield return null;
         }
