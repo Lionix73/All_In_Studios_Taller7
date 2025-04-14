@@ -22,7 +22,7 @@ public class GunManagerMulti2 : NetworkBehaviour
     private PlayerController player;
     [Header("Ammo Info")]
     [Header("Managers")]
-    public CrosshairManager crosshairManager;
+    public CrosshairManagerMulti crosshairManager;
     private SoundManager soundManager; private Animator playerAnimator;
     private NetworkVariable<int> actualTotalAmmo = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
     //public int actualTotalAmmo; //Cuanta municion tiene el jugador
@@ -162,7 +162,6 @@ public class GunManagerMulti2 : NetworkBehaviour
         }
         if (IsOwner)
         {
-            crosshairManager.SetCrosshairImage(weapon.CrosshairImage);
             SetUpGunRigsRpc();
         }
     }
@@ -170,7 +169,7 @@ public class GunManagerMulti2 : NetworkBehaviour
     public void SpawnGunRpc()
     {
         Debug.Log("spawn Arma");
-        CurrentGun.Model = Instantiate(CurrentGun.ModelPrefab);
+        CurrentGun.Model = Instantiate(CurrentGun.NetworkModelPrefab);
         NetworkObject modelNetworkObject = CurrentGun.Model.GetComponent<NetworkObject>();
 
         modelNetworkObject.Spawn();
@@ -214,6 +213,9 @@ public class GunManagerMulti2 : NetworkBehaviour
         // CurrentGun.ShootSystem = CurrentGun.Model.GetComponentInChildren<ParticleSystem>();
         gunRig = CurrentGun.Model.transform;
         weapon = spawnGun.gameObject.GetComponent<WeaponLogic>();
+        
+        crosshairManager.SetCrosshairImage(CurrentGun.CrosshairImage);
+
     }
     [Rpc(SendTo.Server)]
     public void SendActualAmmoRpc(int actualAmmo)

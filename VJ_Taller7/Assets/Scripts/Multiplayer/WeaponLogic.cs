@@ -17,7 +17,7 @@ public class WeaponLogic : NetworkBehaviour
 
     public ShootConfigScriptableObjtect ShootConfig;
     public TrailConfigScriptableObject TrailConfig;
-    public Sprite CrosshairImage;
+    public Sprite crosshairImage;
 
     public MonoBehaviour ActiveMonoBehaviour;
     public GameObject Model;
@@ -66,7 +66,7 @@ public class WeaponLogic : NetworkBehaviour
 
         ShootConfig = currentGun.ShootConfig;
         TrailConfig = currentGun.TrailConfig;
-        CrosshairImage = currentGun.CrosshairImage;
+        crosshairImage = currentGun.CrosshairImage;
 
         //ActiveMonoBehaviour = currentGun.ActiveMonoBehaviour; //Este es el que entiendo que debe dar porblemas
         LastShootTime = currentGun.LastShootTime;
@@ -84,7 +84,7 @@ public class WeaponLogic : NetworkBehaviour
         if (Time.time > ShootConfig.FireRate + LastShootTime && bulletsLeft > 0 && !realoading)
         {
             LastShootTime = Time.time;
-            ShootSystem.Play();
+            ShootVFXRpc();
             bulletsLeft -= ShootConfig.BulletsPerShot;
 
             for (int i = 0; i < ShootConfig.BulletsPerShot; i++)
@@ -133,6 +133,10 @@ public class WeaponLogic : NetworkBehaviour
             {
                 enemy.TakeDamageRpc(Damage);
 
+            }
+            else if (hit.collider.TryGetComponent(out IDamageable enemyDmg))
+            {
+                enemyDmg.TakeDamage(Damage); //simplemente saber si se puede hacer daño, me falta por ver si específicar los críticos
             }
 
         }
@@ -233,6 +237,12 @@ public class WeaponLogic : NetworkBehaviour
         trail.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 
         return trail;
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void ShootVFXRpc()
+    {
+        ShootSystem.Play();
     }
 
 }

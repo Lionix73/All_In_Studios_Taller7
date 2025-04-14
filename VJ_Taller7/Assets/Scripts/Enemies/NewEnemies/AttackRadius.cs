@@ -18,6 +18,7 @@ public class AttackRadius : MonoBehaviour
     public OnRangeBehvaior OnRangeBehvaior { get => onRangeBehvaiorMethod; set => onRangeBehvaiorMethod = value; }
 
     public PlayerController Player { get; set; }
+    public PlayerControllerMulti PlayerMulti {  get; set; }
     
     public delegate void AttackEvent(IDamageable target);
     public AttackEvent OnAttack;

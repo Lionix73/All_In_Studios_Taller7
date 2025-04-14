@@ -8,8 +8,10 @@ public class CrosshairManagerMulti : NetworkBehaviour
     [SerializeField] private Transform aimTarget;
     [SerializeField] private GunManagerMulti2 gunManager;
 
-    private void Awake()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();  
+    
         if (!IsOwner) return;
         crosshairImage = GameObject.Find("CrossHair").GetComponent<Image>();
     }
