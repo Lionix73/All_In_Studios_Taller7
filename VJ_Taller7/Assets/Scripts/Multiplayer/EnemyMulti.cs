@@ -18,8 +18,8 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
         set => attackRadius = value;
     }
 
-    [SerializeField] private EnemyMovement movement;
-    public EnemyMovement Movement
+    [SerializeField] private MultiEnemyMovement movement;
+    public MultiEnemyMovement Movement
     {
         get => movement;
         set => movement = value;
@@ -206,10 +206,11 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
         }
 
         transform.rotation = lookRotation;
+        SyncRotationClientRpc(transform.rotation);
 
     }
     [Rpc(SendTo.Everyone)]
-    private void SyncPositionClientRpc(Quaternion newRotation)
+    private void SyncRotationClientRpc(Quaternion newRotation)
     {
         if (!IsServer) // Solo clientes actualizan su posición
         {
