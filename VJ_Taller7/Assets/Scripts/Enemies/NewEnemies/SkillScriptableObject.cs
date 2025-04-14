@@ -32,8 +32,15 @@ public class SkillScriptableObject : ScriptableObject
     {
         isActivating = true;
     }
+    public virtual void MultiUseSkill(EnemyMulti enemy, PlayerControllerMulti player)
+    {
+        isActivating = true;
+    }
 
     public virtual bool CanUseSkill(Enemy enemy, PlayerController player, int level){
+        return !isActivating && level >= unlocklevel && useTime + cooldown < Time.time;
+    }    
+    public virtual bool MultiCanUseSkill(EnemyMulti enemy, PlayerControllerMulti player, int level){
         return !isActivating && level >= unlocklevel && useTime + cooldown < Time.time;
     }
 

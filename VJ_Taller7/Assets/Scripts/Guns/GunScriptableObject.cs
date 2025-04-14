@@ -9,6 +9,7 @@ public class GunScriptableObject : ScriptableObject {
     public Sprite UIImage;
     public Sprite CrosshairImage;
     public GameObject ModelPrefab;
+    public GameObject NetworkModelPrefab;
     public Vector3 SpawnPoint;
     public Vector3 SpawnRotation;
     public int Damage;
@@ -269,6 +270,7 @@ public class GunScriptableObject : ScriptableObject {
         clone.UIImage = UIImage;
         clone.CrosshairImage = CrosshairImage;
         clone.ModelPrefab = ModelPrefab;
+        clone.NetworkModelPrefab = NetworkModelPrefab;
         clone.SpawnPoint = SpawnPoint;
         clone.SpawnRotation = SpawnRotation;
         clone.aimFov = aimFov;

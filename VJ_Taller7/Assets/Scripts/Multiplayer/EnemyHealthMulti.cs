@@ -16,7 +16,7 @@ public class EnemyHealthMulti : NetworkBehaviour
     [Header("Enemy Health")]
     [SerializeField] private int health = 100;
 
-    public NetworkVariable<int> HealthNet = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
+    [SerializeField] private NetworkVariable<int> HealthNet = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
 
 
 

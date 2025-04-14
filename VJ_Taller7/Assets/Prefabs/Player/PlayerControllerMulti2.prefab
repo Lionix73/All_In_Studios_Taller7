@@ -811,7 +811,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthDisplay: {fileID: 0}
-  maxHealth: 100
   isDead: 0
   animator: {fileID: 0}
 --- !u!114 &197367228027467263
@@ -3522,9 +3521,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1027142627032648680}
+  - component: {fileID: 4563297365813401278}
   - component: {fileID: 6274603480792431093}
   - component: {fileID: 7405740265945685322}
-  - component: {fileID: 4563297365813401278}
   m_Layer: 0
   m_Name: GunManagerMulti 1
   m_TagString: Gun Manager
@@ -3547,6 +3546,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4468175175659240506}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4563297365813401278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6903108681162083449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d5c99b60c4a91f41aabdcdf1439416f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  crosshairImage: {fileID: 0}
+  aimTarget: {fileID: 5519746454959993719}
+  gunManager: {fileID: 6274603480792431093}
 --- !u!114 &6274603480792431093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3562,16 +3577,16 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   camera: {fileID: 0}
   cinemachineBrain: {fileID: 0}
-  crosshairManager: {fileID: 0}
+  crosshairManager: {fileID: 4563297365813401278}
   MaxTotalAmmo: 300
   totalAmmoDisplay: {fileID: 0}
   ammunitionDisplay: {fileID: 0}
   weapon: {fileID: 0}
   gunsList:
-  - {fileID: 11400000, guid: 1946b533a57ce3e4abf0f9a5db71c215, type: 2}
-  - {fileID: 11400000, guid: 1a73ca6d4ea9fee46a126562e1cb1062, type: 2}
-  - {fileID: 11400000, guid: 696055e10ec058541b1671800dc4ea3c, type: 2}
-  - {fileID: 11400000, guid: 549b3a55cd6e82144bd845f6e7b6576d, type: 2}
+  - {fileID: 11400000, guid: 3652ac941fa776349a082da73b60cc8f, type: 2}
+  - {fileID: 11400000, guid: bdb2fbb6410586b48bec8d8b462c8248, type: 2}
+  - {fileID: 11400000, guid: dad2d973a9349f14ca3f690c0d2e33cb, type: 2}
+  - {fileID: 11400000, guid: 1d47203ce74508a45bef38a7c467cadc, type: 2}
   gunParent: {fileID: 4468175175659240506}
   gunRig: {fileID: 0}
   Gun: 0
@@ -3606,22 +3621,6 @@ ParentConstraint:
   m_Sources:
   - sourceTransform: {fileID: 5535448352066537065}
     weight: 1
---- !u!114 &4563297365813401278
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6903108681162083449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d5c99b60c4a91f41aabdcdf1439416f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  crosshairImage: {fileID: 0}
-  aimTarget: {fileID: 5519746454959993719}
-  gunManager: {fileID: 6274603480792431093}
 --- !u!1 &7157211270248834674
 GameObject:
   m_ObjectHideFlags: 0
