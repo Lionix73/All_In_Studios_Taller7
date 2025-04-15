@@ -129,6 +129,7 @@ public class AttackRadius : MonoBehaviour
                 }
             }
 
+
             if(closestDamageable != null)
             {
                 OnAttack?.Invoke(closestDamageable);
