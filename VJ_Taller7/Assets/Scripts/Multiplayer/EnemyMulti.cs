@@ -11,8 +11,8 @@ using Unity.Services.Matchmaker.Models;
 public class EnemyMulti : PoolableObjectMulti, IDamageable
 {
     [Header("Enemy Components")]
-    [SerializeField] private AttackRadius attackRadius;
-    public AttackRadius AttackRadius
+    [SerializeField] private MultiAttackRadius attackRadius;
+    public MultiAttackRadius AttackRadius
     {
         get => attackRadius;
         set => attackRadius = value;
@@ -141,9 +141,9 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
 
     private void Awake()
     {
-        if (!IsServer) return;
+      /*  if (!IsServer) return;
 
-        attackRadius.PlayerMulti = Player;
+        attackRadius.Player = Player;
         colliderEnemy = GetComponent<Collider>();
         AttackRadius.OnAttack += OnAttack;
 
@@ -153,13 +153,22 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
         }
 
         //if (isStatic)
-          //  enemySpawner = FindFirstObjectByType<EnemySpawner>();
+          //  enemySpawner = FindFirstObjectByType<EnemySpawner>();*/
     }
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         if (!IsServer) return;
+        //attackRadius.Player = Player;
+        colliderEnemy = GetComponent<Collider>();
+        AttackRadius.OnAttack += OnAttack;
+
+        if (skinnedMeshRenderers == null)
+        {
+            skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        }
+
         Health = (int)maxHealth;
     }
 

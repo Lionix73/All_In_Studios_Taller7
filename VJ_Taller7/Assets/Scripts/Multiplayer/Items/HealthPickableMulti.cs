@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HealthPickableMulti : NetworkBehaviour
 {
-    [SerializeField] private float amountOfHealing;
+    [SerializeField] private int amountOfHealing;
     private HealthMulti playerHealth;
     private SoundManager soundManager;
 
@@ -22,11 +22,16 @@ public class HealthPickableMulti : NetworkBehaviour
             {
                 playerHealth = other.GetComponent<HealthMulti>();
                 playerHealth.TakeHeal(amountOfHealing);
-                playerHealth.HealthChangeRpc();
                 GetComponent<NetworkObject>().Despawn();
             }
                 soundManager.PlaySound("Health");
                 Destroy(gameObject);
         }
+    }
+
+    private void GetPlayer(GameObject player)
+    {
+        //playerHealth = FindAnyObjectByType(typeof(Health)).GetComponent<Health>();
+        playerHealth = player.GetComponentInChildren<HealthMulti>();
     }
 }

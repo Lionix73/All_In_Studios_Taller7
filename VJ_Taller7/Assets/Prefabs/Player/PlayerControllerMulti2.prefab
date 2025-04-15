@@ -686,15 +686,14 @@ GameObject:
   - component: {fileID: 1003677143700119856}
   - component: {fileID: 6623556822215707918}
   - component: {fileID: 5980219158352977901}
-  - component: {fileID: 4273197550237101772}
   - component: {fileID: 197367228027467263}
   - component: {fileID: 1530045898328325671}
   - component: {fileID: 6575925181704621016}
   - component: {fileID: 3951267400713598900}
+  - component: {fileID: 5314064248248460490}
   - component: {fileID: 2388046720383461067}
   - component: {fileID: 2523499608115504786}
   - component: {fileID: 7668294324850234261}
-  - component: {fileID: 5314064248248460490}
   - component: {fileID: 4288797365404789842}
   m_Layer: 6
   m_Name: Player
@@ -798,21 +797,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4273197550237101772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2504184262613002398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29d39f53845d2254fb71401f3c12c82a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthDisplay: {fileID: 0}
-  isDead: 0
-  animator: {fileID: 0}
 --- !u!114 &197367228027467263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1122,6 +1106,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 8ee4792f-48b1-499c-8851-ec9ab0ece1c7
     m_ActionName: 'Player/Melee[/Mouse/middleButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1afee5c7-9eaf-4bc1-9f4c-b9fe14732c80
+    m_ActionName: 'Player/Active Skill[/Keyboard/leftAlt]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -1220,6 +1208,21 @@ MonoBehaviour:
   gunManager: {fileID: 6274603480792431093}
   gunManagerPrefab: {fileID: 1386519045764041058, guid: 8910093eadfd1b847a55225d8507383e, type: 3}
   Parent: {fileID: 4356260809616859532}
+--- !u!114 &5314064248248460490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2504184262613002398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a4f32d8ecc602b49ab5531bf5fe073f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  healthDisplay: {fileID: 0}
+  animator: {fileID: 5980219158352977901}
 --- !u!114 &2388046720383461067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1344,20 +1347,6 @@ MonoBehaviour:
   UseRigidBodyForMotion: 0
   AutoUpdateKinematicState: 1
   AutoSetKinematicOnDespawn: 1
---- !u!114 &5314064248248460490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2504184262613002398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a4f32d8ecc602b49ab5531bf5fe073f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  healthDisplay: {fileID: 0}
 --- !u!114 &4288797365404789842
 MonoBehaviour:
   m_ObjectHideFlags: 0

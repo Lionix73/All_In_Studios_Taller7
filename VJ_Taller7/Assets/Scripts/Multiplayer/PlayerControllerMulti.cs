@@ -288,7 +288,7 @@ public class PlayerControllerMulti : NetworkBehaviour
     {
         animator.SetLayerWeight(animationLayerToShow, layersDampener1.TargetValue == 1 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
 
-        for (int i = 0; i < animator.layerCount; i++)
+        for (int i = 0; i < 5; i++)
         {
             if (i != animationLayerToShow && animator.GetLayerWeight(i) > 0.05f)
             {

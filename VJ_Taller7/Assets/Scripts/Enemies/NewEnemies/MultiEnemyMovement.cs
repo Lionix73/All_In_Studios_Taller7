@@ -286,7 +286,6 @@ public class MultiEnemyMovement : NetworkBehaviour
         WaitForSeconds wait = new WaitForSeconds(updateRate);
 
         while (true){
-            Debug.Log(player.transform.position);
 
             if(enemy.Health <= 0){
                 followCoroutine = null;
