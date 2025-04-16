@@ -11,6 +11,8 @@ public class RoundManager : MonoBehaviour
     [Header("Manejo de Rondas y oleadas")]
     [SerializeField] private int currentWave; //oleadas
     [SerializeField] private int currentRound; //Rondas
+    public int CurrentRound {get {return currentRound;}}
+
     [SerializeField] private int waveSize; //Tamaño de la oleada en cantidad de enemigos 
     private int waveValue;
     private int enemiesKilledOnWave = 0;
@@ -53,6 +55,7 @@ public class RoundManager : MonoBehaviour
     private ScoreManager scoreManager;
     private EnemyWaves enemySpawner; //Si se balancea en este manager
     private EnemyWavesManager enemyWavesManager; //Si se balancea en el spawner
+    private ChallengeManager challengeManager; //Pa llamar cuando son los challenges
     
     [Space]
     [SerializeField] private bool _Simulating = false;
@@ -82,12 +85,15 @@ public class RoundManager : MonoBehaviour
         scoreManager = GetComponent<ScoreManager>();
         enemySpawner = GetComponent<EnemyWaves>();
         enemyWavesManager = GetComponent<EnemyWavesManager>();
+        challengeManager = GameManager.Instance.challengeManager;
 
         if (UIManager.Singleton)
         {
             _RoundUI.SetActive(false);
             _Simulating = true;
             UIManager.Singleton.UIChangeRound(currentRound);
+
+            challengeManager.ShowChallenges(); //Mostrar los challenges
         }
         
         SetEnemiesInSpawner();
@@ -101,7 +107,6 @@ public class RoundManager : MonoBehaviour
         if (aliveEnemies == 0 && !inBetweenRounds && enemiesKilledOnWave>1){
             
             inBetweenRounds = true; //Next round
-
             OnWaveComplete?.Invoke(); //Se completo exitosamente la oleada, solo cuando acaba por matar a todos los enemigos
             enemiesKilledOnWave = 0;
         }
@@ -117,6 +122,8 @@ public class RoundManager : MonoBehaviour
             { 
                 UIManager.Singleton.actualRoundDisplay = true;
                 UIManager.Singleton.UIChangeRound(currentRound);
+
+                challengeManager.ShowChallenges(); //Mostrar los challenges
             }
 
             OnRoundComplete?.Invoke(); // Se completo la ronda, avisar para escalados y eso, aqui solo importa sobrevivir
@@ -154,7 +161,7 @@ public class RoundManager : MonoBehaviour
             if (waveTimer <= 0){
             //End round
             inBetweenRounds = true;
-            
+
             //castigar por no completar
             //aumentar el escalado de los enemigos o repetir
             }

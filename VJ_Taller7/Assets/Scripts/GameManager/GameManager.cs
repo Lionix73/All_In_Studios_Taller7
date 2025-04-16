@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     public EnemyWavesManager enemyWavesManager;
     public ScoreManager scoreManager;
     public GunManager gunManager;
+    public ChallengeManager challengeManager;
 
     public delegate void OnPlayerSpawn(GameObject player); //Para que todo lo que necesite al player lo encuentre
     public delegate void OnPlayerDeath(GameObject player);
@@ -51,6 +52,7 @@ public class GameManager : MonoBehaviour
         roundManager = GetComponent<RoundManager>();
         enemyWavesManager = GetComponent<EnemyWavesManager>();
         scoreManager = GetComponent<ScoreManager>();
+        challengeManager = FindFirstObjectByType<ChallengeManager>();
     }
 
     private void Start() {

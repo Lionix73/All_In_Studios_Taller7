@@ -22,7 +22,7 @@ public class UpdateChallengeUI : MonoBehaviour
     }
 
     public void OnClick(){
+        Debug.Log("Clicked on challenge: " + challengeSO.challengeName);
         challengeManager.ActivateChallenge(challengeSO);
-
     }
 }

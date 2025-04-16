@@ -11,7 +11,7 @@ public class ChallengeManager : MonoBehaviour
 
     private List<Challenges> activeChallenges = new List<Challenges>();
     private List<GameObject> activePanels = new List<GameObject>();
-
+    private bool isChoosingChallenge = false;
 
     private void Awake()
     {
@@ -21,57 +21,84 @@ public class ChallengeManager : MonoBehaviour
         challengeCanvas.SetActive(false);
     }
 
-    private void Start()
+    private void Update()
     {
-        // Subscribe to the round complete event
-        roundManager.OnRoundComplete += HandleRoundComplete;
+        //Para que puedan escoger felizmente uwu
+        if(isChoosingChallenge){
+            Time.timeScale = 0f; // Pausa
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
-    private void HandleRoundComplete(){
-        ShowChallenges();
-    }
 
-public void ShowChallenges()
-{
-    // Clear any existing panels
-    ClearChallengePanels();
-
-    for (int i = 0; i < 3; i++)
+    public void ShowChallenges()
     {
-        var randomChallenge = allChallenges[Random.Range(0, allChallenges.Count)];
-        var challengePanel = Instantiate(challengePanelPrefab, canvasGroupLayout);
-        var updateChallengeUI = challengePanel.GetComponent<UpdateChallengeUI>();
+        // Clear any existing panels
+        ClearChallengePanels();
 
-        // Associate the ChallengeScriptableObject with the panel
-        if (updateChallengeUI != null)
+        // Filtrado de los challenges dependiendo de la dificultad
+        var filteredChallenges = allChallenges.FindAll(challenge =>
         {
-            updateChallengeUI.challengeManager = this;
-            updateChallengeUI.SetChallengeData(randomChallenge); // Pass the challenge data to the panel
+            if (roundManager.CurrentRound <= 2) return challenge.difficulty == ChallengeDifficulty.Easy;
+            if (roundManager.CurrentRound <= 3) return challenge.difficulty == ChallengeDifficulty.Medium;
+            return challenge.difficulty == ChallengeDifficulty.Hard;
+        });
+
+        // Shuffle the filtered challenges to ensure randomness
+        var shuffledChallenges = new List<ChallengeScriptableObject>(filteredChallenges);
+        for (int i = 0; i < shuffledChallenges.Count; i++)
+        {
+            int randomIndex = Random.Range(0, shuffledChallenges.Count);
+            var temp = shuffledChallenges[i];
+            shuffledChallenges[i] = shuffledChallenges[randomIndex];
+            shuffledChallenges[randomIndex] = temp;
         }
 
-        // Add the panel to the activePanels list
-        activePanels.Add(challengePanel);
-    }
+        // Select up to 3 unique challenges
+        for (int i = 0; i < Mathf.Min(3, shuffledChallenges.Count); i++)
+        {
+            var challenge = shuffledChallenges[i];
+            var challengePanel = Instantiate(challengePanelPrefab, canvasGroupLayout);
+            var updateChallengeUI = challengePanel.GetComponent<UpdateChallengeUI>();
 
-    challengeCanvas.SetActive(true);
-}
+            if (updateChallengeUI != null)
+            {
+                updateChallengeUI.challengeManager = this;
+                updateChallengeUI.SetChallengeData(challenge); // Pass the challenge data to the panel
+            }
+
+            activePanels.Add(challengePanel);
+        }
+
+        // Para mostrar el canvas de los challenges
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        isChoosingChallenge = true;
+        challengeCanvas.SetActive(true);
+    }
 
     public void ActivateChallenge(ChallengeScriptableObject challengeSO)
     {
-        // Create a new GameObject for the active challenge
-        var challengeGO = new GameObject("ActiveChallenge");
+        // Crea un challenge como un nuevo GameObject en la escena
+        var challengeGO = new GameObject(challengeSO.challengeName);
         challengeGO.transform.SetParent(this.transform);
 
-        // Add the appropriate challenge script based on the ChallengeType
+        // Le añade el componente del challenge escogido
         var challenge = challengeGO.AddComponent(GetChallengeType(challengeSO.challengeType)) as Challenges;
         challenge.challengeManager = this;
 
-        // Set up the challenge using the ScriptableObject
+        // Pone los valores del ScriptableObject al challenge
         challengeSO.SetUpChallenge(challenge);
 
-        // Add the challenge to the active challenges list
+        // Añade los challenges activos a una lista (De momento no hace nada mas)
         activeChallenges.Add(challenge);
 
+        //Despues de escoger
+        Time.timeScale = 1f; // Resume the game
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        isChoosingChallenge = false;
         challengeCanvas.SetActive(false);
     }
 
