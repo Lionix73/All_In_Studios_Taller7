@@ -46,6 +46,9 @@ public class GunManager : MonoBehaviour
 
     private Vector3 dondePegaElRayDelArma;
 
+    public delegate void ReloadingEvent();
+    public event ReloadingEvent ReloadEvent;
+
 
     private void Awake() {
         cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
@@ -221,6 +224,8 @@ public class GunManager : MonoBehaviour
         }
     }
     private void RealoadGun(){
+        ReloadEvent?.Invoke();
+
         StopFeedback();
         CurrentGun.Reload();
         actualTotalAmmo -= CurrentGun.MagazineSize - CurrentGun.BulletsLeft;
@@ -370,4 +375,6 @@ public class GunManager : MonoBehaviour
     public void CheckZoomOut(){
         crosshairManager.AimingZoomOut();
     }
+
+    
 }

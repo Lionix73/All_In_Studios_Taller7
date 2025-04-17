@@ -16,5 +16,6 @@ public enum GunType{
 
 public enum ShootType{
     Projectile,
-    HitScan
+    HitScan,
+    Special
 }

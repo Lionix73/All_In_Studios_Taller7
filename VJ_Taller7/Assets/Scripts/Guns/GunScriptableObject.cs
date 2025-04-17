@@ -54,6 +54,8 @@ public class GunScriptableObject : ScriptableObject {
         bulletsLeft = MagazineSize;}
         realoading = false;
         TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
+        if (!ShootConfig.IsHitScan)
+        {BulletPool = new ObjectPool<Bullet>(CreateBullet);}
 
         Model = Instantiate(ModelPrefab);
         Model.transform.SetParent(Parent, false);
@@ -99,11 +101,16 @@ public class GunScriptableObject : ScriptableObject {
                 }
                 shootDirection.Normalize();
 
-                if (ShootConfig.IsHitScan){
-                    DoHitScanShooting(shootDirection, ShootSystem.transform.position, ShootSystem.transform.position);
-                }
-                else {
-                    //DoProjectileShooting();
+                switch(ShootConfig.ShootingType){
+                    case ShootType.HitScan:
+                        DoHitScanShooting(shootDirection, ShootSystem.transform.position, ShootSystem.transform.position);
+                    return;
+                    case ShootType.Projectile:
+                        DoProjectileShooting(shootDirection);
+                    return;
+                    case ShootType.Special:
+                        DoSpecialShooting(shootDirection);
+                    return;
                 }
             }
         }
@@ -119,7 +126,7 @@ public class GunScriptableObject : ScriptableObject {
                 ActiveMonoBehaviour.StartCoroutine(PlayTrail(TrailOrigin, hit.point, hit));
                 dondePegaElRayoPaDisparar = hit.point;
                 if (hit.collider.TryGetComponent(out IDamageable enemy)){
-                    enemy.TakeDamage(Damage); //simplemente saber si se puede hacer daño, me falta por ver si específicar los críticos
+                    enemy.TakeDamage(Damage);
                 }
                 else if(hit.collider.TryGetComponent(out EnemyHealthMulti enemyM))
                 {
@@ -150,8 +157,34 @@ public class GunScriptableObject : ScriptableObject {
         return Model.transform.forward;
     }
 
-    private void DoProjectileShooting(Vector3 shootDirection){
-    
+    private void DoProjectileShooting(Vector3 ShootDirection){
+        Bullet bullet = BulletPool.Get();
+
+        bullet.gameObject.SetActive(true);
+        bullet.OnCollision += HandleBulletCollision;
+        bullet.transform.position = ShootSystem.transform.position;
+        bullet.Spawn(ShootDirection* ShootConfig.BulletSpawnForce);
+
+        // El trail de la bala podemos decidir si ponerlo en la bala, o usar el mismo pool que con el hitscan
+
+    }
+
+    private void DoSpecialShooting(Vector3 ShootDirection){
+        switch(Type){
+            case GunType.MysticCanon:
+            return;
+            case GunType.GoldenFeather:
+            Bullet bullet = BulletPool.Get();
+
+            bullet.gameObject.SetActive(true);
+            bullet.OnCollision += HandleBulletCollision;
+            bullet.OnBulletEnd += HandleSpecialBulletCollision; //Para poder eliminar tambien las balas especiales 
+            bullet.transform.position = ShootSystem.transform.position;
+            bullet.Spawn(ShootDirection* ShootConfig.BulletSpawnForce);
+            return;
+            case GunType.ShinelessFeather:
+            return;
+        }
     }
         
     public void Reload() {
@@ -199,7 +232,33 @@ public class GunScriptableObject : ScriptableObject {
     }
 
 
+    private void HandleBulletCollision(Bullet bullet, Collision collision){
+        // En caso de usar la pool de trail, hay que desactivarla desde aqui
 
+        if (ShootConfig.ShootingType != ShootType.Special){
+            bullet.gameObject.SetActive(false);
+            BulletPool.Release(bullet);
+        }
+
+        if (collision != null){
+            ContactPoint contactPoint = collision.GetContact(0);
+
+            Collider colliderHit = contactPoint.otherCollider;
+            if (colliderHit.gameObject.layer != LayerMask.NameToLayer("Enemy")) return;
+
+                if (colliderHit.TryGetComponent(out IDamageable enemy)){
+                    enemy.TakeDamage(Damage);
+                }
+                else if(colliderHit.TryGetComponent(out EnemyHealthMulti enemyM))
+                {
+                    enemyM.TakeDamageRpc(Damage);
+                }
+        }
+    }
+    private void HandleSpecialBulletCollision(Bullet bullet, Collision collision){
+        bullet.gameObject.SetActive(false);
+        //BulletPool.Release(bullet);
+    }
 
     public TrailRenderer CreateTrail() {
         GameObject instance = new GameObject("Trail");
@@ -215,6 +274,11 @@ public class GunScriptableObject : ScriptableObject {
         trail.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 
         return trail;
+    }
+
+    private Bullet CreateBullet()
+    {
+        return Instantiate(ShootConfig.BulletPrefab);
     }
 
     private IEnumerator ShootingFeedback(){
