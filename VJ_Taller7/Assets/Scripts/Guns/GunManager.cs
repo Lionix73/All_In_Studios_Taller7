@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using TMPro;
 using Unity.Cinemachine;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
+using NUnit.Framework;
 
 [RequireComponent(typeof(CrosshairManager))]
 public class GunManager : MonoBehaviour
@@ -217,6 +218,7 @@ public class GunManager : MonoBehaviour
 
     #region Ammo management //Aqui recibimos el input de recarga y llamamos a la funciond de recarga
     public void OnReload(InputAction.CallbackContext context){
+        
         if (context.started){
             if (!CurrentGun.Realoading){
                 RealoadGun();
@@ -224,6 +226,7 @@ public class GunManager : MonoBehaviour
         }
     }
     private void RealoadGun(){
+        if (CurrentGun.Type == GunType.ShinelessFeather) return;
         ReloadEvent?.Invoke();
 
         StopFeedback();

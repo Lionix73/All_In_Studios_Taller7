@@ -1,5 +1,6 @@
 using System.Collections;
 using Unity.IO.LowLevel.Unsafe;
+using Unity.Mathematics;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -13,7 +14,7 @@ public class Bullet : MonoBehaviour {
 
     [SerializeField] private float DelayedDisableTime;
 
-    [SerializeField] private ParticleSystem bulletImpactEffect;
+    [SerializeField] private GameObject bulletImpactEffect;
 
     public delegate void ColisionEvent(Bullet Bullet, Collision collision);
     public event ColisionEvent OnCollision;
@@ -34,28 +35,35 @@ public class Bullet : MonoBehaviour {
         StartCoroutine(DestroyBullet(DelayedDisableTime));
     }
 
-    private IEnumerator DestroyBullet(float time){
+    protected IEnumerator DestroyBullet(float time){
         yield return null;
         yield return new WaitForSeconds(time);
         OnCollisionEnter(null);
     }
     public virtual void OnCollisionEnter(Collision other) {
-        if (bulletImpactEffect!= null){
-            ContactPoint contactPoint = other.GetContact(0);
-
-            bulletImpactEffect.transform.forward = contactPoint.normal;
-            bulletImpactEffect.Play();
-        }
+        ImpactEffect(other);
 
         InvokeCollisionEvent(other);
         objectPenetrated++;
+    }
+    protected void ImpactEffect(Collision collisionPoint){
+        if (bulletImpactEffect!= null){
+            ContactPoint contactPoint = collisionPoint.GetContact(0);
+
+            //bulletImpactEffect.transform.forward = contactPoint.normal;
+            //bulletImpactEffect.Play();
+
+            GameObject impact = Instantiate(bulletImpactEffect, contactPoint.point, quaternion.identity);
+            impact.transform.up = contactPoint.normal;
+            Destroy(impact, 0.5f);
+        }
     }
 
     protected void InvokeCollisionEvent(Collision other){
         OnCollision?.Invoke(this, other);
     }
 
-    protected void IvokeBulletEnd(Collision other){ //para las armas especiales que se destruyen distinto
+    protected void InvokeBulletEnd(Collision other){ //para las armas especiales que se destruyen distinto
         OnBulletEnd?.Invoke(this, other);
     }
     private void OnDisable() {

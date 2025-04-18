@@ -7,6 +7,7 @@ public class GoldenFeathers : Bullet
     [field: SerializeField] 
     public Transform whereToReturn {get ; private set;}
     public bool isReturning = false;
+    public bool isFlying;
     [SerializeField] private float returningStrength;
     //private PhysicsMaterial physics_Mat;
 
@@ -19,29 +20,36 @@ public class GoldenFeathers : Bullet
         transform.forward = SpawnForce.normalized;
         Rigidbody.AddForce(SpawnForce);
         isReturning = false;
+        isFlying = true;
 
         //Agregar al evento de recarga del gun manager el return()
         GameManager.Instance.gunManager.ReloadEvent += Return;
     }
 
-    public void Return(){
+    public virtual void Return(){
         whereToReturn = GameManager.Instance.playerManager.gunManager.CurrentGun.ShootSystem.transform;
 
         Vector3 direction = whereToReturn.position + - transform.position;
         transform.forward = direction.normalized;
         Rigidbody.AddForce(direction * returningStrength);
         isReturning = true;
+        isFlying = true;
     }
 
     public override void OnCollisionEnter(Collision other) {
-        
-        if(other.gameObject.layer == LayerMask.NameToLayer("Enemy")){
+        if(!isFlying) return;
+
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player")){
+            InvokeCollisionEvent(other);
+        }
+        else if(other.gameObject.layer == LayerMask.NameToLayer("Enemy")){
            InvokeCollisionEvent(other);
         }
+        else{ImpactEffect(other);} //Si no golpea un enemigo que haga el efecto
 
         if (isReturning)
         {
-            IvokeBulletEnd(other);
+            InvokeBulletEnd(other);
             //Liberar de la pool... supongo que con otro evento
         }
 
@@ -52,7 +60,9 @@ public class GoldenFeathers : Bullet
         
     }
 
-    private void OnCollisionExit(Collision other) {
+    public virtual void OnCollisionExit(Collision other) {
+        if(!isFlying) return;
+
         if (isReturning){
             if(other.gameObject.layer == LayerMask.NameToLayer("Enemy")){
                 InvokeCollisionEvent(other);

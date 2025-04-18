@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -40,6 +41,8 @@ public class GunScriptableObject : ScriptableObject {
     public ParticleSystem ShootSystem;
     public ObjectPool<TrailRenderer> TrailPool;
     public ObjectPool<Bullet> BulletPool;
+    public ObjectPool<Bullet> GFeatherPool;
+    public ObjectPool<Bullet> SFeatherPool;
 
     public Vector3 dondePegaElRayoPaDisparar;
 
@@ -56,6 +59,10 @@ public class GunScriptableObject : ScriptableObject {
         TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
         if (!ShootConfig.IsHitScan)
         {BulletPool = new ObjectPool<Bullet>(CreateBullet);}
+        if(ShootConfig.ShootingType == ShootType.Special){
+            GFeatherPool = new ObjectPool<Bullet>(CreateBullet);
+            SFeatherPool = new ObjectPool<Bullet>(CreateBullet);
+        }
 
         Model = Instantiate(ModelPrefab);
         Model.transform.SetParent(Parent, false);
@@ -72,8 +79,12 @@ public class GunScriptableObject : ScriptableObject {
         Model.SetActive(false);
         Destroy(Model);
         TrailPool.Clear();
-        if (BulletPool != null){
+        if (!ShootConfig.IsHitScan){
             BulletPool.Clear();
+        }
+        if(ShootConfig.ShootingType == ShootType.Special){
+            GFeatherPool?.Clear();
+            SFeatherPool?.Clear();
         }
     }
 
@@ -174,15 +185,21 @@ public class GunScriptableObject : ScriptableObject {
             case GunType.MysticCanon:
             return;
             case GunType.GoldenFeather:
-            Bullet bullet = BulletPool.Get();
-
-            bullet.gameObject.SetActive(true);
-            bullet.OnCollision += HandleBulletCollision;
-            bullet.OnBulletEnd += HandleSpecialBulletCollision; //Para poder eliminar tambien las balas especiales 
-            bullet.transform.position = ShootSystem.transform.position;
-            bullet.Spawn(ShootDirection* ShootConfig.BulletSpawnForce);
+            Bullet feather = GFeatherPool.Get();
+            feather.gameObject.SetActive(true);
+            feather.OnCollision += HandleBulletCollision;
+            feather.OnBulletEnd += HandleGoldenBulletCollision; //Para poder eliminar tambien las balas especiales 
+            feather.transform.position = ShootSystem.transform.position;
+            feather.Spawn(ShootDirection* ShootConfig.BulletSpawnForce);
             return;
             case GunType.ShinelessFeather:
+            Bullet shineless = SFeatherPool.Get();
+
+            shineless.gameObject.SetActive(true);
+            shineless.OnCollision += HandleBulletCollision;
+            shineless.OnBulletEnd += HandleShinelessFeather; //Para poder eliminar tambien las balas especiales 
+            shineless.transform.position = ShootSystem.transform.position;
+            shineless.Spawn(ShootDirection* ShootConfig.BulletSpawnForce);
             return;
         }
     }
@@ -255,9 +272,16 @@ public class GunScriptableObject : ScriptableObject {
                 }
         }
     }
-    private void HandleSpecialBulletCollision(Bullet bullet, Collision collision){
+    private void HandleGoldenBulletCollision(Bullet bullet, Collision collision){
         bullet.gameObject.SetActive(false);
-        //BulletPool.Release(bullet);
+        GFeatherPool.Release(bullet);
+
+        //condicion de la shineless feather para que no recargue
+    }
+    private void HandleShinelessFeather(Bullet bullet, Collision collision){
+        bullet.gameObject.SetActive(false);
+        GFeatherPool.Release(bullet);
+        bulletsLeft = 1;
     }
 
     public TrailRenderer CreateTrail() {
