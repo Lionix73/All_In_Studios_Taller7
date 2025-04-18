@@ -10,9 +10,9 @@ public class PlayerController : MonoBehaviour
 {
     #region VariablesAndComponents
     [Header("Movement Settings")]
-    public bool canMove = true;
-    public float walkSpeed = 2f;
-    public float runSpeed = 5f;
+    [SerializeField] private bool canMove = true;
+    [SerializeField] private float walkSpeed = 2f;
+    [SerializeField] private float runSpeed = 5f;
 
     [Header("Animator")]
     public Animator animator;
@@ -44,11 +44,13 @@ public class PlayerController : MonoBehaviour
     private RaycastHit slopeHit;
 
     [Header("Components")]
-    private Rigidbody rb;
-    public CapsuleCollider playerCollider;
-    public CapsuleCollider crouchCollider;
-    public Transform cameraTransform;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private CapsuleCollider playerCollider;
+    [SerializeField] private CapsuleCollider crouchCollider;
+    [SerializeField] private Transform cameraTransform;
     [System.Obsolete] public CinemachineCamera freeLookCamera;
+
+    [Header("VFX")]
     [SerializeField] private ParticleSystem slideVFX;
     [SerializeField] private ParticleSystem jumpVFX;
     [SerializeField] private MeshTrail dashVFX;
@@ -759,4 +761,12 @@ public class PlayerController : MonoBehaviour
             new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
             GroundedRadius);
     }
+
+    #region GettersSetters
+    public bool PlayerCanMove
+    {
+        get => canMove;
+        set => canMove = value;
+    }
+    #endregion
 }

@@ -15,6 +15,13 @@ public class Health : MonoBehaviour, IDamageable
 
     public Animator animator;
 
+    private PlayerController pController;
+
+    private void Start()
+    {
+        pController = GetComponent<PlayerController>();
+    }
+
     void Update()
     {
         //Debug.Log(maxHealth);
@@ -44,6 +51,7 @@ public class Health : MonoBehaviour, IDamageable
         HealthChange();
         if (currentHealth <= 0)
         {
+            pController.PlayerCanMove = false;
             animator.SetTrigger("Dead");
             OnPlayerDeath?.Invoke(gameObject);
             isDead=true;
