@@ -8,6 +8,7 @@ using UnityEngine.Video;
 
 public class Dialogue : MonoBehaviour
 {
+    [SerializeField] private StudioEventEmitter music;
     [SerializeField] private TextMeshProUGUI textComp;
     [SerializeField] private float textSpeed;
     [SerializeField] private string[] lines;
@@ -57,6 +58,7 @@ public class Dialogue : MonoBehaviour
         {
             StopAllCoroutines();
             finishDialogue = true;
+            if(!music.IsPlaying()) music.Play();
             gameObject.SetActive(false);
         }
     }
