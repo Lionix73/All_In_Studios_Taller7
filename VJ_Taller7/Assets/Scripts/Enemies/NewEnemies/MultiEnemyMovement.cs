@@ -97,11 +97,8 @@ public class MultiEnemyMovement : NetworkBehaviour
     [SerializeField] private float syncInterval = 0.2f; // Intervalo mínimo entre sincronizaciones
     [SerializeField] private float lastSyncTime; // Tiempo de la última sincronización
 
-    public override void OnNetworkSpawn()
+    private void Awake()
     {
-        base.OnNetworkSpawn();
-    
-       
         agent = GetComponent<NavMeshAgent>();
         linkMover = GetComponent<AgentLinkMover>();
 
@@ -113,9 +110,14 @@ public class MultiEnemyMovement : NetworkBehaviour
 
         OnStateChange += HandleStateChange;
 
-        if(enemy != null){
+        if (enemy != null)
+        {
             enemy = GetComponent<EnemyMulti>();
         }
+    }
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();  
     }
 
     private void HandleGainSight(PlayerControllerMulti player)
@@ -212,7 +214,7 @@ public class MultiEnemyMovement : NetworkBehaviour
     {
         if (!IsServer) return;
 
-        if(oldState != newState){
+        if(oldState != newState && gameObject.activeInHierarchy){
 
             if(followCoroutine != null){
                 StopCoroutine(followCoroutine);

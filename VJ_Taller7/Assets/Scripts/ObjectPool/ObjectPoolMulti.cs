@@ -61,8 +61,9 @@ public class ObjectPoolMulti
     private void CreateObject(){
         PoolableObjectMulti poolableObject = GameObject.Instantiate(Prefab, Vector3.zero, Quaternion.identity);
         poolableObject.GetComponent<NetworkObject>().Spawn();
-        poolableObject.transform.SetParent(parent.transform, false);
+        poolableObject.Parent = this;
         poolableObject.Deactivate();
+        poolableObject.transform.SetParent(parent.transform, false);
     }
 
     public PoolableObjectMulti GetObject()
@@ -88,6 +89,7 @@ public class ObjectPoolMulti
 
     public void ReturnObjectToPool(PoolableObjectMulti Object)
     {
+        Debug.Log("Return Object to pool");
         AvailableObjectsPool.Add(Object);
     }
 
