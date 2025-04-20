@@ -160,7 +160,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
     {
         base.OnNetworkSpawn();
         if (!IsServer) return;
-        //attackRadius.Player = Player;
+        attackRadius.Player = Player;
         colliderEnemy = GetComponent<Collider>();
         AttackRadius.OnAttack += OnAttack;
 

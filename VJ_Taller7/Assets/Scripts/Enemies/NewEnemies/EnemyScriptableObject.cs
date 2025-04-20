@@ -5,6 +5,7 @@ using UnityEngine.AI;
 public class EnemyScriptableObject : ScriptableObject
 {
     public Enemy prefab;
+    public EnemyMulti prefabMulti;
     public AttackScriptableObject attackConfiguration;
     public SkillScriptableObject[] skills;
 
@@ -38,6 +39,7 @@ public class EnemyScriptableObject : ScriptableObject
         EnemyScriptableObject scaledEnemy = CreateInstance<EnemyScriptableObject>();
         scaledEnemy.name = name;
         scaledEnemy.prefab = prefab;
+        scaledEnemy.prefabMulti = prefabMulti;
 
         scaledEnemy.attackConfiguration = attackConfiguration.ScaleUpLevel(scaling, level);
 
@@ -96,5 +98,31 @@ public class EnemyScriptableObject : ScriptableObject
         enemy.Health = health;
 
         attackConfiguration.SetUpEnemey(enemy);
+    }
+    public void SetUpEnemyMulti(EnemyMulti enemy)
+    {
+        enemy.Agent.acceleration = acceleration;
+        enemy.Agent.angularSpeed = angularSpeed;
+        enemy.Agent.areaMask = areaMask;
+        enemy.Agent.avoidancePriority = avoidancePriority;
+        enemy.Agent.baseOffset = baseOffset;
+        enemy.Agent.height = height;
+        enemy.Agent.obstacleAvoidanceType = obstacleAvoidanceType;
+        enemy.Agent.radius = radius;
+        enemy.Agent.speed = speed;
+        enemy.Agent.stoppingDistance = stoppingDistance;
+
+        enemy.Movement.UpdateRate = aIUpdateInterval;
+        enemy.Movement.DefaultState = defaultState;
+        enemy.Movement.IdleMoveSpeedMultiplier = idleMoveSpeedMultiplier;
+        enemy.Movement.IdleLocationRadius = idleLocationRadius;
+        enemy.Movement.Waypoints = new Vector3[numberOfWaypoints];
+        enemy.Movement.LineOfSightChecker.Fov = fov;
+        enemy.Movement.LineOfSightChecker.SphereCollider.radius = lineOfSightRadius;
+        enemy.Movement.LineOfSightChecker.LineOfSightMask = attackConfiguration.lineOfSightLayer;
+
+        enemy.Health = health;
+
+        attackConfiguration.SetUpEnemyMulti(enemy);
     }
 }

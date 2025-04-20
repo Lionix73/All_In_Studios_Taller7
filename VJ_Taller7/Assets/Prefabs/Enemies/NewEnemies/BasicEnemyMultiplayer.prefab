@@ -24,6 +24,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BasicEnemyMultiplayer
       objectReference: {fileID: 0}
+    - target: {fileID: 4480754247436323794, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7185059666713373341, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.9
@@ -68,6 +72,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9032037112743138318, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+      propertyPath: m_Radius
+      value: 1.09
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3297732537617688826, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
     - {fileID: 6912761307629795907, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
@@ -83,7 +91,7 @@ PrefabInstance:
       addedObject: {fileID: 1590574492273587072}
     - targetCorrespondingSourceObject: {fileID: 4480754247436323794, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       insertIndex: 2
-      addedObject: {fileID: 1449413352729595013}
+      addedObject: {fileID: 2029271959245250401}
     - targetCorrespondingSourceObject: {fileID: 4480754247436323794, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       insertIndex: 3
       addedObject: {fileID: 8331028897295529255}
@@ -157,7 +165,7 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &1449413352729595013
+--- !u!114 &2029271959245250401
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,7 +174,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 851358318541907134}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9e1e6d86e868c548b8742614b2a8015, type: 3}
+  m_Script: {fileID: 11500000, guid: f0cf370eaebf7af439fdde85a025e52e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
@@ -201,8 +209,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  attackRadius: {fileID: 0}
-  movement: {fileID: 1449413352729595013}
+  attackRadius: {fileID: 7222100657200801198}
+  movement: {fileID: 2029271959245250401}
   agent: {fileID: 3130710162326468274}
   skills: []
   ragdollEnabler: {fileID: 7212004560344189572}
@@ -305,6 +313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e58b731cd6b2324f8e08bb6da2e3758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   sphereCollider: {fileID: 5234953222354074466}
   damage: 10
   attackDelay: 1
@@ -360,7 +369,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   fov: 90
-  enemyMov: {fileID: 1449413352729595013}
+  enemyMov: {fileID: 2029271959245250401}
   lineOfSightMask:
     serializedVersion: 2
     m_Bits: 449

@@ -5,7 +5,7 @@ using UnityEngine;
 public class HealthMulti : NetworkBehaviour, IDamageable
 {
     [SerializeField] private TextMeshProUGUI healthDisplay;
-    private NetworkVariable <int> currentHealth = new NetworkVariable<int>();
+    private NetworkVariable<int> currentHealth = new NetworkVariable<int>();
     public int CurrentHealth
     {
         get => currentHealth.Value;
@@ -24,7 +24,7 @@ public class HealthMulti : NetworkBehaviour, IDamageable
 
     public delegate void PlayerDeath(GameObject player);
     public event PlayerDeath OnPlayerDeath; //Este evento es para avisar al player manager, luego ese avisa a todos
-    private NetworkVariable <bool> isDead = new NetworkVariable<bool>();
+    private NetworkVariable<bool> isDead = new NetworkVariable<bool>();
     public bool IsDead
     {
         get => isDead.Value;
@@ -36,25 +36,25 @@ public class HealthMulti : NetworkBehaviour, IDamageable
 
     void Update()
     {
-        if (UIManager.Singleton !=null)
+        if (UIManager.Singleton != null)
         {
             UIManager.Singleton.GetPlayerHealth(currentHealth.Value, MaxHealth);
-        } 
+        }
     }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+
+        if (IsOwner)
+        {
+            healthDisplay = GameObject.Find("HealthDisplay").GetComponent<TextMeshProUGUI>();
+
+        }
         NetworkObject player = GetComponentInParent<NetworkObject>();
         if (IsServer)
         {
             IsDead = false;
-            MaxHealth = 100;
-            CurrentHealth = 40;
-        }
-        if (IsOwner)
-        {
-            healthDisplay = GameObject.Find("HealthDisplay").GetComponent<TextMeshProUGUI>();
-            HealthChange(CurrentHealth);
+            MultiGameManager.Instance.SpawnPlayer(gameObject);
         }
     }
 
@@ -62,6 +62,7 @@ public class HealthMulti : NetworkBehaviour, IDamageable
     /// Se llama desde el player manager para los valores inicales de la vida al aparce el jugador.
     /// </summary>
     /// <param name="startingHealth"></param>
+    /// 
     public void SetInitialHealth(float startingHealth){
         MaxHealth = startingHealth;
         CurrentHealth = (int)MaxHealth;
@@ -137,10 +138,15 @@ public class HealthMulti : NetworkBehaviour, IDamageable
     public void HealthChangeRpc(int updatedHealth)
     {
         if (!IsOwner) return;
-        healthDisplay.text = $"{CurrentHealth} / {MaxHealth}";
+        healthDisplay.text = $"{updatedHealth} / {MaxHealth}";
     }
     public Transform GetTransform()
     {
         return transform;
+    }
+
+    public GameObject GetPlayer()
+    {
+        return gameObject;
     }
 }

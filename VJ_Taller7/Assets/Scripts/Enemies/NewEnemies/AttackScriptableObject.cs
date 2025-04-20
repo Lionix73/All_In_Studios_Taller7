@@ -46,4 +46,22 @@ public class AttackScriptableObject : ScriptableObject
             rangedAttackRadius.CreateBulletPool();
         }
     }
+    public void SetUpEnemyMulti(EnemyMulti enemy)
+    {
+        (enemy.AttackRadius.sphereCollider == null ? enemy.AttackRadius.GetComponent<SphereCollider>() : enemy.AttackRadius.sphereCollider).radius = attackRadius;
+        enemy.AttackRadius.AttackDelay = attackDelay;
+        enemy.AttackRadius.Damage = damage;
+        enemy.AttackRadius.OnRangeBehvaior = OnRangeBehvaior;
+
+        if (isRanged)
+        {
+            RangedAttackRadius rangedAttackRadius = enemy.AttackRadius.GetComponent<RangedAttackRadius>();
+
+            rangedAttackRadius.BulletPrefab = bulletPrefab;
+            rangedAttackRadius.BulletSpawnOffset = bulletSpawnOffSet;
+            rangedAttackRadius.Mask = lineOfSightLayer;
+
+            rangedAttackRadius.CreateBulletPool();
+        }
+    }
 }

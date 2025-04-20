@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class ObjectPoolMulti
@@ -19,6 +20,11 @@ public class ObjectPoolMulti
     public static ObjectPoolMulti CreateInstance(PoolableObjectMulti Prefab, int Size)
     {
         ObjectPoolMulti pool = null;
+        if (Prefab == null)
+        {
+            Debug.LogError("Prefab cannot be null");
+            return null;
+        }
 
         if (ObjectPools.ContainsKey(Prefab))
         {
@@ -28,6 +34,14 @@ public class ObjectPoolMulti
             pool = new ObjectPoolMulti(Prefab, Size);
 
             pool.parent = new GameObject(Prefab + " Pool");
+            
+            // Asegúrate de que el padre tenga NetworkObject
+            if (!pool.parent.GetComponent<NetworkObject>())
+            {
+                var netObj = pool.parent.AddComponent<NetworkObject>();
+                netObj.Spawn(); // ¡Importante spawnear el padre!
+            }
+
             pool.CreateObjects();
 
             ObjectPools.Add(Prefab, pool);
@@ -45,23 +59,29 @@ public class ObjectPoolMulti
     }
 
     private void CreateObject(){
-        PoolableObjectMulti poolableObject = GameObject.Instantiate(Prefab, Vector3.zero, Quaternion.identity, parent.transform);
-        poolableObject.Parent = this;
-        poolableObject.gameObject.SetActive(false);
+        PoolableObjectMulti poolableObject = GameObject.Instantiate(Prefab, Vector3.zero, Quaternion.identity);
+        poolableObject.GetComponent<NetworkObject>().Spawn();
+        poolableObject.transform.SetParent(parent.transform, false);
+        poolableObject.Deactivate();
     }
 
     public PoolableObjectMulti GetObject()
     {
-        if (AvailableObjectsPool.Count <= 0)
+        if (AvailableObjectsPool.Count == 0)
         {
             CreateObject();
-        } 
+        }
+
+        foreach (var obj in AvailableObjectsPool)
+        {
+            Debug.Log(obj);
+        }
 
         PoolableObjectMulti instance = AvailableObjectsPool[0];
 
         AvailableObjectsPool.RemoveAt(0);
 
-        instance.gameObject.SetActive(true);
+        instance.Activate();
 
         return instance;
     }
