@@ -225,7 +225,7 @@ public class MultiEnemyWavesManager : NetworkBehaviour
                 enemy.Player = player;
 
                 enemy.Movement.Triangulation = navMeshTriangulation;
-                enemy.Movement.Player = player.transform;
+                //enemy.Movement.Player = player.transform;
                 enemy.Agent.enabled = true;
 
                 enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
