@@ -396,7 +396,6 @@ Transform:
   m_LocalScale: {x: 0.99999994, y: 0.9999999, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4618414463357957558}
   - {fileID: 5312135684801077275}
   - {fileID: 3414183552669581485}
   - {fileID: 1880719764707250232}
@@ -1850,6 +1849,8 @@ Transform:
   m_LocalScale: {x: 1.0000006, y: 0.99999964, z: 1.0000002}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4618414463357957558}
+  - {fileID: 1118369709132194060}
   - {fileID: 3143910951443566908}
   - {fileID: 5372688003366056588}
   - {fileID: 5035443839232833392}
@@ -1944,13 +1945,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2556716074208243654}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.9151709, z: -0, w: -0.40306604}
-  m_LocalPosition: {x: -0, y: 0.18, z: -0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.095, y: 0.14, z: 0.132}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5312625763831057041}
-  m_LocalEulerAnglesHint: {x: 0, y: 227.54, z: 0}
+  m_Father: {fileID: 4684989690141656526}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &5820332695796491518
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2013,7 +2014,7 @@ Transform:
   m_GameObject: {fileID: 2623306489877163312}
   serializedVersion: 2
   m_LocalRotation: {x: 0.07163772, y: 4.467615e-16, z: -3.2087415e-17, w: 0.99743074}
-  m_LocalPosition: {x: -8.300152, y: 2.2348256, z: -23.811306}
+  m_LocalPosition: {x: -0.037260648, y: 2.2348256, z: -3.9756527}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3232,7 +3233,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3904718732209742536}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71a9d3a285a4ffa42a376bb9a00dfc8f, type: 3}
   m_Name: 
@@ -4354,7 +4355,7 @@ MonoBehaviour:
     m_MinLimit: -90
     m_MaxLimit: 90
     m_AimAxis: 2
-    m_UpAxis: 1
+    m_UpAxis: 4
     m_WorldUpType: 0
     m_WorldUpObject: {fileID: 0}
     m_WorldUpAxis: 2
@@ -4958,6 +4959,37 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: 1
   OverrideMaxDistance: 20
+--- !u!1 &6386218077713764884
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1118369709132194060}
+  m_Layer: 2
+  m_Name: SecondHandGripRig_target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1118369709132194060
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6386218077713764884}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.017382557, y: -0.30086166, z: 0.90058327, w: 0.3132568}
+  m_LocalPosition: {x: 0.020497354, y: 0.0061466084, z: -0.00036787262}
+  m_LocalScale: {x: 0.14757417, y: 0.14757417, z: 0.1475743}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4684989690141656526}
+  m_LocalEulerAnglesHint: {x: 12.767, y: 236.57901, z: 88.49}
 --- !u!1 &6434862349788326708
 GameObject:
   m_ObjectHideFlags: 0
@@ -6609,11 +6641,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_ConstrainedObject: {fileID: 6034652462768712172}
+    m_ConstrainedObject: {fileID: 7686536213697797295}
     m_SourceObjects:
       m_Length: 1
       m_Item0:
-        transform: {fileID: 0}
+        transform: {fileID: 1118369709132194060}
         weight: 1
       m_Item1:
         transform: {fileID: 0}
@@ -6660,9 +6692,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_Root: {fileID: 5699014836159892809}
-    m_Mid: {fileID: 4817776082933193116}
-    m_Tip: {fileID: 5312625763831057041}
+    m_Root: {fileID: 3330154071454888129}
+    m_Mid: {fileID: 8816687553478419038}
+    m_Tip: {fileID: 8647833703464684930}
     m_Target: {fileID: 7686536213697797295}
     m_Hint: {fileID: 8529939241750057868}
     m_TargetPositionWeight: 1

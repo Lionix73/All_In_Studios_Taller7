@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1888077375328469363}
   - component: {fileID: 6924568299356480614}
   - component: {fileID: 8759641817701630382}
+  - component: {fileID: 2779212388520710679}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -55,11 +56,13 @@ MonoBehaviour:
   spawnPlayerWithMenu: 0
   spawntPoint: {fileID: 3865444026879066620}
   playerPrefab: {fileID: 3839446492626894175, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
+  UIManager: {fileID: 0}
   playerManager: {fileID: 0}
   roundManager: {fileID: 0}
   enemyWavesManager: {fileID: 0}
   scoreManager: {fileID: 0}
   gunManager: {fileID: 0}
+  challengeManager: {fileID: 0}
   availableEnemiesForWave:
   - waveToSet: 1
     availableEnemies: 000000000100000004000000
@@ -165,6 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
+  killedEnemies: 0
   _UIscoreText: {fileID: 0}
 --- !u!114 &8759641817701630382
 MonoBehaviour:
@@ -183,6 +187,19 @@ MonoBehaviour:
   healPerRound: 20
   maxHealthIncreasePerRound: 100
   respawnCD: 3
+--- !u!114 &2779212388520710679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2666794559733852778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71a9d3a285a4ffa42a376bb9a00dfc8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetFPS: 60
 --- !u!1 &7147567092717446138
 GameObject:
   m_ObjectHideFlags: 0
