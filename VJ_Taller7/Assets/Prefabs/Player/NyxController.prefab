@@ -2721,6 +2721,69 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7498379193986730317}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4325034085689873551
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6058116971714829007}
+  - component: {fileID: 5375656606346488515}
+  m_Layer: 0
+  m_Name: noFeather
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6058116971714829007
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4325034085689873551}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 795929819794332350}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5375656606346488515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4325034085689873551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1969866190
+      Data2: 1158811350
+      Data3: 1322651789
+      Data4: -1869065346
+    Path: event:/Guns/featherEmpty
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 30
 --- !u!1 &4381765676848425312
 GameObject:
   m_ObjectHideFlags: 0
@@ -3218,6 +3281,7 @@ Transform:
   m_Children:
   - {fileID: 8391780585527655529}
   - {fileID: 8650177408440372596}
+  - {fileID: 6058116971714829007}
   m_Father: {fileID: 878913006775023137}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5042039936779156767
@@ -3502,6 +3566,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5559edd55be596244b9a2358cc7a787d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  brokenFeather: 0
 --- !u!114 &933564020140116791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6571,7 +6636,7 @@ MonoBehaviour:
   Params: []
   OverrideAttenuation: 0
   OverrideMinDistance: 0
-  OverrideMaxDistance: 75
+  OverrideMaxDistance: 20
 --- !u!1 &8315409566442668666
 GameObject:
   m_ObjectHideFlags: 0

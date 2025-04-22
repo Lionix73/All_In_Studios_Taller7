@@ -18,9 +18,19 @@ public class ShinelessFeather : GoldenFeathers
     {
         InvokeCollisionEvent(other);
 
-        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy")) InvokeBulletEnd(other);
-        
-        if (!isReturning) Return();
+        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            featherSounds[0].Play();
+            InvokeBulletEnd(other);
+            if (!isReturning) Return();
+        }
+        else
+        {
+            FindFirstObjectByType<PlayerSoundsManager>().brokenFeather = true;
+            featherSounds[1].Play();
+        }
+
+        //if (!isReturning) Return(); // me estaba dando un error y como se supone que solo regresa si golpea un enemigo, lo movi arriba. Att: Chanti
     }
 
     public override void OnCollisionExit(Collision other)

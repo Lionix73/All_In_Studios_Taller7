@@ -1,4 +1,4 @@
-using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,18 +6,57 @@ public class PlayerSoundsManager : MonoBehaviour
 {
     private SoundManager soundManager;
     private GunManager gunManager;
-    private PlayerController playerController;
+    private PlayerController pControl;
+
+    public bool brokenFeather;
+
+    private bool firerateAllowShoot;
 
     private void Awake()
     {
         soundManager = FindAnyObjectByType<SoundManager>();
         gunManager = FindAnyObjectByType<GunManager>();
-        playerController = GetComponent<PlayerController>();
+        pControl = GetComponent<PlayerController>();
     }
 
+    private void Update()
+    {
+        MovSounds();
+    }
+
+    private void MovSounds()
+    {
+        if(!pControl.PlayerCanMove) soundManager.StopSound("Walk", "Run");
+
+        if(pControl.PlayerIsMoving)
+        {
+            soundManager.StopSound("GangamStyle");
+
+            if (pControl.PlayerRunning && pControl.PlayerInGround)
+            {
+                soundManager.PlaySound("Run");
+                soundManager.StopSound("Walk");
+            }
+            else if (pControl.PlayerInGround)
+            {
+                soundManager.PlaySound("Walk");
+                soundManager.StopSound("Run");
+            }
+            else
+            {
+                soundManager.StopSound("Walk", "Run");
+            }
+        }
+        else
+        {
+            soundManager.StopSound("Walk", "Run");
+        }
+    }
+
+    #region Shooting Sounds
     public void OnShoot(InputAction.CallbackContext context)
     {
-        if (!gunManager.canShoot) return;
+        if (!gunManager.canShoot || !firerateAllowShoot) return;
 
         if (context.started)
         {
@@ -39,7 +78,10 @@ public class PlayerSoundsManager : MonoBehaviour
                     soundManager.PlaySound("sniperFire");
                     break;
                 case GunType.ShinelessFeather:
-                    soundManager.PlaySound("featherThrow");
+                    if(!brokenFeather)
+                        soundManager.PlaySound("featherThrow");
+                    else
+                        soundManager.PlaySound("noFeather");
                     break;
                 case GunType.GoldenFeather:
                     soundManager.PlaySound("featherThrow");
@@ -63,5 +105,19 @@ public class PlayerSoundsManager : MonoBehaviour
         {
             soundManager.StopSound("rifleFire");
         }
+
+        StartCoroutine(FirerateDelay());
     }
+
+    // Limita la emision de sonidos al firerate del arma
+    IEnumerator FirerateDelay()
+    {
+        firerateAllowShoot = false;
+
+        float delay = gunManager.CurrentGun.ShootConfig.FireRate;
+        yield return new WaitForSeconds(delay);
+
+        firerateAllowShoot = true;
+    }
+    #endregion
 }

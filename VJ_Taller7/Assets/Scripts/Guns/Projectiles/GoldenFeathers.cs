@@ -11,7 +11,7 @@ public class GoldenFeathers : Bullet
     public bool isFlying;
     [SerializeField] private float returningStrength;
     //private PhysicsMaterial physics_Mat;
-    [SerializeField] StudioEventEmitter[] featherSounds;
+    public StudioEventEmitter[] featherSounds;
 
     private void Awake() {
         Rigidbody = GetComponent<Rigidbody>();

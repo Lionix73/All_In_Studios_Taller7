@@ -89,6 +89,7 @@ public class PlayerController : MonoBehaviour
     private bool canJump = true;
     private bool isEmoting = false;
     private bool isAiming = false;
+    private bool isMoving;
     private bool usingRifle = true;
     private bool isJumping;
     private bool wasOnGround;
@@ -130,7 +131,6 @@ public class PlayerController : MonoBehaviour
         UpdateAnimLayer();
         adjustFOV();
 
-        animator.SetBool("ShortGun", gunManager.CurrentGun.Type == GunType.BasicPistol || gunManager.CurrentGun.Type == GunType.Revolver ? true : false);
         AdjustRigs();
     }
 
@@ -143,13 +143,10 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
-        if (!canMove)
-        {
-            soundManager.StopSound("Walk", "Run");
-            return;
-        }
+        if (!canMove) return;
 
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
+        isMoving = moveInput.sqrMagnitude > 0.1f;
 
         desiredMoveDirection = (transform.right * moveDirection.x + transform.forward * moveDirection.z);
 
@@ -159,31 +156,13 @@ public class PlayerController : MonoBehaviour
         {
             rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
             isEmoting = false;
-            soundManager.StopSound("GangamStyle");
-
-            if (isRunning && isGrounded)
-            {
-                soundManager.PlaySound("Run");
-                soundManager.StopSound("Walk");
-            }
-            else if(isGrounded)
-            {
-                soundManager.PlaySound("Walk");
-                soundManager.StopSound("Run");
-            }
-            else
-            {
-                soundManager.StopSound("Walk", "Run");
-            }
         }
         else
         {
             isRunning = false;
-            soundManager.StopSound("Walk", "Run");
         }
 
         rb.useGravity = !isGrounded ? true : !OnSlope();
-
 
         if (OnSlope() && !isJumping)
         {
@@ -207,16 +186,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    #region Animation
+    #region Animations and Layers management
     private void HandleAnimations()
     {
+        animator.SetBool("ShortGun", gunManager.CurrentGun.Type == GunType.BasicPistol || gunManager.CurrentGun.Type == GunType.Revolver ? true : false);
+
         speedX.Update();
         speedY.Update();
         layersDampener1.Update();
         layersDampener2.Update();
         ChangeAnimLayer(SelectAnimLayer());
 
-        bool isMoving = moveInput.sqrMagnitude > 0.1f;
         speedX.TargetValue = moveInput.x;
         speedY.TargetValue = moveInput.y;
 
@@ -309,29 +289,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    private IEnumerator AnimLayerCountdown(string layer, float delay)
-    {
-        float timer = 0f;
-        int layerI = animator.GetLayerIndex(layer);
-        animator.SetLayerWeight(layerI, 1);
-
-        while (timer < delay)
-        {
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-        animator.SetLayerWeight(layerI, 0);
-
-        //Math.Clamp(timer, 0, 1);
-        //while(animator.GetLayerWeight(layerI) > 0)
-        //{
-        //    timer -= Time.deltaTime;
-
-        //    animator.SetLayerWeight(layerI, timer);
-        //    yield return null;
-        //}
-    }
 
     #endregion
 
@@ -368,18 +325,6 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetTrigger("ChangeGun");
         }
-    }
-
-    private IEnumerator Reload(float delay)
-    {
-        soundManager.StopSound("rifleFire");
-        animator.SetBool("ShootBurst", false);
-
-        canReload = false;
-        canShoot = false;
-        yield return new WaitForSeconds(delay);
-        canShoot = true;
-        canReload = true;
     }
 
     public void OnEmote(InputAction.CallbackContext context)
@@ -493,25 +438,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnCrouch(InputAction.CallbackContext context)
-    {
-        if (context.performed && canCrouch && isGrounded)
-        {
-            ExchangeColliders();
-            isCrouching = !isCrouching;
-            canCrouch = false;
-
-            if(isRunning && canSlide && !isSliding)
-            {
-                soundManager.PlaySound("Slide");
-                OnSlide();
-                StartCoroutine(Slide());
-            }
-
-            Invoke(nameof(ResetCrouchFlag), 0.5f);
-        }
-    }
-
     #region Melee
     public void OnMelee(InputAction.CallbackContext context) 
     {
@@ -524,7 +450,6 @@ public class PlayerController : MonoBehaviour
     private IEnumerator Melee()
     {
         animator.SetTrigger("Melee");
-        StartCoroutine(AnimLayerCountdown("Melee", 1.2f));
         
         canMove = false;
         canMelee = false;
@@ -544,6 +469,50 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
+    #region Crouch and Slide
+    public void OnCrouch(InputAction.CallbackContext context)
+    {
+        if (context.performed && canCrouch && isGrounded)
+        {
+            ExchangeColliders();
+            isCrouching = !isCrouching;
+            canCrouch = false;
+
+            if(isRunning && canSlide && !isSliding)
+            {
+                soundManager.PlaySound("Slide");
+                StartCoroutine(Slide());
+            }
+
+            Invoke(nameof(ResetCrouchFlag), 0.5f);
+        }
+    }
+
+    private IEnumerator Slide()
+    {
+        slideVFX.Play();
+
+        isSliding = true;
+        canSlide = false;
+
+        //yield return new WaitForSeconds(slideDuration);
+        float timer = 0f;
+        while (timer < slideDuration)
+        {
+            soundManager.StopSound("Run");
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        isSliding = false;
+        isCrouching = false;
+        yield return new WaitForSeconds(slideCooldown);
+
+        canSlide = true;
+        ExchangeColliders();
+        Invoke(nameof(ResetCrouchFlag), 0.5f);
+    }
+
     private void ExchangeColliders()
     {
         if(playerCollider != null && crouchCollider != null)
@@ -561,36 +530,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private IEnumerator Slide()
-    {
-        slideVFX.Play();
-
-        if (isSliding)
-        {
-            soundManager.StopSound("Run");
-            
-            yield return new WaitForSeconds(slideDuration);
-
-            isSliding = false;
-            isCrouching = false;
-            yield return new WaitForSeconds(slideCooldown);
-
-            canSlide = true;
-            ResetCrouchFlag();
-            ExchangeColliders();
-        }
-    }
-
-    public void OnSlide()
-    {
-        isSliding = true;
-        canSlide = false;
-    }
-
     private void ResetCrouchFlag()
     {
         canCrouch = true;
     }
+    #endregion
 
     public void OnDash()
     {
@@ -629,6 +573,8 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
+
+    #region Check Terrain and Height
     private void CheckGround()
     {
         wasOnGround = isGrounded;
@@ -689,6 +635,7 @@ public class PlayerController : MonoBehaviour
             new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
             GroundedRadius);
     }
+    #endregion
 
     #region GettersSetters
     public bool PlayerCanMove
@@ -697,10 +644,22 @@ public class PlayerController : MonoBehaviour
         set => canMove = value;
     }
 
-    public bool PlayerCanShoot
+    public bool PlayerIsMoving
     {
-        get => canShoot;
-        set => canShoot = value;
+        get => isMoving;
+        set => isMoving = value;
+    }
+
+    public bool PlayerRunning
+    {
+        get => isRunning;
+        set => isRunning = value;
+    }
+
+    public bool PlayerInGround
+    {
+        get => isGrounded;
+        set => isGrounded = value;
     }
 
     public bool PlayerCanJump
