@@ -21,6 +21,9 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private float healPerRound;
     [SerializeField] private float maxHealthIncreasePerRound;
 
+    //DEBERIA CAMBIARSE Y NO SER UN SERIALIZEFIELD Y CONSEGUIRLO DE OTRA FORMA PERO NO SE COMO LO MANEJA VILLEGAS
+    [SerializeField] private DamageUI_VFX damageUI_VFX; // Script para controlar el efecto de cuando recibe daño el jugador
+
     [Header("Respawn")]
     [SerializeField] private float respawnCD;
     public void SpawnPlayer(GameObject playerPrefab, Transform spawntPoint) {
@@ -56,6 +59,12 @@ public class PlayerManager : MonoBehaviour
         playerMaxHealth = maxHealth;
 
         UISet();
+
+        if(currentHealth >= damageUI_VFX.HealthThreshold){
+            damageUI_VFX.ShowDamageFlash(currentHealth, maxHealth); //Flash cuando recibe un hit
+        }
+        
+        damageUI_VFX.UpdateDamageEffect(currentHealth, maxHealth); //Actualiza la cantidad de vida que tiene
     }
     private void UISet(){
         if (UIManager.Singleton == null) return;

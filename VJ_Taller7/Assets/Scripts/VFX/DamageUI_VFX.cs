@@ -11,6 +11,9 @@ public class DamageUI_VFX : MonoBehaviour
     [SerializeField] private float flashDuration = 0.2f;
     public float FlashDuration { get => flashDuration; set => flashDuration = value; }
 
+    [SerializeField] private float flashIntensity = 0.5f;
+    public float FlashIntensity { get => flashIntensity; set => flashIntensity = value; }
+
     [SerializeField] private int healthThreshold = 30;
     public int HealthThreshold { get => healthThreshold; set => healthThreshold = value; }
 
@@ -18,10 +21,15 @@ public class DamageUI_VFX : MonoBehaviour
 
     void Start()
     {
+        if(damageImage == null)
+        {
+            damageImage = GetComponent<Image>();
+        }
+
         damageImage.color = damageColor;
     }
 
-    public void UpdateDamageEffect(float health)
+    public void UpdateDamageEffect(float health, float maxHealth)
     {
         if (health < healthThreshold)
         {
@@ -34,7 +42,7 @@ public class DamageUI_VFX : MonoBehaviour
         }
     }
 
-    public void ShowDamageFlash()
+    public void ShowDamageFlash(float health, float maxHealth)
     {
         damageImage.DOFade(0.5f, flashDuration).OnComplete(() => 
         {
