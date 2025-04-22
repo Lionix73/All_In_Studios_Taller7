@@ -52,6 +52,7 @@ public class Health : MonoBehaviour, IDamageable
         if (currentHealth <= 0)
         {
             pController.PlayerCanMove = false;
+            pController.PlayerCanJump = false;
             animator.SetTrigger("Dead");
             OnPlayerDeath?.Invoke(gameObject);
             isDead=true;

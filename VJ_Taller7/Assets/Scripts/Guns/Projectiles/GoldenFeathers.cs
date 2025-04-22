@@ -1,3 +1,4 @@
+using FMODUnity;
 using System.Dynamic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,9 +11,11 @@ public class GoldenFeathers : Bullet
     public bool isFlying;
     [SerializeField] private float returningStrength;
     //private PhysicsMaterial physics_Mat;
+    [SerializeField] StudioEventEmitter[] featherSounds;
 
     private void Awake() {
         Rigidbody = GetComponent<Rigidbody>();
+        featherSounds = GetComponentsInChildren<StudioEventEmitter>();
     }
 
     override public void Spawn(Vector3 SpawnForce){
@@ -34,18 +37,27 @@ public class GoldenFeathers : Bullet
         Rigidbody.AddForce(direction * returningStrength);
         isReturning = true;
         isFlying = true;
+
+        featherSounds[2].Play();
     }
 
     public override void OnCollisionEnter(Collision other) {
         if(!isFlying) return;
 
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player")){
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
             InvokeCollisionEvent(other);
         }
-        else if(other.gameObject.layer == LayerMask.NameToLayer("Enemy")){
-           InvokeCollisionEvent(other);
+        else if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            featherSounds[0].Play();
+            InvokeCollisionEvent(other);
         }
-        else{ImpactEffect(other);} //Si no golpea un enemigo que haga el efecto
+        else //Si no golpea un enemigo que haga el efecto
+        {
+            featherSounds[1].Play();
+            ImpactEffect(other);
+        }
 
         if (isReturning)
         {

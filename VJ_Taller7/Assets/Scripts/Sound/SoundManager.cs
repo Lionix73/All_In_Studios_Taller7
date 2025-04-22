@@ -1,22 +1,29 @@
 using FMODUnity;
 using JetBrains.Annotations;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
 public class SoundManager : MonoBehaviour
 {
-    public StudioEventEmitter[] sounds;
-
+    public List<StudioEventEmitter> sounds;
+        
     private int sound_index;
     private void Start()
     {
-        sounds = FindObjectsByType<StudioEventEmitter>(FindObjectsSortMode.None);
+        GameObject[] objs = GameObject.FindGameObjectsWithTag("Sound");
+        objs.ToList();
+
+        foreach(GameObject obj in objs)
+        {
+            sounds.Add(obj.GetComponent<StudioEventEmitter>());
+        }
     }
 
     public int GetSoundIndex(string s_name)
     {
-        for (int i = 0; i < sounds.Length; i++)
+        for (int i = 0; i < sounds.Count; i++)
         {
             if (sounds[i].gameObject.name == s_name)
             {
@@ -46,7 +53,7 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySound(string s_name1, string s_name2 = "a", string s_name3 = "b", string s_name4 = "c", string s_name5 = "d")
     {
-        for (int i = 0; i < sounds.Length; i++)
+        for (int i = 0; i < sounds.Count; i++)
         {
             if (sounds[i].gameObject.name == s_name1 || sounds[i].gameObject.name == s_name2 || 
                 sounds[i].gameObject.name == s_name3 || sounds[i].gameObject.name == s_name4 || 
@@ -71,7 +78,7 @@ public class SoundManager : MonoBehaviour
 
     public void StopSound(string s_name1, string s_name2 = "a", string s_name3 = "b", string s_name4 = "c", string s_name5 = "d")
     {
-        for (int i = 0; i < sounds.Length; i++)
+        for (int i = 0; i < sounds.Count; i++)
         {
             if (sounds[i].gameObject.name == s_name1 || sounds[i].gameObject.name == s_name2 || 
                 sounds[i].gameObject.name == s_name3 || sounds[i].gameObject.name == s_name4 || 

@@ -27,6 +27,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 248332
+--- !u!114 &-8370958787269278622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Guns/featherBreak
+  m_EditorClassIdentifier: 
+  Path: event:/Guns/featherBreak
+  Guid:
+    Data1: -210635952
+    Data2: 1158686078
+    Data3: 566339974
+    Data4: 2119969893
+  Banks:
+  - {fileID: -4513784106951406516}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 75
+  Length: 1171
 --- !u!114 &-8321730620031244040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,7 +96,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638761968095727155
+  lastModified: 638808510418060103
   FileSizes:
   - Name: Desktop
     Value: 289920
@@ -263,6 +290,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 560
+--- !u!114 &-5293698504948608844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Guns/featherThrow
+  m_EditorClassIdentifier: 
+  Path: event:/Guns/featherThrow
+  Guid:
+    Data1: -962979043
+    Data2: 1214764466
+    Data3: -1589014649
+    Data4: -1348333081
+  Banks:
+  - {fileID: -4513784106951406516}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 30
+  Length: 330
 --- !u!114 &-4793974485510669844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,10 +386,10 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Guns.bank
   Name: Guns
   StudioPath: bank:/Guns
-  lastModified: 638766649920105352
+  lastModified: 638808567824861860
   FileSizes:
   - Name: Desktop
-    Value: 427680
+    Value: 493088
   Exists: 1
 --- !u!114 &-4303300845778931015
 MonoBehaviour:
@@ -632,12 +686,17 @@ MonoBehaviour:
   - {fileID: 4781946106897976136}
   - {fileID: 4292038960267146283}
   - {fileID: -744192283960898893}
+  - {fileID: -5293698504948608844}
+  - {fileID: -8370958787269278622}
+  - {fileID: 1318553803241570733}
+  - {fileID: 7090888100674422147}
+  - {fileID: 2709067754568219011}
   EditorParameters: []
   MasterBanks:
   - {fileID: -8195523702505923715}
   StringsBanks:
   - {fileID: 5092639294113453569}
-  cacheTime: 638807609720508855
+  cacheTime: 638808567824861860
   cacheVersion: 131622
 --- !u!114 &16718576494435817
 MonoBehaviour:
@@ -681,11 +740,38 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Player.bank
   Name: Player
   StudioPath: bank:/Player
-  lastModified: 638784794330036573
+  lastModified: 638808510419300327
   FileSizes:
   - Name: Desktop
     Value: 1260512
   Exists: 1
+--- !u!114 &1318553803241570733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Guns/featherHitEnemy
+  m_EditorClassIdentifier: 
+  Path: event:/Guns/featherHitEnemy
+  Guid:
+    Data1: -1518649409
+    Data2: 1086023206
+    Data3: -26731892
+    Data4: 1419449745
+  Banks:
+  - {fileID: -4513784106951406516}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 30
+  Length: 624
 --- !u!114 &2110489381709066042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -728,11 +814,38 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Env.bank
   Name: Env
   StudioPath: bank:/Env
-  lastModified: 638792243880456748
+  lastModified: 638808510415179112
   FileSizes:
   - Name: Desktop
     Value: 122304
   Exists: 1
+--- !u!114 &2709067754568219011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Guns/featherReturn
+  m_EditorClassIdentifier: 
+  Path: event:/Guns/featherReturn
+  Guid:
+    Data1: 692563172
+    Data2: 1226284346
+    Data3: 1556359578
+    Data4: 362222596
+  Banks:
+  - {fileID: -4513784106951406516}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 15
+  Length: 200
 --- !u!114 &3385443423642959884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -856,10 +969,10 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638807609720040272
+  lastModified: 638808510418080389
   FileSizes:
   - Name: Desktop
-    Value: 2352
+    Value: 2570
   Exists: 1
 --- !u!114 &5951964841540460801
 MonoBehaviour:
@@ -984,11 +1097,38 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/UI.bank
   Name: UI
   StudioPath: bank:/UI
-  lastModified: 638807609720508855
+  lastModified: 638808510420038915
   FileSizes:
   - Name: Desktop
     Value: 3164384
   Exists: 1
+--- !u!114 &7090888100674422147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Guns/featherHitSurface
+  m_EditorClassIdentifier: 
+  Path: event:/Guns/featherHitSurface
+  Guid:
+    Data1: 523277015
+    Data2: 1175523685
+    Data3: 576765335
+    Data4: 1146051725
+  Banks:
+  - {fileID: -4513784106951406516}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 30
+  Length: 480
 --- !u!114 &7110951529853266717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1004,7 +1144,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638754105591141189
+  lastModified: 638808510418614522
   FileSizes:
   - Name: Desktop
     Value: 3100128

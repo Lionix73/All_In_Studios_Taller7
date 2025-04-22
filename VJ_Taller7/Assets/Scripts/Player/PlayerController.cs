@@ -370,78 +370,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnFire(InputAction.CallbackContext context) //Lo pase al game manager ATT: Jacobo
-    {
-        if (!canShoot) return;
-
-        if (context.started)
-        {
-            switch(gunManager.CurrentGun.Type)
-            {
-                case GunType.Rifle:
-                    soundManager.PlaySound("rifleFire");
-                    animator.SetBool("ShootBurst", true);
-                    break;
-                case GunType.BasicPistol:
-                    soundManager.PlaySound("pistolFire");
-                    animator.SetTrigger("ShootOnce");
-                    break;
-                case GunType.Revolver:
-                    soundManager.PlaySound("revolverFire");
-                    animator.SetTrigger("ShootOnce");
-                    break;
-                case GunType.Shotgun:
-                    soundManager.PlaySound("shotgunFire");
-                    animator.SetTrigger("ShootOnce");
-                    break;
-                case GunType.Sniper:
-                    soundManager.PlaySound("sniperFire");
-                    animator.SetTrigger("ShootOnce");
-                    break;
-            }
-        }
-
-        if (context.canceled)
-        {
-            soundManager.StopSound("rifleFire");
-            animator.SetBool("ShootBurst", false);
-        }
-    }
-
-    public void OnReload(InputAction.CallbackContext context) //Lo pase al game manager ATT: Jacobo
-    {
-        if(context.performed && canReload)
-        {
-            animator.SetTrigger("Reload");
-
-            StartCoroutine(AnimLayerCountdown("Reload", 4f));
-
-            switch (gunManager.CurrentGun.Type)
-            {
-                case GunType.Rifle:
-                    soundManager.PlaySound("rifleReload");
-                    StartCoroutine(Reload(2));
-                    break;
-                case GunType.BasicPistol:
-                    soundManager.PlaySound("pistolReload");
-                    StartCoroutine(Reload(2.12f));
-                    break;
-                case GunType.Revolver:
-                    soundManager.PlaySound("revolverReload");
-                    StartCoroutine(Reload(4.3f));
-                    break;
-                case GunType.Shotgun:
-                    soundManager.PlaySound("shotgunReload");
-                    StartCoroutine(Reload(5.4f));
-                    break;
-                case GunType.Sniper:
-                    soundManager.PlaySound("sniperReload");
-                    StartCoroutine(Reload(1.45f));
-                    break;
-            }
-        }
-    }
-
     private IEnumerator Reload(float delay)
     {
         soundManager.StopSound("rifleFire");
@@ -767,6 +695,18 @@ public class PlayerController : MonoBehaviour
     {
         get => canMove;
         set => canMove = value;
+    }
+
+    public bool PlayerCanShoot
+    {
+        get => canShoot;
+        set => canShoot = value;
+    }
+
+    public bool PlayerCanJump
+    {
+        get => canJump;
+        set => canJump = value;
     }
     #endregion
 }

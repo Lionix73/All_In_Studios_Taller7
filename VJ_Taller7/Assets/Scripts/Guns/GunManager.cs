@@ -36,7 +36,7 @@ public class GunManager : MonoBehaviour
     private GunType gunToPick;
 
     private bool shooting;
-    private bool canShoot = true;
+    public bool canShoot = true;
 
     [Space]
     [Header("Active Guns Info")]
