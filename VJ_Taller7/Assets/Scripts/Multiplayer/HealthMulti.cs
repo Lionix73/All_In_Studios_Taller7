@@ -1,5 +1,6 @@
 using TMPro;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HealthMulti : NetworkBehaviour, IDamageable
@@ -34,7 +35,9 @@ public class HealthMulti : NetworkBehaviour, IDamageable
     [SerializeField] Animator animator;
     private PlayerControllerMulti pController;
 
-    private void Start()
+    private NetworkVariable<ulong> currentPlayer = new NetworkVariable<ulong>();
+
+    private void Awake()
     {
         pController = GetComponent<PlayerControllerMulti>();
     }
@@ -57,7 +60,7 @@ public class HealthMulti : NetworkBehaviour, IDamageable
         NetworkObject player = GetComponentInParent<NetworkObject>();
         if (IsServer)
         {
-            MultiGameManager.Instance.SpawnPlayer(gameObject);
+            MultiGameManager.Instance.SpawnPlayer(OwnerClientId , gameObject);
         }
     }
 
@@ -69,6 +72,7 @@ public class HealthMulti : NetworkBehaviour, IDamageable
     public void SetInitialHealth(float startingHealth){
         MaxHealth = startingHealth;
         CurrentHealth = (int)MaxHealth;
+        MovementPlayerStateRpc(true);
 
         HealthChange(CurrentHealth);
         IsDead = false;
@@ -91,7 +95,7 @@ public class HealthMulti : NetworkBehaviour, IDamageable
             if(updatedHealth <= 0)
             {
                 IsDead = true;
-                //OnPlayerDeath?.Invoke(gameObject);
+                OnPlayerDeath.Invoke(gameObject);
             }
         }
 
@@ -99,18 +103,31 @@ public class HealthMulti : NetworkBehaviour, IDamageable
 
         if (updatedHealth <= 0)
         {
-            pController.PlayerCanMove = false;
-            pController.PlayerCanJump = false;
-            animator.SetTrigger("Dead");
-            OnPlayerDeath?.Invoke(gameObject);
-            animator.SetTrigger("Dead");
-            
+            MovementPlayerStateRpc(false);
         }
         else
         {
             animator.SetTrigger("Hit");
         }
 
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void MovementPlayerStateRpc(bool state)
+    {
+        if (!IsOwner) return;
+
+        pController.PlayerCanMove = state;
+        pController.PlayerCanJump = state;
+        
+        if(state)
+        {
+            animator.SetTrigger("Revive");
+        }
+        else
+        {
+            animator.SetTrigger("Dead");
+        }
     }
     /// <summary>
     /// Heal the player

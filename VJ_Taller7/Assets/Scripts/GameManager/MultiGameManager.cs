@@ -69,7 +69,7 @@ public class MultiGameManager : NetworkBehaviour
     }
 
     [ContextMenu("SpawnPlayer")]
-    public void SpawnPlayer(GameObject playerGO) {
+    public void SpawnPlayer(ulong clientId ,GameObject playerGO) {
         playerPrefab = playerGO;
         // spawn player\
         if (spawnPlayerWithMenu){
@@ -80,7 +80,7 @@ public class MultiGameManager : NetworkBehaviour
             playerManager.SpawnPlayer(playerPrefab, spawntPoint);
             gunManager = playerManager.gunManager;
         }*/
-        playerManager.SpawnPlayer(playerPrefab, spawntPoint);
+        playerManager.RegisterPlayer(clientId, playerPrefab);
         isGameOver = false;
     }
     public void PlayerDied(GameObject player) {

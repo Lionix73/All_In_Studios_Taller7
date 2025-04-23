@@ -106,7 +106,7 @@ public class MultiAttackRadius : NetworkBehaviour
                 Transform damageablesTransform = damageables[i].GetTransform();
                 float distance = Vector3.Distance(transform.position, damageablesTransform.position);
 
-                Debug.Log("Distance: " + distance + " - ClosestDistance: " + closestDistance);
+                //Debug.Log("Distance: " + distance + " - ClosestDistance: " + closestDistance);
 
                 if(distance < closestDistance)
                 {
