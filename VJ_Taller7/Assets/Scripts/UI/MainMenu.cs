@@ -59,6 +59,8 @@ public class UIManager : MonoBehaviour
             }
         }
         IsMainMenu = true;
+
+        soundManager = GetComponentInChildren<ThisObjectSounds>();
     }
 
     private void OnDestroy()
@@ -71,9 +73,13 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            if(!IsPaused)
+                soundManager.PlaySound("PausedButton");
+            else
+                soundManager.PlaySound("PlayButton");
+
             PauseGame(4);
         }
-
     }
 
     private float killedEnemiesUI = 0;
@@ -107,6 +113,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private  List<GameObject> playerNameText = new List<GameObject>();
     [SerializeField] private GameObject UIWaves;
 
+    private ThisObjectSounds soundManager;
 
     public void StartGameUI()
     {

@@ -38,7 +38,7 @@ Transform:
   - {fileID: 1101369480612620007}
   - {fileID: 817827609343500063}
   - {fileID: 5821378083514365836}
-  - {fileID: 8469249645402785813}
+  - {fileID: 7536266116212525238}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3625774532078961700
@@ -404,7 +404,6 @@ GameObject:
   - component: {fileID: 4421129872349837335}
   - component: {fileID: 1306863697625437054}
   - component: {fileID: 576055717050390647}
-  - component: {fileID: 7238493989020024509}
   m_Layer: 5
   m_Name: QuitGame
   m_TagString: Untagged
@@ -526,7 +525,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1746975927257191041}
+      - m_Target: {fileID: 3970393093114573529}
         m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
         m_MethodName: Play
         m_Mode: 1
@@ -538,37 +537,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7238493989020024509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 461067601389291354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 1195109271
-      Data2: 1238241658
-      Data3: -655333974
-      Data4: 370836031
-    Path: event:/UI/MenuButton
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &525157843527300833
 GameObject:
   m_ObjectHideFlags: 0
@@ -1490,6 +1458,69 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &1283333229279628754
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6345949057538960030}
+  - component: {fileID: 4789452899634515912}
+  m_Layer: 5
+  m_Name: BackButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6345949057538960030
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1283333229279628754}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7536266116212525238}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4789452899634515912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1283333229279628754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1656152364
+      Data2: 1122579502
+      Data3: -1566870610
+      Data4: 542008266
+    Path: event:/UI/BackButton
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &1285596694115225177
 GameObject:
   m_ObjectHideFlags: 0
@@ -2082,6 +2113,69 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &1639671744578471351
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2138492839916350033}
+  - component: {fileID: 4716947210748163611}
+  m_Layer: 5
+  m_Name: PausedButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2138492839916350033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639671744578471351}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7536266116212525238}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4716947210748163611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639671744578471351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 67527848
+      Data2: 1108938725
+      Data3: 1717178546
+      Data4: -169008599
+    Path: event:/UI/PauseButton
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &1763887067708087910
 GameObject:
   m_ObjectHideFlags: 0
@@ -3133,12 +3227,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2239689358977901410}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8946498604536226962}
+  m_Father: {fileID: 7536266116212525238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &916191315865126754
 MonoBehaviour:
@@ -3159,7 +3253,7 @@ MonoBehaviour:
       Data2: 1100426821
       Data3: 170240417
       Data4: -525112959
-    Path: event:/UI/MusicMenu1
+    Path: event:/Music/MusicMainMenu
   Event: 
   EventPlayTrigger: 0
   EventStopTrigger: 0
@@ -5266,7 +5360,6 @@ GameObject:
   - component: {fileID: 8948929986380704873}
   - component: {fileID: 2080940087642558543}
   - component: {fileID: 8783848597766174707}
-  - component: {fileID: 1283592109583617102}
   m_Layer: 5
   m_Name: Play
   m_TagString: Untagged
@@ -5412,7 +5505,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1283592109583617102}
+      - m_Target: {fileID: 3073136096093876148}
         m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
         m_MethodName: Play
         m_Mode: 1
@@ -5424,37 +5517,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1283592109583617102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4109550464340585914}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -378627366
-      Data2: 1106256897
-      Data3: -1516286798
-      Data4: 356608778
-    Path: event:/UI/PlayButton
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
+      - m_Target: {fileID: 916191315865126754}
+        m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
+        m_MethodName: Stop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4111179374814206224
 GameObject:
   m_ObjectHideFlags: 0
@@ -5467,7 +5541,6 @@ GameObject:
   - component: {fileID: 1524246411756848036}
   - component: {fileID: 2847109120032218648}
   - component: {fileID: 6084477883954491951}
-  - component: {fileID: 2597604926413837177}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -5588,7 +5661,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 891174453728073794}
+      - m_Target: {fileID: 4789452899634515912}
         m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
         m_MethodName: Play
         m_Mode: 1
@@ -5600,37 +5673,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2597604926413837177
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4111179374814206224}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -1656152364
-      Data2: 1122579502
-      Data3: -1566870610
-      Data4: 542008266
-    Path: event:/UI/BackButton
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &4193049072596078854
 GameObject:
   m_ObjectHideFlags: 0
@@ -5767,6 +5809,69 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &4269071826656330883
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2351528045493877064}
+  - component: {fileID: 3073136096093876148}
+  m_Layer: 5
+  m_Name: PlayButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2351528045493877064
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4269071826656330883}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7536266116212525238}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3073136096093876148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4269071826656330883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -378627366
+      Data2: 1106256897
+      Data3: -1516286798
+      Data4: 356608778
+    Path: event:/UI/PlayButton
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &4349960099409274263
 GameObject:
   m_ObjectHideFlags: 0
@@ -6349,6 +6454,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 3970393093114573529}
+        m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4672106035979809847
 GameObject:
   m_ObjectHideFlags: 0
@@ -6662,6 +6779,69 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &4747721670351386319
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6777616881357218747}
+  - component: {fileID: 3970393093114573529}
+  m_Layer: 5
+  m_Name: MenuButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6777616881357218747
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4747721670351386319}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7536266116212525238}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3970393093114573529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4747721670351386319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1195109271
+      Data2: 1238241658
+      Data3: -655333974
+      Data4: 370836031
+    Path: event:/UI/MenuButton
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &4763274207990378781
 GameObject:
   m_ObjectHideFlags: 0
@@ -6907,6 +7087,18 @@ MonoBehaviour:
           m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: PlayGround
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3970393093114573529}
+        m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &4819303371315340440
@@ -8000,7 +8192,6 @@ GameObject:
   - component: {fileID: 685777006869459327}
   - component: {fileID: 3362787456489979953}
   - component: {fileID: 6693149959303759047}
-  - component: {fileID: 937399540120081260}
   m_Layer: 5
   m_Name: Select Level
   m_TagString: Untagged
@@ -8122,7 +8313,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1746975927257191041}
+      - m_Target: {fileID: 3970393093114573529}
         m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
         m_MethodName: Play
         m_Mode: 1
@@ -8134,37 +8325,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &937399540120081260
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5854785924458342221}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 1195109271
-      Data2: 1238241658
-      Data3: -655333974
-      Data4: 370836031
-    Path: event:/UI/MenuButton
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &5869844913764814446
 GameObject:
   m_ObjectHideFlags: 0
@@ -9766,7 +9926,6 @@ GameObject:
   - component: {fileID: 4678231840750681033}
   - component: {fileID: 4269718161808323027}
   - component: {fileID: 8505369545303902834}
-  - component: {fileID: 4586321150298566003}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -9887,7 +10046,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 891174453728073794}
+      - m_Target: {fileID: 4789452899634515912}
         m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
         m_MethodName: Play
         m_Mode: 1
@@ -9899,37 +10058,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4586321150298566003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7121254389988939211}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -1656152364
-      Data2: 1122579502
-      Data3: -1566870610
-      Data4: 542008266
-    Path: event:/UI/BackButton
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &7123902246096159006
 GameObject:
   m_ObjectHideFlags: 0
@@ -10603,6 +10731,7 @@ GameObject:
   - component: {fileID: 5947751464503257672}
   - component: {fileID: 813829788394964583}
   - component: {fileID: 8297637858932461933}
+  - component: {fileID: 6793347808741987418}
   m_Layer: 5
   m_Name: BackToMenu
   m_TagString: Untagged
@@ -10736,6 +10865,49 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6793347808741987418}
+        m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6793347808741987418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7673117156122022008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1656152364
+      Data2: 1122579502
+      Data3: -1566870610
+      Data4: 542008266
+    Path: event:/UI/BackButton
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &7686359083123129591
 GameObject:
   m_ObjectHideFlags: 0
@@ -11324,6 +11496,18 @@ MonoBehaviour:
           m_StringArgument: MainMenu
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 4789452899634515912}
+        m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8159184342564045605
 GameObject:
   m_ObjectHideFlags: 0
@@ -11758,7 +11942,6 @@ GameObject:
   - component: {fileID: 632516502884915789}
   - component: {fileID: 5660924635424315274}
   - component: {fileID: 4322563747193058451}
-  - component: {fileID: 891174453728073794}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -11879,7 +12062,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 891174453728073794}
+      - m_Target: {fileID: 4789452899634515912}
         m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
         m_MethodName: Play
         m_Mode: 1
@@ -11891,37 +12074,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &891174453728073794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8385760502528356389}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -1656152364
-      Data2: 1122579502
-      Data3: -1566870610
-      Data4: 542008266
-    Path: event:/UI/BackButton
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &8441246074935892679
 GameObject:
   m_ObjectHideFlags: 0
@@ -11987,6 +12139,56 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &8495249222146720975
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7536266116212525238}
+  - component: {fileID: 9169912571514661403}
+  m_Layer: 5
+  m_Name: '[Sounds]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7536266116212525238
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8495249222146720975}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8469249645402785813}
+  - {fileID: 2138492839916350033}
+  - {fileID: 2351528045493877064}
+  - {fileID: 6777616881357218747}
+  - {fileID: 6345949057538960030}
+  m_Father: {fileID: 8946498604536226962}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9169912571514661403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8495249222146720975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3da4c8252207fc84ba39f03847507014, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds: []
 --- !u!1 &8668725468182178880
 GameObject:
   m_ObjectHideFlags: 0
@@ -11999,7 +12201,6 @@ GameObject:
   - component: {fileID: 4584311910668486587}
   - component: {fileID: 8272130360169434892}
   - component: {fileID: 8048057072447234582}
-  - component: {fileID: 1746975927257191041}
   m_Layer: 5
   m_Name: Setting
   m_TagString: Untagged
@@ -12121,7 +12322,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1746975927257191041}
+      - m_Target: {fileID: 3970393093114573529}
         m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
         m_MethodName: Play
         m_Mode: 1
@@ -12133,37 +12334,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1746975927257191041
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8668725468182178880}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 1195109271
-      Data2: 1238241658
-      Data3: -655333974
-      Data4: 370836031
-    Path: event:/UI/MenuButton
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &8704617079539953919
 GameObject:
   m_ObjectHideFlags: 0
@@ -12241,7 +12411,6 @@ GameObject:
   - component: {fileID: 1356431104963226298}
   - component: {fileID: 9219071668177016548}
   - component: {fileID: 7980911425667942832}
-  - component: {fileID: 6438211839328056151}
   m_Layer: 5
   m_Name: Select Character
   m_TagString: Untagged
@@ -12363,18 +12532,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1746975927257191041}
-        m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 3625774532078961700}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SetCameraCanva
@@ -12387,37 +12544,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6438211839328056151
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8847033452876118478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 1195109271
-      Data2: 1238241658
-      Data3: -655333974
-      Data4: 370836031
-    Path: event:/UI/MenuButton
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
+      - m_Target: {fileID: 3970393093114573529}
+        m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8866244903297258350
 GameObject:
   m_ObjectHideFlags: 0
@@ -12927,7 +13065,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 7b6963d4b997d074ba8350cfaa5bf83f, type: 3}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
@@ -12940,6 +13078,14 @@ PrefabInstance:
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Mode
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_Mode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -12958,7 +13104,23 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3625774532078961700}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Target
+      value: 
+      objectReference: {fileID: 3073136096093876148}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_Target
+      value: 
+      objectReference: {fileID: 916191315865126754}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
@@ -12974,6 +13136,14 @@ PrefabInstance:
       value: PlayScene
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_MethodName
+      value: Play
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_MethodName
+      value: Stop
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
       value: SceneInfoButton, Assembly-CSharp
       objectReference: {fileID: 0}
@@ -12982,12 +13152,24 @@ PrefabInstance:
       value: UIManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_TargetAssemblyTypeName
+      value: FMODUnity.StudioEventEmitter, FMODUnity
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_TargetAssemblyTypeName
+      value: FMODUnity.StudioEventEmitter, FMODUnity
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_IntArgument
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_IntArgument
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Arguments.m_IntArgument
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
@@ -12999,6 +13181,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6842354873163313702, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
@@ -13321,7 +13511,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
@@ -13334,6 +13524,14 @@ PrefabInstance:
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Mode
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_Mode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -13352,7 +13550,23 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3625774532078961700}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Target
+      value: 
+      objectReference: {fileID: 3073136096093876148}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_Target
+      value: 
+      objectReference: {fileID: 916191315865126754}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
@@ -13368,6 +13582,14 @@ PrefabInstance:
       value: PlayScene
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_MethodName
+      value: Play
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_MethodName
+      value: Stop
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
       value: SceneInfoButton, Assembly-CSharp
       objectReference: {fileID: 0}
@@ -13376,12 +13598,24 @@ PrefabInstance:
       value: UIManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_TargetAssemblyTypeName
+      value: FMODUnity.StudioEventEmitter, FMODUnity
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_TargetAssemblyTypeName
+      value: FMODUnity.StudioEventEmitter, FMODUnity
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_IntArgument
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_IntArgument
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Arguments.m_IntArgument
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
@@ -13393,6 +13627,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082141830104694672, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6842354873163313702, guid: 304f08f86724f764aa94e4cfbb1a5aea, type: 3}
