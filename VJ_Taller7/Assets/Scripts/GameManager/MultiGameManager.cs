@@ -90,7 +90,7 @@ public class MultiGameManager : NetworkBehaviour
 
         if (spawnPlayerWithMenu) return;
 
-        playerManager.RespawnPlayerOrder(playerPrefab,spawntPoint);
+        //playerManager.RespawnPlayerOrder(playerPrefab,spawntPoint);
         
     }
     //Para que todo lo que necesite al player lo encuentre una vez que se haya creado; NOTA: Siempre al final de la función

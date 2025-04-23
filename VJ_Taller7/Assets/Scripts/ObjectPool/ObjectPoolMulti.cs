@@ -9,6 +9,7 @@ public class ObjectPoolMulti
     public int Size {get; private set;}
     private List<PoolableObjectMulti> AvailableObjectsPool;
     private static Dictionary<PoolableObjectMulti, ObjectPoolMulti> ObjectPools = new Dictionary<PoolableObjectMulti, ObjectPoolMulti>();
+    private NetworkPrefabsList networkPrefabsList;
 
     private ObjectPoolMulti(PoolableObjectMulti Prefab, int Size)
     {
@@ -33,14 +34,15 @@ public class ObjectPoolMulti
         else{
             pool = new ObjectPoolMulti(Prefab, Size);
 
-            pool.parent = new GameObject(Prefab + " Pool");
+           /* pool.parent = new GameObject(Prefab + " Pool");
             
             // Asegúrate de que el padre tenga NetworkObject
             if (!pool.parent.GetComponent<NetworkObject>())
             {
                 var netObj = pool.parent.AddComponent<NetworkObject>();
+
                 netObj.Spawn(); // ¡Importante spawnear el padre!
-            }
+            }*/
 
             pool.CreateObjects();
 
@@ -63,7 +65,7 @@ public class ObjectPoolMulti
         poolableObject.GetComponent<NetworkObject>().Spawn();
         poolableObject.Parent = this;
         poolableObject.Deactivate();
-        poolableObject.transform.SetParent(parent.transform, false);
+        //poolableObject.transform.SetParent(parent.transform, false);
     }
 
     public PoolableObjectMulti GetObject()
@@ -97,11 +99,32 @@ public class ObjectPoolMulti
     {
         foreach (var pool in ObjectPools.Values)
         {
-            if (pool.parent != null)
+            // Destruir todos los objetos en AvailableObjectsPool
+            foreach (var pooledObject in pool.AvailableObjectsPool)
             {
-                GameObject.Destroy(pool.parent);
+                if (pooledObject != null && pooledObject.gameObject != null)
+                {
+                    // Asegurarse de despawnear antes de destruir (importante para Netcode)
+                    NetworkObject netObj = pooledObject.GetComponent<NetworkObject>();
+                    if (netObj != null && netObj.IsSpawned)
+                    {
+                        netObj.Despawn();
+                    }
+                    GameObject.Destroy(pooledObject.gameObject);
+                }
             }
+            pool.AvailableObjectsPool.Clear();
         }
         ObjectPools.Clear();
+    }
+    private void RegisterNetworkPrefab(GameObject prefab)
+    {
+        NetworkObject networkObject = prefab.GetComponent<NetworkObject>();
+        if (networkObject == null) return;
+
+        if (!NetworkManager.Singleton != true)
+        {
+            NetworkManager.Singleton.AddNetworkPrefab(prefab);
+        }
     }
 }

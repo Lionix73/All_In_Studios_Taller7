@@ -169,7 +169,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
             skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
         }
 
-        Health = (int)maxHealth;
+        //Health = (int)maxHealth;
     }
 
     private void Update()

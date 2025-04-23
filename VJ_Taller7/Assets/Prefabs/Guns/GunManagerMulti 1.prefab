@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5845470664046783359
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 41280728664386798}
+  - component: {fileID: 3568991218147127736}
+  - component: {fileID: 6467260063498280691}
+  - component: {fileID: 7500171047544732236}
+  m_Layer: 0
+  m_Name: GunManagerMulti 1
+  m_TagString: Gun Manager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &41280728664386798
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5845470664046783359}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.50000036, y: 0.49999967, z: -0.49999967, w: 0.50000036}
+  m_LocalPosition: {x: 0.73782957, y: 1.4356539, z: -0.061713602}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3568991218147127736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5845470664046783359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d5c99b60c4a91f41aabdcdf1439416f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  crosshairImage: {fileID: 0}
+  aimTarget: {fileID: 0}
+  gunManager: {fileID: 6467260063498280691}
+--- !u!114 &6467260063498280691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5845470664046783359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 320b5cb7d9cf63b45add2224dafdce0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  camera: {fileID: 0}
+  cinemachineBrain: {fileID: 0}
+  crosshairManager: {fileID: 3568991218147127736}
+  MaxTotalAmmo: 300
+  totalAmmoDisplay: {fileID: 0}
+  ammunitionDisplay: {fileID: 0}
+  weapon: {fileID: 0}
+  gunsList:
+  - {fileID: 11400000, guid: 3652ac941fa776349a082da73b60cc8f, type: 2}
+  - {fileID: 11400000, guid: bdb2fbb6410586b48bec8d8b462c8248, type: 2}
+  - {fileID: 11400000, guid: dad2d973a9349f14ca3f690c0d2e33cb, type: 2}
+  - {fileID: 11400000, guid: 1d47203ce74508a45bef38a7c467cadc, type: 2}
+  gunParent: {fileID: 0}
+  gunRig: {fileID: 0}
+  Gun: 0
+  secondHandRigTarget: {fileID: 0}
+  inAPickeableGun: 0
+  CurrentGun: {fileID: 0}
+  CurrentSecondGunType: 0
+--- !u!1773428102 &7500171047544732236
+ParentConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5845470664046783359}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0.73782957, y: 1.4356539, z: -0.061713602}
+  m_RotationAtRest: {x: 89.96574, y: 0, z: -89.99993}
+  m_TranslationOffsets:
+  - {x: 0, y: 0, z: 0}
+  m_RotationOffsets:
+  - {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_AffectRotationX: 1
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 1
+  m_Active: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 0}
+    weight: 1

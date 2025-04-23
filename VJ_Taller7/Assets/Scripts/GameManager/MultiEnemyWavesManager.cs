@@ -57,7 +57,10 @@ public class MultiEnemyWavesManager : NetworkBehaviour
 
         ObjectPool.ClearPools();
         ObjectPoolMulti.ClearPools();
-        MultiGameManager.Instance.PlayerSpawned += GetPlayer;
+        GameObject.Find("HealthBarCanvas").TryGetComponent(out healthBarCanvas);
+        if (!IsServer) return;
+
+        //MultiGameManager.Instance.PlayerSpawned += GetPlayer;
         OnEnemySpawned += MultiGameManager.Instance.roundManager.enemyHaveSpawn;
 
         for (int i = 0; i < weightedEnemies.Count; i++)
@@ -73,7 +76,6 @@ public class MultiEnemyWavesManager : NetworkBehaviour
         
         _roundManager = GetComponent<MultiRoundManager>();
         _scoreManager = GetComponent<ScoreManager>();
-        GameObject.Find("HealthBarCanvas").TryGetComponent(out healthBarCanvas);
 
         navMeshTriangulation = NavMesh.CalculateTriangulation();
 

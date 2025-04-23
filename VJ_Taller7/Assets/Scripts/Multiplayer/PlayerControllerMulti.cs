@@ -15,8 +15,6 @@ public class PlayerControllerMulti : NetworkBehaviour
     public bool canMove = true;
     public float walkSpeed = 2f;
     public float runSpeed = 5f;
-    public float crouchHeight = 0.9f;
-    public float normalHeight = 1.8f;
 
 
     [Header("Animator")]
@@ -34,14 +32,16 @@ public class PlayerControllerMulti : NetworkBehaviour
     [SerializeField] private float dashSpeed = 15f;
     [SerializeField] private float dashDuration = 0.2f;
     [SerializeField] private float dashCooldown = 1f;
-    [SerializeField] private float jumpDuration = 1.4f;
-    [SerializeField] private float jumpCooldown = 1f;
+
 
     [Header("Jump Settings")]
 
     public int maxJumps = 2;
     [SerializeField] private float jumpVerticalForce = 10f;
     [SerializeField] private float jumpHorizontalForce = 5f;
+    [SerializeField] private float jumpDuration = 1.4f;
+    [SerializeField] private float jumpCooldown = 1f;
+    [SerializeField] private float SlopeJumpDownForce = 50f;
 
     [Header("Slope Handling")]
     [SerializeField] private float maxSlopeAngle;
@@ -54,6 +54,8 @@ public class PlayerControllerMulti : NetworkBehaviour
     public CapsuleCollider crouchCollider;
     public Transform cameraTransform;
     [System.Obsolete] public CinemachineCamera freeLookCamera;
+
+    [Header("VFX")]
     [SerializeField] private ParticleSystem slideVFX;
     [SerializeField] private ParticleSystem jumpVFX;
     [SerializeField] private MeshTrail dashVFX;
@@ -95,6 +97,7 @@ public class PlayerControllerMulti : NetworkBehaviour
     private bool canJump = true;
     private bool isEmoting = false;
     private bool isAiming = false;
+    private bool isMoving;
     private bool usingRifle = true;
     private bool isJumping;
     private bool wasOnGround;
@@ -175,13 +178,10 @@ public class PlayerControllerMulti : NetworkBehaviour
 
     private void HandleMovement()
     {
-        if (!canMove)
-        {
-            soundManager.StopSound("Walk", "Run");
-            return;
-        }
+        if (!canMove) return;
 
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
+        isMoving = moveInput.sqrMagnitude > 0.1f;
 
         desiredMoveDirection = (transform.right * moveDirection.x + transform.forward * moveDirection.z);
 
@@ -191,38 +191,21 @@ public class PlayerControllerMulti : NetworkBehaviour
         {
             rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
             isEmoting = false;
-            soundManager.StopSound("GangamStyle");
-
-            if (isRunning && isGrounded)
-            {
-                soundManager.PlaySound("Run");
-                soundManager.StopSound("Walk");
-            }
-            else if (isGrounded)
-            {
-                soundManager.PlaySound("Walk");
-                soundManager.StopSound("Run");
-            }
-            else
-            {
-                soundManager.StopSound("Walk", "Run");
-            }
         }
         else
         {
             isRunning = false;
-            soundManager.StopSound("Walk", "Run");
         }
 
         rb.useGravity = !isGrounded ? true : !OnSlope();
 
-        if (OnSlope())
+        if (OnSlope() && !isJumping)
         {
             rb.AddForce(GetSlopeMovement() * speed * 10f, ForceMode.Force);
 
             if (rb.linearVelocity.y > 0)
             {
-                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+                rb.AddForce(Vector3.down * SlopeJumpDownForce, ForceMode.Force);
             }
         }
     }
@@ -240,13 +223,14 @@ public class PlayerControllerMulti : NetworkBehaviour
 
     private void HandleAnimations()
     {
+        animator.SetBool("ShortGun", gunManager.Gun == GunType.BasicPistol || gunManager.CurrentGun.Type == GunType.Revolver ? true : false);
+
         speedX.Update();
         speedY.Update();
         layersDampener1.Update();
         layersDampener2.Update();
         ChangeAnimLayer(SelectAnimLayer());
 
-        bool isMoving = moveInput.sqrMagnitude > 0.1f;
         speedX.TargetValue = moveInput.x;
         speedY.TargetValue = moveInput.y;
 
@@ -393,6 +377,9 @@ public class PlayerControllerMulti : NetworkBehaviour
         {
             isAiming = false;
         }
+
+        if (context.started) gunManager.CheckZoomIn();
+        if (context.canceled) gunManager.CheckZoomOut();
     }
 
     public void OnChangeGun(InputAction.CallbackContext context)
@@ -402,76 +389,6 @@ public class PlayerControllerMulti : NetworkBehaviour
         if (context.performed)
         {
             animator.SetTrigger("ChangeGun");
-        }
-    }
-
-    public void OnFire(InputAction.CallbackContext context)
-    {
-        if (!IsOwner) return;
-
-        if (!canShoot) return;
-
-        if (context.started)
-        {
-            switch (gunManager.Gun)
-            {
-                case GunType.Rifle:
-                    soundManager.PlaySound("rifleFire");
-                    animator.SetBool("ShootBurst", true);
-                    break;
-                case GunType.BasicPistol:
-                    soundManager.PlaySound("pistolFire");
-                    animator.SetTrigger("ShootOnce");
-                    break;
-                case GunType.Revolver:
-                    soundManager.PlaySound("revolverFire");
-                    animator.SetTrigger("ShootOnce");
-                    break;
-                case GunType.Shotgun:
-                    soundManager.PlaySound("shotgunFire");
-                    animator.SetTrigger("ShootOnce");
-                    break;
-                case GunType.Sniper:
-                    soundManager.PlaySound("sniperFire");
-                    animator.SetTrigger("ShootOnce");
-                    break;
-            }
-        }
-
-        if (context.canceled)
-        {
-            soundManager.StopSound("rifleFire");
-            animator.SetBool("ShootBurst", false);
-        }
-    }
-
-
-    public void OnReload(InputAction.CallbackContext context)
-    {
-        if (!IsOwner) return;
-
-        if (context.performed)
-        {
-            animator.SetTrigger("Reload");
-
-            switch (gunManager.Gun)
-            {
-                case GunType.Rifle:
-                    soundManager.PlaySound("rifleReload");
-                    break;
-                case GunType.BasicPistol:
-                    soundManager.PlaySound("pistolReload");
-                    break;
-                case GunType.Revolver:
-                    soundManager.PlaySound("revolverReload");
-                    break;
-                case GunType.Shotgun:
-                    soundManager.PlaySound("shotgunReload");
-                    break;
-                case GunType.Sniper:
-                    soundManager.PlaySound("sniperReload");
-                    break;
-            }
         }
     }
 
@@ -508,6 +425,13 @@ public class PlayerControllerMulti : NetworkBehaviour
         }
 
     }
+
+    public void SetAimFOV(float gunAimFOV)
+    {
+        aimFOV = gunAimFOV;
+        UnityEngine.Debug.Log(gunAimFOV);
+    }
+
 
     /// <summary>
     /// Ajusta los rigs que se tienen para el agarre del arma
@@ -590,29 +514,11 @@ public class PlayerControllerMulti : NetworkBehaviour
         }
     }
 
-    public void OnCrouch(InputAction.CallbackContext context)
-    {
-        if (!IsOwner) return;
-        if (context.performed && canCrouch && isGrounded)
-        {
-            ExchangeCollidersRpc();
-            isCrouching = !isCrouching;
-            canCrouch = false;
-
-            if(isRunning && canSlide && !isSliding)
-            {
-                soundManager.PlaySound("Slide");
-                OnSlide();
-                StartCoroutine(Slide());
-            }
-
-            Invoke(nameof(ResetCrouchFlag), 0.5f);
-        }
-    }
-
     #region Melee
     public void OnMelee(InputAction.CallbackContext context)
     {
+        if(!IsOwner) return;
+
         if (context.performed && canMelee)
         {
             StartCoroutine(Melee());
@@ -642,6 +548,7 @@ public class PlayerControllerMulti : NetworkBehaviour
     }
     #endregion
 
+
     [Rpc(SendTo.Everyone)]
     private void ExchangeCollidersRpc()
     {
@@ -660,25 +567,48 @@ public class PlayerControllerMulti : NetworkBehaviour
             }
         }
     }
+    public void OnCrouch(InputAction.CallbackContext context)
+    {
+        if (!IsOwner) return;
+        if (context.performed && canCrouch && isGrounded)
+        {
+            ExchangeCollidersRpc();
+            isCrouching = !isCrouching;
+            canCrouch = false;
+
+            if (isRunning && canSlide && !isSliding)
+            {
+                soundManager.PlaySound("Slide");
+                StartCoroutine(Slide());
+            }
+
+            Invoke(nameof(ResetCrouchFlag), 0.5f);
+        }
+    }
 
     private IEnumerator Slide()
     {
         SlideVFXRpc();
 
-        if (isSliding)
+        isSliding = true;
+        canSlide = false;
+
+        //yield return new WaitForSeconds(slideDuration);
+        float timer = 0f;
+        while (timer < slideDuration)
         {
             soundManager.StopSound("Run");
-
-            yield return new WaitForSeconds(slideDuration);
-
-            isSliding = false;
-            isCrouching = false;
-            yield return new WaitForSeconds(slideCooldown);
-
-            canSlide = true;
-            ResetCrouchFlag();
-            ExchangeCollidersRpc();
+            timer += Time.deltaTime;
+            yield return null;
         }
+
+        isSliding = false;
+        isCrouching = false;
+        yield return new WaitForSeconds(slideCooldown);
+
+        canSlide = true;
+        ExchangeCollidersRpc();
+        Invoke(nameof(ResetCrouchFlag), 0.5f);
     }
 
     public void OnSlide()
@@ -708,7 +638,6 @@ public class PlayerControllerMulti : NetworkBehaviour
         canDash = false;
         isDashing = true;
 
-        soundManager.StopSound("Walk", "Run");
         soundManager.PlaySound("Dash");
 
         DashVFXRpc();
@@ -729,7 +658,14 @@ public class PlayerControllerMulti : NetworkBehaviour
         rb.linearVelocity = Vector3.zero;
         rb.AddForce(desiredMoveDirection.normalized * dashSpeed, ForceMode.Impulse);
 
-        yield return new WaitForSeconds(dashDuration);
+        float timer = 0;
+
+        while (timer < dashDuration)
+        {
+            soundManager.StopSound("Run");
+            timer += Time.deltaTime;
+            yield return null;
+        }
         animator.applyRootMotion = true;
         isDashing = false;
         rb.useGravity = true;
@@ -799,4 +735,36 @@ public class PlayerControllerMulti : NetworkBehaviour
             new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
             GroundedRadius);
     }
+
+    #region GettersSetters
+    public bool PlayerCanMove
+    {
+        get => canMove;
+        set => canMove = value;
+    }
+
+    public bool PlayerIsMoving
+    {
+        get => isMoving;
+        set => isMoving = value;
+    }
+
+    public bool PlayerRunning
+    {
+        get => isRunning;
+        set => isRunning = value;
+    }
+
+    public bool PlayerInGround
+    {
+        get => isGrounded;
+        set => isGrounded = value;
+    }
+
+    public bool PlayerCanJump
+    {
+        get => canJump;
+        set => canJump = value;
+    }
+    #endregion
 }

@@ -103,6 +103,7 @@ public class MultiRoundManager : NetworkBehaviour
         //SetEnemiesInSpawner();
     }
     private void Update() {
+        if (!IsServer) return;
         if (enemiesKilledOnWave == waveSize - 1 && lastEnemyOfWave == null){ //Todavia no funciona... pero casi
             //setear al enemigo con el loot, o activar el loot en su muerte, algo...
             lastEnemyOfWave= FindFirstObjectByType<Enemy>().gameObject;

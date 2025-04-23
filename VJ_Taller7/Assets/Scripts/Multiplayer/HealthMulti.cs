@@ -32,8 +32,12 @@ public class HealthMulti : NetworkBehaviour, IDamageable
     }
 
     [SerializeField] Animator animator;
+    private PlayerControllerMulti pController;
 
-
+    private void Start()
+    {
+        pController = GetComponent<PlayerControllerMulti>();
+    }
     void Update()
     {
         if (UIManager.Singleton != null)
@@ -53,7 +57,6 @@ public class HealthMulti : NetworkBehaviour, IDamageable
         NetworkObject player = GetComponentInParent<NetworkObject>();
         if (IsServer)
         {
-            IsDead = false;
             MultiGameManager.Instance.SpawnPlayer(gameObject);
         }
     }
@@ -68,8 +71,8 @@ public class HealthMulti : NetworkBehaviour, IDamageable
         CurrentHealth = (int)MaxHealth;
 
         HealthChange(CurrentHealth);
+        IsDead = false;
     }
-
     public void TakeDamage(int damage)
     {
         if (IsDead) return;
@@ -96,6 +99,10 @@ public class HealthMulti : NetworkBehaviour, IDamageable
 
         if (updatedHealth <= 0)
         {
+            pController.PlayerCanMove = false;
+            pController.PlayerCanJump = false;
+            animator.SetTrigger("Dead");
+            OnPlayerDeath?.Invoke(gameObject);
             animator.SetTrigger("Dead");
             
         }

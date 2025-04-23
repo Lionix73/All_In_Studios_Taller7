@@ -8,7 +8,7 @@ public class PoolableObjectMulti : NetworkBehaviour
     public virtual void OnDisable()
     {
         if (!IsServer) return;
-
+        Debug.Log("EnemigoDesactivado");
         if (Parent != null)
         {
             Parent.ReturnObjectToPool(this);

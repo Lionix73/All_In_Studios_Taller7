@@ -38,13 +38,18 @@ public class GunManagerMulti2 : NetworkBehaviour
     [SerializeField] private Transform gunParent;
     [SerializeField] private Transform gunRig;
     [Tooltip("Tipo de arma que posee el jugador, define con cuál empieza")]
-    [SerializeField] public GunType Gun; //Tipo de arma que tiene el jugador
+    [SerializeField] public GunType Gun //Tipo de arma que tiene el jugador
+    {
+        get => GunNet.Value;
+        set { if (IsServer) GunNet.Value = value; }
+    }
     private NetworkVariable<GunType> GunNet = new NetworkVariable<GunType>(0, NetworkVariableReadPermission.Everyone);
     private Transform secondHandGrabPoint; // la posicion a asignar
     [SerializeField] private Transform secondHandRigTarget; //el Rig en sí
 
     [SerializeField] private bool inAPickeableGun;
     private GunType gunToPick;
+    private NetworkObject modelNetworkObject;
 
     private bool shooting;
     private bool canShoot = true;
@@ -75,6 +80,15 @@ public class GunManagerMulti2 : NetworkBehaviour
             return;
         }
         CurrentGun = gun.Clone() as GunScriptableObject;
+
+        if(!IsServer)
+        {
+            DespawnRpc();
+            SpawnGunRpc();
+            ChangeGunTypeRpc(Gun);
+            ChangeSecondGunTypeRpc(Gun);
+        }
+        
         //cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
 
         if (IsServer)
@@ -170,10 +184,10 @@ public class GunManagerMulti2 : NetworkBehaviour
     {
         Debug.Log("spawn Arma");
         CurrentGun.Model = Instantiate(CurrentGun.NetworkModelPrefab);
-        NetworkObject modelNetworkObject = CurrentGun.Model.GetComponent<NetworkObject>();
+        modelNetworkObject = CurrentGun.Model.GetComponent<NetworkObject>();
 
         modelNetworkObject.Spawn();
-        GunNet.Value = CurrentGun.Type;
+        Gun = CurrentGun.Type;
         bool success = modelNetworkObject.TrySetParent(gunParent, false);
         if (success)
         {
@@ -188,7 +202,7 @@ public class GunManagerMulti2 : NetworkBehaviour
     [Rpc(SendTo.Server)]
     void ChangeGunTypeRpc(GunType value)
     {
-        GunNet.Value = value;
+        Gun = value;
     }
     [Rpc(SendTo.Server)]
     void ChangeSecondGunTypeRpc(GunType value)
