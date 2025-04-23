@@ -11,11 +11,12 @@ public class GoldenFeathers : Bullet
     public bool isFlying;
     [SerializeField] private float returningStrength;
     //private PhysicsMaterial physics_Mat;
-    public StudioEventEmitter[] featherSounds;
+
+    protected ThisObjectSounds soundManager;
 
     private void Awake() {
         Rigidbody = GetComponent<Rigidbody>();
-        featherSounds = GetComponentsInChildren<StudioEventEmitter>();
+        soundManager = GetComponent<ThisObjectSounds>();
     }
 
     override public void Spawn(Vector3 SpawnForce){
@@ -38,7 +39,7 @@ public class GoldenFeathers : Bullet
         isReturning = true;
         isFlying = true;
 
-        featherSounds[2].Play();
+        soundManager.PlaySound("featherReturn");
     }
 
     public override void OnCollisionEnter(Collision other) {
@@ -50,12 +51,12 @@ public class GoldenFeathers : Bullet
         }
         else if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            featherSounds[0].Play();
+            soundManager.PlaySound("featherHitEnemy");
             InvokeCollisionEvent(other);
         }
         else //Si no golpea un enemigo que haga el efecto
         {
-            featherSounds[1].Play();
+            soundManager.PlaySound("featherHitSurface");
             ImpactEffect(other);
         }
 

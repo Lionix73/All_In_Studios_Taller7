@@ -5,7 +5,7 @@
 			<value>Death</value>
 		</property>
 		<property name="outputFormat">
-			<value>0</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{7bd644b8-4f9f-4486-8916-0b3de3143590}</destination>
@@ -35,6 +35,9 @@
 		</relationship>
 	</object>
 	<object class="MasterTrack" id="{887038fb-23ae-4d8a-8672-45536e954614}">
+		<relationship name="modules">
+			<destination>{e8d7b5e3-c3dc-4ba7-a473-a685e2a1ecee}</destination>
+		</relationship>
 		<relationship name="mixerGroup">
 			<destination>{3dbe0fd1-aa97-468c-be2d-fbd814462948}</destination>
 		</relationship>
@@ -52,7 +55,11 @@
 	</object>
 	<object class="EventAutomatableProperties" id="{8dd55f53-b2eb-4e87-98f9-4d3bb6329749}" />
 	<object class="MarkerTrack" id="{54e72997-9507-473e-839d-bfbc443ae8de}" />
-	<object class="Timeline" id="{6c74b499-40a4-43ba-9a21-6da127f7a51f}" />
+	<object class="Timeline" id="{6c74b499-40a4-43ba-9a21-6da127f7a51f}">
+		<relationship name="modules">
+			<destination>{e8d7b5e3-c3dc-4ba7-a473-a685e2a1ecee}</destination>
+		</relationship>
+	</object>
 	<object class="EventMixerMaster" id="{3dbe0fd1-aa97-468c-be2d-fbd814462948}">
 		<relationship name="effectChain">
 			<destination>{85e631cd-da43-4fb4-a408-addabc2fd951}</destination>
@@ -62,6 +69,23 @@
 		</relationship>
 		<relationship name="mixer">
 			<destination>{f2f9dcc4-999e-4d95-819b-77b15fb7c311}</destination>
+		</relationship>
+	</object>
+	<object class="SingleSound" id="{e8d7b5e3-c3dc-4ba7-a473-a685e2a1ecee}">
+		<property name="length">
+			<value>1.054</value>
+		</property>
+		<property name="timelockedOffset">
+			<value>0.050000000000000003</value>
+		</property>
+		<relationship name="fadeInCurve">
+			<destination>{8a028d82-698a-4ea3-9979-8ca5ced4b656}</destination>
+		</relationship>
+		<relationship name="fadeOutCurve">
+			<destination>{8061020d-ff97-4693-a7ae-209397fc1b25}</destination>
+		</relationship>
+		<relationship name="audioFile">
+			<destination>{c22c395d-3d45-45f9-b48b-679073bcf9d1}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{2c1f199c-1ecf-498b-b096-9c2e25ec337f}">
@@ -76,6 +100,60 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{075b3b01-6d1d-47eb-9ee4-006e09bb6044}" />
+	<object class="FadeCurve" id="{8a028d82-698a-4ea3-9979-8ca5ced4b656}">
+		<relationship name="startPoint">
+			<destination>{909f1075-71d0-40b8-9d2a-ce009861ff29}</destination>
+		</relationship>
+		<relationship name="endPoint">
+			<destination>{74cb0b94-a016-40f6-af1c-36b678d70122}</destination>
+		</relationship>
+	</object>
+	<object class="FadeCurve" id="{8061020d-ff97-4693-a7ae-209397fc1b25}">
+		<relationship name="startPoint">
+			<destination>{ed84997e-c90d-446e-9d53-181efcbb265f}</destination>
+		</relationship>
+		<relationship name="endPoint">
+			<destination>{cb28b3bf-f0f4-4b2d-83fe-1c76cf858dd9}</destination>
+		</relationship>
+	</object>
 	<object class="MixerBusFader" id="{74939c9f-fb08-468b-bf94-dd5a556f393f}" />
 	<object class="MixerBusFader" id="{9a3dccc9-4d95-4c82-b6a4-8e96b7498a16}" />
+	<object class="AutomationPoint" id="{909f1075-71d0-40b8-9d2a-ce009861ff29}">
+		<property name="position">
+			<value>0</value>
+		</property>
+		<property name="value">
+			<value>0</value>
+		</property>
+		<property name="curveShape">
+			<value>-0.2547189</value>
+		</property>
+	</object>
+	<object class="AutomationPoint" id="{74cb0b94-a016-40f6-af1c-36b678d70122}">
+		<property name="position">
+			<value>0.050000000000000003</value>
+		</property>
+		<property name="value">
+			<value>1</value>
+		</property>
+	</object>
+	<object class="AutomationPoint" id="{ed84997e-c90d-446e-9d53-181efcbb265f}">
+		<property name="position">
+			<value>1</value>
+		</property>
+		<property name="value">
+			<value>1</value>
+		</property>
+		<property name="curveShape">
+			<value>0.25471893</value>
+		</property>
+	</object>
+	<object class="AutomationPoint" id="{cb28b3bf-f0f4-4b2d-83fe-1c76cf858dd9}">
+		<property name="position">
+			<value>1.0540000000000003</value>
+		</property>
+		<property name="value">
+			<value>0</value>
+		</property>
+	</object>
 </objects>

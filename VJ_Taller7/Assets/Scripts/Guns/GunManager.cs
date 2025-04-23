@@ -15,7 +15,7 @@ public class GunManager : MonoBehaviour
     private PlayerController player;
     [Header("Managers")]
     public CrosshairManager crosshairManager;  
-    private SoundManager soundManager; private Animator playerAnimator;
+    private ThisObjectSounds soundManager; private Animator playerAnimator;
     [Header("Ammo Info")]
     public int actualTotalAmmo; //Cuanta municion tiene el jugador
     [SerializeField] private int MaxTotalAmmo; //Cuanta municion puede llevar el jugador
@@ -71,7 +71,7 @@ public class GunManager : MonoBehaviour
         secondHandRigTarget = GameObject.Find("SecondHandGripRig_target").GetComponent<Transform>();
 
         crosshairManager = GetComponent<CrosshairManager>(); 
-        soundManager = FindAnyObjectByType<SoundManager>();
+        soundManager = GetComponentInChildren<ThisObjectSounds>();
     }
 
     private void Update() {
@@ -319,11 +319,7 @@ public class GunManager : MonoBehaviour
         soundManager.StopSound("rifleFire");
         playerAnimator.SetBool("ShootBurst", false);
 
-        soundManager.StopSound("rifleReload");
-        soundManager.StopSound("pistolReload");
-        soundManager.StopSound("revolverReload");
-        soundManager.StopSound("shotgunReload");
-        soundManager.StopSound("sniperReload");
+        soundManager.StopSound("rifleReload", "pistolReload", "revolverReload", "shotgunReload", "sniperReload");
     }
     private void ReloadingFeedback(){
         

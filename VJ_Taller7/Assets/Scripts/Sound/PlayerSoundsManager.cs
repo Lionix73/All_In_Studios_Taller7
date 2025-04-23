@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerSoundsManager : MonoBehaviour
 {
-    private SoundManager soundManager;
+    private ThisObjectSounds soundManager;
     private GunManager gunManager;
     private PlayerController pControl;
 
@@ -14,7 +14,7 @@ public class PlayerSoundsManager : MonoBehaviour
 
     private void Awake()
     {
-        soundManager = FindAnyObjectByType<SoundManager>();
+        soundManager = GetComponent<ThisObjectSounds>();
         gunManager = FindAnyObjectByType<GunManager>();
         pControl = GetComponent<PlayerController>();
     }

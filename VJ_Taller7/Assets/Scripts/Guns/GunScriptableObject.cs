@@ -306,32 +306,33 @@ public class GunScriptableObject : ScriptableObject {
     }
 
     private IEnumerator ShootingFeedback(){
-        SoundManager soundManager = FindFirstObjectByType<SoundManager>();
-        switch(Type)
-            {
-                case GunType.Rifle:
-                    soundManager.PlaySound("rifleFire");
+        yield return null;
+        //SoundManager soundManager = FindFirstObjectByType<SoundManager>();
+        //switch(Type)
+        //    {
+        //        case GunType.Rifle:
+        //            soundManager.PlaySound("rifleFire");
                     
-                    break;
-                case GunType.BasicPistol:
-                    soundManager.PlaySound("pistolFire");
+        //            break;
+        //        case GunType.BasicPistol:
+        //            soundManager.PlaySound("pistolFire");
                    
-                    break;
-                case GunType.Revolver:
-                    soundManager.PlaySound("revolverFire");
+        //            break;
+        //        case GunType.Revolver:
+        //            soundManager.PlaySound("revolverFire");
                     
-                    break;
-                case GunType.Shotgun:
-                    soundManager.PlaySound("shotgunFire");
+        //            break;
+        //        case GunType.Shotgun:
+        //            soundManager.PlaySound("shotgunFire");
                    
-                    break;
-                case GunType.Sniper:
-                    soundManager.PlaySound("sniperFire");
+        //            break;
+        //        case GunType.Sniper:
+        //            soundManager.PlaySound("sniperFire");
                     
-                    break;
-            }
-            yield return new WaitForSeconds(ShootConfig.FireRate);
-            //StopFeedback();
+        //            break;
+        //    }
+        //    yield return new WaitForSeconds(ShootConfig.FireRate);
+        //    //StopFeedback();
     }
 
     ///<summary>

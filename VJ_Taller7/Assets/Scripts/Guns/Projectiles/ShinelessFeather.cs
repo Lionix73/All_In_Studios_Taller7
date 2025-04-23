@@ -20,14 +20,14 @@ public class ShinelessFeather : GoldenFeathers
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            featherSounds[0].Play();
+            soundManager.PlaySound("featherHitEnemy");
             InvokeBulletEnd(other);
             if (!isReturning) Return();
         }
         else
         {
             FindFirstObjectByType<PlayerSoundsManager>().brokenFeather = true;
-            featherSounds[1].Play();
+            soundManager.PlaySound("featherBreak");
         }
 
         //if (!isReturning) Return(); // me estaba dando un error y como se supone que solo regresa si golpea un enemigo, lo movi arriba. Att: Chanti

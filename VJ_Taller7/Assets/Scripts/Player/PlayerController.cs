@@ -109,14 +109,14 @@ public class PlayerController : MonoBehaviour
 
     private PlayerInput playerInput;
     private GunManager gunManager;
-    private SoundManager soundManager;
+    private ThisObjectSounds soundManager;
     #endregion
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         gunManager = FindAnyObjectByType<GunManager>();
-        soundManager = FindAnyObjectByType<SoundManager>();
+        soundManager = GetComponent<ThisObjectSounds>();
     }
 
     private void Start()
