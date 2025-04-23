@@ -3368,6 +3368,7 @@ GameObject:
   - component: {fileID: 7179029444552531254}
   - component: {fileID: 3370538707091364083}
   - component: {fileID: 933564020140116791}
+  - component: {fileID: 8676942630966551283}
   - component: {fileID: 2441644267095333543}
   - component: {fileID: 7260628291453372008}
   - component: {fileID: 4354347854728633355}
@@ -3596,6 +3597,18 @@ MonoBehaviour:
   healthDisplay: {fileID: 0}
   isDead: 0
   animator: {fileID: 2010401642892508666}
+--- !u!114 &8676942630966551283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5065878726692420922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 276ecb09d03acaa4999238c30a8796d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2441644267095333543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3974,6 +3987,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 1afee5c7-9eaf-4bc1-9f4c-b9fe14732c80
     m_ActionName: 'Player/Active Skill[/Keyboard/leftAlt]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8676942630966551283}
+        m_TargetAssemblyTypeName: EmotesMenuController, Assembly-CSharp
+        m_MethodName: ActivateMenu
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 30b90059-ed83-4820-b016-bb6d0f5a1633
+    m_ActionName: 'UI/Emotiza[/Keyboard/tab]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

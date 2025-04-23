@@ -155,7 +155,7 @@ public class PlayerController : MonoBehaviour
         if (moveDirection != Vector3.zero)
         {
             rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
-            isEmoting = false;
+            animator.SetBool("isEmoting", false);
         }
         else
         {
@@ -205,7 +205,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isRunning", isRunning);
         animator.SetBool("isCrouching", isCrouching);
         animator.SetBool("isSliding", isSliding);
-        animator.SetBool("isEmoting", isEmoting);
+        //animator.SetBool("isEmoting", isEmoting);
 
         animator.SetFloat("SpeedX", speedX.CurrentValue);
         animator.SetFloat("SpeedY", speedY.CurrentValue);
