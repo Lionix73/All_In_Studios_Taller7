@@ -11,6 +11,7 @@ public class PlayerSoundsManager : MonoBehaviour
     public bool brokenFeather;
 
     private bool firerateAllowShoot;
+    private string activeEmoteMusic;
 
     private void Awake()
     {
@@ -30,7 +31,7 @@ public class PlayerSoundsManager : MonoBehaviour
 
         if(pControl.PlayerIsMoving)
         {
-            soundManager.StopSound("GangamStyle");
+            StopEmoteMusic();
 
             if (pControl.PlayerRunning && pControl.PlayerInGround)
             {
@@ -119,5 +120,24 @@ public class PlayerSoundsManager : MonoBehaviour
 
         firerateAllowShoot = true;
     }
+    #endregion
+
+    #region Emote Sounds
+    public void EmoteMusic(string musicName)
+    {
+        StopEmoteMusic();
+        activeEmoteMusic = musicName;
+
+        if(!pControl.PlayerIsEmoting) 
+        {
+            soundManager.PlaySound(musicName);
+        }
+    }
+
+    public void StopEmoteMusic()
+    {
+        soundManager.StopSound(activeEmoteMusic);
+    }
+
     #endregion
 }

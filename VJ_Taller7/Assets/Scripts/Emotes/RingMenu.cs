@@ -8,7 +8,7 @@ public class RingMenu : MonoBehaviour
     public int activeElement;
 
     private Animator anim;
-    private PlayerController playerController;
+    private PlayerSoundsManager soundManager;
     private RingPiece[] ringPieces;
     private float degreesPerPiece;
     private float gapDegrees = 1f;
@@ -16,7 +16,7 @@ public class RingMenu : MonoBehaviour
     private void Start()
     {
         anim = FindFirstObjectByType<Animator>();
-        playerController = FindFirstObjectByType<PlayerController>();
+        soundManager = FindFirstObjectByType<PlayerSoundsManager>();
 
         degreesPerPiece = 360f / ringAnimations.Length;
 
@@ -87,5 +87,6 @@ public class RingMenu : MonoBehaviour
     {
         anim.SetBool("isEmoting", true);
         anim.SetFloat("EmoteIndex", activeElement);
+        soundManager.EmoteMusic(ringAnimations[activeElement].name);
     }
 }

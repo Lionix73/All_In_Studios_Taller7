@@ -650,6 +650,12 @@ public class PlayerController : MonoBehaviour
         set => isMoving = value;
     }
 
+    public bool PlayerIsEmoting
+    {
+        get => isEmoting;
+        set => isEmoting = value;
+    }
+
     public bool PlayerRunning
     {
         get => isRunning;
