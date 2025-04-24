@@ -15,8 +15,8 @@ public class RingMenu : MonoBehaviour
 
     private void Start()
     {
-        anim = FindFirstObjectByType<Animator>();
-        soundManager = FindFirstObjectByType<PlayerSoundsManager>();
+        anim = GameObject.FindWithTag("Player").GetComponent<Animator>();
+        soundManager = GameObject.FindWithTag("Player").GetComponent<PlayerSoundsManager>();
 
         degreesPerPiece = 360f / ringAnimations.Length;
 
