@@ -1,5 +1,100 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1049231702320950187
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 20996194764145832}
+  - component: {fileID: 8648549194866170739}
+  m_Layer: 13
+  m_Name: BombExplosion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &20996194764145832
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1049231702320950187}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3114098556541800146}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8648549194866170739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1049231702320950187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 974291619
+      Data2: 1222292988
+      Data3: 1756950955
+      Data4: -1973667727
+    Path: event:/Enemies/Elephant/WaterExplosion
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 50
+--- !u!1 &2972000595993796879
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3114098556541800146}
+  m_Layer: 13
+  m_Name: '[Sounds]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3114098556541800146
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2972000595993796879}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 20996194764145832}
+  m_Father: {fileID: 4891856431791022656}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1238113748385027763
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -96,6 +191,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5966693797459490035, guid: b3a62e98da1604449b38caa074d6a808, type: 3}
       insertIndex: -1
       addedObject: {fileID: 433722975565805660}
+    - targetCorrespondingSourceObject: {fileID: 5966693797459490035, guid: b3a62e98da1604449b38caa074d6a808, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3114098556541800146}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4337251375364151362, guid: b3a62e98da1604449b38caa074d6a808, type: 3}
       insertIndex: -1
@@ -103,6 +201,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4337251375364151362, guid: b3a62e98da1604449b38caa074d6a808, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8766955747695238976}
+    - targetCorrespondingSourceObject: {fileID: 4337251375364151362, guid: b3a62e98da1604449b38caa074d6a808, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7175120071618272376}
   m_SourcePrefab: {fileID: 100100000, guid: b3a62e98da1604449b38caa074d6a808, type: 3}
 --- !u!1 &3251505204543344369 stripped
 GameObject:
@@ -155,6 +256,19 @@ MonoBehaviour:
   upwardForce: 3
   explosionDelay: 0.5
   explosionEffect: {fileID: 9031721717851774424}
+--- !u!114 &7175120071618272376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3251505204543344369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3da4c8252207fc84ba39f03847507014, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds: []
 --- !u!23 &4390139236360449951 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 3297269915966290220, guid: b3a62e98da1604449b38caa074d6a808, type: 3}

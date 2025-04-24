@@ -39,12 +39,13 @@ public class RangedAttackRadius : AttackRadius
 
     protected override IEnumerator Attack()
     {
+        soundManager.PlaySound("Attack");
 
         WaitForSeconds wait = new WaitForSeconds(AttackDelay);
 
         yield return wait;
 
-        while(damageables.Count > 0){
+        while (damageables.Count > 0){
 
             if(enemy.IsDead){
                 StopAllCoroutines();

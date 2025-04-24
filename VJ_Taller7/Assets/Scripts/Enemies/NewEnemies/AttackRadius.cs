@@ -24,7 +24,7 @@ public class AttackRadius : MonoBehaviour
     public AttackEvent OnAttack;
     protected Coroutine attackCoroutine;
     protected Enemy enemy;
-    private ThisObjectSounds soundManager;
+    protected ThisObjectSounds soundManager;
 
     protected virtual void Awake()
     {

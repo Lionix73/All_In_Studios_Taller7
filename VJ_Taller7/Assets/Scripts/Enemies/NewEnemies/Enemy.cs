@@ -93,6 +93,7 @@ public class Enemy : PoolableObject, IDamageable
     public GameObject floatingTextCriticPrefab;
 
     private EnemySpawner enemySpawner;
+    private ThisObjectSounds soundManager;
 
     [Header("Enemy VFX")]
     [SerializeField] private ParticleSystem deathVFX;
@@ -124,6 +125,7 @@ public class Enemy : PoolableObject, IDamageable
     {
         attackRadius.Player = Player;
         colliderEnemy = GetComponent<Collider>();
+        soundManager = GetComponent<ThisObjectSounds>();
         AttackRadius.OnAttack += OnAttack;
 
         if(skinnedMeshRenderers == null){
@@ -205,8 +207,8 @@ public class Enemy : PoolableObject, IDamageable
         //Debug.Log("Enemy Health: " + Health);
 
         if (Health <= 0){
-            
-            // SONIDO morir
+
+            soundManager.PlaySound("Die");
             isDead = true;
 
             #region CarnivoroTemporal Skill

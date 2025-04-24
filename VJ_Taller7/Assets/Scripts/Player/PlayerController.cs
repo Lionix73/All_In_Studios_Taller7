@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
         UpdateAnimLayer();
         adjustFOV();
 
-        AdjustRigs();
+        if(!isEmoting) AdjustRigs();
     }
 
     private void FixedUpdate()
@@ -210,7 +210,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isRunning", isRunning);
         animator.SetBool("isCrouching", isCrouching);
         animator.SetBool("isSliding", isSliding);
-        //animator.SetBool("isEmoting", isEmoting);
+        isEmoting = animator.GetBool("isEmoting");
 
         animator.SetFloat("SpeedX", speedX.CurrentValue);
         animator.SetFloat("SpeedY", speedY.CurrentValue);

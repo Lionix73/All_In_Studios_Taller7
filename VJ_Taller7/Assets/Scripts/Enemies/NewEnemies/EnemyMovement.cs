@@ -37,7 +37,6 @@ public class EnemyMovement : MonoBehaviour
     private AgentLinkMover linkMover;
     private Coroutine followCoroutine;
     private ThisObjectSounds soundManager;
-    private Rigidbody rb;
 
     [Header("State Settings")]
     [SerializeField] private EnemyState defaultState;
@@ -93,7 +92,6 @@ public class EnemyMovement : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         linkMover = GetComponent<AgentLinkMover>();
         soundManager = GetComponent<ThisObjectSounds>();
-        rb = GetComponent<Rigidbody>();
 
         linkMover.OnLinkStart += HandleLinkStart;
         linkMover.OnLinkEnd += HandleLinkEnd;
@@ -211,7 +209,7 @@ public class EnemyMovement : MonoBehaviour
         WaitForSeconds wait = new WaitForSeconds(updateRate);
         agent.speed *= idleMoveSpeedMultiplier;
 
-        soundManager.PlaySound("Idle");
+        //soundManager.PlaySound("Idle");
 
         while (true)
         {
