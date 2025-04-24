@@ -205,7 +205,8 @@ public class Enemy : PoolableObject, IDamageable
         //Debug.Log("Enemy Health: " + Health);
 
         if (Health <= 0){
-
+            
+            // SONIDO morir
             isDead = true;
 
             #region CarnivoroTemporal Skill

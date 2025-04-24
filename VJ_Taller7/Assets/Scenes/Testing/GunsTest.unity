@@ -1780,23 +1780,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b003f968fc1f2034eb7122d8cf0ce343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canMove: 1
   walkSpeed: 2
   runSpeed: 5
-  slideSpeed: 10
-  slideDistance: 5
-  crouchHeight: 1
-  normalHeight: 2
-  jumpForce: 5
-  maxJumps: 2
   animator: {fileID: 1332780507}
+  speedX:
+    smoothTime: 0
+  speedY:
+    smoothTime: 0
+  layersDampener1:
+    smoothTime: 0
+  layersDampener2:
+    smoothTime: 0
+  slideDuration: 3
+  slideCooldown: 0.5
+  dashSpeed: 15
+  dashDuration: 0.2
+  dashCooldown: 1
+  maxJumps: 2
+  jumpVerticalForce: 10
+  jumpHorizontalForce: 5
+  jumpDuration: 1.4
+  jumpCooldown: 1
+  SlopeJumpDownforce: 50
+  maxSlopeAngle: 0
+  stepRayLower: {fileID: 0}
   rb: {fileID: 1332780509}
   playerCollider: {fileID: 1332780508}
+  crouchCollider: {fileID: 0}
   cameraTransform: {fileID: 762984747}
   freeLookCamera: {fileID: 762984753}
+  slideVFX: {fileID: 0}
+  jumpVFX: {fileID: 0}
+  dashVFX: {fileID: 0}
   currentFOV: 65
   aimFOV: 55
   tFOV: 0.05
   rotationSpeed: 10
+  isGrounded: 0
+  GroundedOffset: -0.14
+  GroundedRadius: 0.28
+  GroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  aimRig: {fileID: 0}
+  gripRig: {fileID: 0}
 --- !u!95 &1332780507
 Animator:
   serializedVersion: 7
@@ -2572,6 +2600,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4052be0c208b3f84fb40303a1ce83a90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bullets: []
   bullet: {fileID: 1195523776281968286, guid: ceabd407b4ab95943b490ad62ea3e672, type: 3}
   shootForce: 100
   upwardForce: 0
@@ -2581,8 +2610,6 @@ MonoBehaviour:
   timeBetweenShots: 0
   magazineSize: 100
   bulletsPerTap: 1
-  bulletsLeft: 0
-  bulletsShot: 0
   allowButtonHold: 1
   haveSpread: 0
   maxDistanceTarget: 75
@@ -2590,6 +2617,7 @@ MonoBehaviour:
   bulletSpawnPoint: {fileID: 1699913616}
   muzzleFlash: {fileID: 0}
   ammunitionDisplay: {fileID: 226136924}
+  totalAmmoDisplay: {fileID: 0}
 --- !u!4 &2135041849
 Transform:
   m_ObjectHideFlags: 0
@@ -3113,6 +3141,30 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 52738740-eae0-4c6d-a43a-839a0804dd25
     m_ActionName: 'Player/Reload[/Keyboard/r,/DualSenseGamepadHID/buttonWest]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9f0f27b0-8713-4306-8ab3-c39e1f034e57
+    m_ActionName: 'Player/Dash[/Keyboard/f]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7a190d22-6fd6-4739-a82c-6474fd638490
+    m_ActionName: 'Player/Emote[/Keyboard/t]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 014bf4dc-f36d-4001-9ad9-7b4e1ad9137d
+    m_ActionName: 'Player/ChangeGun[/Keyboard/q]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8ee4792f-48b1-499c-8851-ec9ab0ece1c7
+    m_ActionName: 'Player/Melee[/Mouse/middleButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1afee5c7-9eaf-4bc1-9f4c-b9fe14732c80
+    m_ActionName: 'Player/Active Skill[/Keyboard/leftAlt]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 30b90059-ed83-4820-b016-bb6d0f5a1633
+    m_ActionName: 'UI/Emotiza[/Keyboard/tab]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

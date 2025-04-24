@@ -24,11 +24,13 @@ public class AttackRadius : MonoBehaviour
     public AttackEvent OnAttack;
     protected Coroutine attackCoroutine;
     protected Enemy enemy;
+    private ThisObjectSounds soundManager;
 
     protected virtual void Awake()
     {
         enemy = GetComponentInParent<Enemy>();
         sphereCollider = GetComponent<SphereCollider>();
+        soundManager = GetComponentInParent<ThisObjectSounds>();
     }
 
     protected virtual void OnTriggerEnter(Collider other)
@@ -74,11 +76,11 @@ public class AttackRadius : MonoBehaviour
 
     protected virtual IEnumerator Attack()
     {
-
         WaitForSeconds wait = new WaitForSeconds(attackDelay);
 
         yield return wait;
 
+        soundManager.PlaySound("Attack");
         IDamageable closestDamageable = null;
 
         //Closest distance to enemy is 100% of their attack radius

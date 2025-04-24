@@ -60,7 +60,12 @@ public class BulletEnemie : PoolableObject
 
         if (other.TryGetComponent<IDamageable>(out damageable))
         {
+            // SONIDO golpeo Jugador/emigo, cosa damageable
             damageable.TakeDamage(damage);
+        }
+        else
+        {
+            // SONIDO golpeo una superficie
         }
 
         if (bulletModel!=null) bulletModel.enabled = false;

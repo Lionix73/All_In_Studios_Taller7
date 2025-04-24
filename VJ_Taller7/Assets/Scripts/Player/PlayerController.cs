@@ -87,6 +87,7 @@ public class PlayerController : MonoBehaviour
     private bool canSlide = true;
     private bool canCrouch = true;
     private bool canJump = true;
+    private bool playerAllowedToJump = true;
     private bool isEmoting = false;
     private bool isAiming = false;
     private bool isMoving;
@@ -110,6 +111,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private GunManager gunManager;
     private ThisObjectSounds soundManager;
+    private Health health;
     #endregion
     private void Awake()
     {
@@ -117,6 +119,7 @@ public class PlayerController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         gunManager = FindAnyObjectByType<GunManager>();
         soundManager = GetComponent<ThisObjectSounds>();
+        health = GetComponent<Health>();
     }
 
     private void Start()
@@ -162,7 +165,7 @@ public class PlayerController : MonoBehaviour
             isRunning = false;
         }
 
-        rb.useGravity = !isGrounded ? true : !OnSlope();
+        rb.useGravity = !isGrounded && !isDashing ? true : !OnSlope();
 
         if (OnSlope() && !isJumping)
         {
@@ -177,6 +180,8 @@ public class PlayerController : MonoBehaviour
 
     private void HandleRotation()
     {
+        if(!canMove) return;
+
         if (moveInput.magnitude > 0.05f || aimInput > 0.05f)
         {
             Vector3 cameraForward = cameraTransform.forward;
@@ -186,7 +191,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    #region Animations and Layers management
+    #region -----Animations / Animation Layers Management------
     private void HandleAnimations()
     {
         animator.SetBool("ShortGun", gunManager.CurrentGun.Type == GunType.BasicPistol || gunManager.CurrentGun.Type == GunType.Revolver ? true : false);
@@ -318,6 +323,15 @@ public class PlayerController : MonoBehaviour
         if (context.started) gunManager.CheckZoomIn();
         if (context.canceled) gunManager.CheckZoomOut();
     }
+    
+    public void OnRun(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            isRunning = !isRunning;
+            isCrouching = false;
+        }
+    }
 
     public void OnChangeGun(InputAction.CallbackContext context)
     {
@@ -327,23 +341,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnEmote(InputAction.CallbackContext context)
-    {
-        if(context.performed && moveInput.magnitude < 0.05f)
-        {
-            if(!isEmoting) 
-            { 
-                soundManager.PlaySound("GangamStyle"); 
-            }
-            else 
-            { 
-                soundManager.StopSound("GangamStyle"); 
-            }
-            
-            isEmoting = !isEmoting;
-        }
-    }
-
+    #region -----FOV-----
     public void adjustFOV()
     {
         if (aimInput > 0.1f)
@@ -363,7 +361,9 @@ public class PlayerController : MonoBehaviour
         aimFOV = gunAimFOV;
         UnityEngine.Debug.Log(gunAimFOV);
     }
+    #endregion
 
+    #region -----Adjust Rigs-----
     /// <summary>
     /// Ajusta los rigs que se tienen para el agarre del arma
     /// con la otra mano y el punto donde se apunta
@@ -380,10 +380,13 @@ public class PlayerController : MonoBehaviour
             aimRig.weight = 1.0f;
         }
     }
+    #endregion
 
-    #region Jump
+    #region -----Jump-----
     public void OnJump(InputAction.CallbackContext context)
     {
+        if (!playerAllowedToJump) return;
+
         if(isGrounded) 
         { 
             canJump = true;
@@ -395,7 +398,8 @@ public class PlayerController : MonoBehaviour
             canJump = false;
             return;
         }
-        else { canJump = true;}
+        else 
+            canJump = true;
 
         if (context.performed && jumpCount < maxJumps && canJump)
         {
@@ -429,16 +433,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    public void OnRun(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            isRunning = !isRunning;
-            isCrouching = false;
-        }
-    }
-
-    #region Melee
+    #region -----Melee-----
     public void OnMelee(InputAction.CallbackContext context) 
     {
         if(context.performed && canMelee)
@@ -469,7 +464,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region Crouch and Slide
+    #region -----Crouch / Slide-----
     public void OnCrouch(InputAction.CallbackContext context)
     {
         if (context.performed && canCrouch && isGrounded)
@@ -536,6 +531,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
+    #region -----Dash-----
     public void OnDash()
     {
         if (!canDash || isCrouching || isSliding) return;
@@ -573,8 +569,9 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
+    #endregion
 
-    #region Check Terrain and Height
+    #region -----Check Terrain and Height-----
     private void CheckGround()
     {
         wasOnGround = isGrounded;
@@ -637,7 +634,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region GettersSetters
+    #region -----Getters Setters-----
     public bool PlayerCanMove
     {
         get => canMove;
@@ -670,8 +667,8 @@ public class PlayerController : MonoBehaviour
 
     public bool PlayerCanJump
     {
-        get => canJump;
-        set => canJump = value;
+        get => playerAllowedToJump;
+        set => playerAllowedToJump = value;
     }
     #endregion
 }

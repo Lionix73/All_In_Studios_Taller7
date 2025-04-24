@@ -20,6 +20,13 @@ public class BombBullet : BulletEnemie
 
     [SerializeField] private GameObject explosionEffect;
 
+    private ThisObjectSounds soundManager;
+
+    private void Awake()
+    {
+        soundManager = GetComponent<ThisObjectSounds>();
+    }
+
     private bool hasExploded = false;
 
     protected override void OnEnable(){
@@ -74,6 +81,8 @@ public class BombBullet : BulletEnemie
     {
         if (hasExploded) return;
         hasExploded = true;
+
+        soundManager.PlaySound("BombExplosion");
 
         if(explosionEffect != null && bulletModel != null){
             transform.rotation = new Quaternion(0, 0, 0, 0);

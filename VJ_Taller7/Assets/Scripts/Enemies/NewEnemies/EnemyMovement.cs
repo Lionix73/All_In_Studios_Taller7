@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using UnityEngine.InputSystem.LowLevel;
 
 [RequireComponent(typeof(NavMeshAgent), typeof(AgentLinkMover))]
 public class EnemyMovement : MonoBehaviour
@@ -35,6 +36,8 @@ public class EnemyMovement : MonoBehaviour
     private NavMeshAgent agent;
     private AgentLinkMover linkMover;
     private Coroutine followCoroutine;
+    private ThisObjectSounds soundManager;
+    private Rigidbody rb;
 
     [Header("State Settings")]
     [SerializeField] private EnemyState defaultState;
@@ -89,6 +92,8 @@ public class EnemyMovement : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         linkMover = GetComponent<AgentLinkMover>();
+        soundManager = GetComponent<ThisObjectSounds>();
+        rb = GetComponent<Rigidbody>();
 
         linkMover.OnLinkStart += HandleLinkStart;
         linkMover.OnLinkEnd += HandleLinkEnd;
@@ -192,11 +197,9 @@ public class EnemyMovement : MonoBehaviour
                 case EnemyState.Idle:
                     followCoroutine = StartCoroutine(DoIdleMotion());
                 break;
-
                 case EnemyState.Patrol:
                     followCoroutine = StartCoroutine(DoPatrolMotion());
                 break;
-
                 case EnemyState.Chase:
                     followCoroutine = StartCoroutine(FollowTarget());
                 break;
@@ -207,6 +210,8 @@ public class EnemyMovement : MonoBehaviour
     private IEnumerator DoIdleMotion(){
         WaitForSeconds wait = new WaitForSeconds(updateRate);
         agent.speed *= idleMoveSpeedMultiplier;
+
+        soundManager.PlaySound("Idle");
 
         while (true)
         {
@@ -226,7 +231,9 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    private IEnumerator DoPatrolMotion(){
+    private IEnumerator DoPatrolMotion()
+    {
+
         WaitForSeconds wait = new WaitForSeconds(updateRate);
         
         yield return new WaitUntil(() => agent.isOnNavMesh && agent.enabled);
@@ -248,7 +255,10 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    private IEnumerator FollowTarget(){
+    private IEnumerator FollowTarget()
+    {
+        soundManager.PlaySound("Chase");
+
         WaitForSeconds wait = new WaitForSeconds(updateRate);
 
         while (true){
@@ -265,7 +275,10 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    public void StopMovement(){
+    public void StopMovement()
+    {
+        soundManager.StopSound("Move");
+
         if (agent != null && agent.enabled)
         {
             agent.isStopped = true;
@@ -273,7 +286,10 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    public void ResumeMovement(){
+    public void ResumeMovement()
+    {
+        soundManager.PlaySound("Move");
+
         if (agent != null && agent.enabled)
         {
             agent.isStopped = false;

@@ -108,6 +108,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 3360
+--- !u!114 &-8257551838171646995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemies/Kamikaze/ActivateBomb
+  m_EditorClassIdentifier: 
+  Path: event:/Enemies/Kamikaze/ActivateBomb
+  Guid:
+    Data1: 1395448862
+    Data2: 1231826799
+    Data3: 372629666
+    Data4: -2142968060
+  Banks:
+  - {fileID: 107825808030671681}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1848
 --- !u!114 &-8195523702505923715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,7 +150,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638810110738432627
+  lastModified: 638810385950097910
   FileSizes:
   - Name: Desktop
     Value: 289920
@@ -317,6 +344,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 560
+--- !u!114 &-5738461520877799005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemies/Kamikaze/Idle
+  m_EditorClassIdentifier: 
+  Path: event:/Enemies/Kamikaze/Idle
+  Guid:
+    Data1: -1165515122
+    Data2: 1320067709
+    Data3: 1220702851
+    Data4: -1102752282
+  Banks:
+  - {fileID: 107825808030671681}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 30
+  Length: 1906
 --- !u!114 &-5293698504948608844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -553,6 +607,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &-2500600641265451339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemies/Die
+  m_EditorClassIdentifier: 
+  Path: event:/Enemies/Die
+  Guid:
+    Data1: -1112937873
+    Data2: 1262087250
+    Data3: 788944784
+    Data4: -83679263
+  Banks:
+  - {fileID: 107825808030671681}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1392
 --- !u!114 &-2157672726055925724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -607,6 +688,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 140548
+--- !u!114 &-1940808570105692987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemies/Kamikaze/Move
+  m_EditorClassIdentifier: 
+  Path: event:/Enemies/Kamikaze/Move
+  Guid:
+    Data1: 1880923240
+    Data2: 1296716898
+    Data3: 1656167300
+    Data4: -592239905
+  Banks:
+  - {fileID: 107825808030671681}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 3380
 --- !u!114 &-1296149345757234199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -681,6 +789,7 @@ MonoBehaviour:
   - {fileID: 1312478745403810463}
   - {fileID: 2697271190820603394}
   - {fileID: 7047122884356888304}
+  - {fileID: 107825808030671681}
   EditorEvents:
   - {fileID: -4303300845778931015}
   - {fileID: -8687818927546312647}
@@ -725,13 +834,47 @@ MonoBehaviour:
   - {fileID: 4998499323835854912}
   - {fileID: 2686939738712603918}
   - {fileID: 3516681855229852407}
+  - {fileID: -8257551838171646995}
+  - {fileID: -2500600641265451339}
+  - {fileID: 10818181712237557}
+  - {fileID: -5738461520877799005}
+  - {fileID: 4977427130584956558}
+  - {fileID: -1940808570105692987}
+  - {fileID: 8634737657596135991}
   EditorParameters: []
   MasterBanks:
   - {fileID: -8195523702505923715}
   StringsBanks:
   - {fileID: 5092639294113453569}
-  cacheTime: 638810110816305454
+  cacheTime: 638810405820268754
   cacheVersion: 131622
+--- !u!114 &10818181712237557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemies/Kamikaze/BombExplosion
+  m_EditorClassIdentifier: 
+  Path: event:/Enemies/Kamikaze/BombExplosion
+  Guid:
+    Data1: -1496848513
+    Data2: 1183397269
+    Data3: -1881314121
+    Data4: -1827001619
+  Banks:
+  - {fileID: 107825808030671681}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 50
+  Length: 3152
 --- !u!114 &16718576494435817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -759,6 +902,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 1440
+--- !u!114 &107825808030671681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Enemies.bank
+  m_EditorClassIdentifier: 
+  Path: ../FMOD/Build/Desktop/Enemies.bank
+  Name: Enemies
+  StudioPath: bank:/Enemies
+  lastModified: 638810385952525172
+  FileSizes:
+  - Name: Desktop
+    Value: 192512
+  Exists: 1
 --- !u!114 &298293599141526868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -801,10 +964,10 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Player.bank
   Name: Player
   StudioPath: bank:/Player
-  lastModified: 638809522993671154
+  lastModified: 638810405820268754
   FileSizes:
   - Name: Desktop
-    Value: 1284160
+    Value: 1317504
   Exists: 1
 --- !u!114 &1318553803241570733
 MonoBehaviour:
@@ -1123,6 +1286,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 384
+--- !u!114 &4977427130584956558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemies/Chase
+  m_EditorClassIdentifier: 
+  Path: event:/Enemies/Chase
+  Guid:
+    Data1: -1852761433
+    Data2: 1221909336
+    Data3: 1988309160
+    Data4: -1769051357
+  Banks:
+  - {fileID: 107825808030671681}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 30
+  Length: 2200
 --- !u!114 &4998499323835854912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1165,10 +1355,10 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638810110738447679
+  lastModified: 638810385950122980
   FileSizes:
   - Name: Desktop
-    Value: 2858
+    Value: 3218
   Exists: 1
 --- !u!114 &5951964841540460801
 MonoBehaviour:
@@ -1372,3 +1562,30 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 1280
+--- !u!114 &8634737657596135991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player/Idle
+  m_EditorClassIdentifier: 
+  Path: event:/Player/Idle
+  Guid:
+    Data1: -891964722
+    Data2: 1200653813
+    Data3: 947606196
+    Data4: 2117598922
+  Banks:
+  - {fileID: 1312478745403810463}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 30
+  Length: 8200

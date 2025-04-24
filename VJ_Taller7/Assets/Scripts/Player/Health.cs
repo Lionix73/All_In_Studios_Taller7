@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -16,10 +17,12 @@ public class Health : MonoBehaviour, IDamageable
     public Animator animator;
 
     private PlayerController pController;
+    private ThisObjectSounds soundManager;
 
     private void Start()
     {
         pController = GetComponent<PlayerController>();
+        soundManager = GetComponentInParent<ThisObjectSounds>();
     }
 
     void Update()
@@ -51,17 +54,28 @@ public class Health : MonoBehaviour, IDamageable
         HealthChange();
         if (currentHealth <= 0)
         {
-            pController.PlayerCanMove = false;
-            pController.PlayerCanJump = false;
-            animator.SetTrigger("Dead");
+            StartCoroutine(PlayerDead());
             OnPlayerDeath?.Invoke(gameObject);
-            isDead=true;
         }
         else
         {
             animator.SetTrigger("Hit");
+            soundManager.PlaySound("Hit");
         }
     }
+
+    private IEnumerator PlayerDead()
+    {
+        isDead = true;
+        pController.PlayerCanMove = false;
+        pController.PlayerCanJump = false;
+
+        animator.SetTrigger("Dead");
+        soundManager.PlaySound("Dead");
+        yield return new WaitForSeconds(2f);
+        soundManager.StopAllSounds();
+    }
+
     /// <summary>
     /// Heal the player
     /// </summary>
