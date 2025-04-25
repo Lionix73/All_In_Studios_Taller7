@@ -18,8 +18,8 @@ public class MultiPlayerManager : NetworkBehaviour
     [Header("Respawn Settings")]
     [SerializeField] private float respawnCD = 5f;
     public GameObject activePlayer { get; private set; } //Depronto toca hacer una lista de esto para el multi
-    
-    [Tooltip("Este es el player como tal, su codigo y funciones. Dejar vacio en el inspector")] 
+
+    [Tooltip("Este es el player como tal, su codigo y funciones. Dejar vacio en el inspector")]
     private Transform playerPos;
     private HealthMulti playerHealth;
     public GunManager gunManager { get; private set; }
@@ -31,11 +31,19 @@ public class MultiPlayerManager : NetworkBehaviour
 
     NetworkVariable<int> playersDead = new NetworkVariable<int>();
     public int PlayersDead
-    { get { return playersDead.Value; } 
-        
-      set { playersDead.Value = value; }
+    { get { return playersDead.Value; }
+
+        set { playersDead.Value = value; }
     }
-    
+
+    NetworkVariable<int> playersReady = new NetworkVariable<int>();
+    public int PlayersReady 
+    {
+        get { return playersDead.Value; }
+
+        set { playersDead.Value = value; }
+    }
+
 
     private void Awake()
     {
@@ -85,12 +93,14 @@ public class MultiPlayerManager : NetworkBehaviour
             var playerController = playerObject.GetComponent<PlayerControllerMulti>();
             var playerHealth = playerObject.GetComponent<HealthMulti>();
             var gunManager = playerObject.GetComponent<GunManager>();
+            var playerState = playerObject.GetComponent<MultiPlayerState>();
 
             var playerData = new PlayerData
             {
                 playerObject = playerObject,
                 playerController = playerController,
                 playerHealth = playerHealth,
+                playerState = playerState,
                 gunManager = gunManager,
             };
 
@@ -99,6 +109,7 @@ public class MultiPlayerManager : NetworkBehaviour
             // Configurar eventos
             playerHealth.OnHealthChanged += (current, max) => HandleHealthChanged(clientId, current, max);
             playerHealth.OnPlayerDeath += (player) => HandlePlayerDeath(clientId, player);
+            playerState.OnPlayerReady += () => HandlePlayerReady(clientId);
 
             // Inicializar salud
             playerHealth.SetInitialHealth(playerStartingHealth);
@@ -117,7 +128,7 @@ public class MultiPlayerManager : NetworkBehaviour
             // Actualizar UI si es el jugador local
             if (clientId == NetworkManager.Singleton.LocalClientId)
             {
-               // UIManager.Singleton?.UpdatePlayerHealth(currentHealth, maxHealth);
+                // UIManager.Singleton?.UpdatePlayerHealth(currentHealth, maxHealth);
             }
         }
     }
@@ -127,13 +138,13 @@ public class MultiPlayerManager : NetworkBehaviour
 
         UISet();
     } */
-    private void UISet(){
+    private void UISet() {
         if (UIManager.Singleton == null) return;
         UIManager.Singleton.GetPlayerHealth(playerCurrentHealth, playerMaxHealth);
     }
 
-    public void HandlePlayerDeath(ulong clientId,  GameObject player){
-        if (! IsServer) return;
+    public void HandlePlayerDeath(ulong clientId, GameObject player) {
+        if (!IsServer) return;
         //Logica de la muerte del jugador
         if (activePlayers.TryGetValue(clientId, out PlayerData playerData))
         {
@@ -210,6 +221,40 @@ public class MultiPlayerManager : NetworkBehaviour
 
         }
     }
+    public void HandlePlayerReady(ulong clientId)
+    {
+        if (!IsServer) return;
+        //Logica de la muerte del jugador
+        if (activePlayers.TryGetValue(clientId, out PlayerData playerData))
+        {
+            Debug.Log($"Player {clientId} is Ready");
+
+            // Verificar si todos los jugadores están muertos
+            CheckAllPlayersAreReady();
+
+        }
+    }
+    public void CheckAllPlayersAreReady()
+    {
+
+        foreach (var player in activePlayers.Values)
+        {
+            if (player.playerState.IsReady)
+            {
+                PlayersReady++;
+            }
+            else
+            {
+                PlayersReady--;
+            }
+        }
+
+        if (PlayersReady == activePlayers.Count)
+        {
+            Debug.Log("Start Game");
+            MultiGameManager.Instance.PlayGame();
+        }
+    }
 
   /*  public void RespawnPlayerOrder(GameObject playerPrefab, Transform spawntPoint){
         StartCoroutine(RespawnPlayer(playerPrefab,spawntPoint));
@@ -229,6 +274,7 @@ public class MultiPlayerManager : NetworkBehaviour
         public GameObject playerObject;
         public PlayerControllerMulti playerController;
         public HealthMulti playerHealth;
+        public MultiPlayerState playerState;
         public GunManager gunManager;
     }
 }

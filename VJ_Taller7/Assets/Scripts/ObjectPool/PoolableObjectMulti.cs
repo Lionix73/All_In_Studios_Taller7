@@ -4,7 +4,15 @@ using UnityEngine;
 public class PoolableObjectMulti : NetworkBehaviour
 {
     public ObjectPoolMulti Parent;
+    private bool localActiveState = true;
 
+    private void Start()
+    {
+        if (IsClient && localActiveState != gameObject.activeSelf)
+        {
+            gameObject.SetActive(false);
+        }
+    }
     public virtual void OnDisable()
     {
         if (!IsServer) return;

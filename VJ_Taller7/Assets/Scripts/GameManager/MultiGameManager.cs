@@ -113,6 +113,11 @@ public class MultiGameManager : NetworkBehaviour
         if (UIManager.Singleton) roundManager.PauseGame(isPaused);
     }
 
+    public void PlayGame()
+    {
+        roundManager._Simulating = true;
+    }
+
     /*
     public List<WeightedSpawnScriptableObject> GetBalanceWave(int wave){
         if (wavesBalance[wave-1].enemiesForTheWave == null) return null;

@@ -1304,6 +1304,7 @@ GameObject:
   - component: {fileID: 2523499608115504786}
   - component: {fileID: 7668294324850234261}
   - component: {fileID: 4288797365404789842}
+  - component: {fileID: 4460609647043108037}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1719,6 +1720,26 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 1afee5c7-9eaf-4bc1-9f4c-b9fe14732c80
     m_ActionName: 'Player/Active Skill[/Keyboard/leftAlt]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4460609647043108037}
+        m_TargetAssemblyTypeName: MultiPlayerState, Assembly-CSharp
+        m_MethodName: OnReady
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 4aaf605b-8538-41b9-8f09-af467af43948
+    m_ActionName: 'Player/StartGame[/Keyboard/e]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 30b90059-ed83-4820-b016-bb6d0f5a1633
+    m_ActionName: 'UI/Emotiza[/Keyboard/tab]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -1887,7 +1908,7 @@ MonoBehaviour:
     DestinationState: -2027287457
     TransitionDuration: 0.15941326
     TriggerNameHash: -1218818084
-    TransitionIndex: 4
+    TransitionIndex: 3
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -2015693266
@@ -1901,7 +1922,7 @@ MonoBehaviour:
     DestinationState: -2027287457
     TransitionDuration: 0.15941326
     TriggerNameHash: -1218818084
-    TransitionIndex: 3
+    TransitionIndex: 2
   - IsCrossFadeExit: 0
     Layer: 1
     OriginatingState: -2015693266
@@ -1936,6 +1957,13 @@ MonoBehaviour:
     DestinationState: -1220444935
     TransitionDuration: 0.5793795
     TriggerNameHash: 1293411866
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 9
+    OriginatingState: -1220444935
+    DestinationState: -499022955
+    TransitionDuration: 0.25000024
+    TriggerNameHash: -323374038
     TransitionIndex: 0
   m_Animator: {fileID: 5980219158352977901}
 --- !u!114 &7668294324850234261
@@ -1977,6 +2005,19 @@ MonoBehaviour:
   shaderVarRefresh: 0.1
   skinnedMeshRenderers: []
   IsTrailActive: 0
+--- !u!114 &4460609647043108037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2504184262613002398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c61841b0bf7c5df408c3a9f179e08d22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &2522467053797393184
 GameObject:
   m_ObjectHideFlags: 0

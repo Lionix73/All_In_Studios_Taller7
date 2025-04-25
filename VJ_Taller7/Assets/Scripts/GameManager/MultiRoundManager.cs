@@ -59,7 +59,8 @@ public class MultiRoundManager : NetworkBehaviour
     //private ChallengeManager challengeManager; //Pa llamar cuando son los challenges
     
     [Space]
-    [SerializeField] private bool _Simulating = false;
+    [SerializeField] private bool _simulating = false;
+    public bool _Simulating {  get { return _simulating; } set { _simulating = value; } }
     [SerializeField] private bool _BalncingInThis = false;
 
     //[Header("Eventos")]
@@ -69,7 +70,7 @@ public class MultiRoundManager : NetworkBehaviour
     public event RoundComplete OnRoundComplete;
 
     public void PauseGame(bool state){
-        _Simulating = !state;
+        _simulating = !state;
     }
 
     private void Awake() {
