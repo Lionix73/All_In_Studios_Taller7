@@ -92,7 +92,7 @@ public class MultiPlayerManager : NetworkBehaviour
         {
             var playerController = playerObject.GetComponent<PlayerControllerMulti>();
             var playerHealth = playerObject.GetComponent<HealthMulti>();
-            var gunManager = playerObject.GetComponent<GunManager>();
+            var playerAnimator = playerObject.GetComponent<Animator>();
             var playerState = playerObject.GetComponent<MultiPlayerState>();
 
             var playerData = new PlayerData
@@ -101,7 +101,7 @@ public class MultiPlayerManager : NetworkBehaviour
                 playerController = playerController,
                 playerHealth = playerHealth,
                 playerState = playerState,
-                gunManager = gunManager,
+                playerAnimator = playerAnimator,
             };
 
             activePlayers.Add(clientId, playerData);
@@ -113,7 +113,6 @@ public class MultiPlayerManager : NetworkBehaviour
 
             // Inicializar salud
             playerHealth.SetInitialHealth(playerStartingHealth);
-
             Debug.Log($"Player {clientId} registered in MultiPlayerManager");
         }
     }
@@ -198,7 +197,6 @@ public class MultiPlayerManager : NetworkBehaviour
 
             // Resetear salud
             playerData.playerHealth.SetInitialHealth(playerStartingHealth);
-
             Debug.Log($"Player {clientId} respawned");
         }
     }
@@ -275,6 +273,6 @@ public class MultiPlayerManager : NetworkBehaviour
         public PlayerControllerMulti playerController;
         public HealthMulti playerHealth;
         public MultiPlayerState playerState;
-        public GunManager gunManager;
+        public Animator playerAnimator;
     }
 }

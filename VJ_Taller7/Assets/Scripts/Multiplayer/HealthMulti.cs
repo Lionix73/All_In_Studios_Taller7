@@ -41,6 +41,7 @@ public class HealthMulti : NetworkBehaviour, IDamageable
     {
         pController = GetComponent<PlayerControllerMulti>();
     }
+
     void Update()
     {
         if (UIManager.Singleton != null)
@@ -122,7 +123,7 @@ public class HealthMulti : NetworkBehaviour, IDamageable
         
         if(state)
         {
-            animator.SetTrigger("Revive");
+            animator.SetBool("IsAlive", state);
         }
         else
         {
