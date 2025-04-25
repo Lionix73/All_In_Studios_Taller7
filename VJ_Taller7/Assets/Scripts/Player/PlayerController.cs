@@ -112,6 +112,7 @@ public class PlayerController : MonoBehaviour
     private GunManager gunManager;
     private ThisObjectSounds soundManager;
     private Health health;
+    private Rig rig;
     #endregion
     private void Awake()
     {
@@ -120,6 +121,7 @@ public class PlayerController : MonoBehaviour
         gunManager = FindAnyObjectByType<GunManager>();
         soundManager = GetComponent<ThisObjectSounds>();
         health = GetComponent<Health>();
+        rig = GetComponentInChildren<Rig>();
     }
 
     private void Start()
@@ -134,7 +136,8 @@ public class PlayerController : MonoBehaviour
         UpdateAnimLayer();
         adjustFOV();
 
-        if(!isEmoting) AdjustRigs();
+        AdjustRigs();
+        ChangeRigWeightDuringEmote();
     }
 
     private void FixedUpdate()
@@ -379,6 +382,14 @@ public class PlayerController : MonoBehaviour
         if (moveInput.magnitude!=0){
             aimRig.weight = 1.0f;
         }
+    }
+
+    private void ChangeRigWeightDuringEmote()
+    {
+        if (isEmoting)
+            rig.weight = 0f;
+        else 
+            rig.weight = 1f;
     }
     #endregion
 

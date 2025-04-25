@@ -136,7 +136,7 @@ public class PlayerSoundsManager : MonoBehaviour
         StopEmoteMusic();
         activeEmoteMusic = musicName;
 
-        if(!pControl.PlayerIsEmoting || !pControl.PlayerCanMove) 
+        if(pControl.PlayerCanMove)
         {
             soundManager.PlaySound(musicName);
         }
