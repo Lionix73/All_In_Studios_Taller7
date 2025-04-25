@@ -81,7 +81,7 @@ public class MultiPlayerManager : NetworkBehaviour
         //playerHealth.OnHealthChanged += OnPlayerHealthChanged;
         //playerHealth.OnPlayerDeath += OnPlayerDeath;
         //Setear vida inicial
-        playerHealth.SetInitialHealth(playerStartingHealth);
+        //playerHealth.SetInitialHealth(playerStartingHealth);
 
         MultiGameManager.Instance.PlayerSpawn();
     }

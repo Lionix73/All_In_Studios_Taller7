@@ -71,6 +71,8 @@ public class HealthMulti : NetworkBehaviour, IDamageable
     /// <param name="startingHealth"></param>
     /// 
     public void SetInitialHealth(float startingHealth){
+        Debug.Log("Initial Health");
+        animator.SetTrigger("Revive");
         MaxHealth = startingHealth;
         CurrentHealth = (int)MaxHealth;
         MovementPlayerStateRpc(true);
@@ -123,7 +125,7 @@ public class HealthMulti : NetworkBehaviour, IDamageable
         
         if(state)
         {
-            animator.SetBool("IsAlive", state);
+
         }
         else
         {
