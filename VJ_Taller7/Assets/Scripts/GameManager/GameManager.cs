@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
         }
         else{
             playerManager.SpawnPlayer(playerPrefab, spawntPoint);
-            gunManager = playerManager.gunManager;
+            
         }
         isGameOver = false;
     }
@@ -90,6 +90,7 @@ public class GameManager : MonoBehaviour
     //Para que todo lo que necesite al player lo encuentre una vez que se haya creado; NOTA: Siempre al final de la función
     public void PlayerSpawn(){
         PlayerSpawned?.Invoke(playerManager.activePlayer); 
+        //gunManager = playerManager.gunManager;
     }
     
     public GameObject SelectedPlayer()

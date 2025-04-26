@@ -8,21 +8,18 @@ public class ObjectLookAtCamera : MonoBehaviour
 
     public void LookAtCamera()
     {
+        if (mainCamera==null) return;
         transform.LookAt(mainCamera.transform, Vector3.up);
     }
     public void ApplyOffset()
     {
         transform.position += offset;
     }
-    void Awake()
+    private void Awake()
     {
         if(GameManager.Instance != null)
         {
             GameManager.Instance.PlayerSpawned += GetPlayer;
-        }
-        if (mainCamera == null)
-        {
-            mainCamera = Camera.main;
         }
     }
 

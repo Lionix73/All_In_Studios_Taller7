@@ -20,6 +20,7 @@ public class GunPickeable : MonoBehaviour
         //gunName.SetText(gunType.ToString() + "\n" + "Press E to pick up");
 
         PickeableUI = GetComponentInChildren<ObjectLookAtCamera>().gameObject;
+        lookCamera = PickeableUI.GetComponentInChildren<ObjectLookAtCamera>();
 
         TextMeshProUGUI[] uiTexts = PickeableUI.GetComponentsInChildren<TextMeshProUGUI>();
 
@@ -54,7 +55,7 @@ public class GunPickeable : MonoBehaviour
             fireRateText.text = $"Fire Rate: {gun.ShootConfig.FireRate}";
             magazineText.text = $"Magazine: {gun.MagazineSize}";
             PickeableUI.SetActive(true);
-            lookCamera = PickeableUI.GetComponentInChildren<ObjectLookAtCamera>();
+            //lookCamera = PickeableUI.GetComponentInChildren<ObjectLookAtCamera>();
         }
     }
 

@@ -39,7 +39,7 @@ public class CrosshairManager : MonoBehaviour
     }
 
     public void SetCrosshairImage(Sprite image){
-        crosshairImage.sprite = image;
+        if (crosshairImage!= null) crosshairImage.sprite = image;
     }
 
     public void AimingZoomIn(){

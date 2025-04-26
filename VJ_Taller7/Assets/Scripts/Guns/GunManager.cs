@@ -11,7 +11,7 @@ using NUnit.Framework;
 public class GunManager : MonoBehaviour
 {
     [Header("Camera")]
-    public Camera Camera; public CinemachineBrain cinemachineBrain;
+    public Camera Camera; public CinemachineBrain cinemachineBrain; GameObject playerObject;
     private PlayerController player;
     [Header("Managers")]
     public CrosshairManager crosshairManager;  
@@ -54,7 +54,9 @@ public class GunManager : MonoBehaviour
     private void Awake() {
         cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
         Camera = cinemachineBrain.GetComponent<Camera>();
-        GameManager.Instance.PlayerSpawned += GetPlayer;
+        playerObject = transform.parent.gameObject;
+        GetPlayer(playerObject);
+
         actualTotalAmmo=MaxTotalAmmo;
         if (gunParent == null) {gunParent = this.transform;} //En caso de no tener asignado el punto de la mano donde aparece el arma, que la sostenga encima
 
@@ -71,7 +73,6 @@ public class GunManager : MonoBehaviour
         secondHandRigTarget = GameObject.Find("SecondHandGripRig_target").GetComponent<Transform>();
 
         crosshairManager = GetComponent<CrosshairManager>(); 
-        soundManager = GetComponentInChildren<ThisObjectSounds>();
     }
 
     private void Update() {
@@ -278,6 +279,7 @@ public class GunManager : MonoBehaviour
     private void GetPlayer(GameObject activePlayer){
         player = activePlayer.GetComponentInChildren<PlayerController>();
         playerAnimator = activePlayer.GetComponentInChildren<Animator>();
+        soundManager = activePlayer.GetComponentInChildren<ThisObjectSounds>();
     }
 
     private void OnDrawGizmos() {

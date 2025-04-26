@@ -28,8 +28,8 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private float respawnCD;
     public void SpawnPlayer(GameObject playerPrefab, Transform spawntPoint) {
         // spawn player
-        if (GameObject.Find("PlayerController") != null) {
-            activePlayer = GameObject.Find("PlayerController");
+        if (GameObject.Find("PlayerController") != null) { //NYX UMBRA
+            activePlayer = GameObject.Find("PlayerController"); //NYX UMBRA
             activePlayer.SetActive(true);//no funciona el desactivados xd
         }
         else {
@@ -40,7 +40,9 @@ public class PlayerManager : MonoBehaviour
             return;
         }
         playerController = activePlayer.GetComponentInChildren<PlayerController>(); //No es game object sino el player comom tal
-        gunManager = activePlayer.GetComponentInChildren<GunManager>();
+        gunManager = activePlayer.GetComponentInChildren<GunManager>(); 
+        gunManager.enabled = true; //porque aveces aperecía desactavido, cuando NO HAYA NINGUN error se puede quitar
+        GameManager.Instance.gunManager = gunManager;
 
         playerPos = activePlayer.GetComponentInChildren<PlayerController>().gameObject.transform;
         playerPos.position = spawntPoint.position;
