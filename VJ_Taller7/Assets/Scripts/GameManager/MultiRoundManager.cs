@@ -96,8 +96,8 @@ public class MultiRoundManager : NetworkBehaviour
         if (UIManager.Singleton)
         {
             _RoundUI.SetActive(false);
-            _Simulating = true;
-            UIManager.Singleton.UIChangeRound(currentRound);
+            //_Simulating = true;
+
 
             //challengeManager.ShowChallenges(); //Mostrar los challenges
         }
@@ -198,6 +198,11 @@ public class MultiRoundManager : NetworkBehaviour
     }
     public void enemyHaveSpawn(){
         aliveEnemies += 1;
+        EnemySpawnUIRpc(aliveEnemies);
+    }
+    [Rpc(SendTo.Everyone)]
+    public void EnemySpawnUIRpc(int aliveEnemies)
+    {
         if (UIManager.Singleton) UIManager.Singleton.UIEnemiesAlive(aliveEnemies);
     }
 

@@ -29,7 +29,7 @@ public class MultiPlayerManager : NetworkBehaviour
     public float PlayerCurrentHealth { get { return playerCurrentHealth; } private set { playerCurrentHealth = value; } }
     private float playerMaxHealth; //Solo es el reflejo de la vida del jugador, no cambiar
 
-    NetworkVariable<int> playersDead = new NetworkVariable<int>();
+    NetworkVariable<int> playersDead = new NetworkVariable<int>(0);
     public int PlayersDead
     { get { return playersDead.Value; }
 
@@ -56,6 +56,7 @@ public class MultiPlayerManager : NetworkBehaviour
             Destroy(gameObject);
         }
     }
+
 
     public void SpawnPlayer(GameObject playerPrefab, Transform spawntPoint) {
         // spawn player
@@ -155,7 +156,6 @@ public class MultiPlayerManager : NetworkBehaviour
             // Iniciar respawn si es necesario
             StartCoroutine(RespawnPlayer(clientId));
         }
-        MultiGameManager.Instance.PlayerDied(player);
     }
 
     // Verifica si todos los jugadores están muertos
@@ -168,17 +168,17 @@ public class MultiPlayerManager : NetworkBehaviour
             if (player.playerHealth.IsDead)
             {
                 PlayersDead++;
+                Debug.Log($"Players died: {playersDead.Value} players Active: {activePlayers.Count}");
             }
             else
             {
                 PlayersDead--;
             }
         }
-
-        if (PlayersDead == activePlayers.Count)
+        
+        if (PlayersDead == activePlayers.Count + 1)
         {
-            Debug.Log("Game End");
-            //MultiGameManager.Instance.EndGame();
+            MultiGameManager.Instance.GameOver();
         }
     }
     // Corrutina para respawnear jugador
@@ -198,6 +198,7 @@ public class MultiPlayerManager : NetworkBehaviour
             // Resetear salud
             playerData.playerHealth.SetInitialHealth(playerStartingHealth);
             Debug.Log($"Player {clientId} respawned");
+            CheckAllPlayersDead();
         }
     }
     private Transform GetSpawnPointForPlayer(ulong clientId)

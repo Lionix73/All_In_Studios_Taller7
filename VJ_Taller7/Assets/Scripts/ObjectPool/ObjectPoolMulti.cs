@@ -77,7 +77,7 @@ public class ObjectPoolMulti
 
         foreach (var obj in AvailableObjectsPool)
         {
-            Debug.Log(obj);
+            //Debug.Log(obj);
         }
 
         PoolableObjectMulti instance = AvailableObjectsPool[0];

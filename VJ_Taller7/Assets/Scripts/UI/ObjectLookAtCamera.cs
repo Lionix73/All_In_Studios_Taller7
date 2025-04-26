@@ -17,14 +17,7 @@ public class ObjectLookAtCamera : MonoBehaviour
     }
     private void Awake()
     {
-        if(GameManager.Instance != null)
-        {
-            GameManager.Instance.PlayerSpawned += GetPlayer;
-        }
+        mainCamera = Camera.main;
     }
 
-    private void GetPlayer(GameObject player)
-    {
-        mainCamera = player.GetComponentInChildren<Camera>();
-    }
 }

@@ -85,8 +85,10 @@ public class MultiGameManager : NetworkBehaviour
     }
     public void PlayerDied(GameObject player) {
         PlayerDie?.Invoke(player);
-        isGameOver = true; //Primero saber si el otro jugador esta vivo y depues si confirmar el game over
-        if(UIManager.Singleton != null) UIManager.Singleton.DiedUI(6);
+        if (isGameOver)
+        {
+            LostGameUIRpc();
+        }
 
         if (spawnPlayerWithMenu) return;
 
@@ -116,6 +118,23 @@ public class MultiGameManager : NetworkBehaviour
     public void PlayGame()
     {
         roundManager._Simulating = true;
+        StartRoundUIRpc(roundManager.CurrentRound);
+    }
+    public void GameOver()
+    {
+        Debug.Log("GameOver");
+        LostGameUIRpc();
+        isGameOver = true; 
+    }
+    [Rpc(SendTo.Everyone)]
+    public void StartRoundUIRpc(int currentRound) {
+        UIManager.Singleton.UIChangeRound(currentRound);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void LostGameUIRpc()
+    {
+        if (UIManager.Singleton != null) UIManager.Singleton.DiedUI(6);
     }
 
     /*

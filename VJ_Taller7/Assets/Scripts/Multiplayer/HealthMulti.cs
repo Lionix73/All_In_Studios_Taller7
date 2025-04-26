@@ -20,7 +20,7 @@ public class HealthMulti : NetworkBehaviour, IDamageable
         set { if (IsServer) maxHealth.Value = value; }
     }
 
-    public delegate void HealthChanged(float currentHealth, float maxHealth);
+    public delegate void HealthChanged(int currentHealth, float maxHealth);
     public event HealthChanged OnHealthChanged;
 
     public delegate void PlayerDeath(GameObject player);
@@ -46,7 +46,7 @@ public class HealthMulti : NetworkBehaviour, IDamageable
     {
         if (UIManager.Singleton != null)
         {
-            UIManager.Singleton.GetPlayerHealth(currentHealth.Value, MaxHealth);
+
         }
     }
     public override void OnNetworkSpawn()
@@ -61,7 +61,7 @@ public class HealthMulti : NetworkBehaviour, IDamageable
         NetworkObject player = GetComponentInParent<NetworkObject>();
         if (IsServer)
         {
-            MultiGameManager.Instance.SpawnPlayer(OwnerClientId , gameObject);
+            MultiGameManager.Instance.SpawnPlayer(OwnerClientId, gameObject);
         }
     }
 
@@ -70,15 +70,23 @@ public class HealthMulti : NetworkBehaviour, IDamageable
     /// </summary>
     /// <param name="startingHealth"></param>
     /// 
-    public void SetInitialHealth(float startingHealth){
+    public void SetInitialHealth(float startingHealth) {
         Debug.Log("Initial Health");
+        IsDead = false;
         animator.SetTrigger("Revive");
         MaxHealth = startingHealth;
         CurrentHealth = (int)MaxHealth;
         MovementPlayerStateRpc(true);
 
         HealthChange(CurrentHealth);
-        IsDead = false;
+    }
+    [Rpc(SendTo.Everyone)]
+    public void ReviveAnimRpc()
+    {
+        if (!IsOwner) return;
+        
+        animator.SetTrigger("Revive");
+
     }
     public void TakeDamage(int damage)
     {
@@ -158,15 +166,9 @@ public class HealthMulti : NetworkBehaviour, IDamageable
     
     private void HealthChange(int updatedHealth)
     {
-        HealthChangeRpc(updatedHealth);
         OnHealthChanged?.Invoke(updatedHealth, MaxHealth);
     }
-    [Rpc(SendTo.Everyone)]
-    public void HealthChangeRpc(int updatedHealth)
-    {
-        if (!IsOwner) return;
-        healthDisplay.text = $"{updatedHealth} / {MaxHealth}";
-    }
+
     public Transform GetTransform()
     {
         return transform;
