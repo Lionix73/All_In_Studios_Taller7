@@ -572,6 +572,7 @@ public class PlayerControllerMulti : NetworkBehaviour
         if (!IsOwner) return;
         if (context.performed && canCrouch && isGrounded)
         {
+            Debug.Log("Crouching");
             ExchangeCollidersRpc();
             isCrouching = !isCrouching;
             canCrouch = false;
@@ -608,15 +609,8 @@ public class PlayerControllerMulti : NetworkBehaviour
 
         canSlide = true;
         ExchangeCollidersRpc();
-        Invoke(nameof(ResetCrouchFlag), 0.5f);
     }
 
-    public void OnSlide()
-    {
-        isSliding = true;
-        canSlide = false;
-       // animator.applyRootMotion = true;
-    }
 
     [Rpc(SendTo.Everyone)]
     public void SlideVFXRpc()

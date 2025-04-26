@@ -74,14 +74,15 @@ public class MultiRoundManager : NetworkBehaviour
     }
 
     private void Awake() {
-        _RoundUI = GameObject.Find("RoundsCanva");
+
+       /* _RoundUI = GameObject.Find("RoundsCanva");
        
 
         _UiWaveTimer = _RoundUI.transform.Find("WaveTimer").GetComponent<TextMeshProUGUI>();
         _UiBetweenWavesTimer = _RoundUI.transform.Find("BetweenWavesTimer").GetComponent<TextMeshProUGUI>();
         _UiWaveCounter = _RoundUI.transform.Find("WaveCounter").GetComponent<TextMeshProUGUI>();
         _UiRoundCounter = _RoundUI.transform.Find("RoundCounter").GetComponent<TextMeshProUGUI>();
-        _UiEnemyCounter = _RoundUI.transform.Find("EnemyCounter").GetComponent<TextMeshProUGUI>();
+        _UiEnemyCounter = _RoundUI.transform.Find("EnemyCounter").GetComponent<TextMeshProUGUI>();*/
     }
     public override void OnNetworkSpawn()
     {
@@ -107,7 +108,7 @@ public class MultiRoundManager : NetworkBehaviour
         if (!IsServer) return;
         if (enemiesKilledOnWave == waveSize - 1 && lastEnemyOfWave == null){ //Todavia no funciona... pero casi
             //setear al enemigo con el loot, o activar el loot en su muerte, algo...
-            lastEnemyOfWave= FindFirstObjectByType<Enemy>().gameObject;
+            lastEnemyOfWave= FindFirstObjectByType<EnemyMulti>().gameObject;
             enemiesKilledOnWave = 0;
         }
         if (aliveEnemies == 0 && !inBetweenRounds && enemiesKilledOnWave>1){

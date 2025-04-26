@@ -59,7 +59,7 @@ public class GunManagerMulti2 : NetworkBehaviour
 
     public GunScriptableObject CurrentGun;
     [SerializeField] private GunType CurrentSecondGunType;
-    private NetworkVariable<GunType> CurrentSecondGunTypeNet = new NetworkVariable<GunType>(0, NetworkVariableReadPermission.Everyone);
+    private NetworkVariable<GunType> CurrentSecondGunTypeNet = new NetworkVariable<GunType>(GunType.Crossbow, NetworkVariableReadPermission.Everyone);
     private NetworkVariable<int> CurrentSecondaryGunBulletsLeft = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
     private NetworkVariable<int> CurrentGunBulletsLeft = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
     public event Action<int> OnBulletsChanged;
@@ -81,7 +81,7 @@ public class GunManagerMulti2 : NetworkBehaviour
         }
         CurrentGun = gun.Clone() as GunScriptableObject;
 
-        if(!IsServer)
+        if(!IsServer && IsClient && CurrentSecondGunTypeNet.Value == 0)
         {
             DespawnRpc();
             SpawnGunRpc();

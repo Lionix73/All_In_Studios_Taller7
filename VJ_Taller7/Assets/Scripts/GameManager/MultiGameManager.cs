@@ -73,8 +73,8 @@ public class MultiGameManager : NetworkBehaviour
         playerPrefab = playerGO;
         // spawn player\
         if (spawnPlayerWithMenu){
-            playerManager.SpawnPlayer(playerPrefab, spawntPoint);
-            gunManager = playerManager.gunManager;
+            playerManager.RegisterPlayer(clientId, playerPrefab);
+            isGameOver = false;
         }
         /*else{
             playerManager.SpawnPlayer(playerPrefab, spawntPoint);

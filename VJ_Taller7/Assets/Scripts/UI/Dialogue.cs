@@ -58,7 +58,7 @@ public class Dialogue : MonoBehaviour
         {
             StopAllCoroutines();
             finishDialogue = true;
-            if(!music.IsPlaying()) music.Play();
+            //if(!music.IsPlaying()) music.Play();
             gameObject.SetActive(false);
         }
     }

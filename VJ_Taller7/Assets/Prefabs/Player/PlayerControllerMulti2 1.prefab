@@ -1609,19 +1609,7 @@ MonoBehaviour:
     m_ActionId: cbd2104c-c1c7-4fbe-82b6-b21ad5ebf8ec
     m_ActionName: 'Player/Aim[/Mouse/rightButton]'
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3951267400713598900}
-        m_TargetAssemblyTypeName: PlayerControllerMulti, Assembly-CSharp
-        m_MethodName: OnSlide
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 1636524e-f6b0-4e9c-8d0e-46517f48edd6
     m_ActionName: 'Player/Slide[/Keyboard/c,/Keyboard/ctrl]'
   - m_PersistentCalls:
@@ -1904,24 +1892,10 @@ MonoBehaviour:
   TransitionStateInfoList:
   - IsCrossFadeExit: 0
     Layer: 0
-    OriginatingState: 765711723
-    DestinationState: -2027287457
-    TransitionDuration: 0.15941326
-    TriggerNameHash: -1218818084
-    TransitionIndex: 3
-  - IsCrossFadeExit: 0
-    Layer: 0
     OriginatingState: -2015693266
     DestinationState: -1450844771
     TransitionDuration: 1.6573225
     TriggerNameHash: -1525363869
-    TransitionIndex: 2
-  - IsCrossFadeExit: 0
-    Layer: 1
-    OriginatingState: 765711723
-    DestinationState: -2027287457
-    TransitionDuration: 0.15941326
-    TriggerNameHash: -1218818084
     TransitionIndex: 2
   - IsCrossFadeExit: 0
     Layer: 1
@@ -1941,29 +1915,64 @@ MonoBehaviour:
     Layer: 7
     OriginatingState: -499022955
     DestinationState: -1383311792
-    TransitionDuration: 0
+    TransitionDuration: 0.1
     TriggerNameHash: 237393061
     TransitionIndex: 0
   - IsCrossFadeExit: 0
+    Layer: 7
+    OriginatingState: -499022955
+    DestinationState: -1408821888
+    TransitionDuration: 0.1
+    TriggerNameHash: 237393061
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
     Layer: 8
+    OriginatingState: -499022955
+    DestinationState: -1350518669
+    TransitionDuration: 0.25
+    TriggerNameHash: -1218818084
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 8
+    OriginatingState: -499022955
+    DestinationState: -2027287457
+    TransitionDuration: 0.25
+    TriggerNameHash: -1218818084
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
+    Layer: 9
     OriginatingState: -499022955
     DestinationState: -1120194998
     TransitionDuration: 0.15506458
     TriggerNameHash: 1654612129
     TransitionIndex: 0
   - IsCrossFadeExit: 0
-    Layer: 9
+    Layer: 11
     OriginatingState: -499022955
     DestinationState: -1220444935
     TransitionDuration: 0.5793795
     TriggerNameHash: 1293411866
     TransitionIndex: 0
   - IsCrossFadeExit: 0
-    Layer: 9
-    OriginatingState: -1220444935
-    DestinationState: -499022955
-    TransitionDuration: 0.25000024
+    Layer: 11
+    OriginatingState: -499022955
+    DestinationState: -648460631
+    TransitionDuration: 0.25
     TriggerNameHash: -323374038
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
+    Layer: 11
+    OriginatingState: -1220444935
+    DestinationState: -648460631
+    TransitionDuration: 0.25
+    TriggerNameHash: -323374038
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 11
+    OriginatingState: -648460631
+    DestinationState: -1220444935
+    TransitionDuration: 0.25
+    TriggerNameHash: 1293411866
     TransitionIndex: 0
   m_Animator: {fileID: 5980219158352977901}
 --- !u!114 &7668294324850234261
@@ -3743,7 +3752,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4415161213560851409}
   - component: {fileID: 4134924816026280296}
-  - component: {fileID: 8325626018803004259}
+  - component: {fileID: 7985235262500689426}
   m_Layer: 2
   m_Name: GunHoldParent
   m_TagString: Untagged
@@ -3787,7 +3796,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: -0.45, y: 0, z: 0}
---- !u!114 &8325626018803004259
+--- !u!114 &7985235262500689426
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3796,10 +3805,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4817015800047978730}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4b3734dadf7c9e4ba9e42387ee7369c, type: 3}
+  m_Script: {fileID: 11500000, guid: 6da1fc5c5fe75414a86e837f56476445, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunManager: {fileID: 0}
+  gunManager: {fileID: 6274603480792431093}
 --- !u!1 &4854695730406680652
 GameObject:
   m_ObjectHideFlags: 0
@@ -5357,7 +5366,7 @@ MonoBehaviour:
     m_SourceObjects:
       m_Length: 1
       m_Item0:
-        transform: {fileID: 0}
+        transform: {fileID: 5519746454959993719}
         weight: 1
       m_Item1:
         transform: {fileID: 0}
