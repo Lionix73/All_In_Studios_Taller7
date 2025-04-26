@@ -58,7 +58,7 @@ public class PlayerSoundsManager : MonoBehaviour
     #region -----SHOOTING SOUNDS-----
 
     public bool brokenFeather;
-    private bool firerateAllowShoot;
+    private bool firerateAllowShoot = true;
 
     public void OnShoot(InputAction.CallbackContext context)
     {
