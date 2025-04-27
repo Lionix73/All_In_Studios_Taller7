@@ -84,10 +84,7 @@ private void Update() {
         /*if (!IsLocalPlayer || GunHold == null) return;
         transform.position = GunHold.position;
         transform.rotation = GunHold.rotation;*/
-        /*if (totalAmmoDisplay != null) {
-            totalAmmoDisplay.SetText(actualTotalAmmo + "/" + MaxTotalAmmo);
-            
-        }
+
         if (UIManager.Singleton !=null)
         {
             UIManager.Singleton.GetPlayerTotalAmmo(actualTotalAmmo);
@@ -98,19 +95,19 @@ private void Update() {
         else if (CurrentGun.BulletsLeft<=0 && !CurrentGun.Realoading){
             RealoadGun();
         }
-
+        if (UIManager.Singleton != null && IsOwner)
+        {
+            UIManager.Singleton.GetPlayerGunInfo(CurrentGun.BulletsLeft, CurrentGun.MagazineSize, CurrentGun);
+        }
 
         if (ammunitionDisplay != null) {
             ammunitionDisplay.SetText(CurrentGun.BulletsLeft + "/" + CurrentGun.MagazineSize);
         }
-        if (UIManager.Singleton != null)
-        {
-            UIManager.Singleton.GetPlayerActualAmmo(CurrentGun.BulletsLeft, CurrentGun.MagazineSize);
-        }
+
 
         if (actualTotalAmmo>MaxTotalAmmo){
             actualTotalAmmo=MaxTotalAmmo;
-        }*/
+        }
     }
     [Rpc(SendTo.Everyone)]
     public void SetUpGunRpc(GunType gunType){
@@ -124,12 +121,6 @@ private void Update() {
         CurrentGun = gun.Clone() as GunScriptableObject;
         CurrentSecondaryGunBulletsLeft = CurrentGun.MagazineSize;
         CurrentSecondGunType = Gun;
-        GetCurrentGunRpc(gunType);
-        if (UIManager.Singleton != null)
-        {
-            UIManager.Singleton.GetPlayerGunInfo(CurrentGun.BulletsLeft, CurrentGun.MagazineSize, CurrentGun);
-        }
-
         SetUpGunRigs();
     }
 
@@ -149,6 +140,8 @@ private void Update() {
         { //En revision porque no se recarga al recoger el arma, ni la primera vez que aparece.
             CurrentGun.bulletsLeft = CurrentGun.MagazineSize;
         }
+        GetCurrentGunRpc(gunType);
+
         CurrentGun.realoading = false;
         CurrentGun.TrailPool = new ObjectPool<TrailRenderer>(gun.CreateTrail);
         SpawnRpc(gunType);
@@ -325,6 +318,10 @@ private void Update() {
     private void RealoadGun(){
         CurrentGun.Reload();
         actualTotalAmmo -= CurrentGun.MagazineSize - CurrentGun.BulletsLeft;
+        if (UIManager.Singleton != null)
+        {
+            UIManager.Singleton.GetPlayerActualAmmo(CurrentGun.BulletsLeft, CurrentGun.MagazineSize);
+        }
     }
     #endregion
 

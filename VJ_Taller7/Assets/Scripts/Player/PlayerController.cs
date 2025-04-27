@@ -56,6 +56,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private MeshTrail dashVFX;
 
     [Header("Camera Settings")]
+    [SerializeField] private Transform camTarget;
     [SerializeField] private float currentFOV = 65;
     [SerializeField] private float aimFOV = 55;
     [SerializeField] private float tFOV = 1;
@@ -128,6 +129,9 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        cameraTransform = GameObject.FindGameObjectWithTag("FreeLookCamera").transform;
+        freeLookCamera = GameObject.FindGameObjectWithTag("FreeLookCamera").GetComponent<CinemachineCamera>();
+        freeLookCamera.Target.TrackingTarget = camTarget;
     }
 
     private void Update()

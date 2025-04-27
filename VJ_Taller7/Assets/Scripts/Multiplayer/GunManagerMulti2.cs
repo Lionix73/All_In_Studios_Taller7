@@ -73,31 +73,25 @@ public class GunManagerMulti2 : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        GunScriptableObject gun = gunsList.Find(gun => gun.Type == Gun);
-        if (gun == null)
-        {
-            Debug.LogError($"No se ha encontrado el arma: {CurrentGun}");
-            return;
-        }
-        CurrentGun = gun.Clone() as GunScriptableObject;
 
-        if(!IsServer && IsClient && CurrentSecondGunTypeNet.Value == 0)
+        if (!IsServer && IsClient && CurrentSecondGunTypeNet.Value == 0)
         {
             DespawnRpc();
-            SpawnGunRpc();
+            SetUpGunRpc(Gun);
             ChangeGunTypeRpc(Gun);
             ChangeSecondGunTypeRpc(Gun);
         }
         
         //cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
-
-        if (IsServer)
-        {
-            SendActualAmmoRpc(MaxTotalAmmo);
-            SendCurrentGunBulletsLeftRpc(CurrentGun.MagazineSize);
-        }
         if (!IsLocalPlayer) return;
-        SpawnGunRpc();
+        
+        SetUpGunRpc(Gun);
+        SendActualAmmoRpc(MaxTotalAmmo);
+        SendCurrentGunBulletsLeftRpc(CurrentGun.MagazineSize);
+        
+        
+        //if (UIManager.Singleton && IsOwner) UIManager.Singleton.GetPlayerGunInfo(CurrentGunBulletsLeft.Value, weapon.MagazineSize, CurrentGun);
+        //if (UIManager.Singleton && IsOwner) UIManager.Singleton.GetPlayerTotalAmmo(MaxTotalAmmo);
         camera = Camera.main;
 
         //secondHandRigTarget = GameObject.Find("SecondHandGripRig_target").GetComponent<Transform>();
@@ -107,36 +101,22 @@ public class GunManagerMulti2 : NetworkBehaviour
         //CurrentSecondGunType = Gun;
         //ChangeSecondGunTypeRpc(CurrentSecondGunTypeNet.Value);
         inAPickeableGun = false;
-        ammunitionDisplay = GameObject.Find("AmmoGun").GetComponent<TextMeshProUGUI>();
-        totalAmmoDisplay = GameObject.Find("TotalAmmo").GetComponent<TextMeshProUGUI>();
+        //ammunitionDisplay = GameObject.Find("AmmoGun").GetComponent<TextMeshProUGUI>();
+        //totalAmmoDisplay = GameObject.Find("TotalAmmo").GetComponent<TextMeshProUGUI>();
 
 
     }
 
     private void Update() {
         if (!IsOwner || weapon == null) return;
-        if (totalAmmoDisplay != null) {
-            totalAmmoDisplay.SetText(actualTotalAmmo.Value + "/" + MaxTotalAmmo);
 
-        }
-        if (UIManager.Singleton != null)
-        {
-            UIManager.Singleton.GetPlayerTotalAmmo(actualTotalAmmo.Value);
-        }
+
         if (shooting && weapon.BulletsLeft > 0) {
             weapon.Shoot();
+            UIManager.Singleton.GetPlayerActualAmmo(weapon.bulletsLeft, weapon.MagazineSize);
         }
         else if (weapon.bulletsLeft <= 0 && !weapon.realoading) {
             RealoadGun();
-        }
-
-
-        if (ammunitionDisplay != null) {
-            ammunitionDisplay.SetText(weapon.bulletsLeft + "/" + weapon.MagazineSize);
-        }
-        if (UIManager.Singleton != null)
-        {
-            UIManager.Singleton.GetPlayerActualAmmo(weapon.bulletsLeft, weapon.MagazineSize);
         }
 
         if (actualTotalAmmo.Value > MaxTotalAmmo) {
@@ -168,12 +148,6 @@ public class GunManagerMulti2 : NetworkBehaviour
         }
 
 
-        
-
-        if (UIManager.Singleton != null)
-        {
-            UIManager.Singleton.GetPlayerGunInfo(weapon.BulletsLeft, weapon.MagazineSize, CurrentGun);
-        }
         if (IsOwner)
         {
             SetUpGunRigsRpc();
@@ -227,7 +201,7 @@ public class GunManagerMulti2 : NetworkBehaviour
         // CurrentGun.ShootSystem = CurrentGun.Model.GetComponentInChildren<ParticleSystem>();
         gunRig = CurrentGun.Model.transform;
         weapon = spawnGun.gameObject.GetComponent<WeaponLogic>();
-        
+        if (UIManager.Singleton && IsOwner) UIManager.Singleton.GetPlayerGunInfo(CurrentGunBulletsLeft.Value, weapon.MagazineSize,CurrentGun);
         crosshairManager.SetCrosshairImage(CurrentGun.CrosshairImage);
 
     }
@@ -246,6 +220,7 @@ public class GunManagerMulti2 : NetworkBehaviour
     {
         CurrentGunBulletsLeft.Value = bulletsLeft;
     }
+
     [Rpc(SendTo.Everyone)]
     public void DespawnActiveGunRpc() {
         if (CurrentGun != null) {
@@ -418,8 +393,14 @@ public class GunManagerMulti2 : NetworkBehaviour
         }
     }
     private void RealoadGun(){
+        SendActualAmmoRpc(actualTotalAmmo.Value - (weapon.MagazineSize - weapon.BulletsLeft));
         weapon.Reload();
-        SendActualAmmoRpc(actualTotalAmmo.Value - (weapon.MagazineSize - weapon.bulletsLeft));
+        SendCurrentGunBulletsLeftRpc(weapon.bulletsLeft);
+        if (UIManager.Singleton && IsOwner) UIManager.Singleton.GetPlayerActualAmmo(CurrentGunBulletsLeft.Value, weapon.MagazineSize);
+        if (UIManager.Singleton && IsOwner)
+        {
+            UIManager.Singleton.GetPlayerTotalAmmo(actualTotalAmmo.Value);
+        }
         //actualTotalAmmo.Value -= weapon.MagazineSize - weapon.BulletsLeft;
     }
     private IEnumerator Reload(float delay)

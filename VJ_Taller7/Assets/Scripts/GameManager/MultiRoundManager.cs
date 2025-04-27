@@ -63,6 +63,9 @@ public class MultiRoundManager : NetworkBehaviour
     public bool _Simulating {  get { return _simulating; } set { _simulating = value; } }
     [SerializeField] private bool _BalncingInThis = false;
 
+    private float lastUITimeUpdate = 0f;
+    private int lastDisplayedSecond = 0;
+
     //[Header("Eventos")]
     public delegate void WaveComplete();
     public delegate void RoundComplete();
@@ -95,7 +98,7 @@ public class MultiRoundManager : NetworkBehaviour
 
         if (UIManager.Singleton)
         {
-            _RoundUI.SetActive(false);
+            //_RoundUI.SetActive(false);
             //_Simulating = true;
 
 
@@ -149,26 +152,42 @@ public class MultiRoundManager : NetworkBehaviour
     /// </summary>
     private void UpdateTimers(){
         if (inBetweenRounds) {
-            if (UIManager.Singleton) UIManager.Singleton.UIBetweenWavesTimer(inBetweenRoundsTimer);
             inBetweenRoundsTimer -= Time.deltaTime;
+            // Actualizar UI solo cuando cambie el valor entero del timer
+            int currentSecond = Mathf.CeilToInt(inBetweenRoundsTimer);
+            if (currentSecond != lastDisplayedSecond && UIManager.Singleton)
+            {
+                Debug.Log(currentSecond);
+                UIBetweenRoundsTimerRpc(inBetweenRoundsTimer);
+                lastDisplayedSecond = currentSecond;
+            }
             if (inBetweenRoundsTimer<=0){
             currentWave++;
             SetWaveBalance();
 
-            if(UIManager.Singleton) UIManager.Singleton.UIActualWave(currentWave);
+            UIActualWaveRpc(currentWave);
 
             if (_BalncingInThis) SendWave(enemyIndex); //sin el balance del manager de Alejo (no lo usaremos pero dejemoslo ahi '.')
             inBetweenRounds = false;
             inBetweenRoundsTimer = inBetweenRoundsWaitTime;
+            lastDisplayedSecond = Mathf.CeilToInt(inBetweenRoundsWaitTime); // Reset para el próximo ciclo
             }
         }
         else {
-            if (UIManager.Singleton) UIManager.Singleton.UIBetweenWaves(waveTimer);
             waveTimer -= Time.deltaTime;
-            if (waveTimer <= 0){
+            // Actualizar UI solo cuando cambie el valor entero del timer
+            int currentSecond = Mathf.CeilToInt(waveTimer);
+            if (currentSecond != lastDisplayedSecond && UIManager.Singleton)
+            {
+                UIBetweenWavesRpc(waveTimer);
+                lastDisplayedSecond = currentSecond;
+            }
+
+            if (waveTimer <= 0)
+            {
             //End round
             inBetweenRounds = true;
-
+            lastDisplayedSecond = Mathf.CeilToInt(inBetweenRoundsTimer); // Reset para el próximo ciclo
             //castigar por no completar
             //aumentar el escalado de los enemigos o repetir
             }
@@ -262,6 +281,22 @@ public class MultiRoundManager : NetworkBehaviour
             _UiWaveTimer.gameObject.SetActive(true);
         }
         
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void UIBetweenRoundsTimerRpc(float betweenRoundsTimer)
+    {
+        UIManager.Singleton.UIBetweenWavesTimer(betweenRoundsTimer);
+    }
+    [Rpc(SendTo.Everyone)]
+    public void UIBetweenWavesRpc(float waveTimer)
+    {
+        UIManager.Singleton.UIBetweenWaves(waveTimer);
+    }    
+    [Rpc(SendTo.Everyone)]
+    public void UIActualWaveRpc(int currentWave)
+    {
+        if (UIManager.Singleton) UIManager.Singleton.UIActualWave(currentWave);
     }
 
     #region FUNCIONES SUSCRITAS A EVENTOS

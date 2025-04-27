@@ -55,7 +55,7 @@ public class HealthMulti : NetworkBehaviour, IDamageable
 
         if (IsOwner)
         {
-            healthDisplay = GameObject.Find("HealthDisplay").GetComponent<TextMeshProUGUI>();
+            //healthDisplay = GameObject.Find("HealthDisplay").GetComponent<TextMeshProUGUI>();
 
         }
         NetworkObject player = GetComponentInParent<NetworkObject>();

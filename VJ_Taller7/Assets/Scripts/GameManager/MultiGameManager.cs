@@ -76,12 +76,16 @@ public class MultiGameManager : NetworkBehaviour
             playerManager.RegisterPlayer(clientId, playerPrefab);
             isGameOver = false;
         }
+        else
+        {
+            playerManager.RegisterPlayer(clientId, playerPrefab);
+            isGameOver = false;
+        }
         /*else{
             playerManager.SpawnPlayer(playerPrefab, spawntPoint);
             gunManager = playerManager.gunManager;
         }*/
-        playerManager.RegisterPlayer(clientId, playerPrefab);
-        isGameOver = false;
+
     }
     public void PlayerDied(GameObject player) {
         PlayerDie?.Invoke(player);
