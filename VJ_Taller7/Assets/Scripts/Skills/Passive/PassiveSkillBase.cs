@@ -3,10 +3,28 @@ using UnityEngine;
 
 public abstract class PassiveSkillBase : MonoBehaviour, IPassiveSkill
 {
+    private PassiveSkillManager skillManager;
+    public Sprite image;
+
     protected float cooldown;
     protected bool isOnCooldown = false;
 
+    public float WhatIsTheCooldown => cooldown;
     public bool IsOnCooldown => isOnCooldown;
+
+    private void Awake()
+    {
+        skillManager = GetComponentInParent<PassiveSkillManager>();
+    }
+
+    public virtual void Activate()
+    {
+        if (!isOnCooldown)
+        {
+            skillManager.DecreasePassiveSkillMask(skillManager.passiveSkills[skillManager.activeSkillIndex].WhatIsTheCooldown);
+            CheckCondition();
+        }
+    }
 
     public abstract void CheckCondition(); // Cada skill define cuándo se activa
 

@@ -1,15 +1,35 @@
+using System;
+using System.Linq;
 using UnityEngine;
 
-public class PassiveSkillManager : MonoBehaviour
+public class PassiveSkillManager : SkillsManagerBase
 {
-    [SerializeField] private PassiveSkillBase[] passiveSkills;
+    public PassiveSkillBase[] passiveSkills;
+    public int activeSkillIndex;
+
+    private void Start()
+    {
+        DeactivateUnusedSkills();
+
+        SearchSkillsUI();
+        _pasSkillImg.sprite = passiveSkills[activeSkillIndex].image;
+        _pasSkillMask.sprite = passiveSkills[activeSkillIndex].image;
+    }
 
     private void Update()
     {
-        foreach (var skill in passiveSkills)
+        if (!passiveSkills[activeSkillIndex].IsOnCooldown)
+            passiveSkills[activeSkillIndex].Activate();
+    }
+
+    private void DeactivateUnusedSkills()
+    {
+        for (int i = 0; i < passiveSkills.Length; i++)
         {
-            if (!skill.IsOnCooldown)
-                skill.CheckCondition();
+            if (i != activeSkillIndex)
+            {
+                passiveSkills[i].gameObject.SetActive(false);
+            }
         }
     }
 }

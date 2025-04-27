@@ -5,7 +5,7 @@ public class SegundoAliento : PassiveSkillBase
 {
     [SerializeField] private float cooldownThisSkill = 90f;
     private Health playerHealth;
-
+     
     private void Start()
     {
         playerHealth = GetComponentInParent<Health>();
@@ -13,7 +13,7 @@ public class SegundoAliento : PassiveSkillBase
 
     public override void CheckCondition()
     {
-        if (playerHealth.GetCurrentHeath <= playerHealth.GetMaxHeath * 0.1f && !IsOnCooldown)
+        if (playerHealth.GetCurrentHeath <= playerHealth.GetMaxHeath * 0.1f)
         {
             cooldown = cooldownThisSkill;
             StartCoroutine(Execute());

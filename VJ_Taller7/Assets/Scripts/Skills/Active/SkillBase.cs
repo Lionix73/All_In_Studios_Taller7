@@ -3,15 +3,25 @@ using UnityEngine;
 
 public abstract class SkillBase : MonoBehaviour, ISkill
 {
+    private ActiveSkillManager skillManager;
+    public Sprite image;
+
     protected float cooldown;
     protected bool isOnCooldown = false;
 
+    public float WhatIsTheCooldown => cooldown;
     public bool IsOnCooldown => isOnCooldown;
+
+    private void Awake()
+    {
+        skillManager = GetComponentInParent<ActiveSkillManager>();
+    }
 
     public virtual void Activate()
     {
         if (!isOnCooldown)
         {
+            StartCoroutine(skillManager.DecreaseActiveSkillMask(skillManager.skills[skillManager.activeSkillIndex].WhatIsTheCooldown));
             StartCoroutine(Execute());
             StartCoroutine(CooldownRoutine());
         }
