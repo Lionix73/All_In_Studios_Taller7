@@ -6,7 +6,7 @@ public class DamageZoneMulti : MonoBehaviour, IDamageable
 {
    public EnemyMulti enemyWhoIsFrom;
    [Range(1,5)] public int damageMult;
-
+    private ulong lastAttackerId;
    private void Awake() {
     enemyWhoIsFrom = GetComponentInParent<EnemyMulti>();
    }
@@ -33,7 +33,7 @@ public class DamageZoneMulti : MonoBehaviour, IDamageable
             enemyWhoIsFrom.ShowFloatingTextCriticRpc(damageToTake);
         }
 
-        enemyWhoIsFrom.TakeDamage(damageToTake);
+        enemyWhoIsFrom.TakeDamage(damageToTake, enemyWhoIsFrom.lastAttackerId);
     }
 
     [Rpc(SendTo.Everyone)]

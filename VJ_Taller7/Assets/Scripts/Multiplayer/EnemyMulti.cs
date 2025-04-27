@@ -8,7 +8,7 @@ using Unity.Netcode;
 using Unity.Services.Qos.V2.Models;
 using Unity.Services.Matchmaker.Models;
 
-public class EnemyMulti : PoolableObjectMulti, IDamageable
+public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
 {
     [Header("Enemy Components")]
     [SerializeField] private MultiAttackRadius attackRadius;
@@ -132,7 +132,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
     public DeathEvent OnDie; //Evento que se llama
     [Header("Game Manager")]
     public int scoreOnKill;
-
+    public ulong lastAttackerId;
 
     [Header("External Calls")]
     public Camera MainCamera { get; set; }
@@ -238,7 +238,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
         }
     }
     [Rpc(SendTo.Server)]
-    public void TakeDamageRpc(int damage)
+    public void TakeDamageRpc(int damage, ulong attackerId)
     {
         //networkHealth.Value -= damage;
         Health -= damage;
@@ -278,12 +278,18 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
             //OnDied();
         }
     }
-
-    public void TakeDamage(int damage)
+    private void Die()
+    {
+            // Notificar al sistema de puntuación sobre la muerte
+            //ScoreManager.Instance?.PlayerKilledEnemy(lastAttackerId);
+            // Destruir el enemigo o desactivarlo
+            Destroy(gameObject);
+    }
+    public void TakeDamage(int damage, ulong attackerId)
     {
         if (IsDead) return;
 
-        TakeDamageRpc(damage);
+        TakeDamageRpc(damage, attackerId);
     }
 
     [Rpc(SendTo.Everyone)]

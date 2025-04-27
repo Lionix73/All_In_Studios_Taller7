@@ -113,11 +113,12 @@ public class GunManagerMulti2 : NetworkBehaviour
 
         if (shooting && weapon.BulletsLeft > 0) {
             weapon.Shoot();
-            UIManager.Singleton.GetPlayerActualAmmo(weapon.bulletsLeft, weapon.MagazineSize);
+
         }
         else if (weapon.bulletsLeft <= 0 && !weapon.realoading) {
             RealoadGun();
         }
+        UIManager.Singleton.GetPlayerActualAmmo(weapon.bulletsLeft, weapon.MagazineSize);
 
         if (actualTotalAmmo.Value > MaxTotalAmmo) {
             SendActualAmmoRpc(MaxTotalAmmo);
@@ -393,13 +394,12 @@ public class GunManagerMulti2 : NetworkBehaviour
         }
     }
     private void RealoadGun(){
-        SendActualAmmoRpc(actualTotalAmmo.Value - (weapon.MagazineSize - weapon.BulletsLeft));
+        int totalAmmo = actualTotalAmmo.Value - (weapon.MagazineSize - weapon.BulletsLeft);
+        SendActualAmmoRpc(totalAmmo);
         weapon.Reload();
-        SendCurrentGunBulletsLeftRpc(weapon.bulletsLeft);
-        if (UIManager.Singleton && IsOwner) UIManager.Singleton.GetPlayerActualAmmo(CurrentGunBulletsLeft.Value, weapon.MagazineSize);
         if (UIManager.Singleton && IsOwner)
         {
-            UIManager.Singleton.GetPlayerTotalAmmo(actualTotalAmmo.Value);
+            UIManager.Singleton.GetPlayerTotalAmmo(totalAmmo);
         }
         //actualTotalAmmo.Value -= weapon.MagazineSize - weapon.BulletsLeft;
     }
