@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MultiRoundManager : NetworkBehaviour
@@ -305,8 +304,11 @@ public class MultiRoundManager : NetworkBehaviour
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    public void ChangeScore(EnemyMulti enemy){
-        scoreManager.SetScore(enemy.scoreOnKill);
+    public void ChangeScore(EnemyMulti enemy, ulong attackerId)
+    {
+        MultiGameManager.Instance.PlayerScore(attackerId, enemy.scoreOnKill);
+        //scoreManager.SetScore(enemy.scoreOnKill);
+
     }
 
     public void EnemyDied(EnemyMulti enemy){

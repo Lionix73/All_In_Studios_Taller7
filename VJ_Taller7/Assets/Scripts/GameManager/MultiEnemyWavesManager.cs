@@ -234,7 +234,7 @@ public class MultiEnemyWavesManager : NetworkBehaviour
 
 
                 enemy.Movement.Spawn();
-                enemy.OnDie += _roundManager.ChangeScore;
+                enemy.GetAttackerId+= _roundManager.ChangeScore;
                 enemy.OnDie += _roundManager.EnemyDied;
                 enemy.OnDie += HandleEnemyDeath;
 
@@ -261,9 +261,9 @@ public class MultiEnemyWavesManager : NetworkBehaviour
 
     private void HandleEnemyDeath(EnemyMulti enemy){
          enemiesAlive--;
-
+        
+        enemy.GetAttackerId -= _roundManager.ChangeScore;
         enemy.OnDie -= HandleEnemyDeath;
-        enemy.OnDie -= _roundManager.ChangeScore;
         enemy.OnDie -= _roundManager.EnemyDied;
         if(enemiesAlive == 0 && enemiesSpawned == numberOfEnemiesToSpawn){ //Si la ronda acaba antes del tiempo
             //ScaleUpSpawns(); Ya se escalan cuando se manda la ronda

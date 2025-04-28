@@ -99,6 +99,17 @@ public class MultiGameManager : NetworkBehaviour
         //playerManager.RespawnPlayerOrder(playerPrefab,spawntPoint);
         
     }
+
+    public void PlayerScore(ulong clientId, int score)
+    {
+        NetworkObject playerNet = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject;
+        if (playerNet != null)
+        {
+            MultiPlayerState playerState = playerNet.GetComponentInChildren<MultiPlayerState>();
+            playerState.AddScoreServerRpc(score);
+
+        }
+    }
     //Para que todo lo que necesite al player lo encuentre una vez que se haya creado; NOTA: Siempre al final de la función
     public void PlayerSpawn(){
         PlayerSpawned?.Invoke(playerManager.activePlayer); 

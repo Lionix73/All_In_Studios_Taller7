@@ -3,10 +3,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
-using Unity.VisualScripting;
 using Unity.Netcode;
-using Unity.Services.Qos.V2.Models;
-using Unity.Services.Matchmaker.Models;
+
 
 public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
 {
@@ -128,6 +126,9 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         public int score;
     }
 
+    public delegate void AttackerEvent(EnemyMulti enemy,ulong attackerId);
+    public AttackerEvent GetAttackerId;
+
     public delegate void DeathEvent(EnemyMulti enemy);
     public DeathEvent OnDie; //Evento que se llama
     [Header("Game Manager")]
@@ -247,7 +248,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         movement.State = EnemyState.Chase;
 
         //Debug.Log("Enemy Health: " + Health);
-
+        Debug.Log("Cliente #"+attackerId);
         HealthBarProgressRpc(Health, maxHealth);
 
 
@@ -271,20 +272,15 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
             {
                 agent.enabled = false;
             }
-
+            
+            GetAttackerId?.Invoke(this, attackerId);
             OnDie?.Invoke(this);
 
             DiedAnimationRpc();
             //OnDied();
         }
     }
-    private void Die()
-    {
-            // Notificar al sistema de puntuación sobre la muerte
-            //ScoreManager.Instance?.PlayerKilledEnemy(lastAttackerId);
-            // Destruir el enemigo o desactivarlo
-            Destroy(gameObject);
-    }
+
     public void TakeDamage(int damage, ulong attackerId)
     {
         if (IsDead) return;

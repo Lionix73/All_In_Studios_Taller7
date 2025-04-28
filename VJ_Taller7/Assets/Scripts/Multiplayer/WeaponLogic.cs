@@ -41,6 +41,10 @@ public class WeaponLogic : NetworkBehaviour
     public ObjectPool<TrailRenderer> TrailPool;
     public ObjectPool<Bullet> BulletPool;
 
+    // Añade esta propiedad para obtener el ID del jugador dueño
+    private ulong ownerClientId;
+    public ulong OwnerClientId => ownerClientId;
+
     public void SetBullets(int amount)
     {
         if (IsServer)
@@ -75,6 +79,9 @@ public class WeaponLogic : NetworkBehaviour
         //TrailPool = currentGun.TrailPool;
         TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
         BulletPool = currentGun.BulletPool;
+
+        ownerClientId = NetworkManager.Singleton.LocalClientId;
+
     }
 
 
@@ -134,9 +141,9 @@ public class WeaponLogic : NetworkBehaviour
                 enemy.TakeDamageRpc(Damage);
 
             }
-            else if (hit.collider.TryGetComponent(out IDamageable enemyDmg))
+            else if (hit.collider.TryGetComponent(out IDamageableMulti enemyDmg))
             {
-                enemyDmg.TakeDamage(Damage); //simplemente saber si se puede hacer daño, me falta por ver si específicar los críticos
+                enemyDmg.TakeDamage(Damage, OwnerClientId); //simplemente saber si se puede hacer daño, me falta por ver si específicar los críticos
             }
 
         }
