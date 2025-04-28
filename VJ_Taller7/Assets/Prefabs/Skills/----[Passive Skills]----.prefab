@@ -30,8 +30,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1156436137896964913}
   - {fileID: 1579204365597898343}
+  - {fileID: 5711558237384975057}
+  - {fileID: 1156436137896964913}
+  - {fileID: 18455343290712403}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2419001978559423837
@@ -50,6 +52,37 @@ MonoBehaviour:
   - {fileID: 8147960421917973425}
   - {fileID: 6971882239373132954}
   activeSkillIndex: 0
+--- !u!1 &3580992561230182990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5711558237384975057}
+  m_Layer: 6
+  m_Name: NoFriendsInWar *WIP*
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5711558237384975057
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3580992561230182990}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 56692207260540717}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5652501580672440393
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,8 +127,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfbf76e4ab5bea340bd2d8f3d395827a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: 0c1ab2cfad97fd741a962fd121ac0047, type: 3}
+  skillInfo: {fileID: 11400000, guid: 29fbec893c56fea459c94a5f0daba964, type: 2}
   cooldownThisSkill: 90
+--- !u!1 &7339003463090499738
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 18455343290712403}
+  m_Layer: 6
+  m_Name: YourChargedWeapon *WIP*
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &18455343290712403
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7339003463090499738}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 56692207260540717}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8148112807532216794
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,6 +204,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1a8ae4432823d6409483ae4a4b68b6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: 8066930ad57669b409a236daa8f54b68, type: 3}
+  skillInfo: {fileID: 11400000, guid: 9b813bc6ca5cc8947a99bf80a86f7009, type: 2}
   increasedDamagePercentage: 100
   remainingHealthPercentage: 50

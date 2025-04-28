@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class EmotesMenuController : MonoBehaviour
 {
-    private RingMenu ringMenu;
+    [SerializeField] private RingMenu ringMenu;
 
     private void Start()
     {
@@ -12,14 +12,14 @@ public class EmotesMenuController : MonoBehaviour
     }
 
     public void ActivateMenu(InputAction.CallbackContext callbackContext)
-    {
+    {   
         if (callbackContext.started)
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             ringMenu.gameObject.SetActive(true);
         }
-
+            
         if (callbackContext.canceled)
         {
             Cursor.visible = false;

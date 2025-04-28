@@ -13,8 +13,8 @@ public class ActiveSkillManager : SkillsManagerBase
         DeactivateUnusedSkills();
 
         SearchSkillsUI();
-        _actSkillImg.sprite = skills[activeSkillIndex].image;
-        _actSkillMask.sprite = skills[activeSkillIndex].image;
+        _actSkillImg.sprite = skills[activeSkillIndex].skillInfo.image;
+        _actSkillMask.sprite = skills[activeSkillIndex].skillInfo.image;
     }
 
     private void DeactivateUnusedSkills()

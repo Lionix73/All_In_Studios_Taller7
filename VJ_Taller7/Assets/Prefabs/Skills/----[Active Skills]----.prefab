@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3374760300112938959
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4447256530856493372}
+  m_Layer: 6
+  m_Name: CannonFodder *WIP*
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4447256530856493372
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3374760300112938959}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4325363771053134416}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4492696911585031555
 GameObject:
   m_ObjectHideFlags: 0
@@ -44,7 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1742acceea3540449b704138906a7530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: cec2b256e2881f24c9857170cc92007f, type: 3}
+  skillInfo: {fileID: 11400000, guid: aae0de52f1f3faa449420040c7256045, type: 2}
   blinkSpeed: 100
   duration: 0.1
   cooldownThisSkill: 5
@@ -92,7 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fff27bcc28a51646b32b53d811f2c08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: 2650cedf9d5213f47b5ae02441f2de81, type: 3}
+  skillInfo: {fileID: 11400000, guid: 4ab8b4143a26579459bfb2a67f944858, type: 2}
   duration: 3
   cooldownThisSkill: 5
   force: 20
@@ -127,6 +158,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6393281008089621338}
+  - {fileID: 4447256530856493372}
   - {fileID: 8012372096552309996}
   - {fileID: 3710618366838424861}
   m_Father: {fileID: 0}
@@ -192,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3c817028777a4e44a5c8f46798dcce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: 070ca874a3bfa514eaf3299f2f3750cf, type: 3}
+  skillInfo: {fileID: 11400000, guid: 977cc7f45c70b044d8c4fd8feb755629, type: 2}
   duration: 10
   cooldownThisSkill: 20
   healthPerecentageToRecover: 10

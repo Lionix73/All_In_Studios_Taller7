@@ -4,7 +4,7 @@ using UnityEngine;
 public abstract class PassiveSkillBase : MonoBehaviour, IPassiveSkill
 {
     private PassiveSkillManager skillManager;
-    public Sprite image;
+    public Skill_Info skillInfo;
 
     protected float cooldown;
     protected bool isOnCooldown = false;
