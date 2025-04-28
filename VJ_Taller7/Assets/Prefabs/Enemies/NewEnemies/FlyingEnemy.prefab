@@ -81,22 +81,22 @@ CharacterJoint:
     spring: 0
     damper: 0
   m_LowTwistLimit:
-    limit: -20
+    limit: 18.93664
     bounciness: 0
     contactDistance: 0
   m_HighTwistLimit:
-    limit: 70
+    limit: 147.64014
     bounciness: 0
     contactDistance: 0
   m_SwingLimitSpring:
     spring: 0
     damper: 0
   m_Swing1Limit:
-    limit: 40
+    limit: 90.82149
     bounciness: 0
     contactDistance: 0
   m_Swing2Limit:
-    limit: 40
+    limit: 34.48602
     bounciness: 0
     contactDistance: 0
   m_EnableProjection: 0
@@ -545,6 +545,7 @@ GameObject:
   - component: {fileID: 5250373281508138872}
   - component: {fileID: 3994395632896631120}
   - component: {fileID: 2704008301562075135}
+  - component: {fileID: 628263427543595348}
   m_Layer: 0
   m_Name: BONE_SPINE
   m_TagString: Untagged
@@ -619,6 +620,52 @@ CapsuleCollider:
   m_Height: 0.65963495
   m_Direction: 0
   m_Center: {x: -0.024314106, y: 0.2551708, z: 0.000000016908123}
+--- !u!144 &628263427543595348
+CharacterJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2568165084163265902}
+  serializedVersion: 3
+  m_ConnectedBody: {fileID: 1699121349798707988}
+  m_ConnectedArticulationBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0, z: 0}
+  m_Axis: {x: 1, y: 0, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_SwingAxis: {x: 0, y: 1, z: 0}
+  m_TwistLimitSpring:
+    spring: 0
+    damper: 0
+  m_LowTwistLimit:
+    limit: 71.57991
+    bounciness: 0
+    contactDistance: 0
+  m_HighTwistLimit:
+    limit: 102.536194
+    bounciness: 0
+    contactDistance: 0
+  m_SwingLimitSpring:
+    spring: 0
+    damper: 0
+  m_Swing1Limit:
+    limit: 19.342834
+    bounciness: 0
+    contactDistance: 0
+  m_Swing2Limit:
+    limit: 13.902466
+    bounciness: 0
+    contactDistance: 0
+  m_EnableProjection: 0
+  m_ProjectionDistance: 0.1
+  m_ProjectionAngle: 180
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &2636971022382062678
 GameObject:
   m_ObjectHideFlags: 0
@@ -1484,11 +1531,11 @@ CharacterJoint:
     spring: 0
     damper: 0
   m_LowTwistLimit:
-    limit: -20
+    limit: 48.626743
     bounciness: 0
     contactDistance: 0
   m_HighTwistLimit:
-    limit: 70
+    limit: 159.66331
     bounciness: 0
     contactDistance: 0
   m_SwingLimitSpring:
@@ -1879,11 +1926,11 @@ CharacterJoint:
     spring: 0
     damper: 0
   m_LowTwistLimit:
-    limit: -20
+    limit: 37.87194
     bounciness: 0
     contactDistance: 0
   m_HighTwistLimit:
-    limit: 70
+    limit: 167.86801
     bounciness: 0
     contactDistance: 0
   m_SwingLimitSpring:
@@ -1894,7 +1941,7 @@ CharacterJoint:
     bounciness: 0
     contactDistance: 0
   m_Swing2Limit:
-    limit: 40
+    limit: 44.914845
     bounciness: 0
     contactDistance: 0
   m_EnableProjection: 0
