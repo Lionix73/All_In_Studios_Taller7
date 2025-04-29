@@ -12,8 +12,8 @@ public class PassiveSkillManager : SkillsManagerBase
         DeactivateUnusedSkills();
 
         SearchSkillsUI();
-        _pasSkillImg.sprite = passiveSkills[activeSkillIndex].image;
-        _pasSkillMask.sprite = passiveSkills[activeSkillIndex].image;
+        _pasSkillImg.sprite = passiveSkills[activeSkillIndex].skillInfo.image;
+        _pasSkillMask.sprite = passiveSkills[activeSkillIndex].skillInfo.image;
     }
 
     private void Update()

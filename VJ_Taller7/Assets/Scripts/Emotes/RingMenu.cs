@@ -17,7 +17,6 @@ public class RingMenu : MonoBehaviour
     {
         anim = GameObject.FindWithTag("Player").GetComponent<Animator>();
         soundManager = GameObject.FindWithTag("Player").GetComponent<PlayerSoundsManager>();
-
         degreesPerPiece = 360f / ringAnimations.Length;
 
         float distanceToIcon = Vector3.Distance(ringPiecePrefab.icon.transform.position, ringPiecePrefab.bg.transform.position);
@@ -44,7 +43,6 @@ public class RingMenu : MonoBehaviour
     {
         activeElement = GetActiveElement();
         HighlightActiveElement(activeElement);
-        RespondToMouseInput(activeElement);
     }
 
     private int GetActiveElement()
@@ -72,14 +70,6 @@ public class RingMenu : MonoBehaviour
             {
                 ringPieces[i].bg.color = new Color(1f, 1f, 1f, 0.7f);
             }
-        }
-    }
-
-    private void RespondToMouseInput(int activeElement)
-    {
-        if(Input.GetMouseButtonDown(0)) 
-        {
-            anim.SetBool("isEmoting", true);
         }
     }
 
