@@ -81,6 +81,7 @@ public class AttackRadius : MonoBehaviour
         yield return wait;
 
         soundManager.PlaySound("Attack");
+        enemy.Animator.SetTrigger(Enemy.ATTACK_TRIGGER);
         IDamageable closestDamageable = null;
 
         //Closest distance to enemy is 100% of their attack radius

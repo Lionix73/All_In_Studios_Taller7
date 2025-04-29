@@ -40,6 +40,7 @@ public class RangedAttackRadius : AttackRadius
     protected override IEnumerator Attack()
     {
         soundManager.PlaySound("Attack");
+        enemy.Animator.SetTrigger(Enemy.SHOOT_TRIGGER);
 
         WaitForSeconds wait = new WaitForSeconds(AttackDelay);
 

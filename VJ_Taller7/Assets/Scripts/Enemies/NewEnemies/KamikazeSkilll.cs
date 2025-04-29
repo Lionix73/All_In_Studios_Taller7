@@ -51,8 +51,6 @@ public class KamikazeSkilll : SkillScriptableObject
     {
         WaitForSeconds wait = new WaitForSeconds(delay);
 
-        enemy.Animator.SetBool(EnemyMovement.IsWalking, false);
-
         DisableEnemyMovement(enemy);
         enemy.Movement.State = EnemyState.UsingAbilty;
 
@@ -65,7 +63,7 @@ public class KamikazeSkilll : SkillScriptableObject
         ObjectPool pool = ObjectPool.CreateInstance(prefab, 10);
         PoolableObject instance = pool.GetObject();
 
-        enemy.Animator.SetTrigger(Enemy.ATTACK_TRIGGER);
+        enemy.Animator.SetTrigger(Enemy.SKILL_TRIGGER);
 
         instance.transform.SetParent(enemy.transform, false);
         instance.transform.localPosition = bulletSpawnOffSet;
@@ -101,8 +99,6 @@ public class KamikazeSkilll : SkillScriptableObject
     {
         WaitForSeconds wait = new WaitForSeconds(delay);
 
-        enemy.Animator.SetBool(EnemyMovement.IsWalking, false);
-
         MultiDisableEnemyMovement(enemy);
         enemy.Movement.State = EnemyState.UsingAbilty;
 
@@ -115,7 +111,7 @@ public class KamikazeSkilll : SkillScriptableObject
         ObjectPoolMulti pool = ObjectPoolMulti.CreateInstance(multiPrefab, 10);
         PoolableObjectMulti instance = pool.GetObject();
 
-        enemy.Animator.SetTrigger(Enemy.ATTACK_TRIGGER);
+        enemy.Animator.SetTrigger(Enemy.SKILL_TRIGGER);
 
         instance.transform.SetParent(enemy.transform, false);
         instance.transform.localPosition = bulletSpawnOffSet;

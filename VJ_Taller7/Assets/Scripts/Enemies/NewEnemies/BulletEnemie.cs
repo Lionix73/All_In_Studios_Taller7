@@ -81,7 +81,6 @@ public class BulletEnemie : PoolableObject
     protected void Disable(){
         //Debug.Log("Disable");
         CancelInvoke(DISABLE_METHOD_NAME);
-        Rb.linearVelocity = Vector3.zero;
         gameObject.SetActive(false);
     }
 

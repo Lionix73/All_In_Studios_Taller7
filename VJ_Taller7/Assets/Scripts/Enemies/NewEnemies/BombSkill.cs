@@ -52,8 +52,6 @@ public class BombSkill : SkillScriptableObject
     {
         WaitForSeconds wait = new WaitForSeconds(delay);
 
-        enemy.Animator.SetBool(EnemyMovement.IsWalking, false);
-
         DisableEnemyMovement(enemy);
         enemy.Movement.State = EnemyState.UsingAbilty;
 
@@ -63,7 +61,7 @@ public class BombSkill : SkillScriptableObject
             yield return null;
         }
 
-        enemy.Animator.SetTrigger(Enemy.ATTACK_TRIGGER);
+        enemy.Animator.SetTrigger(Enemy.SKILL_TRIGGER);
 
         ObjectPool pool = ObjectPool.CreateInstance(prefab, 5);
         Debug.Log("Bomba Activada");
@@ -125,8 +123,6 @@ public class BombSkill : SkillScriptableObject
     private IEnumerator MultiShootBomb(EnemyMulti enemy, PlayerControllerMulti player)
     {
         WaitForSeconds wait = new WaitForSeconds(delay);
-
-        enemy.Animator.SetBool(EnemyMovement.IsWalking, false);
 
         MultiDisableEnemyMovement(enemy);
         enemy.Movement.State = EnemyState.UsingAbilty;

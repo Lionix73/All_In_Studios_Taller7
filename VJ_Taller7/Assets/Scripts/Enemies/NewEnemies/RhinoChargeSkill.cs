@@ -49,6 +49,7 @@ public class RhinoChargeSkill : SkillScriptableObject
         // Disable NavMeshAgent and enable Rigidbody
         agent.enabled = false;
         rb.isKinematic = false;
+        rb.useGravity = true;
         enemy.Movement.enabled = false;
 
         // Calculate charge direction
@@ -56,7 +57,7 @@ public class RhinoChargeSkill : SkillScriptableObject
 
         // Set enemy state and animation
         enemy.Movement.State = EnemyState.UsingAbilty;
-        enemy.Animator.SetTrigger(Enemy.ATTACK_TRIGGER);
+        enemy.Animator.SetTrigger(Enemy.SKILL_TRIGGER);
 
         float elapsedTime = 0f;
 
@@ -72,6 +73,7 @@ public class RhinoChargeSkill : SkillScriptableObject
 
         // Re-enable NavMeshAgent and disable Rigidbody
         rb.isKinematic = true;
+        rb.useGravity = false;
         enemy.Movement.enabled = true;
         agent.enabled = true;
 

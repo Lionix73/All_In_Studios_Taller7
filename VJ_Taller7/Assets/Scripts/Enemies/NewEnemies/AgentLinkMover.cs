@@ -38,7 +38,7 @@ public class AgentLinkMover : MonoBehaviour
                     int areaType = link.area;
 
                     if(Vector3.Distance(data.endPos, agent.destination) < Vector3.Distance(data.startPos, agent.destination)){
-                    
+
                         LinkTraversalConfig config = linkTraversalConfigs.Find((type) => type.areaType == areaType);
 
                         if ((config != null && config.m_Method == OffMeshLinkMoveMethod.NormalSpeed) || (config == null && defaultMoveMethod == OffMeshLinkMoveMethod.NormalSpeed)){

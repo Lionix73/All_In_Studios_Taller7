@@ -80,10 +80,14 @@ public class EnemyMovement : MonoBehaviour
 
     [Header("Animation Settings")]
     [SerializeField] private Animator animator;
+    public Animator Animator{
+        get => animator;
+        set => animator = value;
+    }
+
     [SerializeField] private FloatDampener speedX;
     [SerializeField] private FloatDampener speedY;
 
-    public const string IsWalking = "IsWalking";
     public const string Jump = "IsJumping";
     public const string Landed = "Landed";
 
@@ -137,7 +141,7 @@ public class EnemyMovement : MonoBehaviour
 
     private void HandleLinkStart(OffMeshLinkMoveMethod moveMethod){
         if(moveMethod == OffMeshLinkMoveMethod.NormalSpeed){
-            animator.SetBool(IsWalking, true);
+            //Keep animator in idle state
         }
         else if(moveMethod != OffMeshLinkMoveMethod.Teleport){
             animator.SetTrigger(Jump); 
@@ -266,7 +270,7 @@ public class EnemyMovement : MonoBehaviour
                 yield break;
             }
 
-            if(agent.enabled){
+            if(agent.enabled && agent.isOnNavMesh){
                 agent.SetDestination(player.transform.position);
             }
             yield return wait;
@@ -279,6 +283,7 @@ public class EnemyMovement : MonoBehaviour
 
         if (agent != null && agent.enabled)
         {
+            StopAllCoroutines();
             agent.isStopped = true;
             agent.ResetPath();
         }

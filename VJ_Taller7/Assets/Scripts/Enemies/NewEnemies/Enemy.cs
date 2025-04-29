@@ -86,6 +86,9 @@ public class Enemy : PoolableObject, IDamageable
     }
 
     public const string ATTACK_TRIGGER = "Attack";
+    public const string SHOOT_TRIGGER = "Shoot";
+    public const string SKILL_TRIGGER = "UsingSkill";
+    public const string IsHit = "IsHit";
 
 
     [Header("Enemy UI")]
@@ -156,8 +159,6 @@ public class Enemy : PoolableObject, IDamageable
 
     private void OnAttack(IDamageable target)
     {
-        animator.SetTrigger(ATTACK_TRIGGER);
-
         if(lookCoroutine != null){
             StopCoroutine(lookCoroutine);
         }
@@ -167,15 +168,17 @@ public class Enemy : PoolableObject, IDamageable
 
     private IEnumerator LookAt(Transform target)
     {
-        Quaternion lookRotation = Quaternion.LookRotation(target.position - transform.position);
+        Vector3 direction = target.position - transform.position;
+        direction.y = 0; // Ignore the Y-axis
+
+        Quaternion lookRotation = Quaternion.LookRotation(direction);
         float time = 0f;
 
-        while(time < 1f){
-
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, time);
+        while (time < 1f)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, agent.angularSpeed * time);
             time += Time.deltaTime * 2f;
             yield return null;
-
         }
 
         transform.rotation = lookRotation;
@@ -195,6 +198,8 @@ public class Enemy : PoolableObject, IDamageable
         Health -= damage;
         blinkTimer = blinkDuration;
 
+        animator.SetTrigger(IsHit);
+
         movement.State = EnemyState.Chase;
         
         if (floatingTextPrefab != null)
@@ -211,6 +216,7 @@ public class Enemy : PoolableObject, IDamageable
             soundManager.PlaySound("Die");
             isDead = true;
 
+            /*
             #region CarnivoroTemporal Skill
             // Check if carnivoro skill is active
             CarnivoroTemporal skill = FindAnyObjectByType(typeof(CarnivoroTemporal)).GetComponent<CarnivoroTemporal>();
@@ -220,6 +226,7 @@ public class Enemy : PoolableObject, IDamageable
                 skill.HealthForKill();
             }
             #endregion
+            */
 
             if (!isStatic){
                 agent.enabled = false;
