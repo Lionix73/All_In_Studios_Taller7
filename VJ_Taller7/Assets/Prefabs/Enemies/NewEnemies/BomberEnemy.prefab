@@ -32,42 +32,6 @@ Transform:
   - {fileID: 2420227868685503922}
   m_Father: {fileID: 5343584301379110562}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &114377114777581386
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 550977412677348948}
-  m_Layer: 9
-  m_Name: '[Sounds]'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &550977412677348948
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 114377114777581386}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 9044285113836783502}
-  - {fileID: 7402095596302171431}
-  - {fileID: 2228113684884023935}
-  - {fileID: 8653863223536790190}
-  - {fileID: 6001928808598720806}
-  m_Father: {fileID: 1898903459766517733}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &133753002353606367
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,7 +66,7 @@ Transform:
   - {fileID: 4285508363529751736}
   m_Father: {fileID: 4310184287960548225}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &183482474965789171
+--- !u!1 &231860735213159891
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,37 +74,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6001928808598720806}
-  - component: {fileID: 8611095150865332632}
+  - component: {fileID: 2088510707450586566}
+  - component: {fileID: 8491721680816859093}
   m_Layer: 9
-  m_Name: Die
+  m_Name: Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6001928808598720806
+--- !u!4 &2088510707450586566
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 183482474965789171}
+  m_GameObject: {fileID: 231860735213159891}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.0853968, y: 0, z: -5.0139556}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 550977412677348948}
+  m_Father: {fileID: 6450462393365225283}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8611095150865332632
+--- !u!114 &8491721680816859093
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 183482474965789171}
+  m_GameObject: {fileID: 231860735213159891}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
@@ -149,11 +113,11 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: -1112937873
-      Data2: 1262087250
-      Data3: 788944784
-      Data4: -83679263
-    Path: event:/Enemies/Die
+      Data1: -330211623
+      Data2: 1331600606
+      Data3: -798850925
+      Data4: -1515376030
+    Path: event:/Enemies/Elephant/Shoot
   Event: 
   EventPlayTrigger: 0
   EventStopTrigger: 0
@@ -164,7 +128,7 @@ MonoBehaviour:
   Params: []
   OverrideAttenuation: 0
   OverrideMinDistance: 1
-  OverrideMaxDistance: 20
+  OverrideMaxDistance: 30
 --- !u!1 &263690118938833095
 GameObject:
   m_ObjectHideFlags: 0
@@ -1040,69 +1004,6 @@ Transform:
   - {fileID: 9166295371756298876}
   m_Father: {fileID: 3318550701852704853}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1336362207037028708
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9044285113836783502}
-  - component: {fileID: 4498540310385766883}
-  m_Layer: 9
-  m_Name: Idle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9044285113836783502
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1336362207037028708}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 550977412677348948}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4498540310385766883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1336362207037028708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -1236249191
-      Data2: 1242594543
-      Data3: -257597031
-      Data4: -1859810150
-    Path: event:/Enemies/Elephant/Idle
-  Event: 
-  EventPlayTrigger: 1
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 60
 --- !u!1 &1492025073627522391
 GameObject:
   m_ObjectHideFlags: 0
@@ -1493,69 +1394,6 @@ Transform:
   - {fileID: 8674511159083977275}
   m_Father: {fileID: 1610982802121644451}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1962099857165211570
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7402095596302171431}
-  - component: {fileID: 6835999751294162208}
-  m_Layer: 9
-  m_Name: Move
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7402095596302171431
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1962099857165211570}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 550977412677348948}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6835999751294162208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1962099857165211570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -1680183600
-      Data2: 1117125771
-      Data3: 133229728
-      Data4: 1535288479
-    Path: event:/Enemies/Elephant/Move
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &1986576456867608816
 GameObject:
   m_ObjectHideFlags: 0
@@ -2713,7 +2551,7 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!1 &3939185524745823338
+--- !u!1 &3793475057231775875
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2721,37 +2559,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2228113684884023935}
-  - component: {fileID: 187473673738868957}
+  - component: {fileID: 284458498745199256}
+  - component: {fileID: 5061859164355379331}
   m_Layer: 9
-  m_Name: Chase
+  m_Name: Move
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2228113684884023935
+--- !u!4 &284458498745199256
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3939185524745823338}
+  m_GameObject: {fileID: 3793475057231775875}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.0853968, y: 0, z: -5.0139556}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 550977412677348948}
+  m_Father: {fileID: 6450462393365225283}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &187473673738868957
+--- !u!114 &5061859164355379331
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3939185524745823338}
+  m_GameObject: {fileID: 3793475057231775875}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
@@ -2760,11 +2598,11 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: -1852761433
-      Data2: 1221909336
-      Data3: 1988309160
-      Data4: -1769051357
-    Path: event:/Enemies/Chase
+      Data1: -1680183600
+      Data2: 1117125771
+      Data3: 133229728
+      Data4: 1535288479
+    Path: event:/Enemies/Elephant/Move
   Event: 
   EventPlayTrigger: 0
   EventStopTrigger: 0
@@ -2775,7 +2613,70 @@ MonoBehaviour:
   Params: []
   OverrideAttenuation: 0
   OverrideMinDistance: 1
-  OverrideMaxDistance: 30
+  OverrideMaxDistance: 20
+--- !u!1 &3846312119310598599
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5141245715694716502}
+  - component: {fileID: 1867595677694698844}
+  m_Layer: 9
+  m_Name: Idle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5141245715694716502
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3846312119310598599}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.0853968, y: 0, z: -5.0139556}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6450462393365225283}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1867595677694698844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3846312119310598599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1236249191
+      Data2: 1242594543
+      Data3: -257597031
+      Data4: -1859810150
+    Path: event:/Enemies/Elephant/Idle
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 60
 --- !u!1 &4099363848426590901
 GameObject:
   m_ObjectHideFlags: 0
@@ -3383,6 +3284,69 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2568657208055245761}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4997608911046174794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4722171632859326462}
+  - component: {fileID: 2617145019928818431}
+  m_Layer: 9
+  m_Name: Chase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4722171632859326462
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4997608911046174794}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.0853968, y: 0, z: -5.0139556}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6450462393365225283}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2617145019928818431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4997608911046174794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1852761433
+      Data2: 1221909336
+      Data3: 1988309160
+      Data4: -1769051357
+    Path: event:/Enemies/Chase
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 30
 --- !u!1 &5017164399899993472
 GameObject:
   m_ObjectHideFlags: 0
@@ -4027,69 +3991,6 @@ Transform:
   - {fileID: 5653226003711439563}
   m_Father: {fileID: 8299872696802823918}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6887725483635696970
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8653863223536790190}
-  - component: {fileID: 157039368500471747}
-  m_Layer: 9
-  m_Name: Attack
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8653863223536790190
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6887725483635696970}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 550977412677348948}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &157039368500471747
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6887725483635696970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -330211623
-      Data2: 1331600606
-      Data3: -798850925
-      Data4: -1515376030
-    Path: event:/Enemies/Elephant/Shoot
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 30
 --- !u!1 &7239974370722382164
 GameObject:
   m_ObjectHideFlags: 0
@@ -4798,6 +4699,69 @@ CharacterJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!1 &8007685641892271261
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2137891945072566730}
+  - component: {fileID: 5035968264882550441}
+  m_Layer: 9
+  m_Name: Die
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2137891945072566730
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8007685641892271261}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.0853968, y: 0, z: -5.0139556}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6450462393365225283}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5035968264882550441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8007685641892271261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1112937873
+      Data2: 1262087250
+      Data3: 788944784
+      Data4: -83679263
+    Path: event:/Enemies/Die
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &8133366763850541323
 GameObject:
   m_ObjectHideFlags: 0
@@ -5661,6 +5625,11 @@ PrefabInstance:
     - {fileID: 8957624249934730782, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
     - {fileID: 6985678246540391760, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
     - {fileID: 6098382166499443538, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+    - {fileID: 8691141697398860600, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+    - {fileID: 1614939710589297793, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+    - {fileID: 5011598327935341478, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+    - {fileID: 4901804299001215588, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+    - {fileID: 6016701755574236830, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7185059666713373341, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       insertIndex: 0
@@ -5671,16 +5640,25 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7185059666713373341, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       insertIndex: 2
       addedObject: {fileID: 5733139978031077160}
-    - targetCorrespondingSourceObject: {fileID: 7185059666713373341, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 550977412677348948}
     - targetCorrespondingSourceObject: {fileID: 4070073482740766913, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2560372262253647704}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4480754247436323794, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 2335277273915558459, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1070622118977652757}
+      addedObject: {fileID: 5141245715694716502}
+    - targetCorrespondingSourceObject: {fileID: 2335277273915558459, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 284458498745199256}
+    - targetCorrespondingSourceObject: {fileID: 2335277273915558459, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4722171632859326462}
+    - targetCorrespondingSourceObject: {fileID: 2335277273915558459, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2088510707450586566}
+    - targetCorrespondingSourceObject: {fileID: 2335277273915558459, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2137891945072566730}
+    m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4480754247436323794, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6195048541714436335}
@@ -5711,19 +5689,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4480754247436323794, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
   m_PrefabInstance: {fileID: 8785457515527361912}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1070622118977652757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5170942915732086442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3da4c8252207fc84ba39f03847507014, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sounds: []
 --- !u!114 &6195048541714436335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5740,3 +5705,8 @@ MonoBehaviour:
   - m_Rig: {fileID: 1755420599284901077}
     m_Active: 1
   m_Effectors: []
+--- !u!4 &6450462393365225283 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2335277273915558459, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+  m_PrefabInstance: {fileID: 8785457515527361912}
+  m_PrefabAsset: {fileID: 0}
