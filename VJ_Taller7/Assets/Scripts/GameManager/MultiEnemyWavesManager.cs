@@ -46,6 +46,7 @@ public class MultiEnemyWavesManager : NetworkBehaviour
     [Header("Managers")]
     private MultiRoundManager _roundManager;
     private ScoreManager _scoreManager;
+    private MultiPlayerManager _multiPlayerManager;
 
     public delegate void EnemySpawned();
     public event EnemySpawned OnEnemySpawned;
@@ -57,9 +58,16 @@ public class MultiEnemyWavesManager : NetworkBehaviour
 
         ObjectPool.ClearPools();
         ObjectPoolMulti.ClearPools();
+        _multiPlayerManager = GetComponent<MultiPlayerManager>();
         GameObject.Find("HealthBarCanvas").TryGetComponent(out healthBarCanvas);
         if (!IsServer) return;
+        
+        _multiPlayerManager.OnGameStart += StartWavesManager;
 
+        
+    }
+    public void StartWavesManager()
+    {
         MultiGameManager.Instance.PlayerSpawned += GetPlayer;
         OnEnemySpawned += MultiGameManager.Instance.roundManager.enemyHaveSpawn;
 
@@ -72,8 +80,8 @@ public class MultiEnemyWavesManager : NetworkBehaviour
         initialweightedEnemiesToSpawn = numberOfEnemiesToSpawn;
         initialSpawnDelay = spawnDelay;
 
-        
-        
+
+
         _roundManager = GetComponent<MultiRoundManager>();
         _scoreManager = GetComponent<ScoreManager>();
 
@@ -218,9 +226,10 @@ public class MultiEnemyWavesManager : NetworkBehaviour
                 enemy.Agent.Warp(hit.position);
 
                 //Enable Collider and Disable Ragdoll
-                enemy.RagdollEnabler.EnableAnimator();
-                enemy.RagdollEnabler.DisableAllRigidbodies();
-                enemy.ColliderEnemy.enabled = true;
+                //enemy.RagdollEnabler.EnableAnimator();
+                //enemy.RagdollEnabler.DisableAllRigidbodies();
+                //enemy.ColliderEnemy.enabled = true;
+                enemy.RespawmEnemyRpc();
                 enemy.IsDead = false;
 
                 enemy.MainCamera = mainCamera;
