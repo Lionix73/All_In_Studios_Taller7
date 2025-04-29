@@ -84,4 +84,8 @@ public class BulletEnemie : PoolableObject
         Rb.linearVelocity = Vector3.zero;
         gameObject.SetActive(false);
     }
+
+    public override void OnDisable(){
+        base.OnDisable();
+    }
 }

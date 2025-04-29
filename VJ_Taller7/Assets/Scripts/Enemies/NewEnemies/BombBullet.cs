@@ -62,7 +62,7 @@ public class BombBullet : BulletEnemie
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Hit");
+        //Debug.Log("Hit");
         StartCoroutine(DelayedExplosion());
     }
 
@@ -101,6 +101,7 @@ public class BombBullet : BulletEnemie
             }
         }
         
+        gameObject.GetComponent<Collider>().enabled = false;
         StartCoroutine(WaitForDisable());
     }
 }
