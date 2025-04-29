@@ -75,11 +75,6 @@ public class ObjectPoolMulti
             CreateObject();
         }
 
-        foreach (var obj in AvailableObjectsPool)
-        {
-            //Debug.Log(obj);
-        }
-
         PoolableObjectMulti instance = AvailableObjectsPool[0];
 
         AvailableObjectsPool.RemoveAt(0);

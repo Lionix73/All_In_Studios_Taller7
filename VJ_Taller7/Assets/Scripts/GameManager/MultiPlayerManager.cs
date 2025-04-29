@@ -44,6 +44,9 @@ public class MultiPlayerManager : NetworkBehaviour
         set { playersDead.Value = value; }
     }
 
+    public delegate void StartGame();
+    public event StartGame OnGameStart;
+
 
     private void Awake()
     {
@@ -251,6 +254,7 @@ public class MultiPlayerManager : NetworkBehaviour
         if (PlayersReady == activePlayers.Count)
         {
             Debug.Log("Start Game");
+            OnGameStart?.Invoke();
             MultiGameManager.Instance.PlayGame();
         }
     }

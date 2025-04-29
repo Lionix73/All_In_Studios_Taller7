@@ -4,16 +4,7 @@ using UnityEngine;
 public class PoolableObjectMulti : NetworkBehaviour
 {
     public ObjectPoolMulti Parent;
-    private bool isPureClient => IsClient && !IsServer;
 
-    private void Start()
-    {
-       if (isPureClient)
-        {
-            Debug.Log("Desactivado por cliente");
-            gameObject.SetActive(false);
-        }
-    }
     public virtual void OnDisable()
     {
         if (!IsServer) return;

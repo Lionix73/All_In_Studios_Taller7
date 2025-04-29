@@ -147,8 +147,15 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
     public PlayerControllerMulti Player { get; set; }
     public int Level { get; set; }
 
-    private void OnEnable()
+
+    [Rpc(SendTo.Everyone)]
+    public void RespawmEnemyRpc()
     {
+        ColliderEnemy.enabled = true;
+        RagdollEnabler.EnableAnimator();
+        RagdollEnabler.DisableAllRigidbodies();
+        if (!IsServer) return;
+        HealthBarProgressRpc((int)maxHealth, maxHealth);
     }
     private void Awake()
     {
@@ -170,9 +177,9 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        colliderEnemy = GetComponent<Collider>();
         if (!IsServer) return;
         attackRadius.Player = Player;
-        colliderEnemy = GetComponent<Collider>();
         LineOfSightChecker.OnGainSight += GetPlayer;
         LineOfSightChecker.OnLoseSight += LostPlayer;
         AttackRadius.OnAttack += OnAttack;
@@ -329,7 +336,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
 
         if (ragdollEnabler != null)
         {
-            //colliderEnemy.enabled = false;
+            colliderEnemy.enabled = false;
             ragdollEnabler.DisableAllRigidbodies();
         }
 
@@ -342,7 +349,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
             yield return null;
         }
 
-        healthBar.gameObject.SetActive(false);
+        //healthBar.gameObject.SetActive(false);
         gameObject.SetActive(false);
     }
 
