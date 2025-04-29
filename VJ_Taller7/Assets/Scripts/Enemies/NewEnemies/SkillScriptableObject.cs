@@ -57,4 +57,18 @@ public class SkillScriptableObject : ScriptableObject
         enemy.Agent.enabled = true;
         enemy.Movement.enabled = true;
     }
+
+    protected void MultiDisableEnemyMovement(EnemyMulti enemy)
+    {
+        enemy.enabled = false;
+        enemy.Agent.enabled = false;
+        enemy.Movement.enabled = false;
+    }
+
+    protected void MultiEnableEnemyMovement(EnemyMulti enemy)
+    {
+        enemy.enabled = true;
+        enemy.Agent.enabled = true;
+        enemy.Movement.enabled = true;
+    }
 }

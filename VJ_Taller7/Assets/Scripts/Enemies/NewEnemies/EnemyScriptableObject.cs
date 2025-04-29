@@ -122,7 +122,8 @@ public class EnemyScriptableObject : ScriptableObject
         enemy.Movement.LineOfSightChecker.LineOfSightMask = attackConfiguration.lineOfSightLayer;
 
         enemy.Health = health;
-
+        enemy.maxHealth = health;
         attackConfiguration.SetUpEnemyMulti(enemy);
     }
+
 }

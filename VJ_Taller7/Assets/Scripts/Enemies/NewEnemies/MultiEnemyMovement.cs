@@ -122,12 +122,13 @@ public class MultiEnemyMovement : NetworkBehaviour
 
     private void HandleGainSight(PlayerControllerMulti player)
     {
+        Player = player.transform;
         State = EnemyState.Chase;
     }
 
     private void HandleLoseSight(PlayerControllerMulti player)
     {
-        State = defaultState;
+        State = EnemyState.Patrol;
     }
 
     private void OnDisable()
@@ -293,6 +294,7 @@ public class MultiEnemyMovement : NetworkBehaviour
                 followCoroutine = null;
                 yield break;
             }
+            if (player == null) State = EnemyState.Patrol;
 
             if(agent.enabled){
                 agent.SetDestination(player.transform.position);

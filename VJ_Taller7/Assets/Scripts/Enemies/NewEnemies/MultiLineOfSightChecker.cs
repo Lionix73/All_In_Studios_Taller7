@@ -37,7 +37,6 @@ public class MultiLineOfSightChecker : NetworkBehaviour
         PlayerControllerMulti player;
           if(other.gameObject.tag == playerTag){
             other.TryGetComponent<PlayerControllerMulti>(out player);
-            enemyMov.Player = player.transform;
 
             if(!CheckLineOfSight(player)){
                 CheckForlineOfSightCoroutine = StartCoroutine(CheckForLineOfSight(player));

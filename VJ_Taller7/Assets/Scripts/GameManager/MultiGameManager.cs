@@ -132,6 +132,7 @@ public class MultiGameManager : NetworkBehaviour
 
     public void PlayGame()
     {
+        PlayerSpawned?.Invoke(playerPrefab);
         roundManager._Simulating = true;
         StartRoundUIRpc(roundManager.CurrentRound);
     }

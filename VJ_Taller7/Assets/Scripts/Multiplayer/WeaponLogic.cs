@@ -141,9 +141,9 @@ public class WeaponLogic : NetworkBehaviour
                 enemy.TakeDamageRpc(Damage);
 
             }
-            else if (hit.collider.TryGetComponent(out IDamageableMulti enemyDmg))
+            else if (hit.collider.TryGetComponent(out IDamageable enemyDmg))
             {
-                enemyDmg.TakeDamage(Damage, OwnerClientId); //simplemente saber si se puede hacer daño, me falta por ver si específicar los críticos
+                enemyDmg.TakeDamage(Damage); //simplemente saber si se puede hacer daño, me falta por ver si específicar los críticos
             }
 
         }

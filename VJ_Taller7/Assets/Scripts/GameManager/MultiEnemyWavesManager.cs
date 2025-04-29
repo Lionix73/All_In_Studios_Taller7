@@ -60,7 +60,7 @@ public class MultiEnemyWavesManager : NetworkBehaviour
         GameObject.Find("HealthBarCanvas").TryGetComponent(out healthBarCanvas);
         if (!IsServer) return;
 
-        //MultiGameManager.Instance.PlayerSpawned += GetPlayer;
+        MultiGameManager.Instance.PlayerSpawned += GetPlayer;
         OnEnemySpawned += MultiGameManager.Instance.roundManager.enemyHaveSpawn;
 
         for (int i = 0; i < weightedEnemies.Count; i++)
@@ -227,7 +227,7 @@ public class MultiEnemyWavesManager : NetworkBehaviour
                 enemy.Player = player;
 
                 enemy.Movement.Triangulation = navMeshTriangulation;
-                //enemy.Movement.Player = player.transform;
+                enemy.Movement.Player = player.transform;
                 enemy.Agent.enabled = true;
 
                 enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
@@ -293,7 +293,8 @@ public class MultiEnemyWavesManager : NetworkBehaviour
 
     private void GetPlayer (GameObject activePlayer)
     {
-        player = activePlayer.GetComponent<PlayerControllerMulti>();
+        Debug.Log("Obtuvimos jugador");
+        player = activePlayer.GetComponentInChildren<PlayerControllerMulti>();
         mainCamera = Camera.main;
     }
 }

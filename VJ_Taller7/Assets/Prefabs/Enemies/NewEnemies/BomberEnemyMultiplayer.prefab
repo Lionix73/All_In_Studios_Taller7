@@ -8,6 +8,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1001793297054736105, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.7954388e-14
+      objectReference: {fileID: 0}
+    - target: {fileID: 1001793297054736105, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5132834
+      objectReference: {fileID: 0}
+    - target: {fileID: 1001793297054736105, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.00018900815
+      objectReference: {fileID: 0}
     - target: {fileID: 1898903459766517733, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -51,6 +63,26 @@ PrefabInstance:
     - target: {fileID: 5170942915732086442, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
       propertyPath: m_Name
       value: BomberEnemyMultiplayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 5654643203333168008, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.19850756
+      objectReference: {fileID: 0}
+    - target: {fileID: 5654643203333168008, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.0035973694
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622195155119156545, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.8270583e-17
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622195155119156545, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.03069605
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622195155119156545, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.68327993
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6148662613552939367, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
@@ -124,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 0
+  GlobalObjectIdHash: 2977387273
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -182,6 +214,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   attackRadius: {fileID: 5863454670721412523}
+  lineOfSightChecker: {fileID: 2410278885287424999}
   movement: {fileID: 1101947505581850665}
   agent: {fileID: 2965059292958900872}
   skills: []
@@ -195,10 +228,12 @@ MonoBehaviour:
   floatingTextCriticPrefab: {fileID: 4534213121695243783, guid: ff34563d7793e6f49b39fd2078271124, type: 3}
   deathVFX: {fileID: 2448235015234007831}
   skinnedMeshRenderers:
-  - {fileID: 0}
+  - {fileID: 6443711952482214080}
+  - {fileID: 6472482973767561315}
   blinkIntensity: 10
   blinkDuration: 0.4
   scoreOnKill: 100
+  lastAttackerId: 0
 --- !u!198 &2448235015234007831 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 8052196379673296185, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
@@ -258,6 +293,16 @@ MonoBehaviour:
 --- !u!95 &5985304592103947457 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 2114114462862570223, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
+  m_PrefabInstance: {fileID: 5640412425517714990}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &6443711952482214080 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1669266282216353518, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
+  m_PrefabInstance: {fileID: 5640412425517714990}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &6472482973767561315 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1699024531815087693, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
   m_PrefabInstance: {fileID: 5640412425517714990}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &7368638952992276158 stripped

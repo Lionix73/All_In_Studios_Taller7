@@ -2,7 +2,7 @@ using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
 
-public class DamageZoneMulti : MonoBehaviour, IDamageableMulti
+public class DamageZoneMulti : MonoBehaviour, IDamageable
 {
    public EnemyMulti enemyWhoIsFrom;
    [Range(1,5)] public int damageMult;
@@ -10,12 +10,12 @@ public class DamageZoneMulti : MonoBehaviour, IDamageableMulti
     enemyWhoIsFrom = GetComponentInParent<EnemyMulti>();
    }
 
-   public void TakeDamage(int amount, ulong clientId)
+   public void TakeDamage(int amount)
    {
-        TakeDamageRpc(amount, clientId);
+        TakeDamageRpc(amount);
    }
     [Rpc(SendTo.Server)]
-    public void TakeDamageRpc(int amount, ulong clientId)
+    public void TakeDamageRpc(int amount)
     {
         int damageToTake = amount * damageMult;
 
@@ -31,7 +31,7 @@ public class DamageZoneMulti : MonoBehaviour, IDamageableMulti
             //enemyWhoIsFrom.ShowFloatingText(amount, enemyWhoIsFrom.floatingTextCriticPrefab);
             enemyWhoIsFrom.ShowFloatingTextCriticRpc(damageToTake);
         }
-        enemyWhoIsFrom.TakeDamage(damageToTake, clientId);
+        enemyWhoIsFrom.TakeDamage(damageToTake);
     }
 
     [Rpc(SendTo.Everyone)]

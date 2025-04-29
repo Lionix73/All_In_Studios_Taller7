@@ -4,9 +4,10 @@ using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
 using Unity.Netcode;
+using static UnityEngine.EventSystems.EventTrigger;
 
 
-public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
+public class EnemyMulti : PoolableObjectMulti, IDamageable
 {
     [Header("Enemy Components")]
     [SerializeField] private MultiAttackRadius attackRadius;
@@ -14,6 +15,12 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
     {
         get => attackRadius;
         set => attackRadius = value;
+    }
+    [SerializeField] private MultiLineOfSightChecker lineOfSightChecker;
+    public MultiLineOfSightChecker LineOfSightChecker
+    {
+        get => lineOfSightChecker;
+        set => lineOfSightChecker = value;
     }
 
     [SerializeField] private MultiEnemyMovement movement;
@@ -55,7 +62,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
 
 
     [Header("Enemy Health")]
-    [SerializeField] private float maxHealth;
+    public float maxHealth;
     [SerializeField] private ProgressBar healthBar;
 
     private NetworkVariable<int> networkHealth = new NetworkVariable<int>();
@@ -140,6 +147,9 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
     public PlayerControllerMulti Player { get; set; }
     public int Level { get; set; }
 
+    private void OnEnable()
+    {
+    }
     private void Awake()
     {
       /*  if (!IsServer) return;
@@ -163,6 +173,8 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         if (!IsServer) return;
         attackRadius.Player = Player;
         colliderEnemy = GetComponent<Collider>();
+        LineOfSightChecker.OnGainSight += GetPlayer;
+        LineOfSightChecker.OnLoseSight += LostPlayer;
         AttackRadius.OnAttack += OnAttack;
 
         if (skinnedMeshRenderers == null)
@@ -173,12 +185,18 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         //Health = (int)maxHealth;
     }
 
+    private void LostPlayer(PlayerControllerMulti player)
+    {
+        Player = null;
+    }
+
     private void Update()
     {
         if (!IsServer) return;
         if (IsDead) return;
 
         BlinkEffect();
+        if (Player == null) return;
 
         for (int i = 0; i < skills.Length; i++)
         {
@@ -239,17 +257,18 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         }
     }
     [Rpc(SendTo.Server)]
-    public void TakeDamageRpc(int damage, ulong attackerId)
+    public void TakeDamageRpc(int damage)
     {
         //networkHealth.Value -= damage;
-        Health -= damage;
+        int actualHealth = Health - damage;
+        Health = actualHealth;
         blinkTimer = blinkDuration;
 
         movement.State = EnemyState.Chase;
 
         //Debug.Log("Enemy Health: " + Health);
-        Debug.Log("Cliente #"+attackerId);
-        HealthBarProgressRpc(Health, maxHealth);
+        Debug.Log("Cliente #"+ lastAttackerId);
+        HealthBarProgressRpc(actualHealth, maxHealth);
 
 
         if (Health <= 0)
@@ -273,7 +292,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
                 agent.enabled = false;
             }
             
-            GetAttackerId?.Invoke(this, attackerId);
+            GetAttackerId?.Invoke(this, lastAttackerId);
             OnDie?.Invoke(this);
 
             DiedAnimationRpc();
@@ -281,11 +300,11 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         }
     }
 
-    public void TakeDamage(int damage, ulong attackerId)
+    public void TakeDamage(int damage)
     {
         if (IsDead) return;
 
-        TakeDamageRpc(damage, attackerId);
+        TakeDamageRpc(damage);
     }
 
     [Rpc(SendTo.Everyone)]
@@ -350,7 +369,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
     [Rpc(SendTo.Everyone)]
     public void HealthBarProgressRpc(int currentHealth, float maxHealth)
     {
-        healthBar.SetProgress(networkHealth.Value / maxHealth, 3);
+        healthBar.SetProgress(currentHealth / maxHealth, 3);
     }
     [Rpc(SendTo.Everyone)]
     public void ShowFloatingTextRpc(float damage)
@@ -379,6 +398,11 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         {
             skinnedMeshRenderer.material.color = Color.white * intensity;
         }
+    }
+    public void GetPlayer(PlayerControllerMulti player)
+    {
+        //Debug.Log("Detected player");
+        Movement.Player = player.transform;
     }
 
 }
