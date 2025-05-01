@@ -29,15 +29,22 @@ public class BombBullet : BulletEnemie
 
     private bool hasExploded = false;
 
-    protected override void OnEnable(){
+    protected override void OnEnable()
+    {
         base.OnEnable();
+        hasExploded = false; // Reset the explosion state
+        if (bulletModel != null) bulletModel.enabled = true; // Reset the model visibility
+        if (explosionEffect != null) explosionEffect.SetActive(false); // Reset the explosion effect
     }
 
     public override void Spawn(Vector3 forward, int damage, Transform target)
     {
         this.damage = damage;
         this.target = target;
-        Rb.linearVelocity = CalculateLaunchVelocity(target.position);
+
+        if(Rb != null){
+            Rb.linearVelocity = CalculateLaunchVelocity(target.position);
+        }
     }
 
     private Vector3 CalculateLaunchVelocity(Vector3 targetPosition)
@@ -96,7 +103,7 @@ public class BombBullet : BulletEnemie
             IDamageable damageable;
             if (collider.TryGetComponent<IDamageable>(out damageable))
             {
-                Debug.Log("BombBullet: Explode() - Damageable hit: " + damageable);
+                //Debug.Log("BombBullet: Explode() - Damageable hit: " + damageable);
                 damageable.TakeDamage(damage);
             }
         }

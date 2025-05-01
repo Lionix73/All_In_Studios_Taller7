@@ -68,6 +68,7 @@ public class ObjectPool
 
     public void ReturnObjectToPool(PoolableObject Object)
     {
+        //Debug.Log($"Returning object to pool: {Object.name}");
         AvailableObjectsPool.Add(Object);
     }
 

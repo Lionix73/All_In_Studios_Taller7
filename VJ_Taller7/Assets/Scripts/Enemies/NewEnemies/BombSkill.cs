@@ -4,6 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Bomb Skill", menuName = "Enemies/Skills/Bomb Skill")]
 public class BombSkill : SkillScriptableObject
 {
+    public int bombsToShoot = 1;
     public float delay = 1f;
     public PoolableObject prefab;
     public PoolableObjectMulti multiPrefab;
@@ -20,6 +21,7 @@ public class BombSkill : SkillScriptableObject
         BombSkill scaledSkill = CreateInstance<BombSkill>();
 
         ScaleUpBaseValuesForLevel(scaledSkill, scaling, level);
+        scaledSkill.bombsToShoot = bombsToShoot;
         scaledSkill.delay = delay;
         scaledSkill.prefab = prefab;
         scaledSkill.multiPrefab = multiPrefab;
@@ -36,13 +38,19 @@ public class BombSkill : SkillScriptableObject
 
     public override bool CanUseSkill(Enemy enemy, PlayerController player, int level)
     {
-        return base.CanUseSkill(enemy, player, level)
-            && Vector3.Distance(enemy.transform.position, player.transform.position) <= range
-            && HasLineOfSight(enemy, player.transform);
+        bool baseCondition = base.CanUseSkill(enemy, player, level);
+        bool inRange = Vector3.Distance(enemy.transform.position, player.transform.position) <= range;
+        bool hasLineOfSight = HasLineOfSight(enemy, player.transform);
+
+        //Debug.Log($"CanUseSkill - Enemy: {enemy.name}, BaseCondition: {baseCondition}, InRange: {inRange}, HasLineOfSight: {hasLineOfSight}");
+
+        return baseCondition && inRange && hasLineOfSight;
     }
 
     public override void UseSkill(Enemy enemy, PlayerController player)
     {
+        //Debug.Log($"UseSkill - Enemy: {enemy.name}, isActivating: {isActivating}, Time: {Time.time}, useTime: {useTime}");
+
         base.UseSkill(enemy, player);
 
         enemy.StartCoroutine(ShootBomb(enemy, player));
@@ -50,22 +58,40 @@ public class BombSkill : SkillScriptableObject
 
     private IEnumerator ShootBomb(Enemy enemy, PlayerController player)
     {
+        Debug.Log($"ShootBomb - Enemy: {enemy.name}, Starting skill activation.");
+
         WaitForSeconds wait = new WaitForSeconds(delay);
 
         DisableEnemyMovement(enemy);
         enemy.Movement.State = EnemyState.UsingAbilty;
 
+        /*
         for (float time = 0; time < 1f; time += Time.deltaTime * 2f)
         {
             enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, Quaternion.LookRotation(player.transform.position - enemy.transform.position), enemy.Agent.angularSpeed *time);
             yield return null;
         }
+        */
 
-        enemy.Animator.SetTrigger(Enemy.SKILL_TRIGGER);
+        for(int i = 0; i < bombsToShoot; i++)
+        {
+            enemy.Animator.SetTrigger(Enemy.SKILL_TRIGGER);
+            ShootingBombLogic(enemy, player);
+            yield return wait;
+        }
+        
+        ResetSkillState(enemy); // Reset the skill state for this enemy
 
-        ObjectPool pool = ObjectPool.CreateInstance(prefab, 5);
-        Debug.Log("Bomba Activada");
+        EnableEnemyMovement(enemy);
+        enemy.Movement.State = EnemyState.Chase;
+    }
+
+    private void ShootingBombLogic(Enemy enemy, PlayerController player)
+    {
+        ObjectPool pool = ObjectPool.CreateInstance(prefab, 10);
         PoolableObject instance = pool.GetObject();
+
+        Debug.Log($"Bomb instantiated: {instance.name}, Parent: {instance.transform.parent?.name ?? "None"}");
 
         instance.transform.SetParent(enemy.transform, false);
         instance.transform.localPosition = bulletSpawnOffSet;
@@ -73,14 +99,6 @@ public class BombSkill : SkillScriptableObject
 
         BombBullet bomb = instance.GetComponent<BombBullet>();
         bomb.Spawn(enemy.transform.forward, explosionDamage, player.transform);
-
-        yield return wait;
-        
-        useTime = Time.time;
-        isActivating = false;
-
-        EnableEnemyMovement(enemy);
-        enemy.Movement.State = EnemyState.Chase;
     }
 
     private bool HasLineOfSight(Enemy enemy, Transform target)
@@ -135,8 +153,8 @@ public class BombSkill : SkillScriptableObject
 
         enemy.Animator.SetTrigger(EnemyMulti.ATTACK_TRIGGER);
 
-        ObjectPoolMulti pool = ObjectPoolMulti.CreateInstance(multiPrefab, 5);
-        Debug.Log("Bomba Activada");
+        ObjectPoolMulti pool = ObjectPoolMulti.CreateInstance(multiPrefab, 10);
+        //Debug.Log("Bomba Activada");
         PoolableObjectMulti instance = pool.GetObject();
 
         instance.transform.SetParent(enemy.transform, false);
@@ -148,8 +166,8 @@ public class BombSkill : SkillScriptableObject
 
         yield return wait;
 
-        useTime = Time.time;
-        isActivating = false;
+        //useTime = Time.time;
+        //isActivating = false; TAMBIEN HAY QUE HACERLO EN EL MULTI
 
         MultiEnableEnemyMovement(enemy);
         enemy.Movement.State = EnemyState.Chase;

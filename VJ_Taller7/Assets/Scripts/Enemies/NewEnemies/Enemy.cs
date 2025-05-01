@@ -187,6 +187,7 @@ public class Enemy : PoolableObject, IDamageable
     public override void OnDisable(){
         if(!isStatic){
             base.OnDisable();
+            
             agent.enabled = false;
             OnDie = null;
         }

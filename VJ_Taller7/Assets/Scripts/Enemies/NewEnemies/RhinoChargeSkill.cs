@@ -88,8 +88,6 @@ public class RhinoChargeSkill : SkillScriptableObject
             Debug.LogWarning("Failed to warp enemy back to NavMesh.");
         }
 
-        // Reset state and cooldown
-        useTime = Time.time;
-        isActivating = false;
+        ResetSkillState(enemy); // Reset the skill state for this enemy
     }
 }

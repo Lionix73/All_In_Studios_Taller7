@@ -10,8 +10,12 @@ public class PoolableObject : MonoBehaviour
 
         if (Parent != null)
         {
-            //Debug.Log("Returning to pool: " + gameObject.name);
+            //Debug.Log($"Returning {gameObject.name} to its parent pool.");
             Parent.ReturnObjectToPool(this);
+        }
+        else
+        {
+            //Debug.LogWarning($"Parent pool is null for: {gameObject.name}");
         }
     }
 }

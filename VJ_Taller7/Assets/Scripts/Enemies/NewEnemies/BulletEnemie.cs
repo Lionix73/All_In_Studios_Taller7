@@ -83,8 +83,4 @@ public class BulletEnemie : PoolableObject
         CancelInvoke(DISABLE_METHOD_NAME);
         gameObject.SetActive(false);
     }
-
-    public override void OnDisable(){
-        base.OnDisable();
-    }
 }
