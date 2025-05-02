@@ -7,7 +7,9 @@ public class RhinoChargeSkill : SkillScriptableObject
 {
     public float chargeSpeed = 20f;
     public float chargeDuration = 2f;
-    public float minActivationDistance = 5f;
+    public float minActivationDistance = 2f;
+    public float maxActivationDistance = 3f;
+
 
     public override SkillScriptableObject scaleUpForLevel(ScalingScriptableObject scaling, int level)
     {
@@ -17,6 +19,7 @@ public class RhinoChargeSkill : SkillScriptableObject
         scaledSkill.chargeSpeed = chargeSpeed + Mathf.FloorToInt(chargeSpeed * scaling.damageCurve.Evaluate(level));
         scaledSkill.chargeDuration = chargeDuration;
         scaledSkill.minActivationDistance = minActivationDistance;
+        scaledSkill.maxActivationDistance = maxActivationDistance;
 
         return scaledSkill;
     }
@@ -24,7 +27,8 @@ public class RhinoChargeSkill : SkillScriptableObject
     public override bool CanUseSkill(Enemy enemy, PlayerController player, int level)
     {
         return base.CanUseSkill(enemy, player, level)
-            && Vector3.Distance(enemy.transform.position, player.transform.position) >= minActivationDistance;
+            && Vector3.Distance(enemy.transform.position, player.transform.position) >= minActivationDistance
+            && Vector3.Distance(enemy.transform.position, player.transform.position) <= maxActivationDistance;
     }
 
     public override void UseSkill(Enemy enemy, PlayerController player)
@@ -40,11 +44,26 @@ public class RhinoChargeSkill : SkillScriptableObject
         Rigidbody rb = enemy.GetComponent<Rigidbody>();
         NavMeshAgent agent = enemy.Agent;
 
-        if (rb == null || agent == null)
+        // Find the correct collider by tag
+        BoxCollider chargeCollider = null;
+        foreach (BoxCollider col in enemy.GetComponentsInChildren<BoxCollider>())
         {
-            Debug.LogError("Enemy is missing required components: Rigidbody or NavMeshAgent.");
+            if (col.CompareTag("ChargeCollider"))
+            {
+                chargeCollider = col;
+                break;
+            }
+        }
+
+        if (rb == null || agent == null || chargeCollider == null)
+        {
+            Debug.LogError("Enemy is missing required components: Rigidbody, NavMeshAgent, or ChargeCollider.");
             yield break;
         }
+
+        chargeCollider.enabled = false; // Disable the charge collider initially
+        chargeCollider.GetComponent<ChargeDamage>().Damage = damage; // Set the damage value
+
 
         // Disable NavMeshAgent and enable Rigidbody
         agent.enabled = false;
@@ -54,19 +73,36 @@ public class RhinoChargeSkill : SkillScriptableObject
 
         // Calculate charge direction
         Vector3 chargeDirection = (player.transform.position - enemy.transform.position).normalized;
+        chargeDirection.y = 0; // Keep the charge direction horizontal
+
+        // Rotate the enemy to face the charge direction
+        Quaternion targetRotation = Quaternion.LookRotation(chargeDirection);
+        enemy.transform.rotation = targetRotation;
 
         // Set enemy state and animation
         enemy.Movement.State = EnemyState.UsingAbilty;
         enemy.Animator.SetTrigger(Enemy.SKILL_TRIGGER);
 
+        // **Charge preparation phase**
+        float chargePreparationTime = 0.5f; // Time to prepare before charging
+        Debug.Log("Enemy is preparing to charge...");
+        yield return new WaitForSeconds(chargePreparationTime);
+
+        // Enable the charge collider
+        chargeCollider.enabled = true;
+
+        // **Charge Movement phase**
         float elapsedTime = 0f;
 
         while (elapsedTime < chargeDuration)
         {
-            rb.linearVelocity = chargeDirection * chargeSpeed;
+            rb.AddForce(enemy.transform.forward * chargeSpeed, ForceMode.Acceleration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+
+        // Disable the charge collider after the charge
+        chargeCollider.enabled = false;
 
         // Stop the charge
         rb.linearVelocity = Vector3.zero;
