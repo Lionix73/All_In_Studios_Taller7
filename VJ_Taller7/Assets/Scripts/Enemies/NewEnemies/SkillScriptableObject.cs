@@ -8,7 +8,9 @@ public class SkillScriptableObject : ScriptableObject
     public int unlocklevel = 1;
 
     private Dictionary<Enemy, bool> isActivatingPerEnemy = new Dictionary<Enemy, bool>();
+    private Dictionary<EnemyMulti, bool> isActivatingPerEnemyMulti = new Dictionary<EnemyMulti, bool>();
     private Dictionary<Enemy, float> useTimePerEnemy = new Dictionary<Enemy, float>();
+    private Dictionary<EnemyMulti, float> useTimePerEnemyMulti = new Dictionary<EnemyMulti, float>();
 
 
     public virtual SkillScriptableObject scaleUpForLevel(ScalingScriptableObject scaling, int level)
@@ -111,7 +113,22 @@ public class SkillScriptableObject : ScriptableObject
             useTimePerEnemy[enemy] = Time.time;
         }
     }
+    protected void MultiResetSkillState(EnemyMulti enemy)
+    {
+        if (isActivatingPerEnemyMulti.ContainsKey(enemy))
+        {
+            isActivatingPerEnemyMulti[enemy] = false;
+        }
 
+        if (useTimePerEnemyMulti.ContainsKey(enemy))
+        {
+            useTimePerEnemyMulti[enemy] = Time.time;
+        }
+        else
+        {
+            useTimePerEnemyMulti[enemy] = Time.time;
+        }
+    }
     protected virtual void OnDisable()
     {
         // Clear the dictionaries to avoid memory leaks

@@ -91,8 +91,12 @@ public class KamikazeSkilll : SkillScriptableObject
 
     public override bool MultiCanUseSkill(EnemyMulti enemy, PlayerControllerMulti player, int level)
     {
-        return base.MultiCanUseSkill(enemy, player, level)
-            && Vector3.Distance(enemy.transform.position, player.transform.position) <= range;
+        bool baseCondition = base.MultiCanUseSkill(enemy, player, level);
+        bool inRange = Vector3.Distance(enemy.transform.position, player.transform.position) <= range;
+
+        //Debug.Log($"CanUseSkill - Enemy: {enemy.name}, BaseCondition: {baseCondition}, InRange: {inRange}, HasLineOfSight: {hasLineOfSight}");
+
+        return baseCondition && inRange;
     }
 
     public override void MultiUseSkill(EnemyMulti enemy, PlayerControllerMulti player)
@@ -109,31 +113,31 @@ public class KamikazeSkilll : SkillScriptableObject
         MultiDisableEnemyMovement(enemy);
         enemy.Movement.State = EnemyState.UsingAbilty;
 
-        for (float time = 0; time < 1f; time += Time.deltaTime * 2f)
+        for (int i = 0; i < bombsToShoot; i++)
         {
-            enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, Quaternion.LookRotation(player.transform.position - enemy.transform.position), time);
-            yield return null;
+            enemy.Animator.SetTrigger(Enemy.SKILL_TRIGGER);
+            MultiShootingBombLogic(enemy, player);
+            yield return wait;
         }
 
-        ObjectPoolMulti pool = ObjectPoolMulti.CreateInstance(multiPrefab, 10);
-        PoolableObjectMulti instance = pool.GetObject();
+        MultiResetSkillState(enemy); // Reset the skill state for this enemy
 
-        enemy.Animator.SetTrigger(Enemy.SKILL_TRIGGER);
+        MultiEnableEnemyMovement(enemy);
+        enemy.Movement.State = EnemyState.Chase;
+
+    }
+    private void MultiShootingBombLogic(EnemyMulti enemy, PlayerControllerMulti player)
+    {
+        ObjectPool pool = ObjectPool.CreateInstance(prefab, 10);
+        PoolableObject instance = pool.GetObject();
+
+        Debug.Log($"Bomb instantiated: {instance.name}, Parent: {instance.transform.parent?.name ?? "None"}");
 
         instance.transform.SetParent(enemy.transform, false);
         instance.transform.localPosition = bulletSpawnOffSet;
         instance.transform.rotation = enemy.Agent.transform.rotation;
 
-        MultiBombBullet bomb = instance.GetComponent<MultiBombBullet>();
+        BombBullet bomb = instance.GetComponent<BombBullet>();
         bomb.Spawn(enemy.transform.forward, explosionDamage, player.transform);
-
-        yield return wait;
-
-        //useTime = Time.time;
-        //isActivating = false;
-
-        MultiEnableEnemyMovement(enemy);
-        enemy.Movement.State = EnemyState.Chase;
-
     }
 }

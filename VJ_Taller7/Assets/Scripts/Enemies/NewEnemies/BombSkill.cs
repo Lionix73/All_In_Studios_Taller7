@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Bomb Skill", menuName = "Enemies/Skills/Bomb Skill")]
@@ -126,9 +127,13 @@ public class BombSkill : SkillScriptableObject
 
     public override bool MultiCanUseSkill(EnemyMulti enemy, PlayerControllerMulti player, int level)
     {
-        return base.MultiCanUseSkill(enemy, player, level)
-            && Vector3.Distance(enemy.transform.position, player.transform.position) <= range
-            && MultiHasLineOfSight(enemy, player.transform);
+        bool baseCondition = base.MultiCanUseSkill(enemy, player, level);
+        bool inRange = Vector3.Distance(enemy.transform.position, player.transform.position) <= range;
+        bool hasLineOfSight = MultiHasLineOfSight(enemy, player.transform);
+
+        //Debug.Log($"CanUseSkill - Enemy: {enemy.name}, BaseCondition: {baseCondition}, InRange: {inRange}, HasLineOfSight: {hasLineOfSight}");
+
+        return baseCondition && inRange && hasLineOfSight;
     }
 
     public override void MultiUseSkill(EnemyMulti enemy, PlayerControllerMulti player)
@@ -151,11 +156,25 @@ public class BombSkill : SkillScriptableObject
             yield return null;
         }
 
-        enemy.Animator.SetTrigger(EnemyMulti.ATTACK_TRIGGER);
+        for (int i = 0; i < bombsToShoot; i++)
+        {
+            enemy.Animator.SetTrigger(EnemyMulti.SKILL_TRIGGER);
+            MultiShootingBombLogic(enemy, player);
+            yield return wait;
+        }
 
+        MultiResetSkillState(enemy); // Reset the skill state for this enemy
+
+        MultiEnableEnemyMovement(enemy);
+        enemy.Movement.State = EnemyState.Chase;
+    }
+
+    private void MultiShootingBombLogic(EnemyMulti enemy, PlayerControllerMulti player)
+    {
         ObjectPoolMulti pool = ObjectPoolMulti.CreateInstance(multiPrefab, 10);
-        //Debug.Log("Bomba Activada");
         PoolableObjectMulti instance = pool.GetObject();
+
+        Debug.Log($"Bomb instantiated: {instance.name}, Parent: {instance.transform.parent?.name ?? "None"}");
 
         instance.transform.SetParent(enemy.transform, false);
         instance.transform.localPosition = bulletSpawnOffSet;
@@ -163,15 +182,8 @@ public class BombSkill : SkillScriptableObject
 
         MultiBombBullet bomb = instance.GetComponent<MultiBombBullet>();
         bomb.Spawn(enemy.transform.forward, explosionDamage, player.transform);
-
-        yield return wait;
-
-        //useTime = Time.time;
-        //isActivating = false; TAMBIEN HAY QUE HACERLO EN EL MULTI
-
-        MultiEnableEnemyMovement(enemy);
-        enemy.Movement.State = EnemyState.Chase;
     }
+
     private bool MultiHasLineOfSight(EnemyMulti enemy, Transform target)
     {
         Vector3 origin = enemy.transform.position + bulletSpawnOffSet;

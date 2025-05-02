@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
 using Unity.Netcode;
+using System.Threading;
 public class MultiEnemyWavesManager : NetworkBehaviour
 {
     [Header("Player Settings")]
@@ -244,7 +245,6 @@ public class MultiEnemyWavesManager : NetworkBehaviour
 
                 enemy.Movement.Spawn();
                 enemy.GetAttackerId+= _roundManager.ChangeScore;
-                enemy.OnDie += _roundManager.EnemyDied;
                 enemy.OnDie += HandleEnemyDeath;
 
                 enemy.Level = level;
@@ -269,11 +269,13 @@ public class MultiEnemyWavesManager : NetworkBehaviour
     }
 
     private void HandleEnemyDeath(EnemyMulti enemy){
-         enemiesAlive--;
-        
+        if (!IsServer) return;
+
+        Interlocked.Decrement(ref enemiesAlive);
+
+        _roundManager.EnemyDied(enemiesAlive);
         enemy.GetAttackerId -= _roundManager.ChangeScore;
         enemy.OnDie -= HandleEnemyDeath;
-        enemy.OnDie -= _roundManager.EnemyDied;
         if(enemiesAlive == 0 && enemiesSpawned == numberOfEnemiesToSpawn){ //Si la ronda acaba antes del tiempo
             //ScaleUpSpawns(); Ya se escalan cuando se manda la ronda
         }

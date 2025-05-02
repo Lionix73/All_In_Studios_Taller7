@@ -311,12 +311,14 @@ public class MultiRoundManager : NetworkBehaviour
 
     }
 
-    public void EnemyDied(EnemyMulti enemy){
+    public void EnemyDied(int aliveEnemies){
+        if(!IsServer) return;
+        Debug.Log("Enemigo muerto en RoundManager");
         aliveEnemies -=1;
         enemiesKilledOnWave = waveSize - aliveEnemies;
         scoreManager.AddEnemyKilled(1);
-        
-        if(UIManager.Singleton) UIManager.Singleton.UIEnemiesAlive(aliveEnemies);
+       
+        EnemySpawnUIRpc(aliveEnemies);
     }
 #endregion
 

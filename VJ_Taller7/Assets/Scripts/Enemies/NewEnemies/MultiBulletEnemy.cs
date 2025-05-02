@@ -32,10 +32,14 @@ public class MultiBulletEnemy : PoolableObjectMulti
     protected const string DISABLE_METHOD_NAME = "Disable";
 
 
-    private void Awake()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
+
         Rb = GetComponent<Rigidbody>();
     }
+
+    
 
     protected virtual void OnEnable()
     {

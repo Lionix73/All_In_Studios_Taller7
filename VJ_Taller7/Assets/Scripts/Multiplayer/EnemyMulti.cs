@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
 using Unity.Netcode;
-using static UnityEngine.EventSystems.EventTrigger;
+using PimDeWitte.UnityMainThreadDispatcher;
 
 
 public class EnemyMulti : PoolableObjectMulti, IDamageable
@@ -109,6 +109,9 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
     }
 
     public const string ATTACK_TRIGGER = "Attack";
+    public const string SHOOT_TRIGGER = "Shoot";
+    public const string SKILL_TRIGGER = "UsingSkill";
+    public const string IsHit = "IsHit";
 
 
     [Header("Enemy UI")]
@@ -300,11 +303,23 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
             }
             
             GetAttackerId?.Invoke(this, lastAttackerId);
-            OnDie?.Invoke(this);
 
-            DiedAnimationRpc();
+            HandleDeathOnServerRpc();
             //OnDied();
         }
+    }
+
+    [Rpc(SendTo.Server)]
+    private void HandleDeathOnServerRpc()
+    {
+
+        // Ejecutar eventos locales en el servidor
+        // Opción 1 (Recomendada para NGO):
+        UnityMainThreadDispatcher.Instance().Enqueue(() => OnDie?.Invoke(this));
+        Debug.Log("Enemigo Muerto");
+        // Replicar a todos los clientes
+        DiedAnimationRpc();
+
     }
 
     public void TakeDamage(int damage)

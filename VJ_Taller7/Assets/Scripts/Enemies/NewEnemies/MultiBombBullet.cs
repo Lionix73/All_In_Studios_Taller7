@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.Netcode;
 
 [RequireComponent(typeof(Rigidbody))]
 public class MultiBombBullet : MultiBulletEnemy
@@ -31,13 +32,20 @@ public class MultiBombBullet : MultiBulletEnemy
 
     protected override void OnEnable(){
         base.OnEnable();
+        hasExploded = false; // Reset the explosion state
+        if (bulletModel != null) bulletModel.enabled = true; // Reset the model visibility
+        if (explosionEffect != null) explosionEffect.SetActive(false); // Reset the explosion effect
     }
 
     public override void Spawn(Vector3 forward, int damage, Transform target)
     {
         this.damage = damage;
         this.target = target;
-        //Rb.linearVelocity = CalculateLaunchVelocity(target.position);
+
+        if (Rb != null)
+        {
+            Rb.linearVelocity = CalculateLaunchVelocity(target.position);
+        }
     }
 
     private Vector3 CalculateLaunchVelocity(Vector3 targetPosition)
@@ -100,7 +108,21 @@ public class MultiBombBullet : MultiBulletEnemy
                 damageable.TakeDamage(damage);
             }
         }
-        
+        gameObject.GetComponent<Collider>().enabled = false;
         StartCoroutine(WaitForDisable());
+    }
+
+
+    [Rpc(SendTo.Everyone)]
+    public void ExplosionEffectRpc()
+    {
+        soundManager.PlaySound("BombExplosion");
+
+        if (explosionEffect != null && bulletModel != null)
+        {
+            transform.rotation = new Quaternion(0, 0, 0, 0);
+            explosionEffect.SetActive(true);
+            bulletModel.enabled = false;
+        }
     }
 }
