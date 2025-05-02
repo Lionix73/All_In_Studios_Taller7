@@ -6,20 +6,20 @@ public class AsignSkillToSkillCard : MonoBehaviour
 {
     [Header("Skill Info")]
     [Tooltip("Sctiptable object con la info de la skill")]
-    public Skill_Info info;
+    //public Skill_Info info;
     
     private Image icon;
     private TextMeshProUGUI[] texts;
 
-    void Start()
+    void Awake()
     {
         icon = GetComponentInChildren<Image>();
         texts = GetComponentsInChildren<TextMeshProUGUI>();
 
-        AsignInfo();
+        //AsignInfo();
     }
 
-    private void AsignInfo()
+    public void AsignInfo(Skill_Info info)
     {
         icon.sprite = info.image;
         texts[0].text = info.title;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.Services.Vivox;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,9 @@ public class ActiveSkillManager : SkillsManagerBase
 
     private void Start()
     {
+        if (CharacterManager.Instance != null)
+            activeSkillIndex = CharacterManager.Instance.indexActiveSkill;
+
         DeactivateUnusedSkills();
 
         SearchSkillsUI();

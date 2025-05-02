@@ -9,6 +9,9 @@ public class PassiveSkillManager : SkillsManagerBase
 
     private void Start()
     {
+        if (CharacterManager.Instance != null)
+            activeSkillIndex = CharacterManager.Instance.indexPassiveSkill;
+
         DeactivateUnusedSkills();
 
         SearchSkillsUI();
