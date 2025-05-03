@@ -187,14 +187,21 @@ public class GunManager : MonoBehaviour
     }
 
     public void GrabGun(GunType gunPicked){
+        float actualScore = GameManager.Instance.scoreManager.GetScore();
+        GunScriptableObject gun = gunsList.Find(gun => gun.Type == gunPicked);
+
+        if (actualScore < gun.scoreToBuy) return;
+
         if (CurrentSecondGunType != gunPicked){
             if (CurrentSecondGunType == CurrentGun.Type){
                 CurrentSecondGunType = CurrentGun.Type;
             }
             DespawnActiveGun();
             this.Gun = gunPicked;
-            GunScriptableObject gun = gunsList.Find(gun => gun.Type == gunPicked);
+            
             SetUpGun(gun);
+
+            GameManager.Instance.scoreManager.SetScore(-gun.scoreToBuy);
         }
     }
     public void OnGrabGun(InputAction.CallbackContext context){

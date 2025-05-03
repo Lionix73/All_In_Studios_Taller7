@@ -9,9 +9,9 @@ public class RoundManager : MonoBehaviour
     [Tooltip("Lista de los enemigos que existen para seleccionar")]
     public List<BuyableEnemy> enemies = new List<BuyableEnemy>();
     [Header("Manejo de Rondas y oleadas")]
-    [SerializeField] private int currentWave; //oleadas
-    [SerializeField] private int currentRound; //Rondas
-    private int level = 0; //For the wave balance
+    [SerializeField] private int currentWave = 0; //oleadas
+    [SerializeField] private int currentRound =1 ; //Rondas
+    private int level = 0; //For the game balance (in case)
     public int CurrentRound {get {return currentRound;}}
 
     [SerializeField] private int waveSize; //Tamaño de la oleada en cantidad de enemigos 
@@ -100,6 +100,11 @@ public class RoundManager : MonoBehaviour
         SetEnemiesInSpawner();
     }
     private void Update() {
+
+        if (currentRound > 3){ // ez win
+            _Simulating = false;
+            GameManager.Instance.WinGame();
+        }
         
         if (aliveEnemies == 0 && !inBetweenRounds && enemiesKilledOnWave>1){
             
@@ -111,7 +116,6 @@ public class RoundManager : MonoBehaviour
         if (currentWave > 3){
             //POR AHORA: AQUI TERMINARA LA ALPHA
             if (UIManager.Singleton) UIManager.Singleton.WinUI(7);
-            _Simulating= false;
             currentRound++;
             currentWave = 0;
             level++;

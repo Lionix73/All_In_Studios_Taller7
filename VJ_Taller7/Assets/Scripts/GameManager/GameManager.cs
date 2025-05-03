@@ -108,6 +108,11 @@ public class GameManager : MonoBehaviour
         if (UIManager.Singleton) roundManager.PauseGame(isPaused);
     }
 
+    public void WinGame(){
+        //Evento de victoria si es necesario
+        
+    }
+
     /*
     public List<WeightedSpawnScriptableObject> GetBalanceWave(int wave){
         if (wavesBalance[wave-1].enemiesForTheWave == null) return null;

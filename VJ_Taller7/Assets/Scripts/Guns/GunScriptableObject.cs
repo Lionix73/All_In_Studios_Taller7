@@ -7,6 +7,8 @@ using UnityEngine.Pool;
 public class GunScriptableObject : ScriptableObject {
     public GunType Type;
     public string Name;
+
+    public float scoreToBuy;
     public Sprite UIImage;
     public Sprite CrosshairImage;
     public GameObject ModelPrefab;

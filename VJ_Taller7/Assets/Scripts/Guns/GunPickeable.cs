@@ -11,6 +11,7 @@ public class GunPickeable : MonoBehaviour
     [SerializeField] private TextMeshProUGUI damageText;
     [SerializeField] private TextMeshProUGUI fireRateText;
     [SerializeField] private TextMeshProUGUI magazineText;
+    [SerializeField] private TextMeshProUGUI priceText;
 
     private Vector3 spinDirection = new Vector3(0, 1, 0);
     private GunManager gunManager;
@@ -33,6 +34,8 @@ public class GunPickeable : MonoBehaviour
                 fireRateText = text;
             } else if (text.name == "GunMagazine") {
                 magazineText = text;
+            } else if (text.name == "GunPrice"){
+                priceText = text;
             }
         }
 
@@ -54,6 +57,9 @@ public class GunPickeable : MonoBehaviour
             damageText.text = $"DMG: {gun.Damage}";
             fireRateText.text = $"Fire Rate: {gun.ShootConfig.FireRate}";
             magazineText.text = $"Magazine: {gun.MagazineSize}";
+            priceText.text = $"Price: {gun.scoreToBuy}";
+
+            //Pricetext.text= "gun.scoreToBuy" //Falta ponerlo de verdad
             PickeableUI.SetActive(true);
             //lookCamera = PickeableUI.GetComponentInChildren<ObjectLookAtCamera>();
         }

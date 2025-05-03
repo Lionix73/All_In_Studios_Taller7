@@ -17,12 +17,16 @@ public class ScoreManager : MonoBehaviour
         killedEnemies = 0;
     }
 
-    public void SetScore(int sco){
+    public void SetScore(float sco){
         score += sco;
         if(UIManager.Singleton) UIManager.Singleton.GetPlayerActualScore(score);
         if (_UIscoreText==null) return;
         _UIscoreText.text = $"{score}";
 
+    }
+
+    public float GetScore(){
+        return score;
     }
 
     public void AddEnemyKilled(int killedEnemy)
