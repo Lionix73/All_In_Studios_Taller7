@@ -2351,6 +2351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 276ecb09d03acaa4999238c30a8796d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ringMenu: {fileID: 0}
 --- !u!114 &2441644267095333543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2618,10 +2619,6 @@ MonoBehaviour:
     m_ActionId: cbd2104c-c1c7-4fbe-82b6-b21ad5ebf8ec
     m_ActionName: 'Player/Aim[/Mouse/rightButton]'
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 1636524e-f6b0-4e9c-8d0e-46517f48edd6
-    m_ActionName: 'Player/Slide[/Keyboard/c,/Keyboard/ctrl]'
-  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5148926526768909708}
         m_TargetAssemblyTypeName: GunManager, Assembly-CSharp
@@ -2653,10 +2650,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 9f0f27b0-8713-4306-8ab3-c39e1f034e57
     m_ActionName: 'Player/Dash[/Keyboard/f]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 7a190d22-6fd6-4739-a82c-6474fd638490
-    m_ActionName: 'Player/Emote[/Keyboard/t]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5148926526768909708}
@@ -2703,8 +2696,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Melee[/Mouse/middleButton]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
+      - m_Target: {fileID: 332327282473581397}
+        m_TargetAssemblyTypeName: ActiveSkillManager, Assembly-CSharp
         m_MethodName: ActivateSkill
         m_Mode: 1
         m_Arguments:
@@ -4758,6 +4751,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9c827cc0ef8f7d40b4e952a288beaf0, type: 3}
+--- !u!114 &332327282473581397 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2744293802038122738, guid: b9c827cc0ef8f7d40b4e952a288beaf0, type: 3}
+  m_PrefabInstance: {fileID: 2488548080501908391}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d984e6775156ac4d88a5a4a4bd58409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2202222995470856695 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4325363771053134416, guid: b9c827cc0ef8f7d40b4e952a288beaf0, type: 3}
