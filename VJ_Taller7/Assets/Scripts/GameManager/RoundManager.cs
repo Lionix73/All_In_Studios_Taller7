@@ -11,6 +11,7 @@ public class RoundManager : MonoBehaviour
     [Header("Manejo de Rondas y oleadas")]
     [SerializeField] private int currentWave; //oleadas
     [SerializeField] private int currentRound; //Rondas
+    private int level = 0; //For the wave balance
     public int CurrentRound {get {return currentRound;}}
 
     [SerializeField] private int waveSize; //Tamaño de la oleada en cantidad de enemigos 
@@ -99,11 +100,7 @@ public class RoundManager : MonoBehaviour
         SetEnemiesInSpawner();
     }
     private void Update() {
-        if (enemiesKilledOnWave == waveSize - 1 && lastEnemyOfWave == null){ //Todavia no funciona... pero casi
-            //setear al enemigo con el loot, o activar el loot en su muerte, algo...
-            lastEnemyOfWave= FindFirstObjectByType<Enemy>().gameObject;
-            enemiesKilledOnWave = 0;
-        }
+        
         if (aliveEnemies == 0 && !inBetweenRounds && enemiesKilledOnWave>1){
             
             inBetweenRounds = true; //Next round
@@ -117,6 +114,7 @@ public class RoundManager : MonoBehaviour
             _Simulating= false;
             currentRound++;
             currentWave = 0;
+            level++;
             
             if (UIManager.Singleton) 
             { 
@@ -146,6 +144,7 @@ public class RoundManager : MonoBehaviour
             inBetweenRoundsTimer -= Time.deltaTime;
             if (inBetweenRoundsTimer<=0){
             currentWave++;
+            level++;
             SetWaveBalance();
 
             if(UIManager.Singleton) UIManager.Singleton.UIActualWave(currentWave);
@@ -181,7 +180,7 @@ public class RoundManager : MonoBehaviour
             waveDuration += currentWave * waveDurationScaleAdd;
             //List<WeightedSpawnScriptableObject> temp = GameManager.Instance.GetBalanceWave(currentWave);
             //enemyWavesManager.RecieveWaveLimits(temp);
-            enemyWavesManager.RecieveWaveOrder(currentWave, waveSize);
+            enemyWavesManager.RecieveWaveOrder(level, waveSize);
             waveTimer = waveDuration;
         }
     }

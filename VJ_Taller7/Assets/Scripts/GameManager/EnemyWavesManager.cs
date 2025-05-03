@@ -99,15 +99,15 @@ public class EnemyWavesManager : MonoBehaviour
         }
     }
 
-    public void RecieveWaveOrder(int actualWave, int amountOfEnemiesToSpawn){
+    public void RecieveWaveOrder(int actualWaveDif, int amountOfEnemiesToSpawn){
         //numberOfEnemiesToSpawn = amountOfEnemiesToSpawn;
-        level = actualWave;
+        level = actualWaveDif;
         Debug.Log($"Recibiendo oleada de {numberOfEnemiesToSpawn} enemigos");
         ScaleUpSpawns();
         StartCoroutine(SpawnEnemies());
         GameManager.Instance.roundManager.recieveWaveData(numberOfEnemiesToSpawn);
 
-        availableEnemiesToSpawn = GameManager.Instance.availableEnemiesForWave[actualWave-1].availableEnemies;
+        availableEnemiesToSpawn = GameManager.Instance.availableEnemiesForWave[actualWaveDif-1].availableEnemies;
     }
 
     private IEnumerator SpawnEnemies(){
