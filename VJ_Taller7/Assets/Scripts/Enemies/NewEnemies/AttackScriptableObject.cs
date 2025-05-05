@@ -11,6 +11,7 @@ public class AttackScriptableObject : ScriptableObject
 
     //Ranged
     public BulletEnemie bulletPrefab;
+    public MultiBulletEnemy bulletPrefabMulti;
     public Vector3 bulletSpawnOffSet = new Vector3(0, 1, 0);
     public LayerMask lineOfSightLayer;
 
@@ -24,6 +25,7 @@ public class AttackScriptableObject : ScriptableObject
         scaledAttack.OnRangeBehvaior = OnRangeBehvaior;
 
         scaledAttack.bulletPrefab = bulletPrefab;
+        scaledAttack.bulletPrefabMulti = bulletPrefabMulti;
         scaledAttack.bulletSpawnOffSet = bulletSpawnOffSet;
         scaledAttack.lineOfSightLayer = lineOfSightLayer;
 
@@ -55,9 +57,9 @@ public class AttackScriptableObject : ScriptableObject
 
         if (isRanged)
         {
-            RangedAttackRadius rangedAttackRadius = enemy.AttackRadius.GetComponent<RangedAttackRadius>();
+            MultiRangedAttackRadius rangedAttackRadius = enemy.AttackRadius.GetComponent<MultiRangedAttackRadius>();
 
-            rangedAttackRadius.BulletPrefab = bulletPrefab;
+            rangedAttackRadius.BulletPrefab = bulletPrefabMulti;
             rangedAttackRadius.BulletSpawnOffset = bulletSpawnOffSet;
             rangedAttackRadius.Mask = lineOfSightLayer;
 

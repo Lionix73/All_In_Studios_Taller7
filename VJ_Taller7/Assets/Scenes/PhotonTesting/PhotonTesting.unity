@@ -4330,7 +4330,7 @@ PrefabInstance:
     - target: {fileID: 957273885790928038, guid: 2f56975f7d19056438f506cee58050b1, type: 3}
       propertyPath: enemies.Array.data[0].enemyInfo
       value: 
-      objectReference: {fileID: 11400000, guid: 6e4db90ca04a51443a4b35c7598b5ee0, type: 2}
+      objectReference: {fileID: 11400000, guid: 008985b296803414f91b8f307efd3f7e, type: 2}
     - target: {fileID: 957273885790928038, guid: 2f56975f7d19056438f506cee58050b1, type: 3}
       propertyPath: enemies.Array.data[0].spawnCost
       value: 1
@@ -4358,7 +4358,7 @@ PrefabInstance:
     - target: {fileID: 6985667181547561216, guid: 2f56975f7d19056438f506cee58050b1, type: 3}
       propertyPath: 'weightedEnemies.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 9d557fb21a9ee854596734d8aa72a2a4, type: 2}
+      objectReference: {fileID: 11400000, guid: d2e8e2632ab90a74f9d15bf669083d47, type: 2}
     - target: {fileID: 6985667181547561216, guid: 2f56975f7d19056438f506cee58050b1, type: 3}
       propertyPath: 'weightedEnemies.Array.data[1]'
       value: 
@@ -4673,6 +4673,9 @@ GameObject:
   - component: {fileID: 1190515458}
   - component: {fileID: 1190515462}
   - component: {fileID: 1190515463}
+  - component: {fileID: 1190515464}
+  - component: {fileID: 1190515465}
+  - component: {fileID: 1190515466}
   m_Layer: 7
   m_Name: Floor
   m_TagString: Untagged
@@ -4832,6 +4835,102 @@ MonoBehaviour:
   m_VoxelSize: 0.2
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 64d0d0ce2e25dd642bea5bc171c00019, type: 2}
+  m_BuildHeightMesh: 0
+--- !u!114 &1190515464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190515457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_AgentTypeID: -902729914
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.2
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 1815081b424c2b8419d6a08002f77d04, type: 2}
+  m_BuildHeightMesh: 0
+--- !u!114 &1190515465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190515457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_AgentTypeID: -1923039037
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.13333334
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 3195d61ae0676534a859a28e6ef55592, type: 2}
+  m_BuildHeightMesh: 0
+--- !u!114 &1190515466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190515457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_AgentTypeID: 658490984
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.1
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: f518588a032f64344832c5510341d941, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1 &1209925041
 GameObject:

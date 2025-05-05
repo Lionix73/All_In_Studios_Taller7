@@ -182,6 +182,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
         base.OnNetworkSpawn();
         colliderEnemy = GetComponent<Collider>();
         if (!IsServer) return;
+        
         attackRadius.Player = Player;
         LineOfSightChecker.OnGainSight += GetPlayer;
         LineOfSightChecker.OnLoseSight += LostPlayer;

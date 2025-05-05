@@ -25,6 +25,7 @@ public class MultiAttackRadius : NetworkBehaviour
     public AttackEvent OnAttack;
     protected Coroutine attackCoroutine;
     protected EnemyMulti enemy;
+    protected ThisObjectSounds soundManager;
 
     public override void OnNetworkSpawn()
     {
@@ -32,6 +33,7 @@ public class MultiAttackRadius : NetworkBehaviour
     
         enemy = GetComponentInParent<EnemyMulti>();
         sphereCollider = GetComponent<SphereCollider>();
+        soundManager = GetComponentInParent<ThisObjectSounds>();
     }
 
     protected virtual void OnTriggerEnter(Collider other)

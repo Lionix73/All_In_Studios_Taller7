@@ -1609,10 +1609,6 @@ MonoBehaviour:
     m_ActionId: cbd2104c-c1c7-4fbe-82b6-b21ad5ebf8ec
     m_ActionName: 'Player/Aim[/Mouse/rightButton]'
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 1636524e-f6b0-4e9c-8d0e-46517f48edd6
-    m_ActionName: 'Player/Slide[/Keyboard/c,/Keyboard/ctrl]'
-  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6274603480792431093}
         m_TargetAssemblyTypeName: GunManagerMulti2, Assembly-CSharp
@@ -1656,22 +1652,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 9f0f27b0-8713-4306-8ab3-c39e1f034e57
     m_ActionName: 'Player/Dash[/Keyboard/f]'
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3951267400713598900}
-        m_TargetAssemblyTypeName: PlayerControllerMulti, Assembly-CSharp
-        m_MethodName: OnEmote
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 7a190d22-6fd6-4739-a82c-6474fd638490
-    m_ActionName: 'Player/Emote[/Keyboard/t]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6274603480792431093}
@@ -2008,11 +1988,12 @@ MonoBehaviour:
   meshRefreshRate: 0.1
   destroyTime: 0.5
   positionToSpawn: {fileID: 353403930743934515}
-  mat: {fileID: 2100000, guid: 5a3e7dc865291b747a4b7c8241ddcf74, type: 2}
+  mat: {fileID: 2100000, guid: f5885108be6604e479bd55d4562ab98a, type: 2}
   propertyName: _Alpha
   shaderVarRate: 0.01
   shaderVarRefresh: 0.1
-  skinnedMeshRenderers: []
+  skinnedMeshRenderers:
+  - {fileID: 4121562935876794459}
   IsTrailActive: 0
 --- !u!114 &4460609647043108037
 MonoBehaviour:
