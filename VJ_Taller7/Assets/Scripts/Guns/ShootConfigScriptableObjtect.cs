@@ -19,6 +19,7 @@ public class ShootConfigScriptableObjtect : ScriptableObject {
 
     [Header("ProjectileStats")]
     public Bullet BulletPrefab; //para las especiales, asignar el projectil manualmente
+    public MultiBullet BulletPrefabMulti;
     public float BulletSpawnForce = 1000;
 
     public object Clone() {

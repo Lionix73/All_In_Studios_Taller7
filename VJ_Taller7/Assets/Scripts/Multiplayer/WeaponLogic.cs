@@ -39,8 +39,11 @@ public class WeaponLogic : NetworkBehaviour
     }
     public ParticleSystem ShootSystem;
     public ObjectPool<TrailRenderer> TrailPool;
-    public ObjectPool<Bullet> BulletPool;
+    public ObjectPool<MultiBullet> BulletPool;
+    public ObjectPool<MultiBullet> GFeatherPool;
+    public ObjectPool<MultiBullet> SFeatherPool;
 
+    private NetworkObjectPool networkObjectPool;
     // Añade esta propiedad para obtener el ID del jugador dueño
     private ulong ownerClientId;
     public ulong OwnerClientId => ownerClientId;
@@ -55,10 +58,14 @@ public class WeaponLogic : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-    
+       
+
+
+        networkObjectPool = NetworkObjectPool.Singleton.GetComponent<NetworkObjectPool>();
+
         activeCamera = Camera.main;
 
-
+        Model = gameObject;
         bulletsLeft = currentGun.bulletsLeft;
         MagazineSize = currentGun.MagazineSize;
 
@@ -78,9 +85,23 @@ public class WeaponLogic : NetworkBehaviour
         realoading = currentGun.Realoading;
         //TrailPool = currentGun.TrailPool;
         TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
-        BulletPool = currentGun.BulletPool;
+
+       
+        ShootSystem = Model.GetComponentInChildren<ParticleSystem>();
 
         ownerClientId = NetworkManager.Singleton.LocalClientId;
+
+        if (IsServer)
+        {
+            if (!ShootConfig.IsHitScan)
+            { BulletPool = new ObjectPool<MultiBullet>(CreateBullet); }
+            if (ShootConfig.ShootingType == ShootType.Special)
+            {
+                GFeatherPool = new ObjectPool<MultiBullet>(CreateBullet);
+                SFeatherPool = new ObjectPool<MultiBullet>(CreateBullet);
+            }
+
+        }
 
     }
 
@@ -114,13 +135,17 @@ public class WeaponLogic : NetworkBehaviour
                 }
                 shootDirection.Normalize();
 
-                if (ShootConfig.IsHitScan)
+                switch (ShootConfig.ShootingType)
                 {
-                    DoHitScanShooting(shootDirection, ShootSystem.transform.position, ShootSystem.transform.position);
-                }
-                else
-                {
-                    //DoProjectileShooting();
+                    case ShootType.HitScan:
+                        DoHitScanShooting(shootDirection, ShootSystem.transform.position, ShootSystem.transform.position);
+                        return;
+                    case ShootType.Projectile:
+                        DoProjectileShooting(shootDirection);
+                        return;
+                    case ShootType.Special:
+                        DoSpecialShooting(shootDirection);
+                        return;
                 }
             }
         }
@@ -172,9 +197,43 @@ public class WeaponLogic : NetworkBehaviour
         return Model.transform.forward;
     }
 
-    private void DoProjectileShooting(Vector3 shootDirection)
+    private void DoProjectileShooting(Vector3 ShootDirection)
     {
+        MultiBullet bullet = BulletPool.Get();
 
+        bullet.gameObject.SetActive(true);
+        bullet.OnCollision += HandleBulletCollision;
+        bullet.transform.position = ShootSystem.transform.position;
+        bullet.Spawn(ShootDirection * ShootConfig.BulletSpawnForce);
+
+        // El trail de la bala podemos decidir si ponerlo en la bala, o usar el mismo pool que con el hitscan
+
+    }
+
+    private void DoSpecialShooting(Vector3 ShootDirection)
+    {
+        switch (Type)
+        {
+            case GunType.MysticCanon:
+                return;
+            case GunType.GoldenFeather:
+                MultiBullet feather = GFeatherPool.Get();
+                feather.gameObject.SetActive(true);
+                feather.OnCollision += HandleBulletCollision;
+                feather.OnBulletEnd += HandleGoldenBulletCollision; //Para poder eliminar tambien las balas especiales 
+                feather.transform.position = ShootSystem.transform.position;
+                feather.Spawn(ShootDirection * ShootConfig.BulletSpawnForce);
+                return;
+            case GunType.ShinelessFeather:
+                MultiBullet shineless = SFeatherPool.Get();
+
+                shineless.gameObject.SetActive(true);
+                shineless.OnCollision += HandleBulletCollision;
+                shineless.OnBulletEnd += HandleShinelessFeather; //Para poder eliminar tambien las balas especiales 
+                shineless.transform.position = ShootSystem.transform.position;
+                shineless.Spawn(ShootDirection * ShootConfig.BulletSpawnForce);
+                return;
+        }
     }
 
     public void Reload()
@@ -228,7 +287,56 @@ public class WeaponLogic : NetworkBehaviour
 
 
 
+    private void HandleBulletCollision(MultiBullet bullet, Collision collision)
+    {
+        // En caso de usar la pool de trail, hay que desactivarla desde aqui
 
+        if (ShootConfig.ShootingType != ShootType.Special)
+        {
+            bullet.gameObject.SetActive(false);
+            networkObjectPool.ReturnNetworkObject(bullet.GetComponent<NetworkObject>(), ShootConfig.BulletPrefabMulti.gameObject);
+        }
+
+        if (collision != null)
+        {
+            ContactPoint contactPoint = collision.GetContact(0);
+
+            Collider colliderHit = contactPoint.otherCollider;
+            if (colliderHit.gameObject.layer != LayerMask.NameToLayer("Enemy")) return;
+
+            if (colliderHit.TryGetComponent(out IDamageable enemy))
+            {
+                enemy.TakeDamage(Damage);
+            }
+            else if (colliderHit.TryGetComponent(out EnemyHealthMulti enemyM))
+            {
+                enemyM.TakeDamageRpc(Damage);
+            }
+        }
+    }
+    private void HandleGoldenBulletCollision(MultiBullet bullet, Collision collision)
+    {
+        bullet.gameObject.SetActive(false);
+        networkObjectPool.ReturnNetworkObject(bullet.GetComponent<NetworkObject>(), ShootConfig.BulletPrefabMulti.gameObject);
+        GFeatherPool.Release(bullet);
+
+        //condicion de la shineless feather para que no recargue
+    }
+
+    private void HandleShinelessFeather(MultiBullet bullet, Collision collision)
+    {
+        bullet.gameObject.SetActive(false);
+        GFeatherPool.Release(bullet);
+        bulletsLeft = 1;
+    }
+
+    private MultiBullet CreateBullet()
+    {
+        NetworkObject bulletObj = networkObjectPool.GetNetworkObject(ShootConfig.BulletPrefabMulti.gameObject,Vector3.zero,Quaternion.Euler(0f, 0f, 0f));
+        bulletObj.Spawn();
+        return bulletObj.GetComponent<MultiBullet>();
+    }
+   
     public TrailRenderer CreateTrail()
     {
         GameObject instance = new GameObject("Trail");

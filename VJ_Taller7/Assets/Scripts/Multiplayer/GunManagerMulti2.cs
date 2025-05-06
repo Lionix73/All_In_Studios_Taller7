@@ -43,7 +43,7 @@ public class GunManagerMulti2 : NetworkBehaviour
         get => GunNet.Value;
         set { if (IsServer) GunNet.Value = value; }
     }
-    private NetworkVariable<GunType> GunNet = new NetworkVariable<GunType>(0, NetworkVariableReadPermission.Everyone);
+    private NetworkVariable<GunType> GunNet = new NetworkVariable<GunType>(GunType.Crossbow, NetworkVariableReadPermission.Everyone);
     private Transform secondHandGrabPoint; // la posicion a asignar
     [SerializeField] private Transform secondHandRigTarget; //el Rig en sí
 
