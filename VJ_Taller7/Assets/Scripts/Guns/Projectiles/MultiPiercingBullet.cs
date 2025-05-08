@@ -26,15 +26,6 @@ public class MultiPiercingBullet : MultiBullet
 
     public override void OnCollisionEnter(Collision other) {
         if (other!= null) Debug.Log("Colision with " + other.gameObject.name);
-        if (other.collider.TryGetComponent(out IDamageable enemyDmg))
-        {
-            enemyDmg.TakeDamage(damage); //simplemente saber si se puede hacer daño, me falta por ver si específicar los críticos
-        }
-        else if (other.collider.TryGetComponent(out EnemyHealthMulti enemy))
-        {
-            enemy.TakeDamageRpc(damage);
-
-        }
         base.OnCollisionEnter(other);
 
     }

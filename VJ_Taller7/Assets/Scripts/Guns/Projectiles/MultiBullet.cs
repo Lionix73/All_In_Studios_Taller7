@@ -5,7 +5,8 @@ using UnityEngine;
 using Unity.Netcode;
 
 [RequireComponent(typeof(Rigidbody))]
-public class MultiBullet : NetworkBehaviour {
+public class MultiBullet : NetworkBehaviour
+{
 
     private int objectPenetrated;
     public Rigidbody Rigidbody { get; protected set; }
@@ -21,10 +22,19 @@ public class MultiBullet : NetworkBehaviour {
     public event ColisionEvent OnCollision;
      public delegate void EndBulletEvent(MultiBullet Bullet, Collision collision);
     public event EndBulletEvent OnBulletEnd;
-
+    
+    private ulong ownerId;
     private NetworkObject networkObject;
 
+    private void OnEnable()
+    {
+        
+    }
 
+    public void Initialize(ulong shooterId)
+    {
+        ownerId = shooterId;
+    }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();

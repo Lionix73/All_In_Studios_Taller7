@@ -2,6 +2,8 @@ using System.Collections;
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.Pool;
+using UnityEditor.Rendering;
+using UnityEngine.UIElements;
 
 public class WeaponLogic : NetworkBehaviour
 {
@@ -91,7 +93,7 @@ public class WeaponLogic : NetworkBehaviour
 
         ownerClientId = NetworkManager.Singleton.LocalClientId;
 
-        if (IsServer)
+       /* if (IsServer)
         {
             if (!ShootConfig.IsHitScan)
             { BulletPool = new ObjectPool<MultiBullet>(CreateBullet); }
@@ -101,13 +103,18 @@ public class WeaponLogic : NetworkBehaviour
                 SFeatherPool = new ObjectPool<MultiBullet>(CreateBullet);
             }
 
-        }
+        }*/
 
     }
 
 
 
     public void Shoot()
+    {
+        ShootServerRpc();
+    }
+    [Rpc(SendTo.Server)]
+    public void ShootServerRpc()
     {
         if (Time.time > ShootConfig.FireRate + LastShootTime && bulletsLeft > 0 && !realoading)
         {
@@ -199,12 +206,14 @@ public class WeaponLogic : NetworkBehaviour
 
     private void DoProjectileShooting(Vector3 ShootDirection)
     {
-        MultiBullet bullet = BulletPool.Get();
+        NetworkObject netObject = networkObjectPool.GetNetworkObject(ShootConfig.BulletPrefabMulti.gameObject, ShootDirection,Quaternion.Euler(0,0,0));
+        MultiBullet bullet = netObject.GetComponent<MultiBullet>();
+        //MultiBullet bullet = BulletPool.Get();
+        // bullet.gameObject.SetActive(true);
+        bullet.Spawn(ShootDirection * ShootConfig.BulletSpawnForce);
 
-        bullet.gameObject.SetActive(true);
         bullet.OnCollision += HandleBulletCollision;
         bullet.transform.position = ShootSystem.transform.position;
-        bullet.Spawn(ShootDirection * ShootConfig.BulletSpawnForce);
 
         // El trail de la bala podemos decidir si ponerlo en la bala, o usar el mismo pool que con el hitscan
 
@@ -291,12 +300,6 @@ public class WeaponLogic : NetworkBehaviour
     {
         // En caso de usar la pool de trail, hay que desactivarla desde aqui
 
-        if (ShootConfig.ShootingType != ShootType.Special)
-        {
-            bullet.gameObject.SetActive(false);
-            networkObjectPool.ReturnNetworkObject(bullet.GetComponent<NetworkObject>(), ShootConfig.BulletPrefabMulti.gameObject);
-        }
-
         if (collision != null)
         {
             ContactPoint contactPoint = collision.GetContact(0);
@@ -313,6 +316,13 @@ public class WeaponLogic : NetworkBehaviour
                 enemyM.TakeDamageRpc(Damage);
             }
         }
+
+                if (ShootConfig.ShootingType != ShootType.Special)
+        {
+            //bullet.gameObject.SetActive(false);
+            networkObjectPool.ReturnNetworkObject(bullet.GetComponent<NetworkObject>(), ShootConfig.BulletPrefabMulti.gameObject);
+        }
+
     }
     private void HandleGoldenBulletCollision(MultiBullet bullet, Collision collision)
     {
@@ -333,7 +343,6 @@ public class WeaponLogic : NetworkBehaviour
     private MultiBullet CreateBullet()
     {
         NetworkObject bulletObj = networkObjectPool.GetNetworkObject(ShootConfig.BulletPrefabMulti.gameObject,Vector3.zero,Quaternion.Euler(0f, 0f, 0f));
-        bulletObj.Spawn();
         return bulletObj.GetComponent<MultiBullet>();
     }
    
