@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
-using UnityEngine.Pool;
 using TMPro;
 using Unity.Cinemachine;
-using System.Runtime.InteropServices;
-using UnityEngine.Animations;
-using Unity.VisualScripting;
 using System;
 
 
@@ -115,10 +111,10 @@ public class GunManagerMulti2 : NetworkBehaviour
             weapon.Shoot();
 
         }
-        else if (weapon.bulletsLeft <= 0 && !weapon.realoading) {
+        /*else if (IsServer && weapon.BulletsLeft <= 0 && !weapon.realoading) {
             RealoadGun();
-        }
-        UIManager.Singleton.GetPlayerActualAmmo(weapon.bulletsLeft, weapon.MagazineSize);
+        }*/
+        UIManager.Singleton.GetPlayerActualAmmo(weapon.BulletsLeft, weapon.MagazineSize);
 
         if (actualTotalAmmo.Value > MaxTotalAmmo) {
             SendActualAmmoRpc(MaxTotalAmmo);
@@ -202,6 +198,7 @@ public class GunManagerMulti2 : NetworkBehaviour
         // CurrentGun.ShootSystem = CurrentGun.Model.GetComponentInChildren<ParticleSystem>();
         gunRig = CurrentGun.Model.transform;
         weapon = spawnGun.gameObject.GetComponent<WeaponLogic>();
+        if (IsServer) weapon.OnEmptyAmmo += RealoadGun;
         if (UIManager.Singleton && IsOwner) UIManager.Singleton.GetPlayerGunInfo(CurrentGunBulletsLeft.Value, weapon.MagazineSize,CurrentGun);
         crosshairManager.SetCrosshairImage(CurrentGun.CrosshairImage);
 
@@ -237,6 +234,7 @@ public class GunManagerMulti2 : NetworkBehaviour
     [Rpc(SendTo.Server)]
     public void DespawnRpc()
     {
+        weapon.OnEmptyAmmo -= RealoadGun;
         weapon.gameObject.SetActive(false);
         weapon.GetComponent<NetworkObject>().Despawn();
         Destroy(weapon);
@@ -291,7 +289,7 @@ public class GunManagerMulti2 : NetworkBehaviour
 
     public void ChangeWeapon() {
         GunType tempType = CurrentGun.Type;
-        int tempAmmo = weapon.bulletsLeft;
+        int tempAmmo = weapon.BulletsLeft;
 
         ChangeWeaponRpc(tempType,tempAmmo);
         
@@ -341,7 +339,7 @@ public class GunManagerMulti2 : NetworkBehaviour
     [Rpc(SendTo.Owner)]
     private void SyncWeaponAmmoClientRpc(int ammo)
     {
-        weapon.bulletsLeft = ammo;
+        weapon.BulletsLeft = ammo;
         
     }
 
@@ -352,7 +350,7 @@ public class GunManagerMulti2 : NetworkBehaviour
                 ChangeSecondGunTypeRpc(CurrentGun.Type);
             }
             ChangeSecondGunTypeRpc(CurrentGun.Type);
-            SendSecondaryGunBulletsLeftRpc(weapon.bulletsLeft);
+            SendSecondaryGunBulletsLeftRpc(weapon.BulletsLeft);
             DespawnRpc();
             Gun = gunPicked;
             GunScriptableObject gun = gunsList.Find(gun => gun.Type == gunPicked);
@@ -397,7 +395,7 @@ public class GunManagerMulti2 : NetworkBehaviour
         int totalAmmo = actualTotalAmmo.Value - (weapon.MagazineSize - weapon.BulletsLeft);
         SendActualAmmoRpc(totalAmmo);
         weapon.Reload();
-        if (UIManager.Singleton && IsOwner)
+        if (UIManager.Singleton)
         {
             UIManager.Singleton.GetPlayerTotalAmmo(totalAmmo);
         }

@@ -2,8 +2,6 @@ using System.Collections;
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.Pool;
-using UnityEditor.Rendering;
-using UnityEngine.UIElements;
 
 public class WeaponLogic : NetworkBehaviour
 {
@@ -25,13 +23,14 @@ public class WeaponLogic : NetworkBehaviour
     public GameObject Model;
     public Camera activeCamera;
     public float LastShootTime;
-    public int bulletsLeft;
+    private NetworkVariable<int> bulletsLeft = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
     public int BulletsLeft
     {
-        get => bulletsLeft;
+        get => bulletsLeft.Value;
         set
         {
-            bulletsLeft = value;
+            if (IsServer)
+                bulletsLeft.Value = value;
         }
     }
     public bool realoading;
@@ -45,6 +44,10 @@ public class WeaponLogic : NetworkBehaviour
     public ObjectPool<MultiBullet> GFeatherPool;
     public ObjectPool<MultiBullet> SFeatherPool;
 
+    public delegate void EmptyAmmo();
+    public event EmptyAmmo OnEmptyAmmo;
+
+
     private NetworkObjectPool networkObjectPool;
     // Añade esta propiedad para obtener el ID del jugador dueño
     private ulong ownerClientId;
@@ -54,13 +57,13 @@ public class WeaponLogic : NetworkBehaviour
     {
         if (IsServer)
         {
-            bulletsLeft = amount;
+            bulletsLeft.Value = amount;
         }
     }
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-       
+
 
 
         networkObjectPool = NetworkObjectPool.Singleton.GetComponent<NetworkObjectPool>();
@@ -68,7 +71,7 @@ public class WeaponLogic : NetworkBehaviour
         activeCamera = Camera.main;
 
         Model = gameObject;
-        bulletsLeft = currentGun.bulletsLeft;
+        BulletsLeft = currentGun.bulletsLeft;
         MagazineSize = currentGun.MagazineSize;
 
         Type = currentGun.Type;
@@ -83,27 +86,27 @@ public class WeaponLogic : NetworkBehaviour
 
         //ActiveMonoBehaviour = currentGun.ActiveMonoBehaviour; //Este es el que entiendo que debe dar porblemas
         LastShootTime = currentGun.LastShootTime;
-        
+
         realoading = currentGun.Realoading;
         //TrailPool = currentGun.TrailPool;
         TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
 
-       
+
         ShootSystem = Model.GetComponentInChildren<ParticleSystem>();
 
         ownerClientId = NetworkManager.Singleton.LocalClientId;
 
-       /* if (IsServer)
-        {
-            if (!ShootConfig.IsHitScan)
-            { BulletPool = new ObjectPool<MultiBullet>(CreateBullet); }
-            if (ShootConfig.ShootingType == ShootType.Special)
-            {
-                GFeatherPool = new ObjectPool<MultiBullet>(CreateBullet);
-                SFeatherPool = new ObjectPool<MultiBullet>(CreateBullet);
-            }
+        /* if (IsServer)
+         {
+             if (!ShootConfig.IsHitScan)
+             { BulletPool = new ObjectPool<MultiBullet>(CreateBullet); }
+             if (ShootConfig.ShootingType == ShootType.Special)
+             {
+                 GFeatherPool = new ObjectPool<MultiBullet>(CreateBullet);
+                 SFeatherPool = new ObjectPool<MultiBullet>(CreateBullet);
+             }
 
-        }*/
+         }*/
 
     }
 
@@ -116,11 +119,15 @@ public class WeaponLogic : NetworkBehaviour
     [Rpc(SendTo.Server)]
     public void ShootServerRpc()
     {
-        if (Time.time > ShootConfig.FireRate + LastShootTime && bulletsLeft > 0 && !realoading)
+        if (Time.time > ShootConfig.FireRate + LastShootTime && BulletsLeft > 0 && !realoading)
         {
             LastShootTime = Time.time;
             ShootVFXRpc();
-            bulletsLeft -= ShootConfig.BulletsPerShot;
+            BulletsLeft -= ShootConfig.BulletsPerShot;
+            if (BulletsLeft <= 0)
+            {
+                OnEmptyAmmo?.Invoke();
+            }
 
             for (int i = 0; i < ShootConfig.BulletsPerShot; i++)
             {
@@ -181,11 +188,11 @@ public class WeaponLogic : NetworkBehaviour
         }
         else
         {
-                StartCoroutine(PlayTrail(
-                TrailOrigin,
-                TrailOrigin + (shootDirection * TrailConfig.MissDistance),
-                new RaycastHit())
-                );
+            StartCoroutine(PlayTrail(
+            TrailOrigin,
+            TrailOrigin + (shootDirection * TrailConfig.MissDistance),
+            new RaycastHit())
+            );
         }
     }
 
@@ -206,16 +213,35 @@ public class WeaponLogic : NetworkBehaviour
 
     private void DoProjectileShooting(Vector3 ShootDirection)
     {
-        NetworkObject netObject = networkObjectPool.GetNetworkObject(ShootConfig.BulletPrefabMulti.gameObject, ShootDirection,Quaternion.Euler(0,0,0));
+        NetworkObject netObject = networkObjectPool.GetNetworkObject(ShootConfig.BulletPrefabMulti.gameObject, ShootDirection, Quaternion.Euler(0, 0, 0));
+        if (!netObject.IsSpawned) netObject.Spawn();
         MultiBullet bullet = netObject.GetComponent<MultiBullet>();
         //MultiBullet bullet = BulletPool.Get();
         // bullet.gameObject.SetActive(true);
-        bullet.Spawn(ShootDirection * ShootConfig.BulletSpawnForce);
-
+        //bullet.Spawn(ShootDirection * ShootConfig.BulletSpawnForce);
+        GetBulletRpc(netObject.NetworkObjectId, ShootDirection);
         bullet.OnCollision += HandleBulletCollision;
-        bullet.transform.position = ShootSystem.transform.position;
+
 
         // El trail de la bala podemos decidir si ponerlo en la bala, o usar el mismo pool que con el hitscan
+
+    }
+    [Rpc(SendTo.Everyone)]
+    public void GetBulletRpc(ulong modelNetworkObjectId, Vector3 shootDirection)
+    {
+        // Obtén el NetworkObject correspondiente al ID
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(modelNetworkObjectId, out NetworkObject spawnBullet))
+        {
+            if (IsClient) spawnBullet.gameObject.SetActive(true);
+
+            MultiBullet bullet = spawnBullet.GetComponent<MultiBullet>();
+            bullet.Spawn(shootDirection * ShootConfig.BulletSpawnForce);
+            bullet.transform.position = ShootSystem.transform.position;
+        }
+        else
+        {
+            Debug.LogError("Failed to find NetworkObject with ID: " + modelNetworkObjectId);
+        }
 
     }
 
@@ -247,6 +273,11 @@ public class WeaponLogic : NetworkBehaviour
 
     public void Reload()
     {
+        ReloadRpc();
+    }
+    [Rpc(SendTo.Server)]
+    public void ReloadRpc()
+    {
         realoading = true;
         //Invoke("FinishedReload", ReloadTime);
         StartCoroutine(ReloadingCoroutine());
@@ -258,7 +289,7 @@ public class WeaponLogic : NetworkBehaviour
     }
     private void FinishedReload()
     {
-        bulletsLeft = MagazineSize;
+        BulletsLeft = MagazineSize;
         realoading = false;
         //Debug.Log("Fin de la recarga");
     }
@@ -298,6 +329,7 @@ public class WeaponLogic : NetworkBehaviour
 
     private void HandleBulletCollision(MultiBullet bullet, Collision collision)
     {
+        if (!IsServer) return;
         // En caso de usar la pool de trail, hay que desactivarla desde aqui
 
         if (collision != null)
@@ -317,10 +349,12 @@ public class WeaponLogic : NetworkBehaviour
             }
         }
 
-                if (ShootConfig.ShootingType != ShootType.Special)
+        if (ShootConfig.ShootingType != ShootType.Special)
         {
             //bullet.gameObject.SetActive(false);
-            networkObjectPool.ReturnNetworkObject(bullet.GetComponent<NetworkObject>(), ShootConfig.BulletPrefabMulti.gameObject);
+            NetworkObject netObj = bullet.gameObject.GetComponent<NetworkObject>();
+            networkObjectPool.ReturnNetworkObject(netObj, ShootConfig.BulletPrefabMulti.gameObject);
+            ReturnBulletRpc(netObj.NetworkObjectId);
         }
 
     }
@@ -337,7 +371,7 @@ public class WeaponLogic : NetworkBehaviour
     {
         bullet.gameObject.SetActive(false);
         GFeatherPool.Release(bullet);
-        bulletsLeft = 1;
+        BulletsLeft = 1;
     }
 
     private MultiBullet CreateBullet()
@@ -368,5 +402,21 @@ public class WeaponLogic : NetworkBehaviour
     {
         ShootSystem.Play();
     }
+    [Rpc(SendTo.Everyone)]
+    public void ReturnBulletRpc(ulong modelNetworkObjectId) 
+    {
+        if (!IsClient) return;
 
+        // Obtén el NetworkObject correspondiente al ID
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(modelNetworkObjectId, out NetworkObject spawnBullet))
+        {
+            //spawnBullet.Despawn();
+            spawnBullet.gameObject.SetActive(false);
+
+        }
+        else
+        {
+            Debug.LogError("Failed to find NetworkObject with ID: " + modelNetworkObjectId);
+        }
+    }
 }
