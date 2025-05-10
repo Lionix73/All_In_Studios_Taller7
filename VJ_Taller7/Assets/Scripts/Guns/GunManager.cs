@@ -6,6 +6,7 @@ using TMPro;
 using Unity.Cinemachine;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using NUnit.Framework;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(CrosshairManager))]
 public class GunManager : MonoBehaviour
@@ -13,17 +14,18 @@ public class GunManager : MonoBehaviour
     [Header("Camera")]
     public Camera Camera; public CinemachineBrain cinemachineBrain; GameObject playerObject;
     private PlayerController player;
-    [Header("Managers")]
+    [Space][Header("Managers")]
     public CrosshairManager crosshairManager;  
     private ThisObjectSounds soundManager; private Animator playerAnimator;
-    [Header("Ammo Info")]
+    [Space][Header("Ammo Info")]
     public int actualTotalAmmo; //Cuanta municion tiene el jugador
     [SerializeField] private int MaxTotalAmmo; //Cuanta municion puede llevar el jugador
 
     public TextMeshProUGUI totalAmmoDisplay; //UI de la municion total que le queda al jugador
     public TextMeshProUGUI ammunitionDisplay; //UI de la municion que le queda en el cargador
 
-    [Header("Gun General Info")]
+    [Space][Header("Gun General Info")]
+    [SerializeField] private int basePlayerDamage; //Con este se escala el game
     [Tooltip("Lista de las armas que existen en el juego")]
     [SerializeField] private List<GunScriptableObject> gunsList;
     [SerializeField] private Transform gunParent;
@@ -113,6 +115,8 @@ public class GunManager : MonoBehaviour
     private void SetUpGun(GunScriptableObject gun){
         CurrentGun = gun.Clone() as GunScriptableObject;
         CurrentGun.Spawn(gunParent, this, Camera);
+
+        CurrentGun.Damage += basePlayerDamage;
         if (UIManager.Singleton != null)
         {
             UIManager.Singleton.GetPlayerGunInfo(CurrentGun.BulletsLeft, CurrentGun.MagazineSize, CurrentGun);
@@ -382,6 +386,10 @@ public class GunManager : MonoBehaviour
     }
     public void CheckZoomOut(){
         crosshairManager.AimingZoomOut();
+    }
+
+    public void ScaleDamage(int damageToAdd){
+        basePlayerDamage += damageToAdd;
     }
 
     

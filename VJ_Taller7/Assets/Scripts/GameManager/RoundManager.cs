@@ -24,6 +24,8 @@ public class RoundManager : MonoBehaviour
     [SerializeField] private int waveValueScaleMult; //factor de aumento de la cantidad de valor de la wave
     [Tooltip("Tiempo adicional que dura la oleada")]
     [SerializeField] private float waveDurationScaleAdd; //Tiempo que se suma para cada oleada
+    [Tooltip("Tiempo maximo al que pueden escalar las oleadas")]
+    [SerializeField] private float maximunTimeForWaves = 120;
     
     [Space]
     [Tooltip("Enemigos en cola generados para esta oleada")]
@@ -63,8 +65,11 @@ public class RoundManager : MonoBehaviour
     [SerializeField] private bool _BalncingInThis = false;
 
     //[Header("Eventos")]
-    public delegate void WaveComplete();
+    public delegate void WaveStarted();
+    public delegate void WaveComplete(bool completeSatisfactory);
     public delegate void RoundComplete();
+
+    public event WaveStarted OnWaveStart;
     public event WaveComplete OnWaveComplete;
     public event RoundComplete OnRoundComplete;
 
@@ -109,7 +114,7 @@ public class RoundManager : MonoBehaviour
         if (aliveEnemies == 0 && !inBetweenRounds && enemiesKilledOnWave>1){
             
             inBetweenRounds = true; //Next round
-            OnWaveComplete?.Invoke(); //Se completo exitosamente la oleada, solo cuando acaba por matar a todos los enemigos
+            OnWaveComplete?.Invoke(true); //Se completo exitosamente la oleada, solo cuando acaba por matar a todos los enemigos
             enemiesKilledOnWave = 0;
         }
 
@@ -154,8 +159,11 @@ public class RoundManager : MonoBehaviour
             if(UIManager.Singleton) UIManager.Singleton.UIActualWave(currentWave);
 
             if (_BalncingInThis) SendWave(enemyIndex); //sin el balance del manager de Alejo (no lo usaremos pero dejemoslo ahi '.')
+
             inBetweenRounds = false;
             inBetweenRoundsTimer = inBetweenRoundsWaitTime;
+
+            OnWaveStart?.Invoke(); //Comienza la oleada
             }
         }
         else {
@@ -165,8 +173,9 @@ public class RoundManager : MonoBehaviour
             //End round
             inBetweenRounds = true;
 
-            //castigar por no completar
+            //castigar por no completar satisfactoriamente
             //aumentar el escalado de los enemigos o repetir
+            OnWaveComplete?.Invoke(false);
             }
         }
     }
@@ -175,6 +184,7 @@ public class RoundManager : MonoBehaviour
         if (_BalncingInThis){
             waveValue = currentWave * waveValueScaleMult * currentRound ; //current round en review por balance, seguramente sea un scaleRounsMult
             waveDuration += currentWave * waveDurationScaleAdd;
+            if (waveDuration > maximunTimeForWaves) waveDuration =maximunTimeForWaves;
 
             GenerateEnemies();
             
@@ -182,6 +192,7 @@ public class RoundManager : MonoBehaviour
         }
         else {
             waveDuration += currentWave * waveDurationScaleAdd;
+            if (waveDuration > maximunTimeForWaves) waveDuration =maximunTimeForWaves;
             //List<WeightedSpawnScriptableObject> temp = GameManager.Instance.GetBalanceWave(currentWave);
             //enemyWavesManager.RecieveWaveLimits(temp);
             enemyWavesManager.RecieveWaveOrder(level, waveSize);

@@ -14,11 +14,14 @@ public class GameManager : MonoBehaviour
     [Header("Game State")]
     public bool isPaused;
     public bool isGameOver;
+    public bool allowPlayerRespawn;
     [Tooltip("Si queremos que spawnee un jugador, mas que nada para el editor")]
     public bool spawnPlayerWithMenu = false;
 
     public Transform spawntPoint;
     public GameObject playerPrefab;
+
+    [SerializeField] private GameObject GunShop;
 
     //public List<GameObject> activePlayers = new List<GameObject>();
 
@@ -61,6 +64,8 @@ public class GameManager : MonoBehaviour
         SpawnPlayer();
 
         // Crear la logica para el juego en si
+        roundManager.OnWaveStart += WaveStarted;
+        roundManager.OnWaveComplete += WaveFinished;
 
     }
 
@@ -84,7 +89,7 @@ public class GameManager : MonoBehaviour
 
         if (spawnPlayerWithMenu) return;
 
-        playerManager.RespawnPlayerOrder(playerPrefab,spawntPoint);
+        if (allowPlayerRespawn) playerManager.RespawnPlayerOrder(playerPrefab,spawntPoint);
         
     }
     //Para que todo lo que necesite al player lo encuentre una vez que se haya creado; NOTA: Siempre al final de la función
@@ -112,6 +117,19 @@ public class GameManager : MonoBehaviour
         //Evento de victoria si es necesario
         
     }
+
+    public void WaveStarted(){
+        GunShop?.SetActive(false);
+    }
+    
+    private void WaveFinished(bool killedAll){
+        GunShop?.SetActive(true);
+
+        if (killedAll) gunManager.ScaleDamage(10);
+        //El escalado de las armas tengo que mirar si hacerlo que cada arma tenga su esacalado, o un entero pa todas
+        //La segunda opcion me gusta mas porque es mas facil de hacer... xd
+    }
+    
 
     /*
     public List<WeightedSpawnScriptableObject> GetBalanceWave(int wave){
