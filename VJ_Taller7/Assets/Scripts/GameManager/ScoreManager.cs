@@ -19,6 +19,7 @@ public class ScoreManager : MonoBehaviour
 
     public void SetScore(float sco){
         score += sco;
+        GameManager.Instance.ScoreChange(score);
         if(UIManager.Singleton) UIManager.Singleton.GetPlayerActualScore(score);
         if (_UIscoreText==null) return;
         _UIscoreText.text = $"{score}";

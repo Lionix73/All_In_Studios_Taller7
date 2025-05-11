@@ -34,10 +34,14 @@ public class GameManager : MonoBehaviour
     public GunManager gunManager;
     public ChallengeManager challengeManager;
 
+    [Header("Events")] private string paPonerElHeaderXD;
+
     public delegate void OnPlayerSpawn(GameObject player); //Para que todo lo que necesite al player lo encuentre
     public delegate void OnPlayerDeath(GameObject player);
+    public delegate void OnScoreChange(float actualScore);
     public event OnPlayerSpawn PlayerSpawned;
     public event OnPlayerDeath PlayerDie;
+    public event OnScoreChange ScoreChanged;
 
     //[Header("Balance")]
     [SerializeField] public List<WaveRestriction> availableEnemiesForWave = new List<WaveRestriction>();
@@ -128,6 +132,10 @@ public class GameManager : MonoBehaviour
         if (killedAll) gunManager.ScaleDamage(10);
         //El escalado de las armas tengo que mirar si hacerlo que cada arma tenga su esacalado, o un entero pa todas
         //La segunda opcion me gusta mas porque es mas facil de hacer... xd
+    }
+
+    public void ScoreChange(float actualScore){
+        ScoreChanged?.Invoke(actualScore);
     }
     
 

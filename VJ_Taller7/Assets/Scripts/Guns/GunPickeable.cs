@@ -5,6 +5,7 @@ public class GunPickeable : MonoBehaviour
 {
     [SerializeField] private GunType gunType;
     [SerializeField] private GameObject PickeableUI;
+    [SerializeField] private GameObject priceTagObject; //Por si queremos condicionar cuando se muestre
     [SerializeField] private GameObject GunModel;
     [SerializeField] private ObjectLookAtCamera lookCamera;
     [SerializeField] private TextMeshProUGUI gunNameText;
@@ -20,6 +21,11 @@ public class GunPickeable : MonoBehaviour
     private void Awake() {
         //gunName.SetText(gunType.ToString() + "\n" + "Press E to pick up");
 
+        GameManager.Instance.ScoreChanged += CheckIfBuyable;
+        GameManager.Instance.PlayerSpawned += GetPlayer;
+        
+        priceTagObject = transform.Find("GunPriceTag").gameObject;
+
         PickeableUI = GetComponentInChildren<ObjectLookAtCamera>().gameObject;
         lookCamera = PickeableUI.GetComponentInChildren<ObjectLookAtCamera>();
 
@@ -34,14 +40,15 @@ public class GunPickeable : MonoBehaviour
                 fireRateText = text;
             } else if (text.name == "GunMagazine") {
                 magazineText = text;
-            } else if (text.name == "GunPrice"){
-                priceText = text;
             }
         }
 
+        priceText = priceTagObject.GetComponentInChildren<TextMeshProUGUI>();
+
+
         gunNameText.SetText(gunType.ToString());
         PickeableUI.SetActive(false);
-
+        
     }
 
     private void Update() {
@@ -50,14 +57,14 @@ public class GunPickeable : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            gunManager = FindFirstObjectByType<GunManager>();
+            
             //gunManager = other.gameObject.GetComponentInChildren<GunManager>();
             gunManager.EnterPickeableGun(gunType);
             GunScriptableObject gun = gunManager.GetGun(gunType); //Pa tomar lo que quiran del arma a pickear
             damageText.text = $"DMG: {gun.Damage}";
             fireRateText.text = $"Fire Rate: {gun.ShootConfig.FireRate}";
             magazineText.text = $"Magazine: {gun.MagazineSize}";
-            priceText.text = $"Price: {gun.scoreToBuy}";
+            
 
             //Pricetext.text= "gun.scoreToBuy" //Falta ponerlo de verdad
             PickeableUI.SetActive(true);
@@ -80,5 +87,16 @@ public class GunPickeable : MonoBehaviour
         if (other.CompareTag("Player")) {
             PickeableUI.SetActive(false);
         }
+    }
+
+    private void GetPlayer(GameObject player){
+        gunManager = player.GetComponentInChildren<GunManager>();
+        CheckIfBuyable(1f); //simplemente inicializar la interfaz de costo costo
+    }
+
+    private void CheckIfBuyable(float score){
+        GunScriptableObject gun = gunManager.GetGun(gunType);
+        priceText.text = $"{gun.scoreToBuy}"; //necesito porner el score desde el incio y no queria buscar otra vez el gun** 
+        priceText.color = score > gun.scoreToBuy ? Color.green: Color.red;
     }
 }
