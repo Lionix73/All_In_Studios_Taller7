@@ -306,6 +306,7 @@ public class MultiRoundManager : NetworkBehaviour
     /// <param name="e"></param>
     public void ChangeScore(EnemyMulti enemy, ulong attackerId)
     {
+        Debug.Log("cliente # " + attackerId + "Mato");
         MultiGameManager.Instance.PlayerScore(attackerId, enemy.scoreOnKill);
         //scoreManager.SetScore(enemy.scoreOnKill);
 

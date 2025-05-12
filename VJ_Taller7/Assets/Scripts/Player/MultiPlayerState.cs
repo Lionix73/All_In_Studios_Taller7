@@ -44,7 +44,7 @@ public class MultiPlayerState : NetworkBehaviour
             playerDamage.Value = 0;
             playerScore.Value = 0;
         }
-
+        if (!IsOwner) return;
         // Suscribirse a cambios en los puntajes
         playerKills.OnValueChanged += (oldValue, newValue) => UpdateScoreUI();
         playerDamage.OnValueChanged += (oldValue, newValue) => UpdateScoreUI();
