@@ -2338,7 +2338,6 @@ GameObject:
   - component: {fileID: 5902064282984539624}
   - component: {fileID: 2201402117764995550}
   - component: {fileID: 2682859476354308479}
-  - component: {fileID: 7764793127068733630}
   - component: {fileID: 7258361101043836823}
   - component: {fileID: 8949755250385114019}
   - component: {fileID: 1877245165220064511}
@@ -2414,6 +2413,9 @@ MonoBehaviour:
   agent: {fileID: 2201402117764995550}
   skills: []
   ragdollEnabler: {fileID: 5902064282984539624}
+  colliderEnemy:
+  - {fileID: 618059348984806366}
+  - {fileID: 6050876979636982520}
   health: 100
   healthBar: {fileID: 4863211529265534747}
   isStatic: 0
@@ -2496,29 +2498,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!136 &7764793127068733630
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4480754247436323794}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.25
-  m_Height: 1.5895488
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.7947744, z: 0}
 --- !u!95 &7258361101043836823
 Animator:
   serializedVersion: 7
@@ -4372,8 +4351,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.0924747
-  m_Center: {x: 0, y: 0.0924747, z: 0}
+  m_Radius: 0.25570786
+  m_Center: {x: -7.1102804e-16, y: 0.24303497, z: 0.012672347}
 --- !u!54 &8601471970424461254
 Rigidbody:
   m_ObjectHideFlags: 0

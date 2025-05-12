@@ -195,7 +195,6 @@ public class EnemySpawner : MonoBehaviour
                 //Enable Collider and Disable Ragdoll
                 enemy.RagdollEnabler.EnableAnimator();
                 enemy.RagdollEnabler.DisableAllRigidbodies();
-                enemy.ColliderEnemy.enabled = true;
                 enemy.IsDead = false;
 
                 //Set Enemy Properties

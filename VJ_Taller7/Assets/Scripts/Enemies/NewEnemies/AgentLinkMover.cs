@@ -48,12 +48,12 @@ public class AgentLinkMover : MonoBehaviour
                         }
                         else if ((config != null && config.m_Method == OffMeshLinkMoveMethod.Parabola) || (config == null && defaultMoveMethod == OffMeshLinkMoveMethod.Parabola)){
                             OnLinkStart?.Invoke(OffMeshLinkMoveMethod.Parabola);
-                            yield return StartCoroutine(MoveParabola(agent, parabolaHeight, Vector3.Distance(data.startPos, data.endPos) / agent.speed));
+                            yield return StartCoroutine(MoveParabola(agent, parabolaHeight, 0.7f));
                             OnLinkEnd?.Invoke(OffMeshLinkMoveMethod.Parabola);
                         }
                         else if (config != null && config.m_Method == OffMeshLinkMoveMethod.Curve || (config == null && defaultMoveMethod == OffMeshLinkMoveMethod.Curve)){
                             OnLinkStart?.Invoke(OffMeshLinkMoveMethod.Curve);
-                            yield return StartCoroutine(MoveCurve(agent, Vector3.Distance(data.startPos, data.endPos) / agent.speed));
+                            yield return StartCoroutine(MoveCurve(agent, 0.7f));
                             OnLinkEnd?.Invoke(OffMeshLinkMoveMethod.Curve);
                         }
                         else if((config != null && config.m_Method == OffMeshLinkMoveMethod.Teleport) || (config == null && defaultMoveMethod == OffMeshLinkMoveMethod.Teleport)){

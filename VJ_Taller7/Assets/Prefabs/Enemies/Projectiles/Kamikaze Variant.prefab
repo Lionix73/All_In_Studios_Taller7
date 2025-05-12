@@ -119,6 +119,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+    - target: {fileID: 3297269915966290220, guid: b3a62e98da1604449b38caa074d6a808, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2445ae2e7a1bbae43873c1829d527a70, type: 2}
     - target: {fileID: 4337251375364151362, guid: b3a62e98da1604449b38caa074d6a808, type: 3}
       propertyPath: m_Name
       value: Kamikaze Variant
@@ -241,7 +245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoDestroyTime: 10
   moveSpeed: 0.1
-  damage: 35
+  damage: 20
   waitForDisable: 3
   bulletCollisionEffect: {fileID: 0}
   bulletModel: {fileID: 4390139236360449951}
@@ -249,7 +253,7 @@ MonoBehaviour:
   damageableLayer:
     serializedVersion: 2
     m_Bits: 576
-  upwardForce: 0.1
+  upwardForce: 2
   explosionDelay: 0
   explosionEffect: {fileID: 8441963758225538964}
 --- !u!114 &2896004596706925338

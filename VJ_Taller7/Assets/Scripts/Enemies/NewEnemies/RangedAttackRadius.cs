@@ -59,6 +59,11 @@ public class RangedAttackRadius : AttackRadius
             for (int i = 0; i < damageables.Count; i++)
             {
                 if(HasLineOfSight(damageables[i].GetTransform())){
+                    float distanceToPlayer = Vector3.Distance(enemy.transform.position, damageables[i].GetTransform().position);
+                    if (distanceToPlayer < sphereCollider.radius * 0.9f)
+                    {
+                        enemy.Movement.MoveToAttackDistance(sphereCollider.radius);
+                    }
                     if(OnRangeBehvaior == OnRangeBehvaior.Stop){
                         enemy.Movement.StopMovement();
                     }

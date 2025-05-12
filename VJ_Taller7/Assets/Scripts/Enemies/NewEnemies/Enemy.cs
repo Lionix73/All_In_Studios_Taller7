@@ -37,8 +37,9 @@ public class Enemy : PoolableObject, IDamageable
         get => ragdollEnabler;
         set => ragdollEnabler = value;
     }
-    private Collider colliderEnemy;
-    public Collider ColliderEnemy{
+
+    [SerializeField] private Collider[] colliderEnemy;
+    public Collider[] ColliderEnemy{
         get => colliderEnemy;
         set => colliderEnemy = value;
     }
@@ -127,7 +128,6 @@ public class Enemy : PoolableObject, IDamageable
     private void Awake()
     {
         attackRadius.Player = Player;
-        colliderEnemy = GetComponent<Collider>();
         soundManager = GetComponent<ThisObjectSounds>();
         AttackRadius.OnAttack += OnAttack;
 
@@ -252,7 +252,12 @@ public class Enemy : PoolableObject, IDamageable
         yield return new WaitForSeconds(fadeOutDelay);
 
         if(ragdollEnabler != null){
-            colliderEnemy.enabled = false;
+
+            foreach (Collider collider in colliderEnemy)
+            {
+                collider.enabled = false;
+            }
+
             ragdollEnabler.DisableAllRigidbodies();
         }
 

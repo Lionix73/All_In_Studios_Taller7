@@ -211,7 +211,6 @@ public class EnemyWavesManager : MonoBehaviour
                 //Enable Collider and Disable Ragdoll
                 enemy.RagdollEnabler.EnableAnimator();
                 enemy.RagdollEnabler.DisableAllRigidbodies();
-                enemy.ColliderEnemy.enabled = true;
                 enemy.IsDead = false;
 
                 enemy.MainCamera = mainCamera;

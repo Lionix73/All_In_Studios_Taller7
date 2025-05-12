@@ -340,6 +340,18 @@ public class EnemyMovement : MonoBehaviour
         return center;
     }
 
+    public void MoveToAttackDistance(float attackRadius)
+    {
+        if (player == null) return;
+        Vector3 direction = (transform.position - player.position).normalized;
+        Vector3 targetPosition = player.position + direction * attackRadius;
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(targetPosition, out hit, 2f, agent.areaMask))
+        {
+            agent.SetDestination(hit.position);
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         for(int i = 0; i < waypoints.Length; i++){
