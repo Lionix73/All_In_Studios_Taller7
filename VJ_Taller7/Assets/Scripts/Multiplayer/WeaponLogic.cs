@@ -49,9 +49,6 @@ public class WeaponLogic : NetworkBehaviour
 
 
     private NetworkObjectPool networkObjectPool;
-    // Añade esta propiedad para obtener el ID del jugador dueño
-    private ulong ownerClientId;
-    public ulong OwnerClientId => ownerClientId;
 
     public void SetBullets(int amount)
     {
@@ -94,8 +91,6 @@ public class WeaponLogic : NetworkBehaviour
 
         ShootSystem = Model.GetComponentInChildren<ParticleSystem>();
 
-        ownerClientId = NetworkManager.Singleton.LocalClientId;
-
         /* if (IsServer)
          {
              if (!ShootConfig.IsHitScan)
@@ -112,12 +107,12 @@ public class WeaponLogic : NetworkBehaviour
 
 
 
-    public void Shoot()
+    public void Shoot(ulong ownerClientId)
     {
-        ShootServerRpc();
+        ShootServerRpc(ownerClientId);
     }
     [Rpc(SendTo.Server)]
-    public void ShootServerRpc()
+    public void ShootServerRpc(ulong ownerClientId)
     {
         if (Time.time > ShootConfig.FireRate + LastShootTime && BulletsLeft > 0 && !realoading)
         {
@@ -152,7 +147,7 @@ public class WeaponLogic : NetworkBehaviour
                 switch (ShootConfig.ShootingType)
                 {
                     case ShootType.HitScan:
-                        DoHitScanShooting(shootDirection, ShootSystem.transform.position, ShootSystem.transform.position);
+                        DoHitScanShooting(shootDirection, ShootSystem.transform.position, ShootSystem.transform.position, ownerClientId);
                         return;
                     case ShootType.Projectile:
                         DoProjectileShooting(shootDirection);
@@ -165,7 +160,7 @@ public class WeaponLogic : NetworkBehaviour
         }
     }
 
-    private void DoHitScanShooting(Vector3 shootDirection, Vector3 Origin, Vector3 TrailOrigin, int Iteration = 0)
+    private void DoHitScanShooting(Vector3 shootDirection, Vector3 Origin, Vector3 TrailOrigin, ulong ownerClientId, int Iteration = 0)
     {
         if (Physics.Raycast(Origin,
                             shootDirection,
@@ -180,9 +175,9 @@ public class WeaponLogic : NetworkBehaviour
                 enemy.TakeDamageRpc(Damage);
 
             }
-            else if (hit.collider.TryGetComponent(out IDamageable enemyDmg))
+            else if (hit.collider.TryGetComponent(out IDamageableMulti enemyDmg))
             {
-                enemyDmg.TakeDamage(Damage); //simplemente saber si se puede hacer daño, me falta por ver si específicar los críticos
+                enemyDmg.TakeDamage(Damage, ownerClientId); //simplemente saber si se puede hacer daño, me falta por ver si específicar los críticos
             }
 
         }
@@ -339,9 +334,9 @@ public class WeaponLogic : NetworkBehaviour
             Collider colliderHit = contactPoint.otherCollider;
             if (colliderHit.gameObject.layer != LayerMask.NameToLayer("Enemy")) return;
 
-            if (colliderHit.TryGetComponent(out IDamageable enemy))
+            if (colliderHit.TryGetComponent(out IDamageableMulti enemy))
             {
-                enemy.TakeDamage(Damage);
+                enemy.TakeDamage(Damage, OwnerClientId);
             }
             else if (colliderHit.TryGetComponent(out EnemyHealthMulti enemyM))
             {

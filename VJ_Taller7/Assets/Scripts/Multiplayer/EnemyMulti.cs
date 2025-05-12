@@ -7,7 +7,7 @@ using Unity.Netcode;
 using PimDeWitte.UnityMainThreadDispatcher;
 
 
-public class EnemyMulti : PoolableObjectMulti, IDamageable
+public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
 {
     [Header("Enemy Components")]
     [SerializeField] private MultiAttackRadius attackRadius;
@@ -203,10 +203,11 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
 
     private void Update()
     {
-        if (!IsServer) return;
         if (IsDead) return;
-
         BlinkEffect();
+        if (!IsServer) return;
+
+
         if (Player == null) return;
 
         for (int i = 0; i < skills.Length; i++)
@@ -268,12 +269,12 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
         }
     }
     [Rpc(SendTo.Server)]
-    public void TakeDamageRpc(int damage)
+    public void TakeDamageRpc(int damage, ulong clientId)
     {
+        lastAttackerId = clientId;
         //networkHealth.Value -= damage;
         int actualHealth = Health - damage;
         Health = actualHealth;
-        blinkTimer = blinkDuration;
 
         movement.State = EnemyState.Chase;
 
@@ -314,20 +315,17 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
     private void HandleDeathOnServerRpc()
     {
 
-        // Ejecutar eventos locales en el servidor
-        // Opción 1 (Recomendada para NGO):
-        UnityMainThreadDispatcher.Instance().Enqueue(() => OnDie?.Invoke(this));
         Debug.Log("Enemigo Muerto");
         // Replicar a todos los clientes
         DiedAnimationRpc();
 
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, ulong clientId)
     {
         if (IsDead) return;
 
-        TakeDamageRpc(damage);
+        TakeDamageRpc(damage, clientId);
     }
 
     [Rpc(SendTo.Everyone)]
@@ -392,6 +390,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
     [Rpc(SendTo.Everyone)]
     public void HealthBarProgressRpc(int currentHealth, float maxHealth)
     {
+        blinkTimer = blinkDuration;
         healthBar.SetProgress(currentHealth / maxHealth, 3);
     }
     [Rpc(SendTo.Everyone)]
@@ -408,8 +407,6 @@ public class EnemyMulti : PoolableObjectMulti, IDamageable
     }
     public void BlinkEffect()
     {
-        if (!IsServer) return;
-        
         if (skinnedMeshRenderers == null || skinnedMeshRenderers.Length == 0) return;
 
         blinkTimer -= Time.deltaTime;
