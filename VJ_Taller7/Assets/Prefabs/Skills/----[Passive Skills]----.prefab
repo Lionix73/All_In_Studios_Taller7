@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1889843567822453186}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -51,6 +51,8 @@ MonoBehaviour:
   passiveSkills:
   - {fileID: 8147960421917973425}
   - {fileID: 6971882239373132954}
+  - {fileID: 1732501204434326382}
+  - {fileID: 8069434049012679828}
   activeSkillIndex: 0
 --- !u!1 &3580992561230182990
 GameObject:
@@ -61,8 +63,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5711558237384975057}
+  - component: {fileID: 1732501204434326382}
   m_Layer: 6
-  m_Name: NoFriendsInWar *WIP*
+  m_Name: NoFriendsInWar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83,6 +86,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 56692207260540717}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1732501204434326382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3580992561230182990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd0591b81cd80e40a12642690f814fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillInfo: {fileID: 11400000, guid: fc94c1b70d1406c4880409563b007f4d, type: 2}
+  increasedDamagePercentage: 15
 --- !u!1 &5652501580672440393
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,8 +155,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 18455343290712403}
+  - component: {fileID: 8069434049012679828}
   m_Layer: 6
-  m_Name: YourChargedWeapon *WIP*
+  m_Name: YourChargedWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -160,6 +178,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 56692207260540717}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8069434049012679828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7339003463090499738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97e40f439841b824bb1c2d3e0673abba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillInfo: {fileID: 11400000, guid: 8aee02d3b7042c2498ac5186a53fdb28, type: 2}
+  healthIncreasePercentage: 50
+  damageIncreasePercentage: 25
+  duration: 30
+  player: {fileID: 0}
 --- !u!1 &8148112807532216794
 GameObject:
   m_ObjectHideFlags: 0

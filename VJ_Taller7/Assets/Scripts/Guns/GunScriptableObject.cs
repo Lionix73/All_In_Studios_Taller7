@@ -30,6 +30,7 @@ public class GunScriptableObject : ScriptableObject {
     public Camera activeCamera;
     public float LastShootTime;
     public int bulletsLeft;
+    public bool noFriendsInWar;
     public int BulletsLeft {
         get => bulletsLeft;
         set {
@@ -263,6 +264,15 @@ public class GunScriptableObject : ScriptableObject {
             ContactPoint contactPoint = collision.GetContact(0);
 
             Collider colliderHit = contactPoint.otherCollider;
+
+            if(noFriendsInWar && colliderHit.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                if (colliderHit.TryGetComponent(out IDamageable player))
+                {
+                    player.TakeDamage(Damage);
+                }
+            }
+
             if (colliderHit.gameObject.layer != LayerMask.NameToLayer("Enemy")) return;
 
                 if (colliderHit.TryGetComponent(out IDamageable enemy)){
