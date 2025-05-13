@@ -73,6 +73,8 @@ public class RoundManager : MonoBehaviour
     public event WaveComplete OnWaveComplete;
     public event RoundComplete OnRoundComplete;
 
+    private RoundsMusicManager _musicRounds;
+
     public void PauseGame(bool state){
         _Simulating = !state;
     }
@@ -86,6 +88,8 @@ public class RoundManager : MonoBehaviour
         _UiWaveCounter = _RoundUI.transform.Find("WaveCounter").GetComponent<TextMeshProUGUI>();
         _UiRoundCounter = _RoundUI.transform.Find("RoundCounter").GetComponent<TextMeshProUGUI>();
         _UiEnemyCounter = _RoundUI.transform.Find("EnemyCounter").GetComponent<TextMeshProUGUI>();
+
+        _musicRounds = FindFirstObjectByType<RoundsMusicManager>();
     }
     private void Start() {
         scoreManager = GetComponent<ScoreManager>();
@@ -116,6 +120,8 @@ public class RoundManager : MonoBehaviour
             
             inBetweenRounds = true; //Next round
             OnWaveComplete?.Invoke(true); //Se completo exitosamente la oleada, solo cuando acaba por matar a todos los enemigos
+            // SONIDO completar oleada exitosamente
+            _musicRounds.StopMusic();
             enemiesKilledOnWave = 0;
         }
 
@@ -164,6 +170,9 @@ public class RoundManager : MonoBehaviour
             inBetweenRoundsTimer = inBetweenRoundsWaitTime;
 
             OnWaveStart?.Invoke(); //Comienza la oleada
+
+            // SONIDO cambio de oleada
+            _musicRounds.PlayMusic();
             }
         }
         else {
@@ -176,6 +185,9 @@ public class RoundManager : MonoBehaviour
             //castigar por no completar satisfactoriamente
             //aumentar el escalado de los enemigos o repetir
             OnWaveComplete?.Invoke(false);
+            // SONIDO No completar oleada exitosamente
+
+            _musicRounds.StopMusic();
             }
         }
     }
@@ -276,7 +288,10 @@ public class RoundManager : MonoBehaviour
         scoreManager.SetScore(enemy.scoreOnKill);
     }
 
-    public void EnemyDied(Enemy enemy){
+    public void EnemyDied(Enemy enemy)
+    {
+        _musicRounds.OnEnemyKilled();
+
         aliveEnemies -=1;
         enemiesKilledOnWave = waveSize - aliveEnemies;
         scoreManager.AddEnemyKilled(1);

@@ -600,7 +600,7 @@ public class PlayerController : MonoBehaviour
             animator.applyRootMotion = true;
         }
 
-        if(isGrounded && Mathf.Abs(rb.linearVelocity.y) > 10)
+        if(isGrounded && Mathf.Abs(rb.linearVelocity.y) > 8)
         {
             soundManager.PlaySound("Landing");
         }
