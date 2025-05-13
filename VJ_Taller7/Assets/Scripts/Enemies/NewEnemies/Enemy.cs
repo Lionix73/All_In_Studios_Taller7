@@ -269,6 +269,7 @@ public class Enemy : PoolableObject, IDamageable
             yield return null;
         }
 
+        soundManager.StopAllSounds();
         healthBar.gameObject.SetActive(false);
         gameObject.SetActive(false);
     }

@@ -1,20 +1,20 @@
+using FMODUnity;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class AmmoPickable : MonoBehaviour
 {
     [SerializeField] private int amountOfAmmo;
+    [SerializeField] private ThisObjectSounds soundManager;
     private GunManager playerAmmo;
-    private SoundManager soundManager;
     private RespawnInteractables respawn;
 
-    private void Awake()
+    private void OnEnable()
     {
         if (GameManager.Instance!=null){
             GameManager.Instance.PlayerSpawned += GetPlayer;
         }
         
-        soundManager = FindAnyObjectByType<SoundManager>();
         respawn = GetComponentInParent<RespawnInteractables>();
     }
 

@@ -4,8 +4,8 @@ using UnityEngine;
 public class HealthPickable : MonoBehaviour
 {
     [SerializeField] private float amountOfHealing;
+    [SerializeField] private ThisObjectSounds soundManager;
     private Health playerHealth;
-    private SoundManager soundManager;
     private RespawnInteractables respawn;
 
     private void Awake()
@@ -13,8 +13,7 @@ public class HealthPickable : MonoBehaviour
         if (GameManager.Instance!=null){
             GameManager.Instance.PlayerSpawned += GetPlayer;
         }
-        
-        soundManager = FindAnyObjectByType<SoundManager>();
+
         respawn = GetComponentInParent<RespawnInteractables>();
     }
 

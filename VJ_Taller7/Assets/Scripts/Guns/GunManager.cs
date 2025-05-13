@@ -194,7 +194,11 @@ public class GunManager : MonoBehaviour
         float actualScore = GameManager.Instance.scoreManager.GetScore();
         GunScriptableObject gun = gunsList.Find(gun => gun.Type == gunPicked);
 
-        if (actualScore < gun.scoreToBuy) return;
+        if (actualScore < gun.scoreToBuy)
+        {
+            soundManager.PlaySound("CantBuyItem");
+            return;
+        }
 
         if (CurrentSecondGunType != gunPicked){
             if (CurrentSecondGunType == CurrentGun.Type){
@@ -202,6 +206,7 @@ public class GunManager : MonoBehaviour
             }
             DespawnActiveGun();
             this.Gun = gunPicked;
+            soundManager.PlaySound("BuyItem");
             
             SetUpGun(gun);
 

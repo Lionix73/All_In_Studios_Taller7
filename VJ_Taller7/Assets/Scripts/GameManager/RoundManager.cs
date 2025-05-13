@@ -74,6 +74,7 @@ public class RoundManager : MonoBehaviour
     public event RoundComplete OnRoundComplete;
 
     private RoundsMusicManager _musicRounds;
+    private ThisObjectSounds _soundManager;
 
     public void PauseGame(bool state){
         _Simulating = !state;
@@ -90,6 +91,7 @@ public class RoundManager : MonoBehaviour
         _UiEnemyCounter = _RoundUI.transform.Find("EnemyCounter").GetComponent<TextMeshProUGUI>();
 
         _musicRounds = FindFirstObjectByType<RoundsMusicManager>();
+        _soundManager = transform.parent.GetComponentInChildren<ThisObjectSounds>();
     }
     private void Start() {
         scoreManager = GetComponent<ScoreManager>();
@@ -112,6 +114,7 @@ public class RoundManager : MonoBehaviour
 
         if (currentRound > 3){ // ez win
             _Simulating = false;
+            
             if (UIManager.Singleton) UIManager.Singleton.WinUI(7);
             GameManager.Instance.WinGame();
         }
@@ -120,8 +123,8 @@ public class RoundManager : MonoBehaviour
             
             inBetweenRounds = true; //Next round
             OnWaveComplete?.Invoke(true); //Se completo exitosamente la oleada, solo cuando acaba por matar a todos los enemigos
-            // SONIDO completar oleada exitosamente
             _musicRounds.StopMusic();
+            _soundManager.PlaySound("WinWave");
             enemiesKilledOnWave = 0;
         }
 
@@ -140,6 +143,9 @@ public class RoundManager : MonoBehaviour
             }
 
             OnRoundComplete?.Invoke(); // Se completo la ronda, avisar para escalados y eso, aqui solo importa sobrevivir
+
+            _musicRounds.StopMusic();
+            _soundManager.PlaySound("WinRound");
         }
 
         if (_Simulating) UpdateTimers();
@@ -185,9 +191,9 @@ public class RoundManager : MonoBehaviour
             //castigar por no completar satisfactoriamente
             //aumentar el escalado de los enemigos o repetir
             OnWaveComplete?.Invoke(false);
-            // SONIDO No completar oleada exitosamente
-
+            
             _musicRounds.StopMusic();
+            _soundManager.PlaySound("FailWave");
             }
         }
     }

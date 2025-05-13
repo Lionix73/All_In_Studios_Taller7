@@ -9,9 +9,9 @@ public class NoFriendsInWar : PassiveSkillBase
     private GunType _lastGun;
     private bool _damageApplied = false;
 
-    private void Start()
+    private void Awake()
     {
-        _gunManager = FindAnyObjectByType<GunManager>();
+        _gunManager = transform.root.GetComponentInChildren<GunManager>();
 
         _lastGun = _gunManager.CurrentGun.Type;
     }
