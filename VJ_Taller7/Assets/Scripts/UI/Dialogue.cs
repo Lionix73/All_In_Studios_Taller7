@@ -30,6 +30,7 @@ public class Dialogue : MonoBehaviour
 
     public void StartDialogue()
     {
+        textComp.text = string.Empty;
         finishDialogue = false;
         gameObject.SetActive(true);
         index = 0;

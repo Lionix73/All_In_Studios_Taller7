@@ -58,7 +58,7 @@ public class RoundManager : MonoBehaviour
     private ScoreManager scoreManager;
     private EnemyWaves enemySpawner; //Si se balancea en este manager
     private EnemyWavesManager enemyWavesManager; //Si se balancea en el spawner
-    private ChallengeManager challengeManager; //Pa llamar cuando son los challenges
+    //private ChallengeManager challengeManager; //Pa llamar cuando son los challenges
     
     [Space]
     [SerializeField] private bool _Simulating = false;
@@ -97,7 +97,7 @@ public class RoundManager : MonoBehaviour
         scoreManager = GetComponent<ScoreManager>();
         enemySpawner = GetComponent<EnemyWaves>();
         enemyWavesManager = GetComponent<EnemyWavesManager>();
-        challengeManager = GameManager.Instance.challengeManager;
+        //challengeManager = GameManager.Instance.challengeManager;
 
         if (UIManager.Singleton)
         {
@@ -105,7 +105,7 @@ public class RoundManager : MonoBehaviour
             _Simulating = true;
             UIManager.Singleton.UIChangeRound(currentRound);
 
-            challengeManager.ShowChallenges(); //Mostrar los challenges
+            //challengeManager.ShowChallenges(); //Mostrar los challenges
         }
         
         SetEnemiesInSpawner();
@@ -139,7 +139,7 @@ public class RoundManager : MonoBehaviour
                 UIManager.Singleton.actualRoundDisplay = true;
                 UIManager.Singleton.UIChangeRound(currentRound);
 
-                challengeManager.ShowChallenges(); //Mostrar los challenges
+                //challengeManager.ShowChallenges(); //Mostrar los challenges
             }
 
             OnRoundComplete?.Invoke(); // Se completo la ronda, avisar para escalados y eso, aqui solo importa sobrevivir
