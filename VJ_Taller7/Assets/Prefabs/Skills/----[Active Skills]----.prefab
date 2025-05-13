@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4447256530856493372}
+  - component: {fileID: 7302333310274135482}
   m_Layer: 6
-  m_Name: CannonFodder *WIP*
+  m_Name: CannonFodder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,6 +32,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4325363771053134416}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7302333310274135482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3374760300112938959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d96585c7ba00cf54a97e130f266e68fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillInfo: {fileID: 11400000, guid: 942c0c04b9aa96a4a8d7c18e948d9317, type: 2}
+  duration: 12
+  cooldownThisSkill: 25
+  playerTransform: {fileID: 0}
 --- !u!1 &4492696911585031555
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,7 +169,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7236235650836817912}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -179,6 +196,7 @@ MonoBehaviour:
   - {fileID: 2397195150405426444}
   - {fileID: 3431865317813529851}
   - {fileID: 9140621834240968057}
+  - {fileID: 7302333310274135482}
   activeSkillIndex: 0
 --- !u!1 &8861176248210027869
 GameObject:
