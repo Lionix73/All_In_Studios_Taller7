@@ -131,7 +131,7 @@ public class UIManager : MonoBehaviour
     }
     public void SelectedScene(string scene)
     {
-        SceneManager.LoadScene(scene);
+        SceneTransitionManager.LoadScene(scene);
     }
     public void Show(int indexScreen)
     {
