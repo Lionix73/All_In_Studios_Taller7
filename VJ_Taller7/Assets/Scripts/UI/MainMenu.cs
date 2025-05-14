@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -61,6 +62,14 @@ public class UIManager : MonoBehaviour
         IsMainMenu = true;
 
         soundManager = GetComponentInChildren<ThisObjectSounds>();
+
+        // Inicializar el diccionario de paneles
+        foreach (var panel in uiPanels)
+        {
+            panelDictionary.Add(panel.gameObject.name, panel);
+            panel.gameObject.SetActive(false); // Asegurarse que todos están desactivados al inicio
+        }
+        ShowPanel(mainMenuPannel);
     }
 
     private void OnDestroy()
@@ -88,8 +97,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private bool IsDead = false;
     [SerializeField] private bool IsMainMenu = false;
     public bool actualRoundDisplay = true;
-    [SerializeField] GameObject[] screens;
-    [SerializeField] int activeScene;
     [SerializeField] Image healthBar;
 
     [SerializeField] private List<SceneScriptableObject> sceneList = new List<SceneScriptableObject>();
@@ -115,10 +122,101 @@ public class UIManager : MonoBehaviour
 
     private ThisObjectSounds soundManager;
 
+    public static UIManager Instance;
+    [SerializeField] private float fadeTime = 1.0f;
+    [SerializeField] private AnimationList[] uiPanels; // Todos los paneles que quieres controlar
+    [SerializeField] private string mainMenuPannel;
+
+    private Dictionary<string, AnimationList> panelDictionary = new Dictionary<string, AnimationList>();
+
+    // Función pública para mostrar un panel con fade in
+    public void ShowPanel(string panelName)
+    {
+        if (panelDictionary.TryGetValue(panelName, out AnimationList panel))
+        {
+            panel.PanelFadeIn(fadeTime);
+        }
+        else
+        {
+            Debug.LogWarning($"Panel '{panelName}' no encontrado en UIManager");
+        }
+    }
+
+    // Función pública para ocultar un panel con fade out
+    public void HidePanel(string panelName)
+    {
+        if (panelDictionary.TryGetValue(panelName, out AnimationList panel))
+        {
+            if (panel.isActiveAndEnabled)
+                panel.PanelFadeOut(fadeTime);
+        }
+        else
+        {
+            Debug.LogWarning($"Panel '{panelName}' no encontrado en UIManager");
+        }
+    }
+
+    // Función para alternar un panel (si está visible lo oculta, si está oculto lo muestra)
+    public void TogglePanel(string panelName)
+    {
+        if (panelDictionary.TryGetValue(panelName, out AnimationList panel))
+        {
+            if (panel.gameObject.activeSelf)
+            {
+                HidePanel(panelName);
+            }
+            else
+            {
+                ShowPanel(panelName);
+            }
+        }
+    }
+
+    // Formato: "panelToHide|panelToShow"
+    public void SwitchPanels(string panels)
+    {
+        string[] parts = panels.Split('/');
+        if (parts.Length == 2)
+        {
+            StartCoroutine(SwitchPanelsRoutine(parts[0], parts[1]));
+        }
+    }
+
+
+    private IEnumerator SwitchPanelsRoutine(string panelToHide, string panelToShow)
+    {
+        if (panelDictionary.TryGetValue(panelToHide, out AnimationList hidePanel))
+        {
+            // Esperar un poco antes de mostrar el nuevo panel
+            yield return null;
+
+            if (hidePanel.isActiveAndEnabled)
+                StartCoroutine(hidePanel.PanelFadeOutRoutine(fadeTime));
+        }
+
+
+
+        if (panelDictionary.TryGetValue(panelToShow, out AnimationList showPanel))
+        {
+            showPanel.PanelFadeIn(fadeTime);
+        }
+    }
+
     public void StartGameUI()
     {
+        if (panelDictionary.TryGetValue("SkillsMenu", out AnimationList hidePanel))
+        {
+            if (hidePanel.isActiveAndEnabled)
+                hidePanel.gameObject.SetActive(false);
+        }
+        if (panelDictionary.TryGetValue(mainMenuPannel, out AnimationList hideMenuPanel))
+        {
+            if (hideMenuPanel.isActiveAndEnabled)
+                hideMenuPanel.gameObject.SetActive(false);
+        }
+
         IsMainMenu = false;
-        screens[5].SetActive(true);
+        ShowPanel("UIPlayer");
         actualRoundDisplay = true;
         UiWaveTimer.text = "";
         UiWaveCounter.text = "";
@@ -126,35 +224,28 @@ public class UIManager : MonoBehaviour
         UiRoundCounter.gameObject.SetActive(true);
         characterNameText.text = CharacterManager.Instance.characters[CharacterManager.Instance.selectedIndexCharacter].name;
         UiRoundCounter.text = "";
-        scoreInGameText.text = "Score: ";
+        scoreInGameText.text = "Score: 00";
 
     }
     public void SelectedScene(string scene)
     {
         SceneTransitionManager.LoadScene(scene);
     }
-    public void Show(int indexScreen)
-    {
-       activeScene = indexScreen;
-       screens[0].SetActive(false);
-       screens[activeScene].SetActive(true);    
-    }
-    public void Hide()
-    {
-        screens[0].SetActive(true);
-        screens[activeScene].SetActive(false);
-    }
     public void PauseGame(int indexPauseScreen)
     {
         if (IsDead) return;
         if (hasWon) return;
         if (IsMainMenu) return;
+        if (panelDictionary.TryGetValue("Settings", out AnimationList settingsPannel))
+        {
+            if (settingsPannel.isActiveAndEnabled) return;
+        }
 
         if (GameManager.Instance!=null) GameManager.Instance.PauseGame();
         
         IsPaused = !IsPaused;
         Cursor.visible = IsPaused;
-        screens[indexPauseScreen].SetActive(IsPaused);
+        uiPanels[indexPauseScreen].gameObject.SetActive(IsPaused);
         if(IsPaused)
         {
             Cursor.lockState = CursorLockMode.None;
@@ -175,8 +266,7 @@ public class UIManager : MonoBehaviour
         IsDead = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        screens[indexDiedUI].SetActive(true);
-        screens[5].SetActive(false);
+        SwitchPanels("UIPlayer/DeathScene");
     }
     public void WinUI(int indexWinUI)
     {
@@ -188,23 +278,14 @@ public class UIManager : MonoBehaviour
         hasWon = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        screens[indexWinUI].SetActive(true);
-        screens[5].SetActive(false);
+        SwitchPanels("UIPlayer/DeathScene");
+        SwitchPanels("UIPlayer/WinScene");
     }
-    public void SetCameraCanva()
-    {
-        screens[2].GetComponent<Canvas>().worldCamera = Camera.main;
-    }
-    public void PlayScene(int indexInGameUI)
-    {
-        screens[0].SetActive(false);
-        screens[indexInGameUI].SetActive(true);
-    }
+
     public void BackToMenu(int indexInGameUI)
     {
         IsMainMenu = true;
-        screens[0].SetActive(true);
-        screens[indexInGameUI].SetActive(false);
+        SwitchPanels("UIPlayer/MainMenu");
         IsDead = false;
         hasWon = false;
 
