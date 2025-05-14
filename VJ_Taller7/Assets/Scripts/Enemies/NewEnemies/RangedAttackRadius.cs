@@ -164,4 +164,31 @@ public class RangedAttackRadius : AttackRadius
         }
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        // Draw the bullet spawn position
+        Vector3 bulletSpawnPosition = transform.position + bulletSpawnOffset;
+        
+        // Draw a sphere at spawn position
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(bulletSpawnPosition, 0.2f);
+        
+        // Draw a line from the center to the spawn point
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(transform.position, bulletSpawnPosition);
+        
+        // Draw an arrow to indicate firing direction
+        if (Application.isPlaying && targetDamageable != null)
+        {
+            Gizmos.color = Color.green;
+            Vector3 firingDirection = (targetDamageable.GetTransform().position + Vector3.up - bulletSpawnPosition).normalized;
+            Gizmos.DrawRay(bulletSpawnPosition, firingDirection * 2f);
+        }
+        else 
+        {
+            // Default forward direction when no target
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawRay(bulletSpawnPosition, transform.forward * 2f);
+        }
+    }
 }
