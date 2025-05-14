@@ -53,9 +53,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPaused: 0
   isGameOver: 0
+  allowPlayerRespawn: 0
   spawnPlayerWithMenu: 0
   spawntPoint: {fileID: 3865444026879066620}
-  playerPrefab: {fileID: 3839446492626894175, guid: 045cc3dd990362b4aa8365508d12a4da, type: 3}
+  playerPrefab: {fileID: 3839446492626894175, guid: f2f4d3de7bd5e4e4e9c70ba51b6fd900, type: 3}
+  GunShop: {fileID: 0}
   UIManager: {fileID: 0}
   playerManager: {fileID: 0}
   roundManager: {fileID: 0}
@@ -65,11 +67,11 @@ MonoBehaviour:
   challengeManager: {fileID: 0}
   availableEnemiesForWave:
   - waveToSet: 1
-    availableEnemies: 000000000100000004000000
+    availableEnemies: 0000000003000000
   - waveToSet: 2
-    availableEnemies: 0000000001000000020000000400000005000000
+    availableEnemies: 00000000010000000300000004000000
   - waveToSet: 3
-    availableEnemies: 000000000100000002000000030000000400000005000000
+    availableEnemies: 0000000001000000020000000300000004000000
 --- !u!114 &7021727127881821152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,6 +98,7 @@ MonoBehaviour:
   waveSize: 0
   waveValueScaleMult: 8
   waveDurationScaleAdd: 20
+  maximunTimeForWaves: 120
   enemiesToSpawn: []
   waveDuration: 30
   inBetweenRoundsWaitTime: 30
@@ -122,11 +125,11 @@ MonoBehaviour:
   spawnDelay: 1
   weightedEnemies:
   - {fileID: 11400000, guid: d10cc44dc90ed7c4192b63da3c74239f, type: 2}
-  - {fileID: 11400000, guid: d2e8e2632ab90a74f9d15bf669083d47, type: 2}
   - {fileID: 11400000, guid: 9c37f6a7df88bcb4c82c8926d7b63cdf, type: 2}
   - {fileID: 11400000, guid: 3c1719aaf03aaab49ad077f09abbd94c, type: 2}
   - {fileID: 11400000, guid: 4d88d40cb13b5a5469b7dc8fef6a1cc2, type: 2}
   - {fileID: 11400000, guid: 9d557fb21a9ee854596734d8aa72a2a4, type: 2}
+  - {fileID: 11400000, guid: d2e8e2632ab90a74f9d15bf669083d47, type: 2}
   scaling: {fileID: 11400000, guid: e83eeaa20b18f5c4a951a3e5232081ed, type: 2}
   enemySpawnMethod: 2
   continousSpawn: 0
