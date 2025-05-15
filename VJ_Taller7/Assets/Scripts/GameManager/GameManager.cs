@@ -123,11 +123,11 @@ public class GameManager : MonoBehaviour
     }
 
     public void WaveStarted(){
-        GunShop?.SetActive(false);
+        GunShop?.GetComponent<ShopLimit>().WaveStarted();
     }
     
     private void WaveFinished(bool killedAll){
-        GunShop?.SetActive(true);
+        GunShop?.GetComponent<ShopLimit>().WaveFinished(killedAll);
 
         if (killedAll) gunManager.ScaleDamage(10);
         //El escalado de las armas tengo que mirar si hacerlo que cada arma tenga su esacalado, o un entero pa todas
