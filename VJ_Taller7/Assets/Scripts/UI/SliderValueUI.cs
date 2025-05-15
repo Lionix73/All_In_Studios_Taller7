@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+[DefaultExecutionOrder(-1)]
 public class SliderValueUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI valueText;

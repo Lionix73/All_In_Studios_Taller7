@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -62,7 +61,13 @@ public class UIManager : MonoBehaviour
         IsMainMenu = true;
 
         soundManager = GetComponentInChildren<ThisObjectSounds>();
+        defaultColor = scoreText.color;
 
+
+
+    }
+    private void Start()
+    {
         // Inicializar el diccionario de paneles
         foreach (var panel in uiPanels)
         {
@@ -70,7 +75,6 @@ public class UIManager : MonoBehaviour
             panel.gameObject.SetActive(false); // Asegurarse que todos están desactivados al inicio
         }
         ShowPanel(mainMenuPannel);
-        defaultColor = scoreText.color;
     }
 
     private void OnDestroy()

@@ -309,11 +309,6 @@ public class PlayerController : MonoBehaviour
         moveInput = context.ReadValue<Vector2>();
     }
 
-    public void OnLook(InputAction.CallbackContext context)
-    {
-        lookInput = context.ReadValue<Vector2>();
-    }
-
     public void OnAim(InputAction.CallbackContext context)
     {
         aimInput = context.ReadValue<float>();
