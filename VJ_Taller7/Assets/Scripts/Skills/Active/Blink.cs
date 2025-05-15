@@ -7,7 +7,8 @@ public class Blink : SkillBase
     [SerializeField] private float blinkSpeed = 100f;
     [SerializeField] private float duration = 0.2f;
     [SerializeField] private float cooldownThisSkill = 5f;
-    
+    [SerializeField] private MeshTrail dashVFX;
+
     private Transform freeLookCamera;
     private Rigidbody rb;
     private Animator animator;
@@ -21,6 +22,10 @@ public class Blink : SkillBase
     public override IEnumerator Execute()
     {
         cooldown = cooldownThisSkill;
+
+        dashVFX.StartTrail();
+
+        // Sonido blink
 
         animator.applyRootMotion = false;
         rb.useGravity = false;

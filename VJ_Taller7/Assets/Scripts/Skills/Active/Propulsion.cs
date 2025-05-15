@@ -6,7 +6,8 @@ public class Propulsion : SkillBase
     [SerializeField] private float duration = 3f;
     [SerializeField] private float cooldownThisSkill = 5f;
     [SerializeField][Range(0,25)] private float force = 20f;
-    
+    [SerializeField] private ParticleSystem vfx;
+
     private Rigidbody rb;
 
     private void Start()
@@ -17,6 +18,10 @@ public class Propulsion : SkillBase
     public override IEnumerator Execute()
     {
         cooldown = cooldownThisSkill;
+
+        vfx.Play();
+
+        // Sonido Propulsion
 
         float timer = 0;
         while (timer < duration)

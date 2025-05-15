@@ -2636,9 +2636,9 @@ MonoBehaviour:
     m_ActionName: 'Player/Reload[/Keyboard/r]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5374355282723326770}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnDash
+      - m_Target: {fileID: 332327282473581397}
+        m_TargetAssemblyTypeName: ActiveSkillManager, Assembly-CSharp
+        m_MethodName: ActivateSkill
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2695,19 +2695,7 @@ MonoBehaviour:
     m_ActionId: 8ee4792f-48b1-499c-8851-ec9ab0ece1c7
     m_ActionName: 'Player/Melee[/Mouse/middleButton]'
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 332327282473581397}
-        m_TargetAssemblyTypeName: ActiveSkillManager, Assembly-CSharp
-        m_MethodName: ActivateSkill
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 1afee5c7-9eaf-4bc1-9f4c-b9fe14732c80
     m_ActionName: 'Player/Active Skill[/Keyboard/leftAlt]'
   - m_PersistentCalls:
@@ -4702,6 +4690,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5550208734229555072}
     m_Modifications:
+    - target: {fileID: 2397195150405426444, guid: b9c827cc0ef8f7d40b4e952a288beaf0, type: 3}
+      propertyPath: dashVFX
+      value: 
+      objectReference: {fileID: 7260628291453372008}
     - target: {fileID: 4325363771053134416, guid: b9c827cc0ef8f7d40b4e952a288beaf0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
