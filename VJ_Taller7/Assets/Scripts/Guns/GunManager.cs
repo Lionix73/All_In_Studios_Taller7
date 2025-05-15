@@ -59,7 +59,7 @@ public class GunManager : MonoBehaviour
         playerObject = transform.parent.gameObject;
         GetPlayer(playerObject);
 
-        actualTotalAmmo=MaxTotalAmmo;
+        actualTotalAmmo=MaxTotalAmmo/2;
         if (gunParent == null) {gunParent = this.transform;} //En caso de no tener asignado el punto de la mano donde aparece el arma, que la sostenga encima
 
         GunScriptableObject gun = gunsList.Find(gun => gun.Type == Gun);
