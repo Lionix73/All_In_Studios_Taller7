@@ -70,6 +70,7 @@ public class UIManager : MonoBehaviour
             panel.gameObject.SetActive(false); // Asegurarse que todos están desactivados al inicio
         }
         ShowPanel(mainMenuPannel);
+        defaultColor = scoreText.color;
     }
 
     private void OnDestroy()
@@ -126,6 +127,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float fadeTime = 1.0f;
     [SerializeField] private AnimationList[] uiPanels; // Todos los paneles que quieres controlar
     [SerializeField] private string mainMenuPannel;
+
+    private float currentDisplayedScore;
+    // Colores para los estados
+    public Color increasingColor = Color.green; // Color cuando el puntaje aumenta
+    public Color decreasingColor = Color.red;   // Color cuando el puntaje disminuye
+    private Color defaultColor;
 
     private Dictionary<string, AnimationList> panelDictionary = new Dictionary<string, AnimationList>();
 
@@ -321,10 +328,52 @@ public class UIManager : MonoBehaviour
         enemiesKilledText.text = actualKills.ToString();
     }
 
+    // Método público para actualizar el puntaje
     public void GetPlayerActualScore(float actualScore)
     {
-        scoreText.text = actualScore.ToString();
-        scoreInGameText.text = $"Score: {actualScore}";
+
+        // Determinamos si el puntaje está aumentando o disminuyendo
+        bool isIncreasing = actualScore > currentDisplayedScore;
+
+        // Iniciamos una nueva corrutina para animar el puntaje
+        StartCoroutine(AnimateScoreChange(currentDisplayedScore, actualScore, isIncreasing));
+    }
+
+    // Corrutina para animar el cambio de puntaje
+    private IEnumerator AnimateScoreChange(float fromScore, float toScore, bool isIncreasing)
+    {
+        float duration = 0.75f; // Duración de la animación en segundos
+        float elapsedTime = 0f;
+
+        // Aplicamos el color correspondiente
+        Color targetColor = isIncreasing ? increasingColor : decreasingColor;
+        scoreInGameText.color = targetColor;
+
+        while (elapsedTime < duration)
+        {
+            // Interpolamos linealmente entre el puntaje anterior y el nuevo
+            currentDisplayedScore = Mathf.Lerp(fromScore, toScore, elapsedTime / duration);
+
+            // Actualizamos los textos
+            UpdateScoreTexts(currentDisplayedScore);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Aseguramos que al final muestre el valor exacto
+        currentDisplayedScore = toScore;
+        UpdateScoreTexts(currentDisplayedScore);
+
+        // Restauramos el color original después de un pequeño delay (opcional)
+        yield return new WaitForSeconds(0.2f);
+        scoreInGameText.color = defaultColor;
+    }
+
+    private void UpdateScoreTexts(float score)
+    {
+        scoreText.text = $"Score:{Mathf.RoundToInt(score)}";
+        scoreInGameText.text = $"Score:{Mathf.RoundToInt(score)}";
     }
 
     public void UIChangeRound(int currentRound)
