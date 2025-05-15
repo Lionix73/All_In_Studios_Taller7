@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Threading;
 
 public class RoundManager : MonoBehaviour
 {
@@ -296,13 +297,22 @@ public class RoundManager : MonoBehaviour
 
     public void EnemyDied(Enemy enemy)
     {
+        if (enemy == null) return;
+        
         _musicRounds.OnEnemyKilled();
 
-        aliveEnemies -=1;
-        enemiesKilledOnWave = waveSize - aliveEnemies;
+        // Use Interlocked for atomic operations
+        int currentAlive = Interlocked.Decrement(ref aliveEnemies);
+        
+        // Thread-safe calculation of enemies killed
+        int killed = waveSize - currentAlive;
+        Interlocked.Exchange(ref enemiesKilledOnWave, killed);
+        
+        // Add to score
         scoreManager.AddEnemyKilled(1);
         
-        if(UIManager.Singleton) UIManager.Singleton.UIEnemiesAlive(aliveEnemies);
+        // Update UI with the current value after decrementing
+        if(UIManager.Singleton) UIManager.Singleton.UIEnemiesAlive(currentAlive);
     }
 #endregion
 

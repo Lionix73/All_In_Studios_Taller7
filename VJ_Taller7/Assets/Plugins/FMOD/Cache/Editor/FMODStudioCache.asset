@@ -317,6 +317,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 1054
+--- !u!114 &-7262354177547625366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Items/HealthPick
+  m_EditorClassIdentifier: 
+  Path: event:/Items/HealthPick
+  Guid:
+    Data1: -1485809469
+    Data2: 1256671218
+    Data3: -75308381
+    Data4: -1771860443
+  Banks:
+  - {fileID: -2558496573077115599}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 15
+  Length: 9000
 --- !u!114 &-7223410726789901167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -452,6 +479,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 30
   Length: 1906
+--- !u!114 &-5333819322366594127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Environment/Jump Pad
+  m_EditorClassIdentifier: 
+  Path: event:/Environment/Jump Pad
+  Guid:
+    Data1: -2077254888
+    Data2: 1138089643
+    Data3: -269164909
+    Data4: -331878208
+  Banks:
+  - {fileID: -2558496573077115599}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1400
 --- !u!114 &-5293698504948608844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -847,6 +901,26 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
+--- !u!114 &-2558496573077115599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Environment.bank
+  m_EditorClassIdentifier: 
+  Path: ../FMOD/Build/Desktop/Environment.bank
+  Name: Environment
+  StudioPath: bank:/Environment
+  lastModified: 638828351602001794
+  FileSizes:
+  - Name: Desktop
+    Value: 158816
+  Exists: 1
 --- !u!114 &-2500600641265451339
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1080,6 +1154,7 @@ MonoBehaviour:
   - {fileID: 1312478745403810463}
   - {fileID: 7047122884356888304}
   - {fileID: 107825808030671681}
+  - {fileID: -2558496573077115599}
   EditorEvents:
   - {fileID: -4303300845778931015}
   - {fileID: -1296149345757234199}
@@ -1143,12 +1218,17 @@ MonoBehaviour:
   - {fileID: 6618477009429029946}
   - {fileID: 3436491144952579986}
   - {fileID: -8627248871879420094}
+  - {fileID: -5333819322366594127}
+  - {fileID: 8012237259480636748}
+  - {fileID: 6922791728306342166}
+  - {fileID: 692994369105533009}
+  - {fileID: -7262354177547625366}
   EditorParameters: []
   MasterBanks:
   - {fileID: -8195523702505923715}
   StringsBanks:
   - {fileID: 5092639294113453569}
-  cacheTime: 638827134424386934
+  cacheTime: 638828354304417335
   cacheVersion: 131622
 --- !u!114 &10818181712237557
 MonoBehaviour:
@@ -1176,7 +1256,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 50
-  Length: 3152
+  Length: 5000
 --- !u!114 &16718576494435817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1246,10 +1326,10 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Enemies.bank
   Name: Enemies
   StudioPath: bank:/Enemies
-  lastModified: 638810721833880059
+  lastModified: 638828354304417335
   FileSizes:
   - Name: Desktop
-    Value: 2410592
+    Value: 2410816
   Exists: 1
 --- !u!114 &298293599141526868
 MonoBehaviour:
@@ -1278,6 +1358,33 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 30
   Length: 380
+--- !u!114 &692994369105533009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Items/BuyItem
+  m_EditorClassIdentifier: 
+  Path: event:/Items/BuyItem
+  Guid:
+    Data1: 681322654
+    Data2: 1339628918
+    Data3: -208322415
+    Data4: 1520233709
+  Banks:
+  - {fileID: -2558496573077115599}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2708
 --- !u!114 &1312478745403810463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1725,6 +1832,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 284081
+--- !u!114 &6922791728306342166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Items/CantBuy
+  m_EditorClassIdentifier: 
+  Path: event:/Items/CantBuy
+  Guid:
+    Data1: -1714211194
+    Data2: 1278075657
+    Data3: -1614567807
+    Data4: 1553965860
+  Banks:
+  - {fileID: -2558496573077115599}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1153
 --- !u!114 &6934262830592054486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1873,6 +2007,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 1280
+--- !u!114 &8012237259480636748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Items/AmmoPick
+  m_EditorClassIdentifier: 
+  Path: event:/Items/AmmoPick
+  Guid:
+    Data1: -33921719
+    Data2: 1153912399
+    Data3: -176208217
+    Data4: -291813761
+  Banks:
+  - {fileID: -2558496573077115599}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 15
+  Length: 600
 --- !u!114 &8500476291783484184
 MonoBehaviour:
   m_ObjectHideFlags: 0

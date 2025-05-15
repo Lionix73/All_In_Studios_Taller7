@@ -116,6 +116,7 @@ public class Enemy : PoolableObject, IDamageable
     
     public delegate void DeathEvent(Enemy enemy);
     public DeathEvent OnDie; //Evento que se llama
+
     [Header("Game Manager")]
     public int scoreOnKill;
 
@@ -200,14 +201,7 @@ public class Enemy : PoolableObject, IDamageable
         blinkTimer = blinkDuration;
 
         animator.SetTrigger(IsHit);
-
         movement.State = EnemyState.Chase;
-        
-        if (floatingTextPrefab != null)
-        {
-            //ShowFloatingText(damage, floatingTextPrefab);
-        }
-
         healthBar.SetProgress(Health / maxHealth, 3);
 
         //Debug.Log("Enemy Health: " + Health);
@@ -215,7 +209,13 @@ public class Enemy : PoolableObject, IDamageable
         if (Health <= 0){
 
             soundManager.PlaySound("Die");
-            isDead = true;
+
+            // Use thread-safe invocation for the event
+            DeathEvent handler = OnDie;
+            if (handler != null) {
+                // This ensures all subscribers are notified atomically
+                handler(this);
+            }
 
             /*
             #region CarnivoroTemporal Skill
@@ -233,14 +233,11 @@ public class Enemy : PoolableObject, IDamageable
                 agent.enabled = false;
             }
 
-            OnDie?.Invoke(this);
-
             if(ragdollEnabler != null){
                 ragdollEnabler.EnableRagdoll();
             }
             
             StartCoroutine(FadeOut());
-            //OnDied();
         }
     }
 

@@ -342,7 +342,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void MoveToAttackDistance(float attackRadius)
     {
-        if (player == null) return;
+        if (player == null || enemy.IsDead) return;
         Vector3 direction = (transform.position - player.position).normalized;
         Vector3 targetPosition = player.position + direction * attackRadius;
         NavMeshHit hit;

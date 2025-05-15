@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
+using System.Threading;
 
 public class EnemyWavesManager : MonoBehaviour
 {
@@ -250,12 +251,18 @@ public class EnemyWavesManager : MonoBehaviour
     }
 
     private void HandleEnemyDeath(Enemy enemy){
-         enemiesAlive--;
+        if (enemy == null) return;
+        
+        // Use Interlocked instead of lock for better performance
+        int currentAlive = Interlocked.Decrement(ref enemiesAlive);
 
+        // Unsubscribe from events to prevent double-counting
         enemy.OnDie -= HandleEnemyDeath;
-        enemy.OnDie -= _roundManager.ChangeScore;
+        enemy.OnDie -= _roundManager.ChangeScore;  
         enemy.OnDie -= _roundManager.EnemyDied;
-        if(enemiesAlive == 0 && enemiesSpawned == numberOfEnemiesToSpawn){ //Si la ronda acaba antes del tiempo
+        
+        // Check if the wave is complete
+        if(currentAlive <= 0 && enemiesSpawned == numberOfEnemiesToSpawn){ 
             //ScaleUpSpawns(); Ya se escalan cuando se manda la ronda
         }
     }
