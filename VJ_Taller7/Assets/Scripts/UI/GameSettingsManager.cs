@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GameSettingsManager : MonoBehaviour
 {
     public static GameSettingsManager Instance { get; private set; }
-    [SerializeField] private InputActionReference lookAction; // Asigna el Input Action "Look" aquí
+    [SerializeField] private InputActionReference lookAction; // Asigna el Input Action "Look" aquï¿½
 
     [SerializeField] private Slider sensitivitySlider;
     public float MouseSensitivity { get; private set; } = 2f; // Valor por defecto
@@ -27,7 +27,7 @@ public class GameSettingsManager : MonoBehaviour
 
     public void SetupSensitivitySlider()
     {
-        // Configura el slider (si está asignado)
+        // Configura el slider (si estï¿½ asignado)
         if (sensitivitySlider != null)
         {
             sensitivitySlider.minValue = 0.1f;
@@ -42,7 +42,7 @@ public class GameSettingsManager : MonoBehaviour
         PlayerPrefs.SetFloat("MouseSensitivity", MouseSensitivity);
         PlayerPrefs.Save();
 
-        // Si hay una cámara activa, actualiza su sensibilidad
+        // Si hay una cï¿½mara activa, actualiza su sensibilidad
         if (PlayerCameraController.Instance != null)
         {
             PlayerCameraController.Instance.UpdateSensitivity(MouseSensitivity);
