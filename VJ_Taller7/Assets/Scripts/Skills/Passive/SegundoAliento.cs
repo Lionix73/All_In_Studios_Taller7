@@ -23,6 +23,8 @@ public class SegundoAliento : PassiveSkillBase
 
     public override IEnumerator Execute()
     {
+        soundManager.PlaySound("SecondBreath");
+
         playerHealth.TakeHeal(playerHealth.GetMaxHeath);
         yield return null;
     }

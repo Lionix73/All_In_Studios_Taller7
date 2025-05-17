@@ -77,7 +77,7 @@ public class Enemy : PoolableObject, IDamageable
     [SerializeField] private float fadeOutDelay = 3f;
 
     private Coroutine lookCoroutine;
-
+    private CarnivoroTemporal[] carnivoros;
 
     [Header("Enemy Animator")]
     [SerializeField] private Animator animator;
@@ -124,6 +124,7 @@ public class Enemy : PoolableObject, IDamageable
     [Header("External Calls")]
     public Camera MainCamera { get; set; }
     public PlayerController Player { get; set; }
+
     public int Level { get; set; }
 
     private void Awake()
@@ -143,6 +144,8 @@ public class Enemy : PoolableObject, IDamageable
     private void Start()
     {
         maxHealth = Health;
+
+        carnivoros = FindObjectsByType<CarnivoroTemporal>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
     }
 
     private void Update()
@@ -206,9 +209,21 @@ public class Enemy : PoolableObject, IDamageable
 
         //Debug.Log("Enemy Health: " + Health);
 
-        if (Health <= 0){
-
+        if (Health <= 0)
+        {    
+            soundManager.StopAllSounds();
             soundManager.PlaySound("Die");
+
+            #region CarnivoroTemporal Skill
+
+            foreach(CarnivoroTemporal c in carnivoros)
+            {
+                if(c.CarnivoroActive)
+                {
+                    c.HealthForKill();
+                }
+            }
+            #endregion
 
             // Use thread-safe invocation for the event
             DeathEvent handler = OnDie;
@@ -216,19 +231,7 @@ public class Enemy : PoolableObject, IDamageable
                 // This ensures all subscribers are notified atomically
                 handler(this);
             }
-
-            /*
-            #region CarnivoroTemporal Skill
-            // Check if carnivoro skill is active
-            CarnivoroTemporal skill = FindAnyObjectByType(typeof(CarnivoroTemporal)).GetComponent<CarnivoroTemporal>();
             
-            if(skill != null && skill.Carnivoro)
-            {
-                skill.HealthForKill();
-            }
-            #endregion
-            */
-
             if (!isStatic){
                 agent.enabled = false;
             }
@@ -266,7 +269,6 @@ public class Enemy : PoolableObject, IDamageable
             yield return null;
         }
 
-        soundManager.StopAllSounds();
         healthBar.gameObject.SetActive(false);
         gameObject.SetActive(false);
     }

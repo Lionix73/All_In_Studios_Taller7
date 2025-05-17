@@ -24,8 +24,7 @@ public class Blink : SkillBase
         cooldown = cooldownThisSkill;
 
         dashVFX.StartTrail();
-
-        // Sonido blink
+        soundManager.PlaySound("Blink");
 
         animator.applyRootMotion = false;
         rb.useGravity = false;

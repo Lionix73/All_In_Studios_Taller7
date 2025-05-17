@@ -20,8 +20,7 @@ public class Propulsion : SkillBase
         cooldown = cooldownThisSkill;
 
         vfx.Play();
-
-        // Sonido Propulsion
+        soundManager.PlaySound("Propulsion");
 
         float timer = 0;
         while (timer < duration)

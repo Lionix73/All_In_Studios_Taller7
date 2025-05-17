@@ -79,9 +79,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private MultiAimConstraint aimRig;
     [SerializeField] private TwoBoneIKConstraint gripRig;
 
-    private Vector2 moveInput;
-    private Vector2 lookInput;
     private float aimInput;
+
+    private int jumpCount = 0;
+    private int animationLayerToShow = 0;
+
     private bool isRunning = false;
     private bool isCrouching = false;
     private bool isSliding = false;
@@ -95,17 +97,14 @@ public class PlayerController : MonoBehaviour
     private bool usingRifle = true;
     private bool isJumping;
     private bool wasOnGround;
-
-    private int jumpCount = 0;
-
     private bool isDashing = false;
     private bool canDash = true;
     private bool canMelee = true;
     private bool canShoot = true;
     private bool canReload = true;
 
-    private int animationLayerToShow = 0;
-
+    private Vector2 moveInput;
+    private Vector2 lookInput;
     private Vector3 slideDirection;
     private Vector3 desiredMoveDirection;
 
@@ -115,6 +114,7 @@ public class PlayerController : MonoBehaviour
     private Health health;
     private Rig rig;
     #endregion
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
