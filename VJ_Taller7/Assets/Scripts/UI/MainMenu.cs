@@ -61,7 +61,7 @@ public class UIManager : MonoBehaviour
         IsMainMenu = true;
 
         soundManager = GetComponentInChildren<ThisObjectSounds>();
-        defaultColor = scoreText.color;
+        defaultColor = scoreInGameText.color;
 
 
 
@@ -235,7 +235,7 @@ public class UIManager : MonoBehaviour
         UiRoundCounter.gameObject.SetActive(true);
         characterNameText.text = CharacterManager.Instance.characters[CharacterManager.Instance.selectedIndexCharacter].name;
         UiRoundCounter.text = "";
-        scoreInGameText.text = "Score: 00";
+        scoreInGameText.text = "00";
 
     }
     public void SelectedScene(string scene)
@@ -377,7 +377,7 @@ public class UIManager : MonoBehaviour
     private void UpdateScoreTexts(float score)
     {
         scoreText.text = $"Score:{Mathf.RoundToInt(score)}";
-        scoreInGameText.text = $"Score:{Mathf.RoundToInt(score)}";
+        scoreInGameText.text = $"{Mathf.RoundToInt(score)}";
     }
 
     public void UIChangeRound(int currentRound)
@@ -400,12 +400,16 @@ public class UIManager : MonoBehaviour
         Dialogue roundDialogue = UiRoundCounter.GetComponent<Dialogue>();
         if (roundDialogue.FinishDialogue)
         {
-            UiBetweenWavesTimer.text = $"Siguiente ronda en: \n {Mathf.FloorToInt(inBetweenRoundsTimer / 60)} : {Mathf.FloorToInt(inBetweenRoundsTimer % 60)}";
+            //UiBetweenWavesTimer.text = $"{Mathf.FloorToInt(inBetweenRoundsTimer / 60)}:{Mathf.FloorToInt(inBetweenRoundsTimer % 60)}";
+            UiBetweenWavesTimer.text = $"{Mathf.FloorToInt(inBetweenRoundsTimer)}";
+
         }
     }
     public void UIBetweenWaves(float waveTimer)
     {
-        UiWaveTimer.text = $"Tiempo restante: \n {Mathf.FloorToInt(waveTimer / 60)} : {Mathf.FloorToInt(waveTimer % 60)}";
+        //UiWaveTimer.text = $"{Mathf.FloorToInt(waveTimer / 60)} : {Mathf.FloorToInt(waveTimer % 60)}";
+        UiWaveTimer.text = $"{Mathf.FloorToInt(waveTimer)}";
+
     }
 
     public void UIActualWave(int currentWave)
@@ -426,6 +430,10 @@ public class UIManager : MonoBehaviour
             playerName.text = inputFieldName.text;
 
         }
+    }
+    public void SetCameraCanva()
+    {
+        uiPanels[2].GetComponent<Canvas>().worldCamera = Camera.main;
     }
 
     public void ExitGame()
