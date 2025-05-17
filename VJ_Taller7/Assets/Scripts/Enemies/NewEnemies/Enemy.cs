@@ -77,7 +77,6 @@ public class Enemy : PoolableObject, IDamageable
     [SerializeField] private float fadeOutDelay = 3f;
 
     private Coroutine lookCoroutine;
-    private GameObject[] _players;
     private CarnivoroTemporal[] carnivoros;
 
     [Header("Enemy Animator")]
@@ -145,8 +144,6 @@ public class Enemy : PoolableObject, IDamageable
     private void Start()
     {
         maxHealth = Health;
-
-        _players = GameObject.FindGameObjectsWithTag("Player");
 
         carnivoros = FindObjectsByType<CarnivoroTemporal>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
     }
