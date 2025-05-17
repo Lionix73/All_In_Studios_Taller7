@@ -1,6 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
-using UnityEditor.Search;
 using UnityEngine;
 
 public class ShopLimit : MonoBehaviour
