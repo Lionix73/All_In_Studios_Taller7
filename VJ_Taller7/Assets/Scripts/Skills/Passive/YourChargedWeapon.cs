@@ -18,6 +18,9 @@ public class YourChargedWeapon : PassiveSkillBase
     private void Start()
     {
         _players = GameObject.FindGameObjectsWithTag("Player");
+
+        if (_players.Length < 2) return;
+
         _friendPlayerIndex = player == _players[0] ? 1 : 0;
 
         _friendHealth = _players[_friendPlayerIndex].GetComponent<Health>();
@@ -29,6 +32,8 @@ public class YourChargedWeapon : PassiveSkillBase
 
     public override void CheckCondition()
     {
+        if (_players.Length < 2) return;
+
         if (player.GetComponent<Health>().isDead)
         {
             StartCoroutine(Execute());
@@ -37,6 +42,8 @@ public class YourChargedWeapon : PassiveSkillBase
 
     public override IEnumerator Execute()
     {
+        _players[_friendPlayerIndex].GetComponent<ThisObjectSounds>().PlaySound("YourChargedWeapon");
+
         float incrementedHealth = _orignalMaxHealth * (healthIncreasePercentage/100);
         _friendHealth.ScaleHealth(incrementedHealth);
 

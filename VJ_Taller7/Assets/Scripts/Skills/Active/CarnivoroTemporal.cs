@@ -10,7 +10,7 @@ public class CarnivoroTemporal : SkillBase
 
     private Health playerHealth;
 
-    public bool Carnivoro
+    public bool CarnivoroActive
     {
         get => carnivoroTemp;
         set => carnivoroTemp = value;
@@ -24,17 +24,17 @@ public class CarnivoroTemporal : SkillBase
 
     public override IEnumerator Execute()
     {
-        Carnivoro = true;
+        CarnivoroActive = true;
+        soundManager.PlaySound("TempCarnivore");
 
         yield return new WaitForSeconds(duration);
 
-        Carnivoro = false;
+        CarnivoroActive = false;
     }
 
     public void HealthForKill()
     {
-        float healthAmountToRecover = playerHealth.GetMaxHeath * (healthPerecentageToRecover / 100);
-
+        float healthAmountToRecover = playerHealth.GetMaxHeath * ((float)healthPerecentageToRecover / 100);
         playerHealth.TakeHeal(healthAmountToRecover);
     }
 }

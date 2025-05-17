@@ -3,8 +3,9 @@ using UnityEngine;
 
 public abstract class PassiveSkillBase : MonoBehaviour, IPassiveSkill
 {
-    private PassiveSkillManager skillManager;
     public Skill_Info skillInfo;
+    private PassiveSkillManager skillManager;
+    protected ThisObjectSounds soundManager;
 
     protected float cooldown;
     protected bool isOnCooldown = false;
@@ -15,6 +16,7 @@ public abstract class PassiveSkillBase : MonoBehaviour, IPassiveSkill
     private void Awake()
     {
         skillManager = GetComponentInParent<PassiveSkillManager>();
+        soundManager = GetComponentInParent<ThisObjectSounds>();
     }
 
     public virtual void Activate()
@@ -35,5 +37,7 @@ public abstract class PassiveSkillBase : MonoBehaviour, IPassiveSkill
         isOnCooldown = true;
         yield return new WaitForSeconds(cooldown);
         isOnCooldown = false;
+
+        if (cooldown > 0) soundManager.PlaySound("ReloadSkill");
     }
 }

@@ -3,8 +3,9 @@ using UnityEngine;
 
 public abstract class SkillBase : MonoBehaviour, ISkill
 {
-    private ActiveSkillManager skillManager;
     public Skill_Info skillInfo;
+    private ActiveSkillManager skillManager;
+    protected ThisObjectSounds soundManager;
 
     protected float cooldown;
     protected bool isOnCooldown = false;
@@ -15,6 +16,7 @@ public abstract class SkillBase : MonoBehaviour, ISkill
     private void Awake()
     {
         skillManager = GetComponentInParent<ActiveSkillManager>();
+        soundManager = GetComponentInParent<ThisObjectSounds>();
     }
 
     public virtual void Activate()
@@ -34,5 +36,6 @@ public abstract class SkillBase : MonoBehaviour, ISkill
         isOnCooldown = true;
         yield return new WaitForSeconds(cooldown);
         isOnCooldown = false;
+        soundManager.PlaySound("ReloadSkill");
     }
 }

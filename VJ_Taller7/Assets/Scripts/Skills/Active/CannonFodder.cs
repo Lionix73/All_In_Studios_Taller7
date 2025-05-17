@@ -11,6 +11,7 @@ public class CannonFodder : SkillBase
     public override IEnumerator Execute()
     {
         cooldown = cooldownThisSkill;
+        soundManager.PlaySound("CannonFodder");
 
         EnemyMovement[] enemies = FindObjectsByType<EnemyMovement>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
 
