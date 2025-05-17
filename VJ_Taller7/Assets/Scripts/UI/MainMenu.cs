@@ -297,6 +297,7 @@ public class UIManager : MonoBehaviour
     {
         IsMainMenu = true;
         SwitchPanels("UIPlayer/MainMenu");
+        uiPanels[indexInGameUI].GetComponent<Canvas>().worldCamera = Camera.main;
         IsDead = false;
         hasWon = false;
 
@@ -431,9 +432,9 @@ public class UIManager : MonoBehaviour
 
         }
     }
-    public void SetCameraCanva()
+    public void SetCameraCanva(int indexPanel)
     {
-        uiPanels[2].GetComponent<Canvas>().worldCamera = Camera.main;
+        uiPanels[indexPanel].GetComponent<Canvas>().worldCamera = Camera.main;
     }
 
     public void ExitGame()
