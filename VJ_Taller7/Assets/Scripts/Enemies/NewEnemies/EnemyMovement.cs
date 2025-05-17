@@ -183,28 +183,48 @@ public class EnemyMovement : MonoBehaviour
         }    
     }
 
+    public void ProcessMovement()
+    {
+        if (!agent.enabled || !agent.isOnNavMesh || enemy.IsDead)
+            return;
+            
+        if (State == EnemyState.Chase)
+        {
+            agent.SetDestination(player.transform.position);
+        }
+        
+        if (agent.isStopped && State == EnemyState.Chase)
+        {
+            agent.isStopped = false;
+        }
+    }
+
     private void HandleStateChange(EnemyState oldState, EnemyState newState)
     {
-        if(oldState != newState){
+        if (oldState != newState)
+        {
 
-            if(followCoroutine != null){
+            if (followCoroutine != null)
+            {
                 StopCoroutine(followCoroutine);
             }
 
-            if(oldState == EnemyState.Idle){
+            if (oldState == EnemyState.Idle)
+            {
                 agent.speed /= idleMoveSpeedMultiplier;
             }
 
-            switch(newState){
+            switch (newState)
+            {
                 case EnemyState.Idle:
                     followCoroutine = StartCoroutine(DoIdleMotion());
-                break;
+                    break;
                 case EnemyState.Patrol:
                     followCoroutine = StartCoroutine(DoPatrolMotion());
-                break;
+                    break;
                 case EnemyState.Chase:
                     followCoroutine = StartCoroutine(FollowTarget());
-                break;
+                    break;
             }
         }
     }
@@ -346,7 +366,7 @@ public class EnemyMovement : MonoBehaviour
         Vector3 direction = (transform.position - player.position).normalized;
         Vector3 targetPosition = player.position + direction * attackRadius;
         NavMeshHit hit;
-        if (NavMesh.SamplePosition(targetPosition, out hit, 2f, agent.areaMask))
+        if (NavMesh.SamplePosition(targetPosition, out hit, 2f, agent.areaMask) && agent.isOnNavMesh)
         {
             agent.SetDestination(hit.position);
         }

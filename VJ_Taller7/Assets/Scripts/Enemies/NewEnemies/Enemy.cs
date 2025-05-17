@@ -126,6 +126,34 @@ public class Enemy : PoolableObject, IDamageable
     public PlayerController Player { get; set; }
 
     public int Level { get; set; }
+    
+    private bool isRegisteredForPartitioning = false;
+
+    private void OnEnable()
+    {
+        if (!isRegisteredForPartitioning)
+        {
+            TimePartitionManager.Instance.RegisterEnemy(this);
+            isRegisteredForPartitioning = true;
+        }
+    }
+
+    public override void OnDisable()
+    {
+        if (!isStatic)
+        {
+            base.OnDisable();
+            
+            agent.enabled = false;
+            OnDie = null;
+            
+            if (isRegisteredForPartitioning)
+            {
+                TimePartitionManager.Instance.UnregisterEnemy(this);
+                isRegisteredForPartitioning = false;
+            }
+        }
+    }
 
     private void Awake()
     {
@@ -133,12 +161,13 @@ public class Enemy : PoolableObject, IDamageable
         soundManager = GetComponent<ThisObjectSounds>();
         AttackRadius.OnAttack += OnAttack;
 
-        if(skinnedMeshRenderers == null){
+        if (skinnedMeshRenderers == null)
+        {
             skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
         }
 
-        if(isStatic)
-        enemySpawner = FindFirstObjectByType<EnemySpawner>();
+        if (isStatic)
+            enemySpawner = FindFirstObjectByType<EnemySpawner>();
     }
 
     private void Start()
@@ -147,18 +176,30 @@ public class Enemy : PoolableObject, IDamageable
 
         carnivoros = FindObjectsByType<CarnivoroTemporal>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
     }
-
-    private void Update()
+    
+    public void ProcessAI()
     {
         if (isDead) return;
 
         BlinkEffect();
 
-        for(int i = 0; i < skills.Length; i++){
-            if(skills[i].CanUseSkill(this, Player, Level)){
+        for (int i = 0; i < skills.Length; i++)
+        {
+            if (skills[i].CanUseSkill(this, Player, Level))
+            {
                 skills[i].UseSkill(this, Player);
             }
         }
+    }
+
+    private void Update()
+    {
+        // Keep only essential real-time effects here
+        // Most logic moved to ProcessAI which is called by TimePartitionManager
+        if (isDead) return;
+        
+        // BlinkEffect is visual and should run every frame
+        BlinkEffect();
     }
 
     private void OnAttack(IDamageable target)
@@ -186,15 +227,6 @@ public class Enemy : PoolableObject, IDamageable
         }
 
         transform.rotation = lookRotation;
-    }
-
-    public override void OnDisable(){
-        if(!isStatic){
-            base.OnDisable();
-            
-            agent.enabled = false;
-            OnDie = null;
-        }
     }
 
     public void TakeDamage(int damage){
