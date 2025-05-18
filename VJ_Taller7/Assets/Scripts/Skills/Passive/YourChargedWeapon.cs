@@ -44,7 +44,7 @@ public class YourChargedWeapon : PassiveSkillBase
     {
         _players[_friendPlayerIndex].GetComponent<ThisObjectSounds>().PlaySound("YourChargedWeapon");
 
-        float incrementedHealth = _orignalMaxHealth * (healthIncreasePercentage/100);
+        float incrementedHealth = _orignalMaxHealth * ((float)healthIncreasePercentage/100);
         _friendHealth.ScaleHealth(incrementedHealth);
 
         int incrementedDamage = (int)(_orignalDamage * (1 + (damageIncreasePercentage/100)));
@@ -52,8 +52,8 @@ public class YourChargedWeapon : PassiveSkillBase
 
         yield return new WaitForSeconds(duration);
 
-        float originalHealth = _friendHealth.GetMaxHeath - _orignalMaxHealth;
-        _friendHealth.ScaleHealth(-originalHealth);
+        float ExtraHealth = _friendHealth.GetMaxHeath - _orignalMaxHealth;
+        _friendHealth.ScaleHealth(-ExtraHealth);
         _gunManager.CurrentGun.Damage = _orignalDamage;
     }
 }

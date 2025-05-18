@@ -4,8 +4,16 @@ using UnityEngine;
 public class SegundoAliento : PassiveSkillBase
 {
     [SerializeField] private float cooldownThisSkill = 90f;
+    
     private Health playerHealth;
-     
+    private bool secondBreathActive = true;
+
+    public bool IsSecondBreathActive
+    {
+        get => secondBreathActive;
+        set => secondBreathActive = value;
+    }
+
     private void Start()
     {
         playerHealth = GetComponentInParent<Health>();
@@ -13,9 +21,12 @@ public class SegundoAliento : PassiveSkillBase
 
     public override void CheckCondition()
     {
-        if (playerHealth.GetCurrentHeath <= playerHealth.GetMaxHeath * 0.1f)
+        IsSecondBreathActive = true;
+
+        if (playerHealth.GetCurrentHeath <= playerHealth.GetMaxHeath * 0.1f && secondBreathActive)
         {
             cooldown = cooldownThisSkill;
+            IsSecondBreathActive = false;
             StartCoroutine(Execute());
             StartCoroutine(CooldownRoutine());
         }

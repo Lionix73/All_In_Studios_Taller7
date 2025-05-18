@@ -35,7 +35,7 @@ public class GlassCannon : PassiveSkillBase
     {
         if(!healthApplied)
         {
-            float reducedHealth = playerHealth.GetMaxHeath * (remainingHealthPercentage / 100);
+            float reducedHealth = playerHealth.GetMaxHeath * ((float)remainingHealthPercentage / 100);
             playerHealth.ScaleHealth(-reducedHealth);
             healthApplied = true;
         }

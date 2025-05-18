@@ -18,11 +18,13 @@ public class Health : MonoBehaviour, IDamageable
 
     private PlayerController pController;
     private ThisObjectSounds soundManager;
+    private SegundoAliento secondBreath;
 
     private void Start()
     {
         pController = GetComponent<PlayerController>();
         soundManager = GetComponentInParent<ThisObjectSounds>();
+        secondBreath = GetComponentInChildren<SegundoAliento>();
     }
 
     void Update()
@@ -54,6 +56,8 @@ public class Health : MonoBehaviour, IDamageable
         HealthChange();
         if (currentHealth <= 0)
         {
+            if (secondBreath.IsSecondBreathActive) return;
+
             StartCoroutine(PlayerDead());
             OnPlayerDeath?.Invoke(gameObject);
         }
