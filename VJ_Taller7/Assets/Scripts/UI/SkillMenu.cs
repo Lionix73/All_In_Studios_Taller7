@@ -11,69 +11,95 @@ public class SkillMenu : MonoBehaviour
 
     [Header("UI References")]
     public AsignSkillToSkillCard cardSkillInfo;
-    public Transform passiveSkillsContainer;
-    public Transform activeSkillsContainer;
-    public GameObject skillButtonPrefab;
+    public Button passiveButton;
+    public Button activeButton;
+    public Button upArrowButton;
+    public Button downArrowButton;
+    public TextMeshProUGUI skillTypeText;
 
-    int selectedIndex = 0;
+    private List<Skill_Info> currentSkills;
+    private int selectedIndex = 0;
+    private bool viewingPassiveSkills = true;
 
-    private void Start() 
-    { 
-        
-        cardSkillInfo.AsignInfo(passiveSkills[selectedIndex]);
-        // Crear botones para habilidades pasivas
-        CreateSkillButtons(passiveSkills, passiveSkillsContainer, true);
-
-        // Crear botones para habilidades activas
-        CreateSkillButtons(activeSkills, activeSkillsContainer, false);
-    }
-
-    private void CreateSkillButtons(List<Skill_Info> skills, Transform container, bool isPassive)
+    private void Start()
     {
-        // Limpiar contenedor si ya tiene botones
-        foreach (Transform child in container)
+        // Configurar listeners de botones
+        passiveButton.onClick.AddListener(() => SwitchToPassiveSkills());
+        activeButton.onClick.AddListener(() => SwitchToActiveSkills());
+        upArrowButton.onClick.AddListener(() => NavigateSkills(-1));
+        downArrowButton.onClick.AddListener(() => NavigateSkills(1));
+        SelectedActiveSkill(selectedIndex);
+        SelectedPassiveSkill(selectedIndex);
+        // Inicializar mostrando habilidades pasivas
+        SwitchToPassiveSkills();
+    }
+
+    private void SwitchToPassiveSkills()
+    {
+        viewingPassiveSkills = true;
+        currentSkills = passiveSkills;
+        selectedIndex = Mathf.Clamp(CharacterManager.Instance.indexPassiveSkill, 0, currentSkills.Count - 1);
+        UpdateSkillDisplay();
+        //skillTypeText.text = "Habilidades Pasivas";
+    }
+
+    private void SwitchToActiveSkills()
+    {
+        viewingPassiveSkills = false;
+        currentSkills = activeSkills;
+        selectedIndex = Mathf.Clamp(CharacterManager.Instance.indexActiveSkill, 0, currentSkills.Count - 1);
+        UpdateSkillDisplay();
+        //skillTypeText.text = "Habilidades Activas";
+    }
+
+    private void NavigateSkills(int direction)
+    {
+        if (currentSkills == null || currentSkills.Count == 0) return;
+
+        selectedIndex += direction;
+
+        // Asegurarse de que el índice esté dentro de los límites
+        if (selectedIndex < 0) selectedIndex = currentSkills.Count - 1;
+        else if (selectedIndex >= currentSkills.Count) selectedIndex = 0;
+
+        UpdateSkillDisplay();
+
+        // Actualizar el índice en el CharacterManager
+        if (viewingPassiveSkills)
         {
-            Destroy(child.gameObject);
+
+            CharacterManager.Instance.indexPassiveSkill = selectedIndex;
+            SelectedPassiveSkill(selectedIndex);
         }
-
-        // Crear un botón por cada habilidad
-        for (int i = 0; i < skills.Count; i++)
+        else
         {
-            int index = i; // Importante: crear copia local para el closure
-            var buttonObj = Instantiate(skillButtonPrefab, container);
-            var button = buttonObj.GetComponent<Button>();
-
-            // Configurar imagen y texto del botón
-            var icon = buttonObj.GetComponent<Image>();
-            //var text = buttonObj.GetComponentInChildren<TMP_Text>();
-
-            if (icon != null) icon.sprite = skills[i].image;
-            //if (text != null) text.text = skills[i].title;
-
-            // Asignar evento click
-            button.onClick.AddListener(() => {
-                if (isPassive)
-                {
-                    SelectedPassiveSkill(index);
-                }
-                else
-                {
-                    SelectedActiveSkill(index);
-                }
-            });
+            CharacterManager.Instance.indexActiveSkill = selectedIndex;
+            SelectedActiveSkill(selectedIndex);
         }
     }
+
+    private void UpdateSkillDisplay()
+    {
+        if (currentSkills != null && currentSkills.Count > 0 && selectedIndex >= 0 && selectedIndex < currentSkills.Count)
+        {
+            cardSkillInfo.AsignInfo(currentSkills[selectedIndex]);
+        }
+    }
+
     public void SelectedPassiveSkill(int selectedIndex)
     {
         CharacterManager.Instance.indexPassiveSkill = selectedIndex;
         Skill_Info skillInfo = passiveSkills[selectedIndex];
         cardSkillInfo.AsignInfo(skillInfo);
+        Image passiveSkillImage = passiveButton.GetComponent<Image>();
+        passiveSkillImage.sprite = skillInfo.image;
     }
 
     public void SelectedActiveSkill(int selectedIndex)
     {
         CharacterManager.Instance.indexActiveSkill = selectedIndex;
         Skill_Info skillInfo = activeSkills[selectedIndex];
-        cardSkillInfo.AsignInfo(skillInfo);
+        Image activeSkillImage = activeButton.GetComponent<Image>();
+        activeSkillImage.sprite = skillInfo.image;
     }
 }
