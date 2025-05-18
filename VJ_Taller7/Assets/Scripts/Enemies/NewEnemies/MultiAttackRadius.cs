@@ -7,7 +7,7 @@ using UnityEngine;
 public class MultiAttackRadius : NetworkBehaviour
 {
     public SphereCollider sphereCollider;
-    protected List<IDamageable> damageables = new List<IDamageable>();
+    protected List<IDamageableMulti> damageables = new List<IDamageableMulti>();
     
     [SerializeField] protected int damage = 10;
     public int Damage { get => damage; set => damage = value; }
@@ -21,7 +21,7 @@ public class MultiAttackRadius : NetworkBehaviour
     public PlayerControllerMulti Player { get; set; }
 
     
-    public delegate void AttackEvent(IDamageable target);
+    public delegate void AttackEvent(IDamageableMulti target);
     public AttackEvent OnAttack;
     protected Coroutine attackCoroutine;
     protected EnemyMulti enemy;
@@ -46,7 +46,7 @@ public class MultiAttackRadius : NetworkBehaviour
             return;
         } 
         Player = other.GetComponent<PlayerControllerMulti>();
-        IDamageable damageable = other.GetComponent<IDamageable>();
+        IDamageableMulti damageable = other.GetComponent<IDamageableMulti>();
         if(damageable != null)
         {
             damageables.Add(damageable);
@@ -69,7 +69,7 @@ public class MultiAttackRadius : NetworkBehaviour
         }
         
         Player = null;
-        IDamageable damageable = other.GetComponent<IDamageable>();
+        IDamageableMulti damageable = other.GetComponent<IDamageableMulti>();
         if(damageable != null)
         {
             damageables.Remove(damageable);
@@ -89,7 +89,7 @@ public class MultiAttackRadius : NetworkBehaviour
 
         yield return wait;
 
-        IDamageable closestDamageable = null;
+        IDamageableMulti closestDamageable = null;
 
         //Closest distance to enemy is 100% of their attack radius
         float closestDistance = sphereCollider.radius;
@@ -142,7 +142,7 @@ public class MultiAttackRadius : NetworkBehaviour
             if(closestDamageable != null)
             {
                 OnAttack?.Invoke(closestDamageable);
-                closestDamageable.TakeDamage(damage);
+                closestDamageable.TakeDamage(damage,10);
             }
 
             closestDamageable = null;
@@ -156,7 +156,7 @@ public class MultiAttackRadius : NetworkBehaviour
         attackCoroutine = null;
     }
 
-    protected bool DisabledDamageables(IDamageable damageable)
+    protected bool DisabledDamageables(IDamageableMulti damageable)
     {
         return damageable != null && !damageable.GetTransform().gameObject.activeSelf;
     }

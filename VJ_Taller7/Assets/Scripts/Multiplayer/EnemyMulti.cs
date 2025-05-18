@@ -50,8 +50,8 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         get => ragdollEnabler;
         set => ragdollEnabler = value;
     }
-    private Collider colliderEnemy;
-    public Collider ColliderEnemy
+    [SerializeField] private Collider[] colliderEnemy;
+    public Collider [] ColliderEnemy
     {
         get => colliderEnemy;
         set => colliderEnemy = value;
@@ -154,7 +154,16 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
     [Rpc(SendTo.Everyone)]
     public void RespawmEnemyRpc()
     {
-        ColliderEnemy.enabled = true;
+        if (!isStatic)
+        {
+            agent.enabled = true;
+            IsDead = false;
+
+            foreach (Collider collider in colliderEnemy)
+            {
+                collider.enabled = true;
+            }
+        }
         RagdollEnabler.EnableAnimator();
         RagdollEnabler.DisableAllRigidbodies();
         if (!IsServer) return;
@@ -180,7 +189,6 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        colliderEnemy = GetComponent<Collider>();
         if (!IsServer) return;
         
         attackRadius.Player = Player;
@@ -208,7 +216,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         if (!IsServer) return;
 
 
-        if (Player == null) return;
+       // if (Player == null) return;
 
         for (int i = 0; i < skills.Length; i++)
         {
@@ -219,7 +227,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         }
     }
 
-    private void OnAttack(IDamageable target)
+    private void OnAttack(IDamageableMulti target)
     {
         animator.SetTrigger(ATTACK_TRIGGER);
 
@@ -271,12 +279,16 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
     [Rpc(SendTo.Server)]
     public void TakeDamageRpc(int damage, ulong clientId)
     {
+        if(IsDead) return;
+
         lastAttackerId = clientId;
         //networkHealth.Value -= damage;
         int actualHealth = Health - damage;
         Health = actualHealth;
 
+        animator.SetTrigger(IsHit);
         movement.State = EnemyState.Chase;
+        healthBar.SetProgress(Health / maxHealth, 3);
 
         //Debug.Log("Enemy Health: " + Health);
         Debug.Log("Cliente #"+ lastAttackerId);
@@ -286,8 +298,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         if (Health <= 0)
         {
             //networkIsDead.Value = true;
-            IsDead = true;
-            //IsDead = true;
+
 
             /* #region CarnivoroTemporal Skill
              // Check if carnivoro skill is active
@@ -299,10 +310,18 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
              }
              #endregion
             */
-            if (!isStatic)
+
+            // Use thread-safe invocation for the event
+            DeathEvent handler = OnDie;
+            if (handler != null)
             {
-                agent.enabled = false;
+                // This ensures all subscribers are notified atomically
+                handler(this);
             }
+
+            IsDead = true;
+
+
             
             GetAttackerId?.Invoke(this, lastAttackerId);
 
@@ -331,6 +350,14 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
     [Rpc(SendTo.Everyone)]
     public void DiedAnimationRpc()
     {
+        if (!isStatic)
+        {
+            agent.enabled = false;
+            foreach (Collider collider in colliderEnemy)
+            {
+                collider.enabled = false;
+            }
+        }
         if (ragdollEnabler != null)
         {
             ragdollEnabler.EnableRagdoll();
@@ -350,7 +377,12 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
 
         if (ragdollEnabler != null)
         {
-            colliderEnemy.enabled = false;
+
+            foreach (Collider collider in colliderEnemy)
+            {
+                collider.enabled = false;
+            }
+
             ragdollEnabler.DisableAllRigidbodies();
         }
 

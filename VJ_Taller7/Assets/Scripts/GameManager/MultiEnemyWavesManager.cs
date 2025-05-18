@@ -60,9 +60,9 @@ public class MultiEnemyWavesManager : NetworkBehaviour
         ObjectPool.ClearPools();
         ObjectPoolMulti.ClearPools();
         _multiPlayerManager = GetComponent<MultiPlayerManager>();
+
         GameObject.Find("HealthBarCanvas").TryGetComponent(out healthBarCanvas);
         if (!IsServer) return;
-        
         _multiPlayerManager.OnGameStart += StartWavesManager;
 
         
@@ -120,13 +120,15 @@ public class MultiEnemyWavesManager : NetworkBehaviour
 
     public void RecieveWaveOrder(int actualWave, int amountOfEnemiesToSpawn){
         //numberOfEnemiesToSpawn = amountOfEnemiesToSpawn;
-        level = actualWave;
+        //level = actualWave;
         Debug.Log($"Recibiendo oleada de {numberOfEnemiesToSpawn} enemigos");
         ScaleUpSpawns();
         StartCoroutine(SpawnEnemies());
         MultiGameManager.Instance.roundManager.recieveWaveData(numberOfEnemiesToSpawn);
 
-        availableEnemiesToSpawn = MultiGameManager.Instance.availableEnemiesForWave[actualWave-1].availableEnemies;
+        //availableEnemiesToSpawn = MultiGameManager.Instance.availableEnemiesForWave[actualWave-1].availableEnemies;
+        if (actualWave > 2) actualWave = 2;
+        availableEnemiesToSpawn = MultiGameManager.Instance.availableEnemiesForWave[actualWave - 1].availableEnemies;
     }
 
     private IEnumerator SpawnEnemies(){
@@ -245,6 +247,7 @@ public class MultiEnemyWavesManager : NetworkBehaviour
 
                 enemy.Movement.Spawn();
                 enemy.GetAttackerId+= _roundManager.ChangeScore;
+                enemy.OnDie += _roundManager.EnemyDied;
                 enemy.OnDie += HandleEnemyDeath;
 
                 enemy.Level = level;
@@ -271,12 +274,18 @@ public class MultiEnemyWavesManager : NetworkBehaviour
     private void HandleEnemyDeath(EnemyMulti enemy){
         if (!IsServer) return;
 
-        Interlocked.Decrement(ref enemiesAlive);
+        if (enemy == null) return;
+        
+        // Use Interlocked instead of lock for better performance
+        int currentAlive = Interlocked.Decrement(ref enemiesAlive);
 
-        _roundManager.EnemyDied(enemiesAlive);
-        enemy.GetAttackerId -= _roundManager.ChangeScore;
+        // Unsubscribe from events to prevent double-counting
         enemy.OnDie -= HandleEnemyDeath;
-        if(enemiesAlive == 0 && enemiesSpawned == numberOfEnemiesToSpawn){ //Si la ronda acaba antes del tiempo
+        enemy.GetAttackerId -= _roundManager.ChangeScore;  
+        enemy.OnDie -= _roundManager.EnemyDied;
+        
+        // Check if the wave is complete
+        if(currentAlive <= 0 && enemiesSpawned == numberOfEnemiesToSpawn){ 
             //ScaleUpSpawns(); Ya se escalan cuando se manda la ronda
         }
     }

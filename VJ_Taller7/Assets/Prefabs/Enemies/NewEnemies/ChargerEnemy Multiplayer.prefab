@@ -98,6 +98,11 @@ NavMeshAgent:
   m_CorrespondingSourceObject: {fileID: 7449169838366756006, guid: 67979ce69ffaa964496fec69c93e254f, type: 3}
   m_PrefabInstance: {fileID: 7613158071954058919}
   m_PrefabAsset: {fileID: 0}
+--- !u!136 &1790357091729948673 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 8178535429328498342, guid: 67979ce69ffaa964496fec69c93e254f, type: 3}
+  m_PrefabInstance: {fileID: 7613158071954058919}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2798678321174888071 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5724561062335811616, guid: 67979ce69ffaa964496fec69c93e254f, type: 3}
@@ -197,6 +202,9 @@ MonoBehaviour:
   agent: {fileID: 1064989634248811009}
   skills: []
   ragdollEnabler: {fileID: 4729678802674982455}
+  colliderEnemy:
+  - {fileID: 1790357091729948673}
+  - {fileID: 4878068496521144615}
   maxHealth: 0
   healthBar: {fileID: 5996244801279208644}
   isStatic: 0
@@ -206,7 +214,7 @@ MonoBehaviour:
   floatingTextCriticPrefab: {fileID: 4534213121695243783, guid: ff34563d7793e6f49b39fd2078271124, type: 3}
   deathVFX: {fileID: 439236340125848478}
   skinnedMeshRenderers:
-  - {fileID: 9119000039995392073}
+  - {fileID: 0}
   blinkIntensity: 10
   blinkDuration: 0.4
   scoreOnKill: 100
@@ -222,6 +230,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7df5b43d8035fe04b93f630fe07a1392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!135 &4878068496521144615 stripped
+SphereCollider:
+  m_CorrespondingSourceObject: {fileID: 3032399871749556096, guid: 67979ce69ffaa964496fec69c93e254f, type: 3}
+  m_PrefabInstance: {fileID: 7613158071954058919}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5996244801279208644 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4220345704050033251, guid: 67979ce69ffaa964496fec69c93e254f, type: 3}
@@ -325,10 +338,5 @@ MonoBehaviour:
 --- !u!95 &8426667049614859336 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 2114114462862570223, guid: 67979ce69ffaa964496fec69c93e254f, type: 3}
-  m_PrefabInstance: {fileID: 7613158071954058919}
-  m_PrefabAsset: {fileID: 0}
---- !u!137 &9119000039995392073 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 1669266282216353518, guid: 67979ce69ffaa964496fec69c93e254f, type: 3}
   m_PrefabInstance: {fileID: 7613158071954058919}
   m_PrefabAsset: {fileID: 0}

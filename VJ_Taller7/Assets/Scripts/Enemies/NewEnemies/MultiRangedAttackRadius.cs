@@ -22,7 +22,7 @@ public class MultiRangedAttackRadius : MultiAttackRadius
     [Range(0.01f, 1f)][SerializeField] private float sphereCastRadius = 0.1f;
 
     private RaycastHit hit;
-    private IDamageable targetDamageable;
+    private IDamageableMulti targetDamageable;
     private MultiBulletEnemy bullet;
 
     public override void OnNetworkSpawn()
@@ -134,10 +134,10 @@ public class MultiRangedAttackRadius : MultiAttackRadius
         Debug.DrawRay(origin, direction.normalized * sphereCastRadius, Color.red);
 
         if (Physics.SphereCast(origin, sphereCastRadius, direction.normalized, out RaycastHit hit, sphereCollider.radius, mask)){
+
+            IDamageableMulti damageable;
             
-            IDamageable damageable;
-            
-            if(hit.collider.TryGetComponent<IDamageable>(out damageable)){
+            if(hit.collider.TryGetComponent<IDamageableMulti>(out damageable)){
                 //Debug.Log("Line of sight to target: " + (damageable.GetTransform() == target));
                 return damageable.GetTransform() == target;
             }

@@ -242,6 +242,9 @@ MonoBehaviour:
   agent: {fileID: 3130710162326468274}
   skills: []
   ragdollEnabler: {fileID: 7212004560344189572}
+  colliderEnemy:
+  - {fileID: 4426403372313695410}
+  - {fileID: 7351984914987335060}
   maxHealth: 300
   healthBar: {fileID: 8539931829517727863}
   isStatic: 0
@@ -274,7 +277,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  TransitionStateInfoList: []
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -2089788878
+    DestinationState: 125937960
+    TransitionDuration: 0.1
+    TriggerNameHash: 1749078233
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 125937960
+    DestinationState: 545781641
+    TransitionDuration: 0.25
+    TriggerNameHash: -1418138586
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 1
+    OriginatingState: -1459219776
+    DestinationState: 1080829965
+    TransitionDuration: 0.1
+    TriggerNameHash: 1080829965
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 1
+    OriginatingState: -1459219776
+    DestinationState: -1610822797
+    TransitionDuration: 0.1
+    TriggerNameHash: 765154766
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
+    Layer: 2
+    OriginatingState: -1459219776
+    DestinationState: 1654612129
+    TransitionDuration: 0.15
+    TriggerNameHash: 2006285284
+    TransitionIndex: 0
   m_Animator: {fileID: 5855971618680686843}
 --- !u!137 &1340359493068437377 stripped
 SkinnedMeshRenderer:
@@ -289,6 +327,11 @@ ParticleSystem:
 --- !u!195 &3130710162326468274 stripped
 NavMeshAgent:
   m_CorrespondingSourceObject: {fileID: 2201402117764995550, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+  m_PrefabInstance: {fileID: 3890678924350353260}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &4426403372313695410 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 618059348984806366, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
   m_PrefabInstance: {fileID: 3890678924350353260}
   m_PrefabAsset: {fileID: 0}
 --- !u!137 &4457285669020257975 stripped
@@ -368,6 +411,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7df5b43d8035fe04b93f630fe07a1392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!135 &7351984914987335060 stripped
+SphereCollider:
+  m_CorrespondingSourceObject: {fileID: 6050876979636982520, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}
+  m_PrefabInstance: {fileID: 3890678924350353260}
+  m_PrefabAsset: {fileID: 0}
 --- !u!137 &8023428657678575094 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6532055663846001306, guid: 9f410231b86db3e46b56def6b5d7baae, type: 3}

@@ -3,7 +3,7 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class HealthMulti : NetworkBehaviour, IDamageable
+public class HealthMulti : NetworkBehaviour, IDamageableMulti
 {
     [SerializeField] private TextMeshProUGUI healthDisplay;
     private NetworkVariable<int> currentHealth = new NetworkVariable<int>();
@@ -88,7 +88,7 @@ public class HealthMulti : NetworkBehaviour, IDamageable
         animator.SetTrigger("Revive");
 
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, ulong attackerId)
     {
         if (IsDead) return;
 

@@ -195,9 +195,9 @@ public class BombSkill : SkillScriptableObject
 
         if (Physics.SphereCast(origin, bombSize, direction.normalized, out RaycastHit hit, range, lineOfSightLayerMask))
         {
-            IDamageable damageable;
+            IDamageableMulti damageable;
 
-            if (hit.collider.TryGetComponent<IDamageable>(out damageable))
+            if (hit.collider.TryGetComponent<IDamageableMulti>(out damageable))
             {
                 //Debug.Log("Line of sight to target: " + (damageable.GetTransform() == hit.transform));
                 return damageable.GetTransform() == target;

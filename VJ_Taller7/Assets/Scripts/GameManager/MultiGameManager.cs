@@ -102,6 +102,7 @@ public class MultiGameManager : NetworkBehaviour
 
     public void PlayerScore(ulong clientId, int score)
     {
+        if(clientId == 10) return;
         NetworkObject playerNet = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject;
         if (playerNet != null)
         {

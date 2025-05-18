@@ -239,6 +239,10 @@ MonoBehaviour:
   agent: {fileID: 2965059292958900872}
   skills: []
   ragdollEnabler: {fileID: 7368638952992276158}
+  colliderEnemy:
+  - {fileID: 4555738003455910024}
+  - {fileID: 7229397436878047662}
+  - {fileID: 7839727952184120089}
   maxHealth: 100
   healthBar: {fileID: 8419315921865231437}
   isStatic: 0
@@ -262,6 +266,11 @@ ParticleSystem:
 --- !u!195 &2965059292958900872 stripped
 NavMeshAgent:
   m_CorrespondingSourceObject: {fileID: 7449169838366756006, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
+  m_PrefabInstance: {fileID: 5640412425517714990}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &4555738003455910024 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 8178535429328498342, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
   m_PrefabInstance: {fileID: 5640412425517714990}
   m_PrefabAsset: {fileID: 0}
 --- !u!135 &5400607334577114968 stripped
@@ -325,6 +334,11 @@ SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 1699024531815087693, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
   m_PrefabInstance: {fileID: 5640412425517714990}
   m_PrefabAsset: {fileID: 0}
+--- !u!135 &7229397436878047662 stripped
+SphereCollider:
+  m_CorrespondingSourceObject: {fileID: 3032399871749556096, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
+  m_PrefabInstance: {fileID: 5640412425517714990}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7368638952992276158 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2883551852280623248, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
@@ -355,6 +369,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyWhoIsFrom: {fileID: 0}
   damageMult: 5
+--- !u!136 &7839727952184120089 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 2488953745854717239, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
+  m_PrefabInstance: {fileID: 5640412425517714990}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8419315921865231437 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4220345704050033251, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using Unity.Netcode;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody))]
 public class MultiBombBullet : MultiBulletEnemy
@@ -98,14 +99,19 @@ public class MultiBombBullet : MultiBulletEnemy
             bulletModel.enabled = false;
         }
 
+        // Track which enemies are damaged to prevent double-counting
+        HashSet<IDamageableMulti> damagedEnemies = new HashSet<IDamageableMulti>();
+
+
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, damageableLayer);
         foreach (Collider collider in colliders)
         {
-            IDamageable damageable;
-            if (collider.TryGetComponent<IDamageable>(out damageable))
+            IDamageableMulti damageable;
+            if (collider.TryGetComponent<IDamageableMulti>(out damageable) && !damagedEnemies.Contains(damageable))
             {
-                Debug.Log("BombBullet: Explode() - Damageable hit: " + damageable);
-                damageable.TakeDamage(damage);
+                //Debug.Log("BombBullet: Explode() - Damageable hit: " + damageable);
+                damagedEnemies.Add(damageable);
+                damageable.TakeDamage(damage,10);
             }
         }
         gameObject.GetComponent<Collider>().enabled = false;

@@ -150,12 +150,15 @@ public class MultiEnemyMovement : NetworkBehaviour
         OnStateChange?.Invoke(EnemyState.Spawn, defaultState);
     }
 
-    private void HandleLinkStart(OffMeshLinkMoveMethod moveMethod){
-        if(moveMethod == OffMeshLinkMoveMethod.NormalSpeed){
-            animator.SetBool(IsWalking, true);
+    private void HandleLinkStart(OffMeshLinkMoveMethod moveMethod)
+    {
+        if (moveMethod == OffMeshLinkMoveMethod.NormalSpeed)
+        {
+            //Keep animator in idle state
         }
-        else if(moveMethod != OffMeshLinkMoveMethod.Teleport){
-            animator.SetTrigger(Jump); 
+        else if (moveMethod != OffMeshLinkMoveMethod.Teleport)
+        {
+            animator.SetTrigger(Jump);
         }
     }
 

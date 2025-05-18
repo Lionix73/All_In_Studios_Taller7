@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class MultiRoundManager : NetworkBehaviour
     [Header("Manejo de Rondas y oleadas")]
     [SerializeField] private int currentWave; //oleadas
     [SerializeField] private int currentRound; //Rondas
+    private int level = 0; //For the game balance (in case)
     public int CurrentRound {get {return currentRound;}}
 
     [SerializeField] private int waveSize; //Tamaño de la oleada en cantidad de enemigos 
@@ -23,7 +25,9 @@ public class MultiRoundManager : NetworkBehaviour
     [SerializeField] private int waveValueScaleMult; //factor de aumento de la cantidad de valor de la wave
     [Tooltip("Tiempo adicional que dura la oleada")]
     [SerializeField] private float waveDurationScaleAdd; //Tiempo que se suma para cada oleada
-    
+    [Tooltip("Tiempo maximo al que pueden escalar las oleadas")]
+    [SerializeField] private float maximunTimeForWaves = 120;
+
     [Space]
     [Tooltip("Enemigos en cola generados para esta oleada")]
     public List<EnemyScriptableObject> enemiesToSpawn = new List<EnemyScriptableObject>();
@@ -66,8 +70,11 @@ public class MultiRoundManager : NetworkBehaviour
     private int lastDisplayedSecond = 0;
 
     //[Header("Eventos")]
-    public delegate void WaveComplete();
+    public delegate void WaveStarted();
+    public delegate void WaveComplete(bool completeSatisfactory);
     public delegate void RoundComplete();
+
+    public event WaveStarted OnWaveStart;
     public event WaveComplete OnWaveComplete;
     public event RoundComplete OnRoundComplete;
 
@@ -106,29 +113,36 @@ public class MultiRoundManager : NetworkBehaviour
         
         //SetEnemiesInSpawner();
     }
-    private void Update() {
-        if (!IsServer) return;
-        if (enemiesKilledOnWave == waveSize - 1 && lastEnemyOfWave == null){ //Todavia no funciona... pero casi
-            //setear al enemigo con el loot, o activar el loot en su muerte, algo...
-            lastEnemyOfWave= FindFirstObjectByType<EnemyMulti>().gameObject;
-            enemiesKilledOnWave = 0;
+    private void Update()
+    {
+
+        if (currentRound > 3)
+        { // ez win
+            _Simulating = false;
+
+            if (UIManager.Singleton) UIManager.Singleton.WinUI(7);
+            GameManager.Instance.WinGame();
         }
-        if (aliveEnemies == 0 && !inBetweenRounds && enemiesKilledOnWave>1){
-            
+
+        if (aliveEnemies == 0 && !inBetweenRounds && enemiesKilledOnWave > 1)
+        {
+
             inBetweenRounds = true; //Next round
-            OnWaveComplete?.Invoke(); //Se completo exitosamente la oleada, solo cuando acaba por matar a todos los enemigos
+            OnWaveComplete?.Invoke(true); //Se completo exitosamente la oleada, solo cuando acaba por matar a todos los enemigos
+            //_musicRounds.StopMusic();
+            //_soundManager.PlaySound("WinWave");
             enemiesKilledOnWave = 0;
         }
 
-        if (currentWave > 3){
+        if (currentWave > 3)
+        {
             //POR AHORA: AQUI TERMINARA LA ALPHA
-            if (UIManager.Singleton) UIManager.Singleton.WinUI(7);
-            _Simulating= false;
             currentRound++;
             currentWave = 0;
-            
-            if (UIManager.Singleton) 
-            { 
+            level++;
+
+            if (UIManager.Singleton)
+            {
                 UIManager.Singleton.actualRoundDisplay = true;
                 UIManager.Singleton.UIChangeRound(currentRound);
 
@@ -136,10 +150,13 @@ public class MultiRoundManager : NetworkBehaviour
             }
 
             OnRoundComplete?.Invoke(); // Se completo la ronda, avisar para escalados y eso, aqui solo importa sobrevivir
+
+            //_musicRounds.StopMusic();
+            //_soundManager.PlaySound("WinRound");
         }
 
         if (_Simulating) UpdateTimers();
-        
+
         if (MultiGameManager.Instance.spawnPlayerWithMenu) return;
         UISet();
 
@@ -189,24 +206,36 @@ public class MultiRoundManager : NetworkBehaviour
             lastDisplayedSecond = Mathf.CeilToInt(inBetweenRoundsTimer); // Reset para el próximo ciclo
             //castigar por no completar
             //aumentar el escalado de los enemigos o repetir
+
+            OnWaveComplete?.Invoke(false);
+            
+            //_musicRounds.StopMusic();
+           // _soundManager.PlaySound("FailWave");
+
+
+
             }
         }
     }
 
     private void SetWaveBalance(){
-        if (_BalncingInThis){
-            waveValue = currentWave * waveValueScaleMult * currentRound ; //current round en review por balance, seguramente sea un scaleRounsMult
+        if (_BalncingInThis)
+        {
+            waveValue = currentWave * waveValueScaleMult * currentRound; //current round en review por balance, seguramente sea un scaleRounsMult
             waveDuration += currentWave * waveDurationScaleAdd;
+            if (waveDuration > maximunTimeForWaves) waveDuration = maximunTimeForWaves;
 
             GenerateEnemies();
-            
+
             waveTimer = waveDuration;
         }
-        else {
+        else
+        {
             waveDuration += currentWave * waveDurationScaleAdd;
+            if (waveDuration > maximunTimeForWaves) waveDuration = maximunTimeForWaves;
             //List<WeightedSpawnScriptableObject> temp = GameManager.Instance.GetBalanceWave(currentWave);
             //enemyWavesManager.RecieveWaveLimits(temp);
-            enemyWavesManager.RecieveWaveOrder(currentWave, waveSize);
+            enemyWavesManager.RecieveWaveOrder(level, waveSize);
             waveTimer = waveDuration;
         }
     }
@@ -312,16 +341,26 @@ public class MultiRoundManager : NetworkBehaviour
 
     }
 
-    public void EnemyDied(int aliveEnemies){
-        if(!IsServer) return;
-        Debug.Log("Enemigo muerto en RoundManager");
-        aliveEnemies -=1;
-        enemiesKilledOnWave = waveSize - aliveEnemies;
+    public void EnemyDied(EnemyMulti enemy)
+    {
+        if (enemy == null) return;
+
+        //_musicRounds.OnEnemyKilled();
+
+        // Use Interlocked for atomic operations
+        int currentAlive = Interlocked.Decrement(ref aliveEnemies);
+
+        // Thread-safe calculation of enemies killed
+        int killed = waveSize - currentAlive;
+        Interlocked.Exchange(ref enemiesKilledOnWave, killed);
+
+        // Add to score
         scoreManager.AddEnemyKilled(1);
-       
-        EnemySpawnUIRpc(aliveEnemies);
+
+        // Update UI with the current value after decrementing
+        EnemySpawnUIRpc(currentAlive);
     }
-#endregion
+    #endregion
 
 }
 
