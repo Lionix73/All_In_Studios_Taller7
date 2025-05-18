@@ -1,26 +1,23 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 [DefaultExecutionOrder(-1)]
 public class SliderValueUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI valueText;
     private Slider slider;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         slider = GetComponentInChildren<Slider>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        UpdateSlideNumber();
     }
 
     public void UpdateSlideNumber()
     {
-        valueText.text = Mathf.FloorToInt(slider.value).ToString();
+        //valueText.text = Mathf.FloorToInt(slider.value).ToString();
+        valueText.text = Math.Round(slider.value, 1).ToString();
     }
 }
