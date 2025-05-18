@@ -127,31 +127,28 @@ public class Enemy : PoolableObject, IDamageable
 
     public int Level { get; set; }
     
-    private bool isRegisteredForPartitioning = false;
-
     private void OnEnable()
     {
-        if (!isRegisteredForPartitioning)
+        if (!isStatic)
         {
-            TimePartitionManager.Instance.RegisterEnemy(this);
-            isRegisteredForPartitioning = true;
+            agent.enabled = true;
+            isDead = false;
+
+            foreach (Collider collider in colliderEnemy)
+            {
+                collider.enabled = true;
+            }
         }
     }
-
+    
     public override void OnDisable()
     {
         if (!isStatic)
         {
             base.OnDisable();
-            
+
             agent.enabled = false;
             OnDie = null;
-            
-            if (isRegisteredForPartitioning)
-            {
-                TimePartitionManager.Instance.UnregisterEnemy(this);
-                isRegisteredForPartitioning = false;
-            }
         }
     }
 
@@ -176,8 +173,8 @@ public class Enemy : PoolableObject, IDamageable
 
         carnivoros = FindObjectsByType<CarnivoroTemporal>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
     }
-    
-    public void ProcessAI()
+
+    private void Update()
     {
         if (isDead) return;
 
@@ -190,16 +187,6 @@ public class Enemy : PoolableObject, IDamageable
                 skills[i].UseSkill(this, Player);
             }
         }
-    }
-
-    private void Update()
-    {
-        // Keep only essential real-time effects here
-        // Most logic moved to ProcessAI which is called by TimePartitionManager
-        if (isDead) return;
-        
-        // BlinkEffect is visual and should run every frame
-        BlinkEffect();
     }
 
     private void OnAttack(IDamageable target)
@@ -264,8 +251,16 @@ public class Enemy : PoolableObject, IDamageable
                 handler(this);
             }
             
-            if (!isStatic){
+            isDead = true;
+
+            if (!isStatic)
+            {
                 agent.enabled = false;
+
+                foreach (Collider collider in colliderEnemy)
+                {
+                    collider.enabled = false;
+                }
             }
 
             if(ragdollEnabler != null){

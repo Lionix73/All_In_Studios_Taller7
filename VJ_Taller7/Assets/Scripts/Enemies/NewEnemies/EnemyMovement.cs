@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
-using UnityEngine.InputSystem.LowLevel;
 
 [RequireComponent(typeof(NavMeshAgent), typeof(AgentLinkMover))]
 public class EnemyMovement : MonoBehaviour
@@ -181,22 +180,6 @@ public class EnemyMovement : MonoBehaviour
             animator.SetFloat("Horizontal", 0, 0.25f, Time.deltaTime);
             animator.SetFloat("Vertical", 0, 0.25f, Time.deltaTime);
         }    
-    }
-
-    public void ProcessMovement()
-    {
-        if (!agent.enabled || !agent.isOnNavMesh || enemy.IsDead)
-            return;
-            
-        if (State == EnemyState.Chase)
-        {
-            agent.SetDestination(player.transform.position);
-        }
-        
-        if (agent.isStopped && State == EnemyState.Chase)
-        {
-            agent.isStopped = false;
-        }
     }
 
     private void HandleStateChange(EnemyState oldState, EnemyState newState)

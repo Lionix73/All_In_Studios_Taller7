@@ -3,20 +3,7 @@ using UnityEngine;
 
 public class TimePartitionManager : MonoBehaviour
 {
-    private static TimePartitionManager _instance;
-    public static TimePartitionManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                GameObject go = new GameObject("TimePartitionManager");
-                _instance = go.AddComponent<TimePartitionManager>();
-                DontDestroyOnLoad(go);
-            }
-            return _instance;
-        }
-    }
+    // Script NOT USED because generating problems with Enemy Death
 
     [Tooltip("Number of frames to distribute enemy updates across")]
     [SerializeField] private int partitionCount = 4;
@@ -34,16 +21,7 @@ public class TimePartitionManager : MonoBehaviour
     private Queue<Enemy> pendingEnemies = new Queue<Enemy>();
 
     private void Awake()
-    {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        
-        _instance = this;
-        DontDestroyOnLoad(gameObject);
-        
+    { 
         InitializePartitions();
     }
 
@@ -111,14 +89,9 @@ public class TimePartitionManager : MonoBehaviour
         {
             if (currentEnemies[i] != null && currentEnemies[i].gameObject.activeInHierarchy)
             {
-                // Process AI logic
-                currentEnemies[i].ProcessAI();
-                
+                // Process AI logic    
+
                 // Process movement
-                if (currentEnemies[i].Movement != null)
-                {
-                    currentEnemies[i].Movement.ProcessMovement();
-                }
             }
         }
     }
