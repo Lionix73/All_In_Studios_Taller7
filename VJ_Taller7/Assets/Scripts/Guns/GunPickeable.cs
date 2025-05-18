@@ -14,7 +14,7 @@ public class GunPickeable : MonoBehaviour
     [SerializeField] private TextMeshProUGUI magazineText;
     [SerializeField] private TextMeshProUGUI priceText;
 
-    private Vector3 spinDirection = new Vector3(0, 1, 0);
+    [SerializeField] private Vector3 spinDirection = new Vector3(0, 1, 0);
     private GunManager gunManager;
 
 
