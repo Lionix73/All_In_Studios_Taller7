@@ -150,10 +150,10 @@ public class WeaponLogic : NetworkBehaviour
                         DoHitScanShooting(shootDirection, ShootSystem.transform.position, ShootSystem.transform.position, ownerClientId);
                         return;
                     case ShootType.Projectile:
-                        DoProjectileShooting(shootDirection);
+                        DoProjectileShooting(shootDirection, ownerClientId);
                         return;
                     case ShootType.Special:
-                        DoSpecialShooting(shootDirection);
+                        DoSpecialShooting(shootDirection, ownerClientId);
                         return;
                 }
             }
@@ -206,7 +206,7 @@ public class WeaponLogic : NetworkBehaviour
         return Model.transform.forward;
     }
 
-    private void DoProjectileShooting(Vector3 ShootDirection)
+    private void DoProjectileShooting(Vector3 ShootDirection, ulong ownerClientId)
     {
         NetworkObject netObject = networkObjectPool.GetNetworkObject(ShootConfig.BulletPrefabMulti.gameObject, ShootDirection, Quaternion.Euler(0, 0, 0));
         if (!netObject.IsSpawned) netObject.Spawn();
@@ -214,7 +214,7 @@ public class WeaponLogic : NetworkBehaviour
         //MultiBullet bullet = BulletPool.Get();
         // bullet.gameObject.SetActive(true);
         //bullet.Spawn(ShootDirection * ShootConfig.BulletSpawnForce);
-        GetBulletRpc(netObject.NetworkObjectId, ShootDirection);
+        GetBulletRpc(netObject.NetworkObjectId, ShootDirection, ownerClientId);
         bullet.OnCollision += HandleBulletCollision;
 
 
@@ -222,16 +222,18 @@ public class WeaponLogic : NetworkBehaviour
 
     }
     [Rpc(SendTo.Everyone)]
-    public void GetBulletRpc(ulong modelNetworkObjectId, Vector3 shootDirection)
+    public void GetBulletRpc(ulong modelNetworkObjectId, Vector3 shootDirection, ulong ownerClientId)
     {
         // Obtén el NetworkObject correspondiente al ID
         if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(modelNetworkObjectId, out NetworkObject spawnBullet))
         {
             if (IsClient) spawnBullet.gameObject.SetActive(true);
-
             MultiBullet bullet = spawnBullet.GetComponent<MultiBullet>();
-            bullet.Spawn(shootDirection * ShootConfig.BulletSpawnForce);
             bullet.transform.position = ShootSystem.transform.position;
+
+            if (!IsServer) return;
+            //bullet.Initialize(ownerClientId);
+            bullet.Spawn(shootDirection * ShootConfig.BulletSpawnForce, ownerClientId);
         }
         else
         {
@@ -240,28 +242,35 @@ public class WeaponLogic : NetworkBehaviour
 
     }
 
-    private void DoSpecialShooting(Vector3 ShootDirection)
+    private void DoSpecialShooting(Vector3 ShootDirection, ulong ownerClientId)
     {
         switch (Type)
         {
             case GunType.MysticCanon:
                 return;
             case GunType.GoldenFeather:
-                MultiBullet feather = GFeatherPool.Get();
-                feather.gameObject.SetActive(true);
+                //MultiBullet feather = GFeatherPool.Get();
+                //feather.gameObject.SetActive(true);
+                NetworkObject netObjectGF = networkObjectPool.GetNetworkObject(ShootConfig.BulletPrefabMulti.gameObject, ShootDirection, Quaternion.Euler(0, 0, 0));
+                if (!netObjectGF.IsSpawned) netObjectGF.Spawn();
+                MultiBullet feather = netObjectGF.GetComponent<MultiBullet>();
+                GetBulletRpc(netObjectGF.NetworkObjectId, ShootDirection,ownerClientId);
                 feather.OnCollision += HandleBulletCollision;
                 feather.OnBulletEnd += HandleGoldenBulletCollision; //Para poder eliminar tambien las balas especiales 
-                feather.transform.position = ShootSystem.transform.position;
-                feather.Spawn(ShootDirection * ShootConfig.BulletSpawnForce);
+                //feather.transform.position = ShootSystem.transform.position;
+                //feather.Spawn(ShootDirection * ShootConfig.BulletSpawnForce);
                 return;
             case GunType.ShinelessFeather:
-                MultiBullet shineless = SFeatherPool.Get();
-
-                shineless.gameObject.SetActive(true);
+                //MultiBullet shineless = SFeatherPool.Get();
+                NetworkObject netObjectSF = networkObjectPool.GetNetworkObject(ShootConfig.BulletPrefabMulti.gameObject, ShootDirection, Quaternion.Euler(0, 0, 0));
+                if (!netObjectSF.IsSpawned) netObjectSF.Spawn();
+                MultiBullet shineless = netObjectSF.GetComponent<MultiBullet>();
+                GetBulletRpc(netObjectSF.NetworkObjectId, ShootDirection, ownerClientId);
+                //shineless.gameObject.SetActive(true);
                 shineless.OnCollision += HandleBulletCollision;
                 shineless.OnBulletEnd += HandleShinelessFeather; //Para poder eliminar tambien las balas especiales 
-                shineless.transform.position = ShootSystem.transform.position;
-                shineless.Spawn(ShootDirection * ShootConfig.BulletSpawnForce);
+                //shineless.transform.position = ShootSystem.transform.position;
+                //shineless.Spawn(ShootDirection * ShootConfig.BulletSpawnForce);
                 return;
         }
     }
@@ -326,13 +335,25 @@ public class WeaponLogic : NetworkBehaviour
     {
         if (!IsServer) return;
         // En caso de usar la pool de trail, hay que desactivarla desde aqui
+        if (ShootConfig.ShootingType != ShootType.Special)
+        {
+            //bullet.gameObject.SetActive(false);
+            NetworkObject netObj = bullet.gameObject.GetComponent<NetworkObject>();
+            networkObjectPool.ReturnNetworkObject(netObj, ShootConfig.BulletPrefabMulti.gameObject);
+            ReturnBulletRpc(netObj.NetworkObjectId);
+        }
 
         if (collision != null)
         {
             ContactPoint contactPoint = collision.GetContact(0);
 
             Collider colliderHit = contactPoint.otherCollider;
-            if (colliderHit.gameObject.layer != LayerMask.NameToLayer("Enemy")) return;
+            if (colliderHit == null || colliderHit.gameObject.layer != LayerMask.NameToLayer("Enemy"))
+            {
+                return;
+            }
+
+            //if (colliderHit.gameObject.layer != LayerMask.NameToLayer("Enemy")) return;
 
             if (colliderHit.TryGetComponent(out IDamageableMulti enemy))
             {
@@ -344,29 +365,28 @@ public class WeaponLogic : NetworkBehaviour
             }
         }
 
-        if (ShootConfig.ShootingType != ShootType.Special)
-        {
-            //bullet.gameObject.SetActive(false);
-            NetworkObject netObj = bullet.gameObject.GetComponent<NetworkObject>();
-            networkObjectPool.ReturnNetworkObject(netObj, ShootConfig.BulletPrefabMulti.gameObject);
-            ReturnBulletRpc(netObj.NetworkObjectId);
-        }
+
 
     }
     private void HandleGoldenBulletCollision(MultiBullet bullet, Collision collision)
     {
-        bullet.gameObject.SetActive(false);
-        networkObjectPool.ReturnNetworkObject(bullet.GetComponent<NetworkObject>(), ShootConfig.BulletPrefabMulti.gameObject);
-        GFeatherPool.Release(bullet);
+        NetworkObject netObj = bullet.gameObject.GetComponent<NetworkObject>();
+        networkObjectPool.ReturnNetworkObject(netObj, ShootConfig.BulletPrefabMulti.gameObject);
+        ReturnBulletRpc(netObj.NetworkObjectId);
+        bullet.OnCollision -= HandleBulletCollision;
+        bullet.OnBulletEnd -= HandleGoldenBulletCollision; //Para poder eliminar tambien las balas especiales 
 
         //condicion de la shineless feather para que no recargue
     }
 
     private void HandleShinelessFeather(MultiBullet bullet, Collision collision)
     {
-        bullet.gameObject.SetActive(false);
-        GFeatherPool.Release(bullet);
+        NetworkObject netObj = bullet.gameObject.GetComponent<NetworkObject>();
+        networkObjectPool.ReturnNetworkObject(netObj, ShootConfig.BulletPrefabMulti.gameObject);
+        ReturnBulletRpc(netObj.NetworkObjectId);
         BulletsLeft = 1;
+        bullet.OnCollision -= HandleBulletCollision;
+        bullet.OnBulletEnd -= HandleShinelessFeather;
     }
 
     private MultiBullet CreateBullet()

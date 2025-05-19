@@ -12,9 +12,9 @@ public class MultiPiercingBullet : MultiBullet
         Rigidbody = GetComponent<Rigidbody>();
         //physicColl.enabled = false;
     }
-    public override void Spawn(Vector3 SpawnForce)
+    public override void Spawn(Vector3 SpawnForce, ulong ownerId)
     {
-        base.Spawn(SpawnForce);
+        base.Spawn(SpawnForce, ownerId);
         damage = baseDamage;
         
     }

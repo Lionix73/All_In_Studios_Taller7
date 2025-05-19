@@ -94,10 +94,11 @@ public class MultiPlayerManager : NetworkBehaviour
     {
         if (!activePlayers.ContainsKey(clientId))
         {
-            var playerController = playerObject.GetComponent<PlayerControllerMulti>();
-            var playerHealth = playerObject.GetComponent<HealthMulti>();
-            var playerAnimator = playerObject.GetComponent<Animator>();
-            var playerState = playerObject.GetComponent<MultiPlayerState>();
+            var playerController = playerObject.GetComponentInChildren<PlayerControllerMulti>();
+            var playerHealth = playerObject.GetComponentInChildren<HealthMulti>();
+            var playerAnimator = playerObject.GetComponentInChildren<Animator>();
+            var playerState = playerObject.GetComponentInChildren<MultiPlayerState>();
+            var playerGunManager = playerObject.GetComponentInChildren<GunManagerMulti2>();
 
             var playerData = new PlayerData
             {
@@ -106,6 +107,7 @@ public class MultiPlayerManager : NetworkBehaviour
                 playerHealth = playerHealth,
                 playerState = playerState,
                 playerAnimator = playerAnimator,
+                playerGunManager = playerGunManager
             };
 
             activePlayers.Add(clientId, playerData);
@@ -133,6 +135,21 @@ public class MultiPlayerManager : NetworkBehaviour
             {
                 // UIManager.Singleton?.UpdatePlayerHealth(currentHealth, maxHealth);
             }
+        }
+    }
+
+    public GunManagerMulti2 GetPlayerGunManager(ulong clientId)
+    {
+        if (activePlayers.TryGetValue(clientId, out PlayerData playerData))
+        {
+            Debug.Log("Obtuvimos Gun Manager");
+
+            return playerData.playerGunManager;
+        }
+        else
+        {
+            Debug.Log("No Hay Gun Manager");
+            return null;
         }
     }
     /*private void OnHealthChanged(float currentHealth, float maxHealth) {
@@ -279,5 +296,6 @@ public class MultiPlayerManager : NetworkBehaviour
         public HealthMulti playerHealth;
         public MultiPlayerState playerState;
         public Animator playerAnimator;
+        public GunManagerMulti2 playerGunManager;
     }
 }

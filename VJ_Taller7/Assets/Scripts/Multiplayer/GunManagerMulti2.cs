@@ -39,7 +39,7 @@ public class GunManagerMulti2 : NetworkBehaviour
         get => GunNet.Value;
         set { if (IsServer) GunNet.Value = value; }
     }
-    private NetworkVariable<GunType> GunNet = new NetworkVariable<GunType>(0, NetworkVariableReadPermission.Everyone);
+    private NetworkVariable<GunType> GunNet = new NetworkVariable<GunType>(GunType.GranadeLaucher, NetworkVariableReadPermission.Everyone);
     private Transform secondHandGrabPoint; // la posicion a asignar
     [SerializeField] private Transform secondHandRigTarget; //el Rig en sí
 
@@ -62,6 +62,8 @@ public class GunManagerMulti2 : NetworkBehaviour
 
     private Vector3 dondePegaElRayDelArma;
     //private int CurrentSecondaryGunBulletsLeft;
+    public delegate void ReloadingEvent(ulong ownerId);
+    public event ReloadingEvent ReloadEvent;
 
 
 
@@ -70,7 +72,7 @@ public class GunManagerMulti2 : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
-        if (!IsServer && IsClient && CurrentSecondGunTypeNet.Value == 0)
+        if (!IsServer && IsClient && CurrentSecondGunTypeNet.Value == GunType.GranadeLaucher)
         {
             DespawnRpc();
             SetUpGunRpc(Gun);
@@ -393,6 +395,9 @@ public class GunManagerMulti2 : NetworkBehaviour
         }
     }
     private void RealoadGun(){
+        if (CurrentGun.Type == GunType.ShinelessFeather) return;
+        ReloadEventRpc();
+
         int totalAmmo = actualTotalAmmo.Value - (weapon.MagazineSize - weapon.BulletsLeft);
         SendActualAmmoRpc(totalAmmo);
         weapon.Reload();
@@ -518,5 +523,11 @@ public class GunManagerMulti2 : NetworkBehaviour
     public void CheckZoomOut()
     {
         crosshairManager.AimingZoomOut();
+    }
+    [Rpc(SendTo.Server)]
+    public void ReloadEventRpc()
+    {
+        ReloadEvent?.Invoke(OwnerClientId);
+        Debug.Log("ReloadEvent");
     }
 }
