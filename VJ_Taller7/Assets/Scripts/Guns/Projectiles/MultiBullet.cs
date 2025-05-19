@@ -42,12 +42,24 @@ public class MultiBullet : NetworkBehaviour
     }
 
     virtual public void Spawn(Vector3 SpawnForce, ulong ownerId){
+
+        if(!IsServer) return;
+
         objectPenetrated = 0;
         SpawnLocation = transform.position;
         transform.forward = SpawnForce.normalized;
         Rigidbody.AddForce(SpawnForce);
         //SpawnVelocity = SpawnForce * Time.fixedDeltaTime/Rigidbody.mass;
         StartCoroutine(DestroyBullet(DelayedDisableTime));
+    }
+    [Rpc(SendTo.Everyone)]
+    public void SpawnRpc(Vector3 SpawnForce)
+    {
+        if (IsServer) return;
+
+        SpawnLocation = transform.position;
+        transform.forward = SpawnForce.normalized;
+        Rigidbody.AddForce(SpawnForce);
     }
 
     protected IEnumerator DestroyBullet(float time){

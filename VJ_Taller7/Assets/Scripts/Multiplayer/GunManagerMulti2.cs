@@ -39,7 +39,7 @@ public class GunManagerMulti2 : NetworkBehaviour
         get => GunNet.Value;
         set { if (IsServer) GunNet.Value = value; }
     }
-    private NetworkVariable<GunType> GunNet = new NetworkVariable<GunType>(GunType.ShinelessFeather, NetworkVariableReadPermission.Everyone);
+    private NetworkVariable<GunType> GunNet = new NetworkVariable<GunType>(GunType.GranadeLaucher, NetworkVariableReadPermission.Everyone);
     private Transform secondHandGrabPoint; // la posicion a asignar
     [SerializeField] private Transform secondHandRigTarget; //el Rig en sí
 
@@ -72,7 +72,7 @@ public class GunManagerMulti2 : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
-        if (!IsServer && IsClient && CurrentSecondGunTypeNet.Value == GunType.ShinelessFeather)
+        if (!IsServer && IsClient && CurrentSecondGunTypeNet.Value == GunType.GranadeLaucher)
         {
             DespawnRpc();
             SetUpGunRpc(Gun);
