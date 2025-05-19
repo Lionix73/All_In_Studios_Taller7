@@ -7,6 +7,7 @@ public class MultiGoldenFeathers : MultiBullet
     public Transform whereToReturn {get ; private set;}
     public bool isReturning = false;
     public bool isFlying;
+    public ulong GOownerId;
     [SerializeField] private float returningStrength;
     //private PhysicsMaterial physics_Mat;
 
@@ -21,6 +22,7 @@ public class MultiGoldenFeathers : MultiBullet
     override public void Spawn(Vector3 SpawnForce, ulong ownerId){
         if (!IsServer) return;
 
+        GOownerId = ownerId;
         SpawnLocation = transform.position;
         transform.forward = SpawnForce.normalized;
         Rigidbody.AddForce(SpawnForce);
@@ -28,14 +30,14 @@ public class MultiGoldenFeathers : MultiBullet
         isFlying = true;
         //Agregar al evento de recarga del gun manager el return()
         GunManagerMulti2 gunManager;
-        gunManager = MultiPlayerManager.Instance.GetPlayerGunManager(ownerId);
+        gunManager = MultiPlayerManager.Instance.GetPlayerGunManager(GOownerId);
         gunManager.ReloadEvent += Return;
-        SpawnClientRpc(SpawnForce, ownerId);
+        SpawnClientRpc(SpawnForce);
 
 
     }
     [Rpc(SendTo.Everyone)]
-    private void SpawnClientRpc(Vector3 SpawnForce, ulong ownerId)
+    private void SpawnClientRpc(Vector3 SpawnForce)
     {
         if (IsServer) return; // Solo se ejecuta en clientes
 

@@ -385,6 +385,8 @@ public class WeaponLogic : NetworkBehaviour
         networkObjectPool.ReturnNetworkObject(netObj, ShootConfig.BulletPrefabMulti.gameObject);
         ReturnBulletRpc(netObj.NetworkObjectId);
         BulletsLeft = 1;
+        bullet.OnCollision -= HandleBulletCollision;
+        bullet.OnBulletEnd -= HandleShinelessFeather;
     }
 
     private MultiBullet CreateBullet()
