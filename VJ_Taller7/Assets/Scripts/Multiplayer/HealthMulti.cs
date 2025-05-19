@@ -1,6 +1,5 @@
 using TMPro;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class HealthMulti : NetworkBehaviour, IDamageableMulti
@@ -61,7 +60,7 @@ public class HealthMulti : NetworkBehaviour, IDamageableMulti
         NetworkObject player = GetComponentInParent<NetworkObject>();
         if (IsServer)
         {
-            MultiGameManager.Instance.SpawnPlayer(OwnerClientId, gameObject);
+            MultiGameManager.Instance.SpawnPlayer(OwnerClientId, gameObject.GetComponentInParent<NetworkObject>().gameObject);
         }
     }
 

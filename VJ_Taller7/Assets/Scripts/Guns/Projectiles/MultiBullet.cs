@@ -22,7 +22,7 @@ public class MultiBullet : NetworkBehaviour
      public delegate void EndBulletEvent(MultiBullet Bullet, Collision collision);
     public event EndBulletEvent OnBulletEnd;
     
-    private ulong ownerId;
+    public ulong ownerId;
     private NetworkObject networkObject;
 
     private void OnEnable()
@@ -41,7 +41,7 @@ public class MultiBullet : NetworkBehaviour
         networkObject = GetComponent<NetworkObject>();
     }
 
-    virtual public void Spawn(Vector3 SpawnForce){
+    virtual public void Spawn(Vector3 SpawnForce, ulong ownerId){
         objectPenetrated = 0;
         SpawnLocation = transform.position;
         transform.forward = SpawnForce.normalized;
