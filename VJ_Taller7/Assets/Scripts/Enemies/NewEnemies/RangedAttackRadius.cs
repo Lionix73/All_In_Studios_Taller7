@@ -9,8 +9,8 @@ public class RangedAttackRadius : AttackRadius
     [SerializeField] private BulletEnemie bulletPrefab;
     public BulletEnemie BulletPrefab{ get => bulletPrefab; set => bulletPrefab = value; }
 
-    [SerializeField] private Vector3 bulletSpawnOffset = new Vector3(0, 1, 0);
-    public Vector3 BulletSpawnOffset{ get => bulletSpawnOffset; set => bulletSpawnOffset = value; }
+    [SerializeField] private Transform bulletOrigin;
+    public Transform BulletOrigin{ get => bulletOrigin; set => bulletOrigin = value; }
 
     [SerializeField] private LayerMask mask;
     public LayerMask Mask{ get => mask; set => mask = value; }
@@ -23,6 +23,7 @@ public class RangedAttackRadius : AttackRadius
     private RaycastHit hit;
     private IDamageable targetDamageable;
     private BulletEnemie bullet;
+    private Vector3 directionToTarget;
 
     protected override void Awake()
     {
@@ -89,10 +90,11 @@ public class RangedAttackRadius : AttackRadius
                 if(poolableObject != null){
                     bullet = poolableObject.GetComponent<BulletEnemie>();
 
-                    bullet.transform.position = transform.position + bulletSpawnOffset;
+                    bullet.transform.position = bulletOrigin.position;
                     bullet.transform.rotation = agent.transform.rotation;
 
-                    bullet.Spawn(enemy.transform.forward, damage, targetDamageable.GetTransform());
+                    directionToTarget = targetDamageable.GetTransform().position + new Vector3(0, 1, 0) - (bulletOrigin.position + new Vector3(0, 1, 0));
+                    bullet.Spawn(directionToTarget + new Vector3(0, 0.5f, 0), damage, targetDamageable.GetTransform());
                 }
             }
             else{
@@ -125,9 +127,10 @@ public class RangedAttackRadius : AttackRadius
             return false;
         }
 
-        Vector3 origin = transform.position + bulletSpawnOffset;
+        Vector3 origin = bulletOrigin.position;
         Vector3 direction = target.position + new Vector3(0, 1, 0) - (transform.position + new Vector3(0, 1, 0));
-        float distance = Vector3.Distance(origin, target.position + bulletSpawnOffset);
+
+        float distance = Vector3.Distance(origin, target.position);
 
         Debug.DrawLine(origin, origin + direction.normalized * distance, Color.red);
         Debug.DrawRay(origin, direction.normalized * sphereCastRadius, Color.red);
@@ -139,6 +142,7 @@ public class RangedAttackRadius : AttackRadius
             if(hit.collider.TryGetComponent<IDamageable>(out damageable)){
                 //Debug.Log("Line of sight to target: " + (damageable.GetTransform() == target));
                 return damageable.GetTransform() == target;
+                
             }
             else
             {
@@ -167,7 +171,7 @@ public class RangedAttackRadius : AttackRadius
     private void OnDrawGizmosSelected()
     {
         // Draw the bullet spawn position
-        Vector3 bulletSpawnPosition = transform.position + bulletSpawnOffset;
+        Vector3 bulletSpawnPosition = bulletOrigin.position;
         
         // Draw a sphere at spawn position
         Gizmos.color = Color.red;

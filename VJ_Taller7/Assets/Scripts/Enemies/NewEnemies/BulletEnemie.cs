@@ -24,6 +24,7 @@ public class BulletEnemie : PoolableObject
     [SerializeField] private GameObject bulletCollisionEffect;
 
     [SerializeField] protected MeshRenderer bulletModel;
+    [SerializeField] protected TrailRenderer bulletLine;
 
     public Rigidbody Rb { get; private set; }
 
@@ -41,6 +42,10 @@ public class BulletEnemie : PoolableObject
     {
         CancelInvoke(DISABLE_METHOD_NAME);
         Invoke(DISABLE_METHOD_NAME, autoDestroyTime);
+
+        if (bulletModel != null) bulletModel.enabled = true;
+        if (bulletLine != null) bulletLine.enabled = true;
+        if (bulletCollisionEffect != null) bulletCollisionEffect.SetActive(false);
     }
 
     public virtual void Spawn(Vector3 forward, int damage, Transform target)
@@ -69,6 +74,7 @@ public class BulletEnemie : PoolableObject
         }
 
         if (bulletModel!=null) bulletModel.enabled = false;
+        if (bulletLine != null) bulletLine.enabled = false;
         gameObject.GetComponent<Collider>().enabled = false;
         StartCoroutine(WaitForDisable());
     }
