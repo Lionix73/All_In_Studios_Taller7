@@ -126,6 +126,7 @@ public class WeaponLogic : NetworkBehaviour
 
             for (int i = 0; i < ShootConfig.BulletsPerShot; i++)
             {
+                Debug.Log(ShootConfig.BulletsPerShot);
                 Vector3 shootDirection;
                 if (ShootConfig.HaveSpread)
                 {
@@ -143,19 +144,24 @@ public class WeaponLogic : NetworkBehaviour
                     shootDirection = ShootSystem.transform.forward;
                 }
                 shootDirection.Normalize();
-
-                switch (ShootConfig.ShootingType)
+                
+                if (ShootConfig.IsHitScan)
                 {
-                    case ShootType.HitScan:
-                        DoHitScanShooting(shootDirection, ShootSystem.transform.position, ShootSystem.transform.position, ownerClientId);
-                        return;
-                    case ShootType.Projectile:
-                        DoProjectileShooting(shootDirection, ownerClientId);
-                        return;
-                    case ShootType.Special:
-                        DoSpecialShooting(shootDirection, ownerClientId);
-                        return;
+                    DoHitScanShooting(shootDirection, ShootSystem.transform.position, ShootSystem.transform.position, ownerClientId);
                 }
+                else
+                {
+                    switch (ShootConfig.ShootingType)
+                    {
+                        case ShootType.Projectile:
+                            DoProjectileShooting(shootDirection, ownerClientId);
+                            return;
+                        case ShootType.Special:
+                            DoSpecialShooting(shootDirection, ownerClientId);
+                            return;
+                    }
+                }
+
             }
         }
     }

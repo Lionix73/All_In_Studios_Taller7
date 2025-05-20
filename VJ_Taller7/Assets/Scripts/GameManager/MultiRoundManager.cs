@@ -179,12 +179,14 @@ public class MultiRoundManager : NetworkBehaviour
             }
             if (inBetweenRoundsTimer<=0){
             currentWave++;
+            level++;
             SetWaveBalance();
 
             UIActualWaveRpc(currentWave);
 
             if (_BalncingInThis) SendWave(enemyIndex); //sin el balance del manager de Alejo (no lo usaremos pero dejemoslo ahi '.')
             inBetweenRounds = false;
+            OnWaveStart?.Invoke(); //Comienza la oleada
             inBetweenRoundsTimer = inBetweenRoundsWaitTime;
             lastDisplayedSecond = Mathf.CeilToInt(inBetweenRoundsWaitTime); // Reset para el próximo ciclo
             }
