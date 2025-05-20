@@ -56,16 +56,16 @@ public class MultiBulletEnemy : PoolableObjectMulti
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        IDamageable damageable;
+        IDamageableMulti damageable;
 
         if(bulletCollisionEffect != null){
             bulletCollisionEffect.SetActive(true);
         }
 
-        if (other.TryGetComponent<IDamageable>(out damageable))
+        if (other.TryGetComponent<IDamageableMulti>(out damageable))
         {
             // SONIDO golpeo Jugador/emigo, cosa damageable
-            damageable.TakeDamage(damage);
+            damageable.TakeDamage(damage, 10);
         }
         else
         {
