@@ -48,6 +48,7 @@ public class MultiPlayerManager : NetworkBehaviour
     public event StartGame OnGameStart;
 
 
+
     private void Awake()
     {
         if (Instance == null)
@@ -99,6 +100,7 @@ public class MultiPlayerManager : NetworkBehaviour
             var playerAnimator = playerObject.GetComponentInChildren<Animator>();
             var playerState = playerObject.GetComponentInChildren<MultiPlayerState>();
             var playerGunManager = playerObject.GetComponentInChildren<GunManagerMulti2>();
+            var uiManager = GameObject.FindFirstObjectByType<UIManager>();
 
             var playerData = new PlayerData
             {
@@ -196,7 +198,7 @@ public class MultiPlayerManager : NetworkBehaviour
             }
         }
         
-        if (PlayersDead == activePlayers.Count + 1)
+        if (PlayersDead == activePlayers.Count)
         {
             MultiGameManager.Instance.GameOver();
         }
@@ -297,5 +299,6 @@ public class MultiPlayerManager : NetworkBehaviour
         public MultiPlayerState playerState;
         public Animator playerAnimator;
         public GunManagerMulti2 playerGunManager;
+        public UIManager uiManager;
     }
 }

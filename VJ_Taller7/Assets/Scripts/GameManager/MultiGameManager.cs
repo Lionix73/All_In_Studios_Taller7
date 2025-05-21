@@ -40,6 +40,8 @@ public class MultiGameManager : NetworkBehaviour
     [SerializeField] public List<WaveRestriction> availableEnemiesForWave = new List<WaveRestriction>();
     //[SerializeField]private List<WaveDificulty> wavesBalance = new List<WaveDificulty>();
 
+    private GameObject cameraAnim;
+
     private void Awake() {
         if (Instance == null) {
             Instance = this;
@@ -61,6 +63,8 @@ public class MultiGameManager : NetworkBehaviour
         base.OnNetworkSpawn();
         // Start the game
         if (UIManager.Singleton) spawnPlayerWithMenu = true;
+        cameraAnim = GameObject.FindGameObjectWithTag("AnimationCamera");
+        cameraAnim.SetActive(false);
 
         //SpawnPlayer();
 
@@ -151,7 +155,21 @@ public class MultiGameManager : NetworkBehaviour
     [Rpc(SendTo.Everyone)]
     public void LostGameUIRpc()
     {
-        if (UIManager.Singleton != null) UIManager.Singleton.DiedUI(6);
+        cameraAnim.SetActive(true);
+        if (UIManager.Singleton != null) UIManager.Singleton.FinalUI(false);
+    }
+
+
+    public void WinGame()
+    {
+        WinGameUIRpc();
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void WinGameUIRpc()
+    {
+        cameraAnim.SetActive(true);
+        if (UIManager.Singleton != null) UIManager.Singleton.FinalUI(true);
     }
 
     /*

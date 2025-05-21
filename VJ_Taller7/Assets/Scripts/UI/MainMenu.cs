@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -15,7 +16,7 @@ public class UIManager : MonoBehaviour
             if (value == null)
                 _singleton = null;
             else if (_singleton == null)
-            { 
+            {
                 _singleton = value;
                 DontDestroyOnLoad(value);
             }
@@ -87,7 +88,7 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(!IsPaused)
+            if (!IsPaused)
                 soundManager.PlaySound("PausedButton");
             else
                 soundManager.PlaySound("PlayButton");
@@ -97,6 +98,7 @@ public class UIManager : MonoBehaviour
     }
 
     private float killedEnemiesUI = 0;
+    [SerializeField] private float waitingTimeForMenu = 0;
     [SerializeField] private bool hasWon = false;
     [SerializeField] private bool IsPaused = false;
     [SerializeField] private bool IsDead = false;
@@ -267,6 +269,38 @@ public class UIManager : MonoBehaviour
         }
 
     }
+    public void FinalUI(bool HasWon)
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        if (IsPaused)
+        {
+            PauseGame(4);
+        }
+
+        if (HasWon)
+        {
+            hasWon = true;
+            SwitchPanels("UIPlayer/WinScene");
+            StartCoroutine(WaitingTimeForMainMenu("WinScene/MainMenu"));
+        }
+        else
+        {
+            IsDead = true;
+            SwitchPanels("UIPlayer/DeathScene");
+            StartCoroutine(WaitingTimeForMainMenu("DeathScene/MainMenu"));
+
+        }
+    }
+
+    public IEnumerator WaitingTimeForMainMenu(string UISwitchingPanels)
+    {
+        yield return new WaitForSeconds(waitingTimeForMenu);
+        SwitchPanels(UISwitchingPanels);
+        BackToMenu();
+
+    }
     public void DiedUI(int indexDiedUI)
     {
         if (IsPaused)
@@ -289,17 +323,16 @@ public class UIManager : MonoBehaviour
         hasWon = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        SwitchPanels("UIPlayer/DeathScene");
         SwitchPanels("UIPlayer/WinScene");
     }
 
-    public void BackToMenu(int indexInGameUI)
+    public void BackToMenu()
     {
         IsMainMenu = true;
-        SwitchPanels("UIPlayer/MainMenu");
-        uiPanels[indexInGameUI].GetComponent<Canvas>().worldCamera = Camera.main;
+        //uiPanels[indexInGameUI].GetComponent<Canvas>().worldCamera = Camera.main;
         IsDead = false;
         hasWon = false;
+        SceneTransitionManager.instance.LoadSceneWithLoadingScreen("MainMenu");
 
     }
 

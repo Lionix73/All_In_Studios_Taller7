@@ -120,8 +120,7 @@ public class MultiRoundManager : NetworkBehaviour
         { // ez win
             _Simulating = false;
 
-            if (UIManager.Singleton) UIManager.Singleton.WinUI(7);
-            GameManager.Instance.WinGame();
+            MultiGameManager.Instance.WinGame();
         }
 
         if (aliveEnemies == 0 && !inBetweenRounds && enemiesKilledOnWave > 1)

@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 public class MultiPlayerState : NetworkBehaviour
 {
+
     private NetworkVariable <bool> isReady = new NetworkVariable<bool> ();
     public bool IsReady
     {
@@ -31,6 +32,7 @@ public class MultiPlayerState : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+
 
         health = GetComponent<HealthMulti>();
 

@@ -47,13 +47,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] public List<WaveRestriction> availableEnemiesForWave = new List<WaveRestriction>();
     //[SerializeField]private List<WaveDificulty> wavesBalance = new List<WaveDificulty>();
 
+    private GameObject cameraAnim;
+
     private void Awake() {
         if (Instance == null) {
             Instance = this;
         } else {
             Destroy(gameObject);
         }
-
+        cameraAnim = GameObject.FindGameObjectWithTag("AnimationCamera");
+        cameraAnim.SetActive(false);
         ObjectPool.ClearPools();
         playerManager = GetComponent<PlayerManager>();
         roundManager = GetComponent<RoundManager>();
@@ -89,7 +92,9 @@ public class GameManager : MonoBehaviour
     public void PlayerDied(GameObject player) {
         PlayerDie?.Invoke(player);
         isGameOver = true; //Primero saber si el otro jugador esta vivo y depues si confirmar el game over
-        if(UIManager.Singleton != null) UIManager.Singleton.DiedUI(6);
+        cameraAnim.SetActive(true);
+
+        if (UIManager.Singleton != null) UIManager.Singleton.FinalUI(false);
 
         if (spawnPlayerWithMenu) return;
 
@@ -119,7 +124,9 @@ public class GameManager : MonoBehaviour
 
     public void WinGame(){
         //Evento de victoria si es necesario
-        
+        cameraAnim.SetActive(true);
+
+        if (UIManager.Singleton) UIManager.Singleton.FinalUI(true);
     }
 
     public void WaveStarted(){
