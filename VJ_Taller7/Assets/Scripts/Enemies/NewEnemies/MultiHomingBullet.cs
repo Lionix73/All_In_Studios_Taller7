@@ -11,7 +11,7 @@ public class MultiHomingBullet : MultiBulletEnemy
 
     private Coroutine homingCoroutine;
 
-    public override void Spawn(Vector3 forward, int damage, Transform target)
+    public override void Spawn(Vector3 forward, int damage, Transform target, Vector3 bombPos, Quaternion bombRot)
     {
         this.damage = damage;
         this.target = target;

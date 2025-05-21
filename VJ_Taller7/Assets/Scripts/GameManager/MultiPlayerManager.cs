@@ -185,6 +185,7 @@ public class MultiPlayerManager : NetworkBehaviour
     {
         if (!IsServer) { return; }
 
+        PlayersDead = 0;
         foreach (var player in activePlayers.Values)
         {
             if (player.playerHealth.IsDead)
@@ -192,15 +193,11 @@ public class MultiPlayerManager : NetworkBehaviour
                 PlayersDead++;
                 Debug.Log($"Players died: {playersDead.Value} players Active: {activePlayers.Count}");
             }
-            else
-            {
-                PlayersDead--;
-            }
         }
         
         if (PlayersDead == activePlayers.Count)
         {
-            MultiGameManager.Instance.GameOver();
+           MultiGameManager.Instance.GameOver();
         }
     }
     // Corrutina para respawnear jugador

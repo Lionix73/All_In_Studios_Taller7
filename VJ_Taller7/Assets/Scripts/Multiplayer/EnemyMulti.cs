@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
 using Unity.Netcode;
-using PimDeWitte.UnityMainThreadDispatcher;
 
 
 public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
@@ -324,7 +323,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
 
             
             GetAttackerId?.Invoke(this, lastAttackerId);
-
+            Debug.Log("Cliente #" + lastAttackerId+" Mato");
             HandleDeathOnServerRpc();
             //OnDied();
         }

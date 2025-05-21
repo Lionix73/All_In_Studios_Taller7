@@ -23,7 +23,8 @@ public class MultiRangedAttackRadius : MultiAttackRadius
 
     private RaycastHit hit;
     private IDamageableMulti targetDamageable;
-    private MultiBulletEnemy bullet;
+
+
 
     public override void OnNetworkSpawn()
     {  
@@ -31,6 +32,7 @@ public class MultiRangedAttackRadius : MultiAttackRadius
         base.OnNetworkSpawn();
        if(!IsServer) return;
         agent = GetComponentInParent<NavMeshAgent>();
+        networkObjectPool = NetworkObjectPool.Singleton.GetComponent<NetworkObjectPool>();
 
     }
 
@@ -39,7 +41,7 @@ public class MultiRangedAttackRadius : MultiAttackRadius
 
     public void CreateBulletPool(){
         if (bulletPool == null){
-            bulletPool = ObjectPoolMulti.CreateInstance(bulletPrefab, Mathf.CeilToInt(1 / attackDelay * bulletPrefab.AutoDestroyTime));
+            //bulletPool = ObjectPoolMulti.CreateInstance(bulletPrefab, Mathf.CeilToInt(1 / attackDelay * bulletPrefab.AutoDestroyTime));
         }
     }
 
@@ -86,15 +88,15 @@ public class MultiRangedAttackRadius : MultiAttackRadius
             }
 
             if (targetDamageable != null){
-                PoolableObjectMulti poolableObject = bulletPool.GetObject();
-                if(poolableObject != null){
-                    bullet = poolableObject.GetComponent<MultiBulletEnemy>();
+                
+                NetworkObject netObject = networkObjectPool.GetNetworkObject(bulletPrefab.gameObject, Vector3.zero, Quaternion.Euler(0, 0, 0));
+                if (!netObject.IsSpawned) netObject.Spawn();
+                MultiBulletEnemy bullet = netObject.GetComponent<MultiBulletEnemy>();
 
-                    bullet.transform.position = transform.position + bulletSpawnOffset;
-                    bullet.transform.rotation = agent.transform.rotation;
-
-                    bullet.Spawn(enemy.transform.forward, damage, targetDamageable.GetTransform());
-                }
+                    Vector3 bulletPos = transform.position + bulletSpawnOffset;
+                    Quaternion bulletRot = agent.transform.rotation;
+                    bullet.OnCollision += ReturnBulletEnemy;
+                    bullet.Spawn(enemy.transform.forward, damage, targetDamageable.GetTransform(), bulletPos, bulletRot);
             }
             else{
                 if(!enemy.IsStatic && !agent.enabled){
@@ -119,7 +121,6 @@ public class MultiRangedAttackRadius : MultiAttackRadius
 
         attackCoroutine = null;
     }
-
     private bool HasLineOfSight(Transform target)
     {
         if(enemy.IsDead){
@@ -153,6 +154,31 @@ public class MultiRangedAttackRadius : MultiAttackRadius
 
         //Debug.Log("No line of sight to target");
         return false;
+    }
+    public void ReturnBulletEnemy(MultiBulletEnemy bullet)
+    {
+        NetworkObject netObj = bullet.gameObject.GetComponent<NetworkObject>();
+        networkObjectPool.ReturnNetworkObject(netObj, bulletPrefab.gameObject);
+        ReturnBulletRpc(netObj.NetworkObjectId);
+        bullet.OnCollision -= ReturnBulletEnemy;
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void ReturnBulletRpc(ulong modelNetworkObjectId)
+    {
+        if (!IsClient) return;
+        Debug.Log("Desactivando Bala");
+        // Obtén el NetworkObject correspondiente al ID
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(modelNetworkObjectId, out NetworkObject spawnBullet))
+        {
+            //spawnBullet.Despawn();
+            spawnBullet.gameObject.SetActive(false);
+
+        }
+        else
+        {
+            Debug.LogError("Failed to find NetworkObject with ID: " + modelNetworkObjectId);
+        }
     }
 
     protected override void OnTriggerExit(Collider other)

@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: damageableLayer.m_Bits
       value: 576
       objectReference: {fileID: 0}
+    - target: {fileID: 9031721717851774424, guid: 5472dbc5f3748b94eb4eddc4e7c960f3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2643519762120033643, guid: 5472dbc5f3748b94eb4eddc4e7c960f3, type: 3}
     - {fileID: 8766955747695238976, guid: 5472dbc5f3748b94eb4eddc4e7c960f3, type: 3}
@@ -69,11 +73,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 5040541786642615887}
   m_SourcePrefab: {fileID: 100100000, guid: 5472dbc5f3748b94eb4eddc4e7c960f3, type: 3}
---- !u!1 &4184681429461000686 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9031721717851774424, guid: 5472dbc5f3748b94eb4eddc4e7c960f3, type: 3}
-  m_PrefabInstance: {fileID: 5135764500989754422}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7663521673771872967 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3251505204543344369, guid: 5472dbc5f3748b94eb4eddc4e7c960f3, type: 3}
@@ -123,13 +122,19 @@ MonoBehaviour:
   waitForDisable: 3
   bulletCollisionEffect: {fileID: 0}
   bulletModel: {fileID: 8910669805880267689}
+  rb: {fileID: 7691754374387457838}
   explosionRadius: 5
   damageableLayer:
     serializedVersion: 2
     m_Bits: 64
   upwardForce: 3
   explosionDelay: 0.5
-  explosionEffect: {fileID: 4184681429461000686}
+  explosionEffect: {fileID: 3965438318526565790, guid: 05203e8b7876b2c418ecf29bbf38a8e5, type: 3}
+--- !u!54 &7691754374387457838 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 3313381879744684824, guid: 5472dbc5f3748b94eb4eddc4e7c960f3, type: 3}
+  m_PrefabInstance: {fileID: 5135764500989754422}
+  m_PrefabAsset: {fileID: 0}
 --- !u!23 &8910669805880267689 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 4390139236360449951, guid: 5472dbc5f3748b94eb4eddc4e7c960f3, type: 3}

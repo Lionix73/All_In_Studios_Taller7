@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Collections;
+using Unity.Netcode;
 
 [RequireComponent(typeof(Rigidbody))]
-public class MultiBulletEnemy : PoolableObjectMulti
+public class MultiBulletEnemy : NetworkBehaviour
 {
 
     [Header("Bullet Settings")]
@@ -25,40 +26,63 @@ public class MultiBulletEnemy : PoolableObjectMulti
 
     [SerializeField] protected MeshRenderer bulletModel;
 
-    public Rigidbody Rb { get; private set; }
+    [SerializeField] Rigidbody rb;
+
+    public Rigidbody Rb { get => rb; private set => rb = value; }
 
     protected Transform target;
 
     protected const string DISABLE_METHOD_NAME = "Disable";
 
+    public delegate void ColisionEvent(MultiBulletEnemy Bullet);
+    public event ColisionEvent OnCollision;
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
 
-        Rb = GetComponent<Rigidbody>();
+       // Rb = GetComponent<Rigidbody>();
     }
 
     
 
     protected virtual void OnEnable()
     {
-        CancelInvoke(DISABLE_METHOD_NAME);
-        Invoke(DISABLE_METHOD_NAME, autoDestroyTime);
+            //Debug.Log("BulletEnemyOnEnable");
+            Rb.linearVelocity = Vector3.zero;
+            //CancelInvoke(DISABLE_METHOD_NAME);
+
     }
 
-    public virtual void Spawn(Vector3 forward, int damage, Transform target)
+    public virtual void Spawn(Vector3 forward, int damage, Transform target, Vector3 bulletPos, Quaternion bulletRot)
     {
+        Invoke(DISABLE_METHOD_NAME, autoDestroyTime);
+
         this.damage = damage;
         this.target = target;
+        transform.position = bulletPos;
+        transform.rotation = bulletRot;
+        Rb.AddForce(forward * moveSpeed, ForceMode.VelocityChange);
+        SpawnRpc(forward, bulletPos, bulletRot);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void SpawnRpc(Vector3 forward, Vector3 bulletPos, Quaternion bulletRot)
+    {
+        if (IsServer) return;
+        transform.position = bulletPos;
+        transform.rotation = bulletRot;
         Rb.AddForce(forward * moveSpeed, ForceMode.VelocityChange);
     }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
+        if(!IsServer) return;
         IDamageableMulti damageable;
+        
+        //StartCoroutine(WaitForDisable());
 
-        if(bulletCollisionEffect != null){
+        if (bulletCollisionEffect != null){
             bulletCollisionEffect.SetActive(true);
         }
 
@@ -72,9 +96,8 @@ public class MultiBulletEnemy : PoolableObjectMulti
             // SONIDO golpeo una superficie
         }
 
-        if (bulletModel!=null) bulletModel.enabled = false;
-        gameObject.GetComponent<Collider>().enabled = false;
-        StartCoroutine(WaitForDisable());
+        //if (bulletModel!=null) bulletModel.enabled = false;
+        //gameObject.GetComponent<Collider>().enabled = false;
     }
 
     protected virtual IEnumerator WaitForDisable(){
@@ -83,9 +106,14 @@ public class MultiBulletEnemy : PoolableObjectMulti
     }
 
     protected void Disable(){
+
         Debug.Log("Disable");
-        CancelInvoke(DISABLE_METHOD_NAME);
+        //CancelInvoke(DISABLE_METHOD_NAME);
+
+        OnCollision?.Invoke(this);
         //Rb.linearVelocity = Vector3.zero;
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+
+
     }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.Netcode;
 
 [CreateAssetMenu(fileName = "Kamikaze Skill", menuName = "Enemies/Skills/Kamikaze Skill")]
 public class KamikazeSkilll : SkillScriptableObject
@@ -7,7 +8,7 @@ public class KamikazeSkilll : SkillScriptableObject
     public int bombsToShoot = 1;
     public float delay = 1f;
     public PoolableObject prefab;
-    public PoolableObjectMulti multiPrefab;
+    public NetworkObject multiPrefab;
     public LayerMask lineOfSightLayerMask;
     public float explosionRadius = 5f;
     public float explosionForce = 700f;
@@ -128,16 +129,46 @@ public class KamikazeSkilll : SkillScriptableObject
     }
     private void MultiShootingBombLogic(EnemyMulti enemy, PlayerControllerMulti player)
     {
-        ObjectPool pool = ObjectPool.CreateInstance(prefab, 10);
-        PoolableObject instance = pool.GetObject();
+        // ObjectPoolMulti pool = ObjectPoolMulti.CreateInstance(multiPrefab, 10);
+        // PoolableObjectMulti instance = pool.GetObject();
 
-        Debug.Log($"Bomb instantiated: {instance.name}, Parent: {instance.transform.parent?.name ?? "None"}");
+        NetworkObjectPool networkObjectPool = NetworkObjectPool.Singleton.GetComponent<NetworkObjectPool>();
+        NetworkObject netObject = networkObjectPool.GetNetworkObject(multiPrefab.gameObject, Vector3.zero, Quaternion.Euler(0, 0, 0));
+        if (!netObject.IsSpawned) netObject.Spawn();
+        MultiBombBullet bullet = netObject.GetComponent<MultiBombBullet>();
+        bullet.OnExplosion += ReturnBulletEnemy;
 
-        instance.transform.SetParent(enemy.transform, false);
-        instance.transform.localPosition = bulletSpawnOffSet;
-        instance.transform.rotation = enemy.Agent.transform.rotation;
+        Debug.Log($"Bomb instantiated: {netObject.name}, Parent: {netObject.transform.parent?.name ?? "None"}");
 
-        BombBullet bomb = instance.GetComponent<BombBullet>();
-        bomb.Spawn(enemy.transform.forward, explosionDamage, player.transform);
+        //netObject.transform.SetParent(enemy.transform, false);
+        Vector3 bulletPos = bulletSpawnOffSet;
+        Quaternion bulletRot = enemy.Agent.transform.rotation;
+        bullet.Spawn(enemy.transform.forward, explosionDamage, player.transform, bulletPos, bulletRot);
+    }
+
+    public void ReturnBulletEnemy(MultiBombBullet bullet)
+    {
+        NetworkObjectPool networkObjectPool = NetworkObjectPool.Singleton.GetComponent<NetworkObjectPool>();
+        NetworkObject netObj = bullet.gameObject.GetComponent<NetworkObject>();
+        networkObjectPool.ReturnNetworkObject(netObj, multiPrefab.gameObject);
+        ReturnBulletRpc(netObj.NetworkObjectId);
+        bullet.OnExplosion -= ReturnBulletEnemy;
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void ReturnBulletRpc(ulong modelNetworkObjectId)
+    {
+        Debug.Log("Desactivando Bala");
+        // Obt�n el NetworkObject correspondiente al ID
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(modelNetworkObjectId, out NetworkObject spawnBullet))
+        {
+            //spawnBullet.Despawn();
+            spawnBullet.gameObject.SetActive(false);
+
+        }
+        else
+        {
+            Debug.LogError("Failed to find NetworkObject with ID: " + modelNetworkObjectId);
+        }
     }
 }

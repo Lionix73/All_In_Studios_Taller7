@@ -27,6 +27,8 @@ public class MultiAttackRadius : NetworkBehaviour
     protected EnemyMulti enemy;
     protected ThisObjectSounds soundManager;
 
+    public NetworkObjectPool networkObjectPool;
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
