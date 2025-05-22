@@ -247,8 +247,9 @@ public class PlayerController : MonoBehaviour
     private void UpdateAnimLayer()
     {
         animator.SetLayerWeight(animationLayerToShow, layersDampener1.TargetValue == 1 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
+        int layersAmount = animator.GetLayerIndex("Aim");
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i <= layersAmount; i++)
         {
             if (i != animationLayerToShow && animator.GetLayerWeight(i) > 0.05f)
             {
@@ -266,42 +267,63 @@ public class PlayerController : MonoBehaviour
     {
         if (gunManager.CurrentGun.Type == GunType.BasicPistol || gunManager.CurrentGun.Type == GunType.Revolver)
         {
-            if (isRunning)
-            {
-                return 3;
-            }
-            else
-            {
-                if (isAiming)
-                {
-                    return 4;
-                }
-                else
-                {
-                    return 1;
-                }
-            }
+            return isAiming ? 2 : 1;
         }
         else
         {
-            if (isRunning)
-            {
-                return 2;
-            }
-            else
-            {
-                if (isAiming)
-                {
-                    return 4;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
+            return isAiming ? 2 : 0;
         }
     }
 
+    private void SelectGunType()
+    {
+        switch (gunManager.CurrentGun.Type)
+        {
+            case GunType.Rifle:
+                animator.SetFloat("GunType", 1f);
+                break;
+
+            case GunType.BasicPistol:
+                animator.SetFloat("GunType", 2f);
+                break;
+
+            case GunType.Revolver:
+                animator.SetFloat("GunType", 3f);
+                break;
+
+            case GunType.Shotgun:
+                animator.SetFloat("GunType", 4f);
+                break;
+
+            case GunType.Sniper:
+                animator.SetFloat("GunType", 5f);
+                break;
+
+            case GunType.ShinelessFeather:
+                animator.SetFloat("GunType", 6f);
+                break;
+
+            case GunType.GoldenFeather:
+                animator.SetFloat("GunType", 7f);
+                break;
+
+            case GunType.GranadeLaucher:
+                animator.SetFloat("GunType", 8f);
+                break;
+
+            case GunType.AncientTome:
+                animator.SetFloat("GunType", 9f);
+                break;
+
+            case GunType.Crossbow:
+                animator.SetFloat("GunType", 10f);
+                break;
+
+            case GunType.MysticCanon:
+                animator.SetFloat("GunType", 11f);
+                break;
+        }
+    }
     #endregion
 
     public void OnMove(InputAction.CallbackContext context)

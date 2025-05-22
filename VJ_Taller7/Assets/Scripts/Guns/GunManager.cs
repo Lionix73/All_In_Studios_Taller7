@@ -52,7 +52,6 @@ public class GunManager : MonoBehaviour
     public delegate void ReloadingEvent();
     public event ReloadingEvent ReloadEvent;
 
-
     private void Awake() {
         cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
         Camera = cinemachineBrain.GetComponent<Camera>();
@@ -86,9 +85,10 @@ public class GunManager : MonoBehaviour
         {
             UIManager.Singleton.GetPlayerTotalAmmo(actualTotalAmmo);
         }
-        if (shooting && CurrentGun.BulletsLeft > 0) {
-            CurrentGun.Shoot();
 
+        if (shooting && CurrentGun.BulletsLeft > 0) 
+        {
+            CurrentGun.Shoot();
         }
         else if (CurrentGun.BulletsLeft<=0 && !CurrentGun.Realoading){
             RealoadGun();
@@ -144,12 +144,12 @@ public class GunManager : MonoBehaviour
     private void SetUpGunRigs(){
         Transform[] chGun = gunParent.GetComponentsInChildren<Transform>();
         //secondHandGrabPoint = GameObject.Find("SecondHanGrip").transform;
-        for(int i = 0; i < chGun.Length; i++){
+        for(int i = 0; i < chGun.Length; i++)
+        {
             if (chGun[i].name == "SecondHandGrip") {
                 secondHandGrabPoint = chGun[i].transform;
             }
         }
-        
     }
 
     public void OnShoot(InputAction.CallbackContext context) { //RECORDAR ASIGNAR MANUALMENTE EN LOS EVENTOS DEL INPUT
@@ -157,6 +157,18 @@ public class GunManager : MonoBehaviour
         //    shooting = context.performed;
         //}
         //else { shooting = context.started; }
+
+        UIManager ui = UIManager.Singleton;
+
+        if (ui.IsPaused || ui.IsMainMenu || ui.IsDead)
+        {
+            canShoot = false;
+        }
+        else if (!ui.IsPaused && !ui.IsMainMenu && !ui.IsDead)
+        {
+            canShoot = true;
+        }
+
         if (!canShoot) return;
 
         if (context.started && CurrentGun.ShootConfig.IsAutomatic) 
@@ -396,6 +408,4 @@ public class GunManager : MonoBehaviour
     public void ScaleDamage(int damageToAdd){
         basePlayerDamage += damageToAdd;
     }
-
-    
 }

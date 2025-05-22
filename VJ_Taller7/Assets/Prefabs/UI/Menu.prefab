@@ -57,10 +57,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3c358bec6a61d49a8a87440e1f999e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waitingTimeForMenu: 0
   hasWon: 0
-  IsPaused: 0
-  IsDead: 0
-  IsMainMenu: 0
   actualRoundDisplay: 1
   healthBar: {fileID: 6113835799238875489}
   sceneList:
@@ -14167,6 +14165,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 4416919105460054708}
+        m_TargetAssemblyTypeName: OmnipotentSoundManager, Assembly-CSharp
+        m_MethodName: StopEverySound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 3625774532078961700}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SelectedScene
@@ -14355,6 +14365,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 4416919105460054708}
+        m_TargetAssemblyTypeName: OmnipotentSoundManager, Assembly-CSharp
+        m_MethodName: StopEverySound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 3625774532078961700}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SelectedScene
@@ -14997,6 +15019,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 4416919105460054708}
+        m_TargetAssemblyTypeName: OmnipotentSoundManager, Assembly-CSharp
+        m_MethodName: StopEverySound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 3625774532078961700}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: PauseGame
@@ -16042,6 +16076,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7536266116212525238}
   - component: {fileID: 9169912571514661403}
+  - component: {fileID: 4416919105460054708}
   m_Layer: 5
   m_Name: '[Sounds]'
   m_TagString: Untagged
@@ -16082,6 +16117,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds: []
+--- !u!114 &4416919105460054708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8495249222146720975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7344b93e4a863684885fb59402e2cc63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8533901258712600997
 GameObject:
   m_ObjectHideFlags: 0

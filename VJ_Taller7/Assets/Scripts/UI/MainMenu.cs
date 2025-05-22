@@ -100,9 +100,9 @@ public class UIManager : MonoBehaviour
     private float killedEnemiesUI = 0;
     [SerializeField] private float waitingTimeForMenu = 0;
     [SerializeField] private bool hasWon = false;
-    [SerializeField] private bool IsPaused = false;
-    [SerializeField] private bool IsDead = false;
-    [SerializeField] private bool IsMainMenu = false;
+    public bool IsPaused { get; private set; } = false;
+    public bool IsDead { get; private set; } = false;
+    public bool IsMainMenu { get; private set; } = false;
     public bool actualRoundDisplay = true;
     [SerializeField] Image healthBar;
 
