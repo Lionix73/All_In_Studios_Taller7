@@ -342,9 +342,9 @@ public class MultiRoundManager : NetworkBehaviour
 
     }
 
-    public void EnemyDied(EnemyMulti enemy)
+    public void EnemyDied(EnemyMulti enemy, ulong ownerId)
     {
-        if (enemy == null) return;
+        //if (enemy == null) return;
 
         //_musicRounds.OnEnemyKilled();
 
@@ -360,6 +360,8 @@ public class MultiRoundManager : NetworkBehaviour
 
         // Update UI with the current value after decrementing
         EnemySpawnUIRpc(currentAlive);
+
+        ChangeScore(enemy, ownerId);
     }
     #endregion
 

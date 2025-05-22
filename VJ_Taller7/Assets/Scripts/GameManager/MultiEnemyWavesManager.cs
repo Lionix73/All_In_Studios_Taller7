@@ -246,9 +246,9 @@ public class MultiEnemyWavesManager : NetworkBehaviour
 
 
                 enemy.Movement.Spawn();
-                enemy.GetAttackerId+= _roundManager.ChangeScore;
-                enemy.OnDie += _roundManager.EnemyDied;
-                enemy.OnDie += HandleEnemyDeath;
+                //enemy.GetAttackerId+= _roundManager.ChangeScore;
+                //enemy.OnDie += _roundManager.EnemyDied;
+                //enemy.OnDie += HandleEnemyDeath;
 
                 enemy.Level = level;
                 enemy.Skills = scaledEnemies[spawnIndex].skills;
@@ -280,9 +280,9 @@ public class MultiEnemyWavesManager : NetworkBehaviour
         int currentAlive = Interlocked.Decrement(ref enemiesAlive);
 
         // Unsubscribe from events to prevent double-counting
-        enemy.OnDie -= HandleEnemyDeath;
-        enemy.GetAttackerId -= _roundManager.ChangeScore;  
-        enemy.OnDie -= _roundManager.EnemyDied;
+        //enemy.OnDie -= HandleEnemyDeath;
+        //enemy.GetAttackerId -= _roundManager.ChangeScore;  
+        //enemy.OnDie -= _roundManager.EnemyDied;
         
         // Check if the wave is complete
         if(currentAlive <= 0 && enemiesSpawned == numberOfEnemiesToSpawn){ 

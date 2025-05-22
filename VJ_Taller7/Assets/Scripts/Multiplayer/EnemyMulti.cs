@@ -127,6 +127,8 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
 
     private float blinkTimer;
 
+    private MultiRoundManager multiRoundManager;
+
 
     //Evento que se llama para el game manager --Antigua referencia, esta con el balancing in this del manager (ignorar perop dejar quieto)
     public event EventHandler<OnEnemyDeadEventArgs> OnEnemyDead;
@@ -190,6 +192,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         base.OnNetworkSpawn();
         if (!IsServer) return;
         
+        multiRoundManager = GameObject.FindFirstObjectByType<MultiRoundManager>();
         attackRadius.Player = Player;
         LineOfSightChecker.OnGainSight += GetPlayer;
         LineOfSightChecker.OnLoseSight += LostPlayer;
@@ -311,20 +314,20 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
             */
 
             // Use thread-safe invocation for the event
-            DeathEvent handler = OnDie;
+            /*DeathEvent handler = OnDie;
             if (handler != null)
             {
                 Debug.Log("HandlerDeath");
                 // This ensures all subscribers are notified atomically
                 handler(this);
-            }
-
+            }*/
+            multiRoundManager.EnemyDied(this,lastAttackerId);
             IsDead = true;
 
 
             
-            GetAttackerId?.Invoke(this, lastAttackerId);
-            Debug.Log("Cliente #" + lastAttackerId+" Mato");
+            //GetAttackerId?.Invoke(this, lastAttackerId);
+            //Debug.Log("Cliente #" + lastAttackerId+" Mato");
             HandleDeathOnServerRpc();
             //OnDied();
         }

@@ -236,6 +236,7 @@ public class WeaponLogic : NetworkBehaviour
             if (IsClient) spawnBullet.gameObject.SetActive(true);
             MultiBullet bullet = spawnBullet.GetComponent<MultiBullet>();
             bullet.transform.position = ShootSystem.transform.position;
+            bullet.Initialize(ownerClientId);
 
             if (!IsServer) return;
             //bullet.Initialize(ownerClientId);
