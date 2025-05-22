@@ -1,5 +1,4 @@
 using Unity.Netcode;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MultiPlayerState : NetworkBehaviour
@@ -22,6 +21,8 @@ public class MultiPlayerState : NetworkBehaviour
     public event PlayerIsReady OnPlayerReady; //Este evento es para avisar al player manager, luego ese avisa a todos
     public delegate void ScoreUpdated();
     public event ScoreUpdated OnScoreUpdated;
+    public delegate void BuyableWeapons();
+    public event BuyableWeapons OnBuyableWeapons;
 
     private HealthMulti health;
 
@@ -46,11 +47,18 @@ public class MultiPlayerState : NetworkBehaviour
             playerDamage.Value = 0;
             playerScore.Value = 0;
         }
-        if (!IsOwner) return;
+        if (!IsLocalPlayer) return;
         // Suscribirse a cambios en los puntajes
         playerKills.OnValueChanged += (oldValue, newValue) => UpdateScoreUI();
         playerDamage.OnValueChanged += (oldValue, newValue) => UpdateScoreUI();
         playerScore.OnValueChanged += (oldValue, newValue) => UpdateScoreUI();
+
+        var allPickeables = FindObjectsOfType<GunPickeableMulti>();
+        foreach (var pickeable in allPickeables)
+        {
+          pickeable.TrySubscribeToLocalPlayer(this);
+        }
+       
 
     }
 
@@ -82,6 +90,7 @@ public class MultiPlayerState : NetworkBehaviour
         if (IsOwner)
         {
            UIManager.Singleton.GetPlayerActualScore(playerScore.Value);
+            OnBuyableWeapons?.Invoke();
         }
     }
     public void OnReady(InputAction.CallbackContext context)
