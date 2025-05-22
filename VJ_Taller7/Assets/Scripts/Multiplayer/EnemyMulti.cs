@@ -215,7 +215,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         if (!IsServer) return;
 
 
-       // if (Player == null) return;
+       if (Player == null) return;
 
         for (int i = 0; i < skills.Length; i++)
         {
@@ -314,6 +314,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
             DeathEvent handler = OnDie;
             if (handler != null)
             {
+                Debug.Log("HandlerDeath");
                 // This ensures all subscribers are notified atomically
                 handler(this);
             }

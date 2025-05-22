@@ -102,7 +102,7 @@ public class MultiBulletEnemy : NetworkBehaviour
 
     protected virtual IEnumerator WaitForDisable(MultiBulletEnemy bullet){
         yield return new WaitForSeconds(waitForDisable);
-        Disable(this);
+        Disable(bullet);
     }
 
     protected void Disable(MultiBulletEnemy bullet){
@@ -115,5 +115,11 @@ public class MultiBulletEnemy : NetworkBehaviour
         //gameObject.SetActive(false);
 
 
+    }
+    [Rpc(SendTo.Everyone)]
+    public void DisableRpc()
+    {
+        if(!IsServer) return;
+        gameObject.SetActive(false);
     }
 }

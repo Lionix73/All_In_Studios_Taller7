@@ -127,6 +127,7 @@ public class BombSkill : SkillScriptableObject
 
     public override bool MultiCanUseSkill(EnemyMulti enemy, PlayerControllerMulti player, int level)
     {
+
         bool baseCondition = base.MultiCanUseSkill(enemy, player, level);
         bool inRange = Vector3.Distance(enemy.transform.position, player.transform.position) <= range;
         bool hasLineOfSight = MultiHasLineOfSight(enemy, player.transform);
@@ -215,24 +216,6 @@ public class BombSkill : SkillScriptableObject
         NetworkObjectPool networkObjectPool = NetworkObjectPool.Singleton.GetComponent<NetworkObjectPool>();
         NetworkObject netObj = bullet.gameObject.GetComponent<NetworkObject>();
         networkObjectPool.ReturnNetworkObject(netObj, multiPrefab.gameObject);
-        ReturnBulletRpc(netObj.NetworkObjectId);
         bullet.OnCollision -= ReturnBulletEnemy;
-    }
-
-    [Rpc(SendTo.Everyone)]
-    public void ReturnBulletRpc(ulong modelNetworkObjectId)
-    {
-        Debug.Log("Desactivando Bala");
-        // Obtén el NetworkObject correspondiente al ID
-        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(modelNetworkObjectId, out NetworkObject spawnBullet))
-        {
-            //spawnBullet.Despawn();
-            spawnBullet.gameObject.SetActive(false);
-
-        }
-        else
-        {
-            Debug.LogError("Failed to find NetworkObject with ID: " + modelNetworkObjectId);
-        }
     }
 }

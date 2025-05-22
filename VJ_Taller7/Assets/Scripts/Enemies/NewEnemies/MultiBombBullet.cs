@@ -25,8 +25,6 @@ public class MultiBombBullet : MultiBulletEnemy
 
     private ThisObjectSounds soundManager;
 
-    public delegate void ExplosionEvent(MultiBombBullet Bullet);
-    public event ExplosionEvent OnExplosion;
 
     private void Awake()
     {
@@ -151,15 +149,13 @@ public class MultiBombBullet : MultiBulletEnemy
 
         }
         ExplosionEffectRpc();
-
+        StartCoroutine(WaitForDisable(this));
         Collider[] inRadius = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (Collider e in inRadius)
         {
             e.TryGetComponent<IDamageableMulti>(out IDamageableMulti enemy);
             if (enemy != null) enemy.TakeDamage(damage, 10);
         }
-
-        StartCoroutine(WaitForDisable(this));
     }
 
 

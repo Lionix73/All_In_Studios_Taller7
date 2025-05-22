@@ -135,40 +135,22 @@ public class KamikazeSkilll : SkillScriptableObject
         NetworkObjectPool networkObjectPool = NetworkObjectPool.Singleton.GetComponent<NetworkObjectPool>();
         NetworkObject netObject = networkObjectPool.GetNetworkObject(multiPrefab.gameObject, Vector3.zero, Quaternion.Euler(0, 0, 0));
         if (!netObject.IsSpawned) netObject.Spawn();
-        MultiBombBullet bullet = netObject.GetComponent<MultiBombBullet>();
-        bullet.OnExplosion += ReturnBulletEnemy;
+        MultiBulletEnemy bullet = netObject.GetComponent<MultiBombBullet>();
+        bullet.OnCollision += ReturnBulletEnemy;
 
         Debug.Log($"Bomb instantiated: {netObject.name}, Parent: {netObject.transform.parent?.name ?? "None"}");
 
         //netObject.transform.SetParent(enemy.transform, false);
-        Vector3 bulletPos = bulletSpawnOffSet;
+        Vector3 bulletPos = enemy.transform.position + bulletSpawnOffSet;
         Quaternion bulletRot = enemy.Agent.transform.rotation;
         bullet.Spawn(enemy.transform.forward, explosionDamage, player.transform, bulletPos, bulletRot);
     }
 
-    public void ReturnBulletEnemy(MultiBombBullet bullet)
+    public void ReturnBulletEnemy(MultiBulletEnemy bullet)
     {
         NetworkObjectPool networkObjectPool = NetworkObjectPool.Singleton.GetComponent<NetworkObjectPool>();
         NetworkObject netObj = bullet.gameObject.GetComponent<NetworkObject>();
         networkObjectPool.ReturnNetworkObject(netObj, multiPrefab.gameObject);
-        ReturnBulletRpc(netObj.NetworkObjectId);
-        bullet.OnExplosion -= ReturnBulletEnemy;
-    }
-
-    [Rpc(SendTo.Everyone)]
-    public void ReturnBulletRpc(ulong modelNetworkObjectId)
-    {
-        Debug.Log("Desactivando Bala");
-        // Obt�n el NetworkObject correspondiente al ID
-        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(modelNetworkObjectId, out NetworkObject spawnBullet))
-        {
-            //spawnBullet.Despawn();
-            spawnBullet.gameObject.SetActive(false);
-
-        }
-        else
-        {
-            Debug.LogError("Failed to find NetworkObject with ID: " + modelNetworkObjectId);
-        }
+        bullet.OnCollision -= ReturnBulletEnemy;
     }
 }
