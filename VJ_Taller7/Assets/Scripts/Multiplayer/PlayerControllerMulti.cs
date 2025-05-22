@@ -138,13 +138,28 @@ public class PlayerControllerMulti : NetworkBehaviour
 
 
         if (!IsOwner) return;
-        //SpawnGunManagerRpc();
+        //StartCoroutine(RespawnPlayer(gameObject));
         playerInput = GetComponent<PlayerInput>();
         Debug.Log(playerInput);
         cameraTransform = GameObject.FindGameObjectWithTag("FreeLookCamera").transform;
         freeLookCamera = GameObject.FindGameObjectWithTag("FreeLookCamera").GetComponent<CinemachineCamera>();
         freeLookCamera.Target.TrackingTarget = camTarget;
         Debug.Log(IsOwner);
+    }
+    private IEnumerator RespawnPlayer(GameObject player)
+    {
+        player.GetComponent<Rigidbody>().isKinematic = true; // Desactivar la fisica del jugador
+        player.GetComponent<Animator>().enabled = false; // Desactivar la animacion del jugador
+        player.GetComponent<Animator>().applyRootMotion = false; // Desactivar la root del jugador
+
+        player.transform.position = MultiGameManager.Instance.spawntPoint.position;
+
+        yield return null;
+
+        player.GetComponent<Rigidbody>().isKinematic = false; // Reactivar la fisica del jugador
+        player.GetComponent<Animator>().enabled = true; // Reactivar la animacion del jugador
+        player.GetComponent<Animator>().applyRootMotion = false; // Desactivar la root del jugador
+
     }
 
     private void Start()

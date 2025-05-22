@@ -151,14 +151,36 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
     public PlayerControllerMulti Player { get; set; }
     public int Level { get; set; }
 
+    public void RespawmEnemy(float baseOffset)
+    {
+        RagdollEnabler.EnableAnimator();
+        RagdollEnabler.DisableAllRigidbodies();
+        if (!isStatic)
+        {
+
+            IsDead = false;
+
+            foreach (Collider collider in colliderEnemy)
+            {
+                collider.enabled = true;
+            }
+        }
+        HealthBarProgressRpc((int)maxHealth, maxHealth);
+
+        RespawmEnemyRpc(baseOffset);
+    }
 
     [Rpc(SendTo.Everyone)]
     public void RespawmEnemyRpc(float baseOffset)
     {
+        if(IsServer) return;
+
+        RagdollEnabler.EnableAnimator();
+        RagdollEnabler.DisableAllRigidbodies();
         if (!isStatic)
         {
-            agent.enabled = true;
-            agent.baseOffset = baseOffset;
+                agent.enabled = false;
+            //agent.baseOffset = baseOffset;
             
             IsDead = false;
 
@@ -167,10 +189,9 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
                 collider.enabled = true;
             }
         }
-        RagdollEnabler.EnableAnimator();
-        RagdollEnabler.DisableAllRigidbodies();
-        if (!IsServer) return;
         HealthBarProgressRpc((int)maxHealth, maxHealth);
+
+        Debug.Log(agent.isActiveAndEnabled);
     }
     private void Awake()
     {
@@ -341,6 +362,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
 
         Debug.Log("Enemigo Muerto");
         // Replicar a todos los clientes
+        agent.enabled = false;
         DiedAnimationRpc();
 
     }
@@ -357,7 +379,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
     {
         if (!isStatic)
         {
-            agent.enabled = false;
+            //agent.enabled = false;
             foreach (Collider collider in colliderEnemy)
             {
                 collider.enabled = false;

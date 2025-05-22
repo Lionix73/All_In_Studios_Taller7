@@ -138,6 +138,7 @@ public class MultiEnemyMovement : NetworkBehaviour
 
     public void Spawn()
     {
+        if (!IsServer)
         for(int i = 0; i < waypoints.Length; i++){
             NavMeshHit hit;
             if(NavMesh.SamplePosition(triangulation.vertices[Random.Range(0, triangulation.vertices.Length)], out hit, 2f, agent.areaMask)){
@@ -174,8 +175,8 @@ public class MultiEnemyMovement : NetworkBehaviour
         if (!IsServer) return;
         if (Vector3.Distance(transform.position, lastSyncedPos) > 0.01f)
         {
-            lastSyncedPos = transform.position;
-            lastSyncedRot = transform.rotation;
+            lastSyncedPos = transform.localPosition;
+            lastSyncedRot = transform.localRotation;
            SyncPositionClientRpc(lastSyncedPos, lastSyncedRot);
         }
 
@@ -187,8 +188,8 @@ public class MultiEnemyMovement : NetworkBehaviour
     {
         if (!IsServer) // Solo clientes actualizan su posición
         {
-            transform.position = newPosition;
-            transform.rotation = newRotation;
+            transform.localPosition = newPosition;
+            transform.localRotation = newRotation;
         }
     }
     private void HandleAnims()

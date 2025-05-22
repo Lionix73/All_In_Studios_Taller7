@@ -20,13 +20,13 @@ public class RagdollEnabler : MonoBehaviour
 
     private void Start()
     {
-        if (startRagdoll)
+        /*if (startRagdoll)
         {
             EnableRagdoll();
         }
         else{
             EnableAnimator();
-        }
+        }*/
     }
 
     public void EnableRagdoll(){

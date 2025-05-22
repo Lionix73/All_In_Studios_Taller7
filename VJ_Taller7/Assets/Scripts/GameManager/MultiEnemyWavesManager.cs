@@ -69,6 +69,8 @@ public class MultiEnemyWavesManager : NetworkBehaviour
     }
     public void StartWavesManager()
     {
+        if (!IsServer) return;
+
         MultiGameManager.Instance.PlayerSpawned += GetPlayer;
         OnEnemySpawned += MultiGameManager.Instance.roundManager.enemyHaveSpawn;
 
@@ -108,6 +110,8 @@ public class MultiEnemyWavesManager : NetworkBehaviour
 
     private void StoreInitialPositions()
     {
+        if (!IsServer) return;
+
         EnemyMulti[] weightedEnemies = FindObjectsByType<EnemyMulti>(FindObjectsSortMode.None);
         foreach (EnemyMulti enemy in weightedEnemies)
         {
@@ -119,6 +123,8 @@ public class MultiEnemyWavesManager : NetworkBehaviour
     }
 
     public void RecieveWaveOrder(int actualWave, int amountOfEnemiesToSpawn){
+        if (!IsServer) return;
+
         //numberOfEnemiesToSpawn = amountOfEnemiesToSpawn;
         //level = actualWave;
         Debug.Log($"Recibiendo oleada de {numberOfEnemiesToSpawn} enemigos");
@@ -167,6 +173,8 @@ public class MultiEnemyWavesManager : NetworkBehaviour
     }
 
     private void ResetSpawnWeights(){
+        if (!IsServer) return;
+
         float totalWeight = 0;
 
         for (int i = 0; i < weightedEnemies.Count; i++)
@@ -188,12 +196,15 @@ public class MultiEnemyWavesManager : NetworkBehaviour
     }
 
     private void SpawnRandomEnemy(){
+        if (!IsServer) return;
+
         DoSpawnEnemy(Random.Range(0, weightedEnemies.Count), ChooseRandomPositionOnNavMesh());
     }
     
     private void SpawnWeightedRandomEnemy(){
+        if (!IsServer) return;
         float randomValue = Random.value;
-
+        Debug.Log("Spawneando Enemigos");
         for (int i = 0; i < weights.Length; i++)
         {
             if(randomValue <= weights[i]){
@@ -209,11 +220,14 @@ public class MultiEnemyWavesManager : NetworkBehaviour
 
     private Vector3 ChooseRandomPositionOnNavMesh()
     {
+
         int VertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
         return navMeshTriangulation.vertices[VertexIndex];
     }
 
     public void DoSpawnEnemy(int spawnIndex, Vector3 spawnPosition){
+        if(!IsServer) return;
+
         if (!availableEnemiesToSpawn.Contains(spawnIndex)) return; //Saber si esta permitido o no ese enemigo
 
         PoolableObjectMulti poolableObject = EnemyObjectPools[spawnIndex].GetObject();
@@ -233,7 +247,6 @@ public class MultiEnemyWavesManager : NetworkBehaviour
                 //enemy.RagdollEnabler.DisableAllRigidbodies();
                 //enemy.ColliderEnemy.enabled = true;
                 float baseOffset = scaledEnemies[spawnIndex].baseOffset;
-                enemy.RespawmEnemyRpc(baseOffset);
                 enemy.IsDead = false;
 
                 enemy.MainCamera = mainCamera;
@@ -242,6 +255,7 @@ public class MultiEnemyWavesManager : NetworkBehaviour
                 enemy.Movement.Triangulation = navMeshTriangulation;
                 enemy.Movement.Player = player.transform;
                 enemy.Agent.enabled = true;
+
 
                 enemy.SetUpHealthBar(healthBarCanvas, mainCamera);
 
@@ -257,8 +271,11 @@ public class MultiEnemyWavesManager : NetworkBehaviour
                 enemiesAlive++;
                 enemiesSpawned++;
                 OnEnemySpawned?.Invoke();
+                enemy.RespawmEnemy(baseOffset);
+
             }
-            else{
+            else
+            {
                 Debug.LogError($"No se pudo poner el NavMeshAgent en el navmesh, usando {navMeshTriangulation.vertices[vertexIndex]}");
             }
         }
@@ -268,6 +285,7 @@ public class MultiEnemyWavesManager : NetworkBehaviour
     }
 
     private void ScaleUpSpawns(){
+        if(!IsServer)return;
         numberOfEnemiesToSpawn = Mathf.FloorToInt(initialweightedEnemiesToSpawn * scaling.spawnCountCurve.Evaluate(level + 1));
         spawnDelay = initialSpawnDelay * scaling.spawnRateCurve.Evaluate(level + 1);
     }
@@ -293,6 +311,8 @@ public class MultiEnemyWavesManager : NetworkBehaviour
 
     public void RespawnEnemy(EnemyMulti enemy)
     {
+        if (!IsServer) return;
+
         if (initialPositions.TryGetValue(enemy, out Vector3 initialPosition))
         {
             enemy.transform.position = initialPosition;
