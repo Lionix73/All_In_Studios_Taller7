@@ -1,38 +1,64 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AmmoPickable : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI priceText;
+
+    public GameObject pickeableUI; //En caso de que queramos agregar una descripcion de la cantida que da
+    private TextMeshProUGUI descriptionText;
     [SerializeField] private int amountOfAmmo;
     [SerializeField] private float scoreToBuy; private bool canBuy;
     [SerializeField] private ThisObjectSounds soundManager;
     private GunManager playerAmmo;
     private RespawnInteractables respawn;
+    public PickeableType typeOfPickable;
 
     private void OnEnable()
     {
-        if (GameManager.Instance!=null){
+        if (GameManager.Instance != null)
+        {
             GameManager.Instance.PlayerSpawned += GetPlayer;
             GameManager.Instance.ScoreChanged += CheckIfBuyable;
         }
-        
+
+        descriptionText = pickeableUI.GetComponentInChildren<TextMeshProUGUI>();
+        descriptionText.text = $"Get {amountOfAmmo} bullets";
+        pickeableUI.SetActive(false);
         respawn = GetComponentInParent<RespawnInteractables>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && canBuy)
+        if (other.CompareTag("Player"))
         {
-            playerAmmo.actualTotalAmmo += amountOfAmmo;
-            soundManager?.PlaySound("Ammo");
+            pickeableUI.SetActive(true);
+            playerAmmo.EnterPickeableCollectable(typeOfPickable, gameObject);
 
             //Destroy(gameObject);
-            respawn.StartCountdown();
+            //respawn.StartCountdown(); // ya no queremos respawn
+        }
+    }
+    private void OnTriggerExit(Collider other) {
+        if (other.CompareTag("Player"))
+        {
+            playerAmmo.ExitPickeableCollectable();
         }
     }
 
-    private void GetPlayer(GameObject player){
+    public void BuyCollectable()
+    {
+        if (!canBuy) return;
+
+        playerAmmo.actualTotalAmmo += amountOfAmmo;
+        soundManager?.PlaySound("Ammo");
+
+        GameManager.Instance.scoreManager.SetScore(-scoreToBuy);
+    }
+
+    private void GetPlayer(GameObject player)
+    {
         //playerAmmo = FindAnyObjectByType(typeof(GunManager)).GetComponent<GunManager>();
         playerAmmo = player.GetComponentInChildren<GunManager>();
 

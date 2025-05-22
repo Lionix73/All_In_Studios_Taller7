@@ -7,6 +7,8 @@ using Unity.Cinemachine;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using NUnit.Framework;
 using UnityEngine.UIElements;
+using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime;
 
 [RequireComponent(typeof(CrosshairManager))]
 public class GunManager : MonoBehaviour
@@ -36,6 +38,9 @@ public class GunManager : MonoBehaviour
 
     [SerializeField] private bool inAPickeableGun;
     private GunType gunToPick;
+
+    [SerializeField] private PickeableType pickeableToBuy; private GameObject colleactableToGrab; //Por no hacer desde el principio una heredada de pickeables... SANTI....
+    [SerializeField] private bool inAPickeableCollectable; //true para coger municion, false para vida
 
     private bool shooting;
     public bool canShoot = true;
@@ -159,16 +164,17 @@ public class GunManager : MonoBehaviour
         //else { shooting = context.started; }
 
         UIManager ui = UIManager.Singleton;
-
-        if (ui.IsPaused || ui.IsMainMenu || ui.IsDead)
-        {
-            canShoot = false;
+        if (ui!=null){ 
+            if (ui.IsPaused || ui.IsMainMenu || ui.IsDead)
+            {
+                canShoot = false;
+            }
+            else canShoot = true;
+            //else if (!ui.IsPaused && !ui.IsMainMenu && !ui.IsDead)
+            //{
+            //    canShoot = true;
+            //}
         }
-        else if (!ui.IsPaused && !ui.IsMainMenu && !ui.IsDead)
-        {
-            canShoot = true;
-        }
-
         if (!canShoot) return;
 
         if (context.started && CurrentGun.ShootConfig.IsAutomatic) 
@@ -226,9 +232,15 @@ public class GunManager : MonoBehaviour
         }
     }
     public void OnGrabGun(InputAction.CallbackContext context){
-        if (context.started){
-            if (inAPickeableGun){
+        if (context.started)
+        {
+            if (inAPickeableGun)
+            {
                 GrabGun(gunToPick);
+            }
+            else if (inAPickeableCollectable)
+            {
+                GrabCollectable();
             }
         }
     }
@@ -243,13 +255,41 @@ public class GunManager : MonoBehaviour
     public void ExitPickeableGun(){
         inAPickeableGun = false;
     }
+
+    public void EnterPickeableCollectable(PickeableType typeToPick, GameObject colleactable)
+    {
+        inAPickeableCollectable = true;
+
+        colleactableToGrab = colleactable;
+        pickeableToBuy = typeToPick;
+    }
+    public void ExitPickeableCollectable()
+    {
+        inAPickeableCollectable = false;
+    }
+
+    public void GrabCollectable()
+    {
+        switch (pickeableToBuy)
+        {
+            case PickeableType.Ammo:
+                colleactableToGrab.GetComponent<AmmoPickable>()?.BuyCollectable();
+                return;
+            case PickeableType.Healing:
+                colleactableToGrab.GetComponent<HealthPickable>()?.BuyCollectable();
+                return;
+        }
+    }
     #endregion
 
     #region Ammo management //Aqui recibimos el input de recarga y llamamos a la funciond de recarga
-    public void OnReload(InputAction.CallbackContext context){
-        
-        if (context.started){
-            if (!CurrentGun.Realoading){
+    public void OnReload(InputAction.CallbackContext context)
+    {
+
+        if (context.started)
+        {
+            if (!CurrentGun.Realoading)
+            {
                 RealoadGun();
             }
         }

@@ -5,38 +5,66 @@ using UnityEngine;
 public class HealthPickable : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI priceText;
+    public GameObject pickeableUI;
+    private TextMeshProUGUI descriptionText;
     [SerializeField] private float scoreToBuy; private bool canBuy;
     [SerializeField] private float amountOfHealing;
     [SerializeField] private ThisObjectSounds soundManager;
     private Health playerHealth;
+    private GunManager playerAmmo; //referencia igual a la del ammo pickeable para manegar todo ahi
     private RespawnInteractables respawn;
+    public PickeableType typeOfPickable;
+    
 
     private void Awake()
     {
-        if (GameManager.Instance!=null){
+        if (GameManager.Instance != null)
+        {
             GameManager.Instance.PlayerSpawned += GetPlayer;
             GameManager.Instance.ScoreChanged += CheckIfBuyable;
         }
 
+        descriptionText = pickeableUI.GetComponentInChildren<TextMeshProUGUI>();
+        descriptionText.text = $"Get {amountOfHealing} points of health";
+
+        pickeableUI.SetActive(false);
         respawn = GetComponentInParent<RespawnInteractables>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && canBuy)
+        if (other.CompareTag("Player"))
         {
-            if (playerHealth.GetCurrentHeath == playerHealth.GetMaxHeath) return; //Evitar curar sin queres al pasar por encima sobre todo en las primeras rondas
-            playerHealth.TakeHeal(amountOfHealing);
-            soundManager?.PlaySound("Health");
-
-            //Destroy(gameObject);
-            respawn.StartCountdown();
+            pickeableUI.SetActive(true);
+            playerAmmo.EnterPickeableCollectable(typeOfPickable, gameObject);
         }
     }
 
-    private void GetPlayer(GameObject player){
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            pickeableUI.SetActive(false);
+            playerAmmo.ExitPickeableCollectable(); 
+        }
+    }
+
+    public void BuyCollectable()
+    {
+        if (!canBuy) return;
+
+        if (playerHealth.GetCurrentHeath == playerHealth.GetMaxHeath) return; //Evitar curar sin queres al pasar por encima sobre todo en las primeras rondas
+        playerHealth.TakeHeal(amountOfHealing);
+        soundManager?.PlaySound("Health");
+
+        GameManager.Instance.scoreManager.SetScore(-scoreToBuy);
+    }
+
+    private void GetPlayer(GameObject player)
+    {
         //playerHealth = FindAnyObjectByType(typeof(Health)).GetComponent<Health>();
         playerHealth = player.GetComponentInChildren<Health>();
+        playerAmmo = player.GetComponentInChildren<GunManager>();
         CheckIfBuyable(1f);
     }
     

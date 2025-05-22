@@ -14,8 +14,15 @@ public enum GunType{
     ShinelessFeather
 }
 
-public enum ShootType{
+public enum ShootType
+{
     Projectile,
     HitScan,
     Special
+}
+
+public enum PickeableType
+{
+    Ammo,
+    Healing
 }
