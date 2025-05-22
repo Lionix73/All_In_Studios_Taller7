@@ -21,6 +21,8 @@ public class GunScriptableObject : ScriptableObject {
     [Tooltip("Especificar el zoom que tiene cada arma")]
     public float aimFov;
 
+    public GameObject ImpactBulletEffectForHitScan;
+
     public ShootConfigScriptableObjtect ShootConfig;
     public TrailConfigScriptableObject TrailConfig;
 
@@ -131,31 +133,32 @@ public class GunScriptableObject : ScriptableObject {
     }
 
     private void DoHitScanShooting(Vector3 shootDirection, Vector3 Origin, Vector3 TrailOrigin, int Iteration = 0){
-        if (Physics.Raycast(Origin, 
-                            shootDirection, 
-                            out RaycastHit hit, 
-                            float.MaxValue, 
+        if (Physics.Raycast(Origin,
+                            shootDirection,
+                            out RaycastHit hit,
+                            float.MaxValue,
                             ShootConfig.HitMask))
-                {
-                ActiveMonoBehaviour.StartCoroutine(PlayTrail(TrailOrigin, hit.point, hit));
-                dondePegaElRayoPaDisparar = hit.point;
-                if (hit.collider.TryGetComponent(out IDamageable enemy)){
-                    enemy.TakeDamage(Damage);
-                }
-                else if(hit.collider.TryGetComponent(out EnemyHealthMulti enemyM))
-                {
-                    enemyM.TakeDamageRpc(Damage);
-                
-                }
+        {
+            ActiveMonoBehaviour.StartCoroutine(PlayTrail(TrailOrigin, hit.point, hit));
+            dondePegaElRayoPaDisparar = hit.point;
+            if (hit.collider.TryGetComponent(out IDamageable enemy))
+            {
+                enemy.TakeDamage(Damage);
+            }
+            else if (hit.collider.TryGetComponent(out EnemyHealthMulti enemyM))
+            {
+                enemyM.TakeDamageRpc(Damage);
 
             }
-            else {  
-                ActiveMonoBehaviour.StartCoroutine(PlayTrail(
-                    TrailOrigin,
-                    TrailOrigin + (shootDirection * TrailConfig.MissDistance),
-                    new RaycastHit())
-                    );
             }
+        else
+        {
+            ActiveMonoBehaviour.StartCoroutine(PlayTrail(
+                TrailOrigin,
+                TrailOrigin + (shootDirection * TrailConfig.MissDistance),
+                new RaycastHit())
+                );
+        }
     }
 
     public Vector3 GetRaycastOrigin(){
@@ -207,17 +210,20 @@ public class GunScriptableObject : ScriptableObject {
         }
     }
         
-    public void Reload() {
+    public void Reload(int totalBulletsLeft) {
         realoading = true;
         //Invoke("FinishedReload", ReloadTime);
-        ActiveMonoBehaviour.StartCoroutine(ReloadingCoroutine());
+        ActiveMonoBehaviour.StartCoroutine(ReloadingCoroutine(totalBulletsLeft));
     }
-    private IEnumerator ReloadingCoroutine(){
+    private IEnumerator ReloadingCoroutine(int totalBulletsLeft){
         yield return new WaitForSeconds(ReloadTime);
-        FinishedReload();
+        FinishedReload(totalBulletsLeft);
     }
-    private void FinishedReload() {
-        bulletsLeft = MagazineSize;
+    private void FinishedReload(int totalBulletsLeft) {
+        if (totalBulletsLeft > MagazineSize) bulletsLeft = MagazineSize;
+        else if (bulletsLeft + totalBulletsLeft >= MagazineSize) bulletsLeft = MagazineSize;
+        else bulletsLeft = totalBulletsLeft; 
+        // Si no tengo suficiente para el cargador, pos me quedo con las pocas que tenga
         realoading = false;
         //Debug.Log("Fin de la recarga");
     }
@@ -241,6 +247,13 @@ public class GunScriptableObject : ScriptableObject {
             remainingDistance -= TrailConfig.SimulationSpeed * Time.deltaTime;
             yield return null;
         }
+
+        if (ImpactBulletEffectForHitScan != null)
+            {
+                GameObject impact = Instantiate(ImpactBulletEffectForHitScan, EndPoint, Quaternion.identity);
+                impact.transform.up = Hit.normal;
+                Destroy(impact, 0.5f);
+            }
 
         instance.transform.position = EndPoint;
 
@@ -275,20 +288,18 @@ public class GunScriptableObject : ScriptableObject {
 
             if (colliderHit.gameObject.layer != LayerMask.NameToLayer("Enemy")) return;
 
-                if (colliderHit.TryGetComponent(out IDamageable enemy)){
-                    enemy.TakeDamage(Damage);
-                }
-                else if(colliderHit.TryGetComponent(out EnemyHealthMulti enemyM))
-                {
-                    enemyM.TakeDamageRpc(Damage);
-                }
+            if (colliderHit.TryGetComponent(out IDamageable enemy)){
+                enemy.TakeDamage(Damage);
+            }
+            else if(colliderHit.TryGetComponent(out EnemyHealthMulti enemyM))
+            {
+                enemyM.TakeDamageRpc(Damage);
+            }
         }
     }
     private void HandleGoldenBulletCollision(Bullet bullet, Collision collision){
         bullet.gameObject.SetActive(false);
         GFeatherPool.Release(bullet);
-
-        //condicion de la shineless feather para que no recargue
     }
     private void HandleShinelessFeather(Bullet bullet, Collision collision){
         bullet.gameObject.SetActive(false);
@@ -375,6 +386,7 @@ public class GunScriptableObject : ScriptableObject {
         clone.SpawnPoint = SpawnPoint;
         clone.SpawnRotation = SpawnRotation;
         clone.aimFov = aimFov;
+        clone.ImpactBulletEffectForHitScan = ImpactBulletEffectForHitScan;
         return clone;
     }
 }

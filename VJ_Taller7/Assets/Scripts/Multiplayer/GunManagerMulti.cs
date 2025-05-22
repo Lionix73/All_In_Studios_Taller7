@@ -316,7 +316,7 @@ private void Update() {
         }
     }
     private void RealoadGun(){
-        CurrentGun.Reload();
+        CurrentGun.Reload(actualTotalAmmo);
         actualTotalAmmo -= CurrentGun.MagazineSize - CurrentGun.BulletsLeft;
         if (UIManager.Singleton != null)
         {
