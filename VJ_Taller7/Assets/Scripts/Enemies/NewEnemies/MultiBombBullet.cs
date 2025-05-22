@@ -119,7 +119,6 @@ public class MultiBombBullet : MultiBulletEnemy
     {
         if (hasExploded) return;
         hasExploded = true;
-
         // Track which enemies are damaged to prevent double-counting
         HashSet<IDamageableMulti> damagedEnemies = new HashSet<IDamageableMulti>();
 
@@ -173,7 +172,6 @@ public class MultiBombBullet : MultiBulletEnemy
         //bulletModel.enabled = false;
         
     }
-
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, explosionRadius);

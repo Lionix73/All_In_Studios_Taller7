@@ -58,10 +58,7 @@ public class AttackScriptableObject : ScriptableObject
             MultiRangedAttackRadius rangedAttackRadius = enemy.AttackRadius.GetComponent<MultiRangedAttackRadius>();
 
             rangedAttackRadius.BulletPrefab = bulletPrefabMulti;
-            rangedAttackRadius.BulletSpawnOffset = bulletSpawnOffSet;
             rangedAttackRadius.Mask = lineOfSightLayer;
-
-            rangedAttackRadius.CreateBulletPool();
         }
     }
 }

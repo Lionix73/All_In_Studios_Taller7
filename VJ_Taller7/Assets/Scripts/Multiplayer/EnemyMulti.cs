@@ -153,11 +153,13 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
 
 
     [Rpc(SendTo.Everyone)]
-    public void RespawmEnemyRpc()
+    public void RespawmEnemyRpc(float baseOffset)
     {
         if (!isStatic)
         {
             agent.enabled = true;
+            agent.baseOffset = baseOffset;
+            
             IsDead = false;
 
             foreach (Collider collider in colliderEnemy)

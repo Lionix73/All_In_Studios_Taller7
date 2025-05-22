@@ -122,9 +122,10 @@ MonoBehaviour:
   damage: 5
   attackDelay: 0.5
   onRangeBehvaiorMethod: 0
+  networkObjectPool: {fileID: 0}
   agent: {fileID: 7234800549213081353}
   bulletPrefab: {fileID: 2628616267759679176, guid: 839daeb06bb5b694c8affb71d810f50f, type: 3}
-  bulletSpawnOffset: {x: 0, y: 1, z: 0}
+  bulletOrigin: {fileID: 5649754452388295760}
   mask:
     serializedVersion: 2
     m_Bits: 0
@@ -157,6 +158,11 @@ MonoBehaviour:
   lineOfSightMask:
     serializedVersion: 2
     m_Bits: 449
+--- !u!4 &5649754452388295760 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 873507537842318957, guid: 01e57bf583dbfb94f8f3847a2c9c3d5d, type: 3}
+  m_PrefabInstance: {fileID: 4789762680732686909}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5834791085250195328 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1333611208540599741, guid: 01e57bf583dbfb94f8f3847a2c9c3d5d, type: 3}

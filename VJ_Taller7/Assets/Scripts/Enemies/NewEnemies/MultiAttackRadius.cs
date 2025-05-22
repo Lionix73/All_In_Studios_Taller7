@@ -29,14 +29,20 @@ public class MultiAttackRadius : NetworkBehaviour
 
     public NetworkObjectPool networkObjectPool;
 
-    public override void OnNetworkSpawn()
+    protected virtual void Awake()
+    {
+        enemy = GetComponentInParent<EnemyMulti>();
+        sphereCollider = GetComponent<SphereCollider>();
+        soundManager = GetComponentInParent<ThisObjectSounds>();
+    }
+    /*public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
     
         enemy = GetComponentInParent<EnemyMulti>();
         sphereCollider = GetComponent<SphereCollider>();
         soundManager = GetComponentInParent<ThisObjectSounds>();
-    }
+    }*/
 
     protected virtual void OnTriggerEnter(Collider other)
     {
@@ -92,6 +98,9 @@ public class MultiAttackRadius : NetworkBehaviour
         yield return wait;
 
         IDamageableMulti closestDamageable = null;
+
+        soundManager.PlaySound("Attack");
+        enemy.Animator.SetTrigger(Enemy.ATTACK_TRIGGER);
 
         //Closest distance to enemy is 100% of their attack radius
         float closestDistance = sphereCollider.radius;

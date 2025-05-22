@@ -229,6 +229,11 @@ MonoBehaviour:
   blinkDuration: 0.4
   scoreOnKill: 60
   lastAttackerId: 0
+--- !u!4 &4290361559425202117 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2503063945079708986, guid: 149aa7a2a0e909247be201f5046f7211, type: 3}
+  m_PrefabInstance: {fileID: 1816857744479087359}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4484826296592581718 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2813496046232841897, guid: 149aa7a2a0e909247be201f5046f7211, type: 3}
@@ -330,9 +335,10 @@ MonoBehaviour:
   damage: 10
   attackDelay: 1
   onRangeBehvaiorMethod: 0
+  networkObjectPool: {fileID: 0}
   agent: {fileID: 1597705524698405072}
   bulletPrefab: {fileID: -4931120822053380738, guid: 5acc92356efca2a4085b3735b063f129, type: 3}
-  bulletSpawnOffset: {x: 0.42, y: 0.25, z: 1.59}
+  bulletOrigin: {fileID: 4290361559425202117}
   mask:
     serializedVersion: 2
     m_Bits: 193

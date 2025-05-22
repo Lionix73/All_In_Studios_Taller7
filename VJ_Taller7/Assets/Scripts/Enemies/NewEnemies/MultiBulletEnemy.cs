@@ -49,15 +49,16 @@ public class MultiBulletEnemy : NetworkBehaviour
     protected virtual void OnEnable()
     {
             //Debug.Log("BulletEnemyOnEnable");
-            Rb.linearVelocity = Vector3.zero;
-            //CancelInvoke(DISABLE_METHOD_NAME);
+            //Rb.linearVelocity = Vector3.zero;
+            CancelInvoke(DISABLE_METHOD_NAME);
+
 
     }
 
     public virtual void Spawn(Vector3 forward, int damage, Transform target, Vector3 bulletPos, Quaternion bulletRot)
     {
-        Invoke(DISABLE_METHOD_NAME, autoDestroyTime);
-
+        //Invoke(DISABLE_METHOD_NAME, autoDestroyTime);
+        rb.linearVelocity = Vector3.zero;
         this.damage = damage;
         this.target = target;
         transform.position = bulletPos;
@@ -70,6 +71,8 @@ public class MultiBulletEnemy : NetworkBehaviour
     public void SpawnRpc(Vector3 forward, Vector3 bulletPos, Quaternion bulletRot)
     {
         if (IsServer) return;
+        gameObject.SetActive(true);
+        rb.linearVelocity = Vector3.zero;
         transform.position = bulletPos;
         transform.rotation = bulletRot;
         Rb.AddForce(forward * moveSpeed, ForceMode.VelocityChange);
@@ -80,7 +83,6 @@ public class MultiBulletEnemy : NetworkBehaviour
         if(!IsServer) return;
         IDamageableMulti damageable;
         
-        //StartCoroutine(WaitForDisable());
 
         if (bulletCollisionEffect != null){
             bulletCollisionEffect.SetActive(true);
@@ -90,11 +92,17 @@ public class MultiBulletEnemy : NetworkBehaviour
         {
             // SONIDO golpeo Jugador/emigo, cosa damageable
             damageable.TakeDamage(damage, 10);
+            OnCollision?.Invoke(this);
+
         }
         else
         {
             // SONIDO golpeo una superficie
         }
+
+        if (!gameObject.activeInHierarchy) return;
+        StartCoroutine(WaitForDisable(this));
+
 
         //if (bulletModel!=null) bulletModel.enabled = false;
         //gameObject.GetComponent<Collider>().enabled = false;

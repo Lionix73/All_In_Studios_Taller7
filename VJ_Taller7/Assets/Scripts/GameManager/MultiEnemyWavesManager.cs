@@ -232,7 +232,8 @@ public class MultiEnemyWavesManager : NetworkBehaviour
                 //enemy.RagdollEnabler.EnableAnimator();
                 //enemy.RagdollEnabler.DisableAllRigidbodies();
                 //enemy.ColliderEnemy.enabled = true;
-                enemy.RespawmEnemyRpc();
+                float baseOffset = scaledEnemies[spawnIndex].baseOffset;
+                enemy.RespawmEnemyRpc(baseOffset);
                 enemy.IsDead = false;
 
                 enemy.MainCamera = mainCamera;
