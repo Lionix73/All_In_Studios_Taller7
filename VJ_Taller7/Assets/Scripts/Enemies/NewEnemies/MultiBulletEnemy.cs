@@ -100,17 +100,17 @@ public class MultiBulletEnemy : NetworkBehaviour
         //gameObject.GetComponent<Collider>().enabled = false;
     }
 
-    protected virtual IEnumerator WaitForDisable(){
+    protected virtual IEnumerator WaitForDisable(MultiBulletEnemy bullet){
         yield return new WaitForSeconds(waitForDisable);
-        Disable();
+        Disable(this);
     }
 
-    protected void Disable(){
+    protected void Disable(MultiBulletEnemy bullet){
 
         Debug.Log("Disable");
         //CancelInvoke(DISABLE_METHOD_NAME);
 
-        OnCollision?.Invoke(this);
+        OnCollision?.Invoke(bullet);
         //Rb.linearVelocity = Vector3.zero;
         //gameObject.SetActive(false);
 

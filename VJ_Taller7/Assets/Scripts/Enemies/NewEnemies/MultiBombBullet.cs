@@ -40,7 +40,14 @@ public class MultiBombBullet : MultiBulletEnemy
         //if (bulletModel != null) bulletModel.enabled = true; // Reset the model visibility
         //if (explosionEffect != null)
     }
-
+    [Rpc(SendTo.Everyone)]
+    public void OnEnableRpc()
+    {
+        if (IsServer) return;
+        gameObject.GetComponent<Collider>().enabled = true;
+        explosionEffect.gameObject.SetActive(false);
+        bulletModel.enabled = true;
+    }
     public override void Spawn(Vector3 forward, int damage, Transform target, Vector3 bombPos, Quaternion bombRot)
     {
         this.damage = damage;
@@ -49,11 +56,13 @@ public class MultiBombBullet : MultiBulletEnemy
         transform.rotation = bombRot;
         hasExploded = false; // Reset the explosion state
         gameObject.GetComponent<Collider>().enabled = true;
-        explosionEffect.gameObject.SetActive(false); // Reset the explosion effect
+        explosionEffect.gameObject.SetActive(false);
+        bulletModel.enabled = true;
         if (Rb != null)
         {
             Rb.linearVelocity = CalculateLaunchVelocity(target.position);
         }
+        OnEnableRpc();
         SpawnRpc(forward, target.position,bombPos, bombRot);
     }
 
@@ -61,8 +70,6 @@ public class MultiBombBullet : MultiBulletEnemy
     public void SpawnRpc(Vector3 forward,Vector3 targetPos ,Vector3 bulletPos, Quaternion bulletRot)
     {
         if (IsServer) return;
-        gameObject.GetComponent<Collider>().enabled = true ;
-        explosionEffect.gameObject.SetActive(false); // Reset the explosion effect
         transform.position = bulletPos;
         transform.rotation = bulletRot;
         Rb.linearVelocity = CalculateLaunchVelocity(targetPos);
@@ -130,6 +137,20 @@ public class MultiBombBullet : MultiBulletEnemy
                 damageable.TakeDamage(damage,10);
             }
         }*/
+        //gameObject.GetComponent<Collider>().enabled = false;
+        //OnExplosion?.Invoke(this);
+        soundManager.PlaySound("BombExplosion");
+
+        transform.rotation = new Quaternion(0, 0, 0, 0);
+        explosionEffect.gameObject.SetActive(true);
+        bulletModel.enabled = false;
+
+        if (explosionEffect != null && bulletModel != null)
+        {
+
+
+        }
+        ExplosionEffectRpc();
 
         Collider[] inRadius = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (Collider e in inRadius)
@@ -137,21 +158,8 @@ public class MultiBombBullet : MultiBulletEnemy
             e.TryGetComponent<IDamageableMulti>(out IDamageableMulti enemy);
             if (enemy != null) enemy.TakeDamage(damage, 10);
         }
-        gameObject.GetComponent<Collider>().enabled = false;
-        //OnExplosion?.Invoke(this);
-        soundManager.PlaySound("BombExplosion");
 
-        transform.rotation = new Quaternion(0, 0, 0, 0);
-        explosionEffect.gameObject.SetActive(true);
-        if (explosionEffect != null && bulletModel != null)
-        {
-
-            //bulletModel.enabled = false;
-        }
-        ExplosionEffectRpc();
-
-        if (!gameObject.activeInHierarchy) return;
-        StartCoroutine(WaitForDisable());
+        StartCoroutine(WaitForDisable(this));
     }
 
 
@@ -161,14 +169,13 @@ public class MultiBombBullet : MultiBulletEnemy
         if (IsServer) return;
         soundManager.PlaySound("BombExplosion");
 
-        if (explosionEffect != null && bulletModel != null)
-        {
-            gameObject.GetComponent<Collider>().enabled = false;
-            transform.rotation = new Quaternion(0, 0, 0, 0);
-            explosionEffect.gameObject.SetActive(true);
-            //explosionEffect.Play();
-            //bulletModel.enabled = false;
-        }
+        //gameObject.GetComponent<Collider>().enabled = false;
+        bulletModel.enabled = false;
+        transform.rotation = new Quaternion(0, 0, 0, 0);
+        explosionEffect.gameObject.SetActive(true);
+        //explosionEffect.Play();
+        //bulletModel.enabled = false;
+        
     }
 
     private void OnDrawGizmos()
