@@ -95,7 +95,7 @@ public class GunManager : MonoBehaviour
         {
             CurrentGun.Shoot();
         }
-        else if (CurrentGun.BulletsLeft<=0 && !CurrentGun.Realoading){
+        else if (CurrentGun.BulletsLeft<=0 && !CurrentGun.Realoading && actualTotalAmmo > 0){
             RealoadGun();
         }
 
@@ -111,9 +111,10 @@ public class GunManager : MonoBehaviour
         if (actualTotalAmmo>MaxTotalAmmo){
             actualTotalAmmo=MaxTotalAmmo;
         }
+        if (actualTotalAmmo < 0) actualTotalAmmo = 0;
 
 
-        if (secondHandRigTarget==null) return;
+        if (secondHandRigTarget == null) return;
         secondHandRigTarget.position = secondHandGrabPoint.position;
     }
 
@@ -299,7 +300,7 @@ public class GunManager : MonoBehaviour
         ReloadEvent?.Invoke();
 
         StopFeedback();
-        CurrentGun.Reload();
+        CurrentGun.Reload(actualTotalAmmo);
         actualTotalAmmo -= CurrentGun.MagazineSize - CurrentGun.BulletsLeft;
         ReloadingFeedback();
         //StartCoroutine(Reload(CurrentGun.ReloadTime)); //Deberia cordinarse la animacion al tiempo de recarga de las armas
@@ -361,29 +362,30 @@ public class GunManager : MonoBehaviour
     }
 
     private void ShootingFeedback(){
-        switch(CurrentGun.Type)
-            {
-                case GunType.Rifle:
-                    
-                    playerAnimator.SetBool("ShootBurst", true);
-                    break;
-                case GunType.BasicPistol:
-                    
-                    playerAnimator.SetTrigger("ShootOnce");
-                    break;
-                case GunType.Revolver:
-                    
-                    playerAnimator.SetTrigger("ShootOnce");
-                    break;
-                case GunType.Shotgun:
-                    
-                    playerAnimator.SetTrigger("ShootOnce");
-                    break;
-                case GunType.Sniper:
-                    
-                    playerAnimator.SetTrigger("ShootOnce");
-                    break;
-            }
+        if (CurrentGun.bulletsLeft < 1) return;
+        switch (CurrentGun.Type)
+        {
+            case GunType.Rifle:
+
+                playerAnimator.SetBool("ShootBurst", true);
+                break;
+            case GunType.BasicPistol:
+
+                playerAnimator.SetTrigger("ShootOnce");
+                break;
+            case GunType.Revolver:
+
+                playerAnimator.SetTrigger("ShootOnce");
+                break;
+            case GunType.Shotgun:
+
+                playerAnimator.SetTrigger("ShootOnce");
+                break;
+            case GunType.Sniper:
+
+                playerAnimator.SetTrigger("ShootOnce");
+                break;
+        }
     }
     private void StopFeedback(){
         soundManager.StopSound("rifleFire");
