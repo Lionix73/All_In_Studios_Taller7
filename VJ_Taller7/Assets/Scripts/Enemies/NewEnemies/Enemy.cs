@@ -126,6 +126,8 @@ public class Enemy : PoolableObject, IDamageable
     public PlayerController Player { get; set; }
 
     public int Level { get; set; }
+
+    private RoundManager roundManager;
     
     private void OnEnable()
     {
@@ -157,6 +159,8 @@ public class Enemy : PoolableObject, IDamageable
         attackRadius.Player = Player;
         soundManager = GetComponent<ThisObjectSounds>();
         AttackRadius.OnAttack += OnAttack;
+
+        roundManager = GameManager.Instance.roundManager;
 
         if (skinnedMeshRenderers == null)
         {
@@ -244,13 +248,17 @@ public class Enemy : PoolableObject, IDamageable
             }
             #endregion
 
+            /*
             // Use thread-safe invocation for the event
             DeathEvent handler = OnDie;
             if (handler != null) {
                 // This ensures all subscribers are notified atomically
                 handler(this);
             }
-            
+            */
+
+            roundManager.EnemyDied(this);
+            roundManager.ChangeScore(this);
             isDead = true;
 
             if (!isStatic)
