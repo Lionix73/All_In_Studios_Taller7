@@ -7,6 +7,7 @@ public class HealthPickable : MonoBehaviour
     [SerializeField] private TextMeshProUGUI priceText;
     public GameObject pickeableUI;
     private TextMeshProUGUI descriptionText;
+    private ObjectLookAtCamera uiForLook;
     [SerializeField] private float scoreToBuy; private bool canBuy;
     [SerializeField] private float amountOfHealing;
     [SerializeField] private ThisObjectSounds soundManager;
@@ -26,9 +27,14 @@ public class HealthPickable : MonoBehaviour
 
         descriptionText = pickeableUI.GetComponentInChildren<TextMeshProUGUI>();
         descriptionText.text = $"Get {amountOfHealing} points of health";
-
+        uiForLook = pickeableUI.GetComponent<ObjectLookAtCamera>();
         pickeableUI.SetActive(false);
         respawn = GetComponentInParent<RespawnInteractables>();
+    }
+
+    private void Update()
+    {
+        if (pickeableUI.activeSelf) uiForLook.LookAtCamera();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -53,7 +59,7 @@ public class HealthPickable : MonoBehaviour
     {
         if (!canBuy) return;
 
-        if (playerHealth.GetCurrentHeath == playerHealth.GetMaxHeath) return; //Evitar curar sin queres al pasar por encima sobre todo en las primeras rondas
+        if (playerHealth.GetCurrentHeath == playerHealth.GetMaxHeath) return; //Evitar curar sin queres al tener toda la vida
         playerHealth.TakeHeal(amountOfHealing);
         soundManager?.PlaySound("Health");
 

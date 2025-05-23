@@ -8,6 +8,7 @@ public class AmmoPickable : MonoBehaviour
 
     public GameObject pickeableUI; //En caso de que queramos agregar una descripcion de la cantida que da
     private TextMeshProUGUI descriptionText;
+    private ObjectLookAtCamera uiForLook;
     [SerializeField] private int amountOfAmmo;
     [SerializeField] private float scoreToBuy; private bool canBuy;
     [SerializeField] private ThisObjectSounds soundManager;
@@ -23,10 +24,18 @@ public class AmmoPickable : MonoBehaviour
             GameManager.Instance.ScoreChanged += CheckIfBuyable;
         }
 
+        
+        respawn = GetComponentInParent<RespawnInteractables>();
+    }
+    private void Awake() {
         descriptionText = pickeableUI.GetComponentInChildren<TextMeshProUGUI>();
         descriptionText.text = $"Get {amountOfAmmo} bullets";
+        uiForLook = pickeableUI.GetComponent<ObjectLookAtCamera>();
         pickeableUI.SetActive(false);
-        respawn = GetComponentInParent<RespawnInteractables>();
+    }
+
+    private void Update() {
+        if (pickeableUI.activeSelf) uiForLook.LookAtCamera();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -40,9 +49,11 @@ public class AmmoPickable : MonoBehaviour
             //respawn.StartCountdown(); // ya no queremos respawn
         }
     }
-    private void OnTriggerExit(Collider other) {
+    private void OnTriggerExit(Collider other)
+    {
         if (other.CompareTag("Player"))
         {
+            pickeableUI.SetActive(false);
             playerAmmo.ExitPickeableCollectable();
         }
     }
