@@ -65,6 +65,8 @@ public class GunManagerMulti2 : NetworkBehaviour
     public delegate void ReloadingEvent(ulong ownerId);
     public event ReloadingEvent ReloadEvent;
 
+    MultiPlayerState playerState;
+
 
 
 
@@ -81,8 +83,9 @@ public class GunManagerMulti2 : NetworkBehaviour
         }
         
         //cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
-        if (!IsLocalPlayer) return;
+        if (!IsOwner) return;
         
+        playerState = transform.root.GetComponentInChildren<MultiPlayerState>();
         SetUpGunRpc(Gun);
         SendActualAmmoRpc(MaxTotalAmmo);
         SendCurrentGunBulletsLeftRpc(CurrentGun.MagazineSize);
@@ -348,18 +351,33 @@ public class GunManagerMulti2 : NetworkBehaviour
 
 
     public void GrabGun(GunType gunPicked){
-        if (CurrentSecondGunTypeNet.Value != gunPicked){
-            if (CurrentSecondGunTypeNet.Value == CurrentGun.Type){
+       if(Gun == gunPicked) return;
+
+        int actualScore = playerState.Score;
+        GunScriptableObject gun = gunsList.Find(gun => gun.Type == gunPicked);
+
+        if (actualScore < gun.scoreToBuy)
+        {
+            soundManager.PlaySound("CantBuyItem");
+            return;
+        }
+        else
+        {
+            if (CurrentSecondGunTypeNet.Value != gunPicked)
+            {
+                if (CurrentSecondGunTypeNet.Value == CurrentGun.Type)
+                {
+                    ChangeSecondGunTypeRpc(CurrentGun.Type);
+                }
                 ChangeSecondGunTypeRpc(CurrentGun.Type);
+                SendSecondaryGunBulletsLeftRpc(weapon.BulletsLeft);
+                DespawnRpc();
+                Gun = gunPicked;
+                CurrentGun = gun.Clone() as GunScriptableObject;
+                SendCurrentGunBulletsLeftRpc(CurrentGun.MagazineSize);
+                SetUpGunRpc(gunPicked);
+                MultiGameManager.Instance.PlayerScore(OwnerClientId, -(int)gun.scoreToBuy);
             }
-            ChangeSecondGunTypeRpc(CurrentGun.Type);
-            SendSecondaryGunBulletsLeftRpc(weapon.BulletsLeft);
-            DespawnRpc();
-            Gun = gunPicked;
-            GunScriptableObject gun = gunsList.Find(gun => gun.Type == gunPicked);
-            CurrentGun = gun.Clone() as GunScriptableObject;
-            SendCurrentGunBulletsLeftRpc(CurrentGun.MagazineSize);
-            SetUpGunRpc(gunPicked);
         }
     }
     public void OnGrabGun(InputAction.CallbackContext context){

@@ -45,10 +45,11 @@ public class MultiPlayerState : NetworkBehaviour
         {
             playerKills.Value = 0;
             playerDamage.Value = 0;
-            playerScore.Value = 0;
+            playerScore.Value = 3000;
         }
         if (!IsLocalPlayer) return;
         // Suscribirse a cambios en los puntajes
+        UpdateScoreUI();
         playerKills.OnValueChanged += (oldValue, newValue) => UpdateScoreUI();
         playerDamage.OnValueChanged += (oldValue, newValue) => UpdateScoreUI();
         playerScore.OnValueChanged += (oldValue, newValue) => UpdateScoreUI();
