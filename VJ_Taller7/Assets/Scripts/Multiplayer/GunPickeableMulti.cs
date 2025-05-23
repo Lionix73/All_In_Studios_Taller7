@@ -123,7 +123,7 @@ public class GunPickeableMulti : NetworkBehaviour
         int score = localPlayerState.Score;
         GunScriptableObject gun = gunManager.GetGun(gunType);
         priceText.text = $"{gun.scoreToBuy}"; //necesito porner el score desde el incio y no queria buscar otra vez el gun** 
-        priceText.color = score > gun.scoreToBuy ? Color.green : Color.red;
+        priceText.color = score >= gun.scoreToBuy ? Color.green : Color.red;
     }
 
     public override void OnDestroy()
