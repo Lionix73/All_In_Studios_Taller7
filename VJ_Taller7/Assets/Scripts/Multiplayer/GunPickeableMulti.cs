@@ -126,8 +126,10 @@ public class GunPickeableMulti : NetworkBehaviour
         priceText.color = score >= gun.scoreToBuy ? Color.green : Color.red;
     }
 
-    public override void OnDestroy()
+    public override void OnNetworkDespawn()
     {
+        base.OnNetworkDespawn();
+
         if(localPlayerState.IsLocalPlayer)
         {
             localPlayerState.OnBuyableWeapons -= CheckIfBuyable;

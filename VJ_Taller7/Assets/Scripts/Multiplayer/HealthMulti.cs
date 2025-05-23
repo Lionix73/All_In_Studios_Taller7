@@ -72,11 +72,11 @@ public class HealthMulti : NetworkBehaviour, IDamageableMulti
     public void SetInitialHealth(float startingHealth) {
         Debug.Log("Initial Health");
         IsDead = false;
-        animator.SetTrigger("Revive");
+        //animator.SetTrigger("Revive");
         MaxHealth = startingHealth;
         CurrentHealth = (int)MaxHealth;
         MovementPlayerStateRpc(true);
-
+        ReviveAnimRpc();
         HealthChange(CurrentHealth);
     }
     [Rpc(SendTo.Everyone)]

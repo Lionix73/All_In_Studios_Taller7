@@ -17,6 +17,7 @@ public class MultiPlayerManager : NetworkBehaviour
 
     [Header("Respawn Settings")]
     [SerializeField] private float respawnCD = 5f;
+    [SerializeField] Transform spawnPoint;
     public GameObject activePlayer { get; private set; } //Depronto toca hacer una lista de esto para el multi
 
     [Tooltip("Este es el player como tal, su codigo y funciones. Dejar vacio en el inspector")]
@@ -43,6 +44,7 @@ public class MultiPlayerManager : NetworkBehaviour
 
         set { playersDead.Value = value; }
     }
+    
 
     public delegate void StartGame();
     public event StartGame OnGameStart;
@@ -135,7 +137,6 @@ public class MultiPlayerManager : NetworkBehaviour
             // Actualizar UI si es el jugador local
             if (clientId == NetworkManager.Singleton.LocalClientId)
             {
-                // UIManager.Singleton?.UpdatePlayerHealth(currentHealth, maxHealth);
             }
         }
     }
@@ -176,7 +177,8 @@ public class MultiPlayerManager : NetworkBehaviour
             CheckAllPlayersDead();
 
             // Iniciar respawn si es necesario
-            StartCoroutine(RespawnPlayer(clientId));
+            //StartCoroutine(RespawnPlayer(clientId));
+            //CheckDeadPlayersAndRespawn();
         }
     }
 
@@ -200,15 +202,50 @@ public class MultiPlayerManager : NetworkBehaviour
            MultiGameManager.Instance.GameOver();
         }
     }
+    public void CheckDeadPlayersAndRespawn()
+    {
+        if (!IsServer) return;
+
+        foreach (var playerEntry in activePlayers)
+        {
+            ulong clientId = playerEntry.Key;
+            PlayerData playerData = playerEntry.Value;
+            Debug.Log(playerEntry.Key);
+            Debug.Log(playerEntry.Value);
+
+            // Verificar si el jugador está muerto
+            if (playerData.playerHealth.IsDead)
+            {
+                Debug.Log($"Player {clientId} is dead. Respawning...");
+                RespawnPlayer(clientId);
+            }
+        }
+    }
     // Corrutina para respawnear jugador
-    private IEnumerator RespawnPlayer(ulong clientId)
+    public void RespawnPlayer(ulong clientId) 
+    {
+        if (activePlayers.TryGetValue(clientId, out PlayerData playerData))
+        {
+            playerData.playerHealth.SetInitialHealth(playerStartingHealth);
+            // Aquí deberías tener lógica para obtener el punto de respawn apropiado
+            //Transform spawnPoint = GetSpawnPointForPlayer();
+            playerData.playerGunManager.RespawnGuns(GunType.BasicPistol);
+            playerData.playerState.RespawnPlayer(spawnPoint);
+
+            // Resetear salud
+
+            //Debug.Log($"Player {clientId} respawned");
+            CheckAllPlayersDead();
+        }
+    } 
+    private IEnumerator RespawnPlayerCoroutine(ulong clientId)
     {
         yield return new WaitForSeconds(respawnCD);
 
         if (activePlayers.TryGetValue(clientId, out PlayerData playerData))
         {
             // Aquí deberías tener lógica para obtener el punto de respawn apropiado
-            Transform spawnPoint = GetSpawnPointForPlayer(clientId);
+            Transform spawnPoint = GetSpawnPointForPlayer();
 
             // Reactivar jugador
             playerData.playerObject.SetActive(true);
@@ -220,8 +257,9 @@ public class MultiPlayerManager : NetworkBehaviour
             CheckAllPlayersDead();
         }
     }
-    private Transform GetSpawnPointForPlayer(ulong clientId)
+    private Transform GetSpawnPointForPlayer()
     {
+        if(spawnPoint != null) return spawnPoint;
         // Implementa lógica para obtener spawn point según el jugador
         // Esto puede ser desde un SpawnManager o puntos designados
         return transform; // Ejemplo simplificado
@@ -254,6 +292,7 @@ public class MultiPlayerManager : NetworkBehaviour
     }
     public void CheckAllPlayersAreReady()
     {
+        PlayersReady = 0;
 
         foreach (var player in activePlayers.Values)
         {
@@ -261,10 +300,7 @@ public class MultiPlayerManager : NetworkBehaviour
             {
                 PlayersReady++;
             }
-            else
-            {
-                PlayersReady--;
-            }
+
         }
 
         if (PlayersReady == activePlayers.Count)

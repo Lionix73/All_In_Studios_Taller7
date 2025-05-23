@@ -29,6 +29,7 @@ public class GunManagerMulti2 : NetworkBehaviour
 
     [Header("Gun General Info")]
     [Tooltip("Lista de las armas que existen en el juego")]
+    [SerializeField] private int basePlayerDamage; //Con este se escala el game
     public WeaponLogic weapon;
     [SerializeField] private List<GunScriptableObject> gunsList;
     [SerializeField] private Transform gunParent;
@@ -107,6 +108,15 @@ public class GunManagerMulti2 : NetworkBehaviour
 
 
     }
+    public void RespawnGuns(GunType gun)
+    {
+        DespawnRpc();
+        SetUpGunRpc(gun);
+        SendActualAmmoRpc(MaxTotalAmmo);
+        SendCurrentGunBulletsLeftRpc(CurrentGun.MagazineSize);
+        ChangeGunTypeRpc(gun);
+        ChangeSecondGunTypeRpc(gun);
+    }
 
     private void Update() {
         if (!IsOwner || weapon == null) return;
@@ -138,6 +148,7 @@ public class GunManagerMulti2 : NetworkBehaviour
         }
         //CurrentGun.ActiveMonoBehaviour = this;
         CurrentGun = gun.Clone() as GunScriptableObject;
+        CurrentGun.Damage = basePlayerDamage;
         /* CurrentGun.LastShootTime = 0f;
          if (CurrentGun.bulletsLeft == 0)
          { //En revision porque no se recarga al recoger el arma, ni la primera vez que aparece.
@@ -351,7 +362,7 @@ public class GunManagerMulti2 : NetworkBehaviour
 
 
     public void GrabGun(GunType gunPicked){
-       if(Gun == gunPicked) return;
+       if(Gun == gunPicked || CurrentSecondGunTypeNet.Value == gunPicked) return;
 
         int actualScore = playerState.Score;
         GunScriptableObject gun = gunsList.Find(gun => gun.Type == gunPicked);
@@ -541,6 +552,10 @@ public class GunManagerMulti2 : NetworkBehaviour
     public void CheckZoomOut()
     {
         crosshairManager.AimingZoomOut();
+    }
+    public void ScaleDamage(int damageToAdd)
+    {
+        basePlayerDamage += damageToAdd;
     }
     [Rpc(SendTo.Server)]
     public void ReloadEventRpc()

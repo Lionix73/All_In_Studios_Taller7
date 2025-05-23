@@ -179,7 +179,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         RagdollEnabler.DisableAllRigidbodies();
         if (!isStatic)
         {
-                agent.enabled = false;
+              agent.enabled = false;
             //agent.baseOffset = baseOffset;
             
             IsDead = false;
@@ -190,7 +190,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
             }
         }
         HealthBarProgressRpc((int)maxHealth, maxHealth);
-
+        agent.enabled = true;
         Debug.Log(agent.isActiveAndEnabled);
     }
     private void Awake()

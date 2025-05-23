@@ -20,6 +20,8 @@ public class MultiGameManager : NetworkBehaviour
     public Transform spawntPoint;
     public GameObject playerPrefab;
 
+    [SerializeField] private GameObject GunShop;
+
     //public List<GameObject> activePlayers = new List<GameObject>();
 
     [Header("Managers")]
@@ -65,6 +67,9 @@ public class MultiGameManager : NetworkBehaviour
         if (UIManager.Singleton) spawnPlayerWithMenu = true;
         cameraAnim = GameObject.FindGameObjectWithTag("AnimationCamera");
         cameraAnim.SetActive(false);
+        if (!IsServer) return;
+        roundManager.OnWaveStart += WaveStarted;
+        roundManager.OnWaveComplete += WaveFinished;
 
         //SpawnPlayer();
 
@@ -148,6 +153,22 @@ public class MultiGameManager : NetworkBehaviour
         LostGameUIRpc();
         isGameOver = true; 
     }
+
+    public void WaveStarted()
+    {
+        GunShop?.GetComponent<MultiShopLimit>().WaveStarted();
+        playerManager.CheckDeadPlayersAndRespawn();
+    }
+
+    private void WaveFinished(bool killedAll)
+    {
+        GunShop?.GetComponent<MultiShopLimit>().WaveFinished(killedAll);
+
+        //if (killedAll) gunManager.ScaleDamage(10);
+        //El escalado de las armas tengo que mirar si hacerlo que cada arma tenga su esacalado, o un entero pa todas
+        //La segunda opcion me gusta mas porque es mas facil de hacer... xd
+    }
+
     [Rpc(SendTo.Everyone)]
     public void StartRoundUIRpc(int currentRound) {
         UIManager.Singleton.UIChangeRound(currentRound);
@@ -171,6 +192,19 @@ public class MultiGameManager : NetworkBehaviour
     {
         cameraAnim.SetActive(true);
         if (UIManager.Singleton != null) UIManager.Singleton.FinalUI(true);
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        if (!IsServer) return;
+        roundManager.OnWaveStart -= WaveStarted;
+        roundManager.OnWaveComplete -= WaveFinished;
+
+        //SpawnPlayer();
+
+        // Crear la logica para el juego en si
+
     }
 
     /*

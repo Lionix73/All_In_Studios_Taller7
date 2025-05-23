@@ -1,4 +1,7 @@
 using Unity.Netcode;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MultiPlayerState : NetworkBehaviour
@@ -121,6 +124,36 @@ public class MultiPlayerState : NetworkBehaviour
         {
             UIManager.Singleton.GetPlayerHealth(currentHealth, maxHealth);
         }
+
+    }
+
+    public void RespawnPlayer(Transform placeToRespawn)
+    {
+        Vector3 vecToSpawn = placeToRespawn.position;
+        RespawnPlayerRpc(vecToSpawn);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void RespawnPlayerRpc(Vector3 placeToRespawn)
+    {
+        if(!IsOwner) return;
+
+        StartCoroutine(RespawnPlayer(gameObject, placeToRespawn));
+
+    }
+    private IEnumerator RespawnPlayer(GameObject player, Vector3 placeToRespawn)
+    {
+        player.GetComponent<Rigidbody>().isKinematic = true; // Desactivar la fisica del jugador
+        player.GetComponent<Animator>().enabled = false; // Desactivar la animacion del jugador
+        player.GetComponent<Animator>().applyRootMotion = false; // Desactivar la root del jugador
+
+        player.transform.position = placeToRespawn;
+
+        yield return null;
+
+        player.GetComponent<Rigidbody>().isKinematic = false; // Reactivar la fisica del jugador
+        player.GetComponent<Animator>().enabled = true; // Reactivar la animacion del jugador
+        player.GetComponent<Animator>().applyRootMotion = false; // Desactivar la root del jugador
 
     }
 

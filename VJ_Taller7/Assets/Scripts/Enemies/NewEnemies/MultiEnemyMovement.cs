@@ -97,6 +97,7 @@ public class MultiEnemyMovement : NetworkBehaviour
     [SerializeField] private float syncInterval = 0.2f; // Intervalo mínimo entre sincronizaciones
     [SerializeField] private float lastSyncTime; // Tiempo de la última sincronización
 
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -117,7 +118,7 @@ public class MultiEnemyMovement : NetworkBehaviour
     }
     public override void OnNetworkSpawn()
     {
-        base.OnNetworkSpawn();  
+        base.OnNetworkSpawn();
     }
 
     private void HandleGainSight(PlayerControllerMulti player)
@@ -148,6 +149,7 @@ public class MultiEnemyMovement : NetworkBehaviour
                 Debug.LogError("No se pudo encontrar un punto de navmesh cerca de las triangulaciones");
             }
         }
+
         OnStateChange?.Invoke(EnemyState.Spawn, defaultState);
     }
 
@@ -175,8 +177,8 @@ public class MultiEnemyMovement : NetworkBehaviour
         if (!IsServer) return;
         if (Vector3.Distance(transform.position, lastSyncedPos) > 0.01f)
         {
-            lastSyncedPos = transform.localPosition;
-            lastSyncedRot = transform.localRotation;
+            lastSyncedPos = transform.position;
+            lastSyncedRot = transform.rotation;
            SyncPositionClientRpc(lastSyncedPos, lastSyncedRot);
         }
 
@@ -186,11 +188,10 @@ public class MultiEnemyMovement : NetworkBehaviour
     [Rpc(SendTo.Everyone)]
     private void SyncPositionClientRpc(Vector3 newPosition, Quaternion newRotation)
     {
-        if (!IsServer) // Solo clientes actualizan su posición
-        {
-            transform.localPosition = newPosition;
-            transform.localRotation = newRotation;
-        }
+        if (IsServer) return;
+            transform.position = newPosition;
+            transform.rotation = newRotation;
+        
     }
     private void HandleAnims()
     {
