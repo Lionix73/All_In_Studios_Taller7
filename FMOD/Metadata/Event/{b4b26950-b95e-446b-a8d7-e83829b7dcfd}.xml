@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{b4b26950-b95e-446b-a8d7-e83829b7dcfd}">
 		<property name="name">
-			<value>SuccessRound</value>
+			<value>CompleteGame</value>
 		</property>
 		<property name="outputFormat">
 			<value>1</value>
@@ -29,7 +29,7 @@
 			<destination>{e1be0ed1-3698-48c8-a6b4-5e6f33ba3478}</destination>
 		</relationship>
 		<relationship name="banks">
-			<destination>{2c06a844-ad73-4409-b190-9981b743fed0}</destination>
+			<destination>{76cc76a2-bdde-46ee-ab34-b402bd6fe4a7}</destination>
 		</relationship>
 	</object>
 	<object class="EventMixer" id="{1a48befd-4808-44c3-b2ff-e86916c592c0}">
@@ -113,6 +113,7 @@
 	<object class="MixerBusEffectChain" id="{affa4634-dc9c-4544-813b-f602f7b2032f}">
 		<relationship name="effects">
 			<destination>{7da963d6-afca-47a0-b5b6-805aac489a09}</destination>
+			<destination>{9c322dcc-1e39-4dae-b224-1e8b6a1428df}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{98b3175b-dcba-4e6c-9b15-a5a05032101d}" />
@@ -134,6 +135,11 @@
 	</object>
 	<object class="MixerBusFader" id="{bbb5aebd-7e7e-4ceb-b115-a058f02ad63b}" />
 	<object class="MixerBusFader" id="{7da963d6-afca-47a0-b5b6-805aac489a09}" />
+	<object class="SFXReverbEffect" id="{9c322dcc-1e39-4dae-b224-1e8b6a1428df}">
+		<property name="wetLevel">
+			<value>-7.5</value>
+		</property>
+	</object>
 	<object class="AutomationPoint" id="{6f7d4b2e-7f34-4d29-b5bd-e158f4b6a779}">
 		<property name="position">
 			<value>3.7119999999999997</value>

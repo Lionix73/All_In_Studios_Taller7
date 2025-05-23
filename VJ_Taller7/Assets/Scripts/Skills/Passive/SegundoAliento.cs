@@ -6,7 +6,7 @@ public class SegundoAliento : PassiveSkillBase
     [SerializeField] private float cooldownThisSkill = 90f;
     
     private Health playerHealth;
-    private bool secondBreathActive = true;
+    private bool secondBreathActive = false;
 
     public bool IsSecondBreathActive
     {

@@ -18,7 +18,8 @@ public class RoundManager : MonoBehaviour
     public int CurrentRound {get {return currentRound;}}
 
     [Tooltip("Para saber si quieren pasar de ronda o esperar")]
-    public bool wantToPassRound; //private bool startOfTheGame; //
+    public bool wantToPassRound;
+    private bool omnipresentWaveCummingWarning;
 
     [SerializeField] private int waveSize; //Tamaño de la oleada en cantidad de enemigos 
     private int waveValue;
@@ -118,11 +119,13 @@ public class RoundManager : MonoBehaviour
         SetEnemiesInSpawner();
 
         wantToPassRound = true; //Las rondas empiezan de una, para el multiplayer controlar esto con lo de darle a la E para empezar;
+        omnipresentWaveCummingWarning = true;
     }
     private void Update() {
 
         if (currentRound > 3){ // ez win
             _Simulating = false;
+            _soundManager.PlaySound("CompleteGame");
             
             if (UIManager.Singleton) UIManager.Singleton.WinUI(7);
             GameManager.Instance.WinGame();
@@ -153,10 +156,11 @@ public class RoundManager : MonoBehaviour
             if (UIManager.Singleton) UIManager.Singleton.UIBetweenWavesTimer(inBetweenRoundsTimer);
             inBetweenRoundsTimer -= Time.deltaTime;
 
-            if (inBetweenRoundsTimer > 6 && inBetweenRoundsTimer <= 7 ) // se supone que el audio dura 7 seg, y el conteo esta calculdo
+            if (omnipresentWaveCummingWarning && inBetweenRoundsTimer <= 7) // se supone que el audio dura 7 seg, y el conteo esta calculdo
             {
-                // Santi --> Aqui pones que suene el audio del conteo para la ronda, supongo que podes hacer que suene una vez y ya, sino me decis.
-
+                //Santi --> Aqui pones que suene el audio del conteo para la ronda, supongo que podes hacer que suene una vez y ya, sino me decis.
+                _soundManager.PlaySound("SendingReiforcement");
+                omnipresentWaveCummingWarning = false;
                 //_soundManager?.PlaySound("SendindReinforcements....");
             }
 
@@ -202,7 +206,9 @@ public class RoundManager : MonoBehaviour
         inBetweenRounds = true; //Empezar a descontar para la otra sugiente ronda/oleada
         enemiesKilledOnWave = 0;
         _musicRounds.StopMusic();
-        _soundManager.PlaySound(how ? "Winwave" : "FailWave");
+        _soundManager.PlaySound(how ? "WinWave" : "FailWave");
+
+        omnipresentWaveCummingWarning = true;
 
         //Santi --> aqui el audio segun si paso la ronda matando a todos o no.
         //_soundManager?.PlaySound(how? "YourefficienteBirds..." : "ToTheFOrcesRemain");
@@ -246,6 +252,11 @@ public class RoundManager : MonoBehaviour
         _musicRounds.PlayMusic(); // Empezar la musica
 
         if (currentWave == 3) wantToPassRound = false; //Al iniciar las terceras oleadas queremos que para pasar de ronda ellos decidan.
+
+        if(currentWave == 1)
+        {
+            _soundManager.PlaySound("IntrudersDetected");
+        }
     }
     private void PassRound()
     {
@@ -262,8 +273,6 @@ public class RoundManager : MonoBehaviour
             }
 
         _musicRounds.StopMusic();
-
-        //SANTI --> Si queda algun audio de la IA mala sin poner, ponelo aqui, sino ahora grabo mas
         _soundManager.PlaySound("WinRound");
 
         OnRoundComplete?.Invoke();

@@ -297,6 +297,11 @@ public class UIManager : MonoBehaviour
     public IEnumerator WaitingTimeForMainMenu(string UISwitchingPanels)
     {
         yield return new WaitForSeconds(waitingTimeForMenu);
+
+        if(IsDead)
+        {
+            FindFirstObjectByType<OmnipotentSoundManager>().StopEverySound();
+        }
         SwitchPanels(UISwitchingPanels);
         BackToMenu();
 
