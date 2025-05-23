@@ -243,6 +243,10 @@ public class GunManager : MonoBehaviour
             {
                 GrabCollectable();
             }
+            else
+            {
+                GameManager.Instance.roundManager.OrderToPassRound(); //Asegurarnos que no pasen de ronda sin querer
+            }
         }
     }
 

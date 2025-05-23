@@ -3,6 +3,8 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using System.Threading;
+using FMOD;
+using UnityEngine.InputSystem;
 
 public class RoundManager : MonoBehaviour
 {
@@ -14,6 +16,9 @@ public class RoundManager : MonoBehaviour
     [SerializeField] private int currentRound =1 ; //Rondas
     private int level = 0; //For the game balance (in case)
     public int CurrentRound {get {return currentRound;}}
+
+    [Tooltip("Para saber si quieren pasar de ronda o esperar")]
+    public bool wantToPassRound; //private bool startOfTheGame; //
 
     [SerializeField] private int waveSize; //Tamaño de la oleada en cantidad de enemigos 
     private int waveValue;
@@ -94,7 +99,8 @@ public class RoundManager : MonoBehaviour
         _musicRounds = FindFirstObjectByType<RoundsMusicManager>();
         _soundManager = transform.parent.GetComponentInChildren<ThisObjectSounds>();
     }
-    private void Start() {
+    private void Start()
+    {
         scoreManager = GetComponent<ScoreManager>();
         enemySpawner = GetComponent<EnemyWaves>();
         enemyWavesManager = GetComponent<EnemyWavesManager>();
@@ -108,8 +114,10 @@ public class RoundManager : MonoBehaviour
 
             //challengeManager.ShowChallenges(); //Mostrar los challenges
         }
-        
+
         SetEnemiesInSpawner();
+
+        wantToPassRound = true; //Las rondas empiezan de una, para el multiplayer controlar esto con lo de darle a la E para empezar;
     }
     private void Update() {
 
@@ -121,32 +129,11 @@ public class RoundManager : MonoBehaviour
         }
         
         if (aliveEnemies == 0 && !inBetweenRounds && enemiesKilledOnWave>1){
-            
-            inBetweenRounds = true; //Next round
-            OnWaveComplete?.Invoke(true); //Se completo exitosamente la oleada, solo cuando acaba por matar a todos los enemigos
-            _musicRounds.StopMusic();
-            _soundManager.PlaySound("WinWave");
-            enemiesKilledOnWave = 0;
+            EndWave(true);
         }
 
         if (currentWave > 3){
-            //POR AHORA: AQUI TERMINARA LA ALPHA
-            currentRound++;
-            currentWave = 0;
-            level++;
-            
-            if (UIManager.Singleton) 
-            { 
-                UIManager.Singleton.actualRoundDisplay = true;
-                UIManager.Singleton.UIChangeRound(currentRound);
-
-                //challengeManager.ShowChallenges(); //Mostrar los challenges
-            }
-
-            OnRoundComplete?.Invoke(); // Se completo la ronda, avisar para escalados y eso, aqui solo importa sobrevivir
-
-            _musicRounds.StopMusic();
-            _soundManager.PlaySound("WinRound");
+            PassRound();
         }
 
         if (_Simulating) UpdateTimers();
@@ -162,56 +149,47 @@ public class RoundManager : MonoBehaviour
     /// </summary>
     private void UpdateTimers(){
         if (inBetweenRounds) {
+            if (!wantToPassRound) return; //Para que no pase el tiempo de espera
             if (UIManager.Singleton) UIManager.Singleton.UIBetweenWavesTimer(inBetweenRoundsTimer);
             inBetweenRoundsTimer -= Time.deltaTime;
-            if (inBetweenRoundsTimer<=0){
-            currentWave++;
-            level++;
-            SetWaveBalance();
 
-            if(UIManager.Singleton) UIManager.Singleton.UIActualWave(currentWave);
+            if (inBetweenRoundsTimer > 6 && inBetweenRoundsTimer <= 7 ) // se supone que el audio dura 7 seg, y el conteo esta calculdo
+            {
+                // Santi --> Aqui pones que suene el audio del conteo para la ronda, supongo que podes hacer que suene una vez y ya, sino me decis.
 
-            if (_BalncingInThis) SendWave(enemyIndex); //sin el balance del manager de Alejo (no lo usaremos pero dejemoslo ahi '.')
+                //_soundManager?.PlaySound("SendindReinforcements....");
+            }
 
-            inBetweenRounds = false;
-            inBetweenRoundsTimer = inBetweenRoundsWaitTime;
-
-            OnWaveStart?.Invoke(); //Comienza la oleada
-
-            // SONIDO cambio de oleada
-            _musicRounds.PlayMusic();
+            if (inBetweenRoundsTimer <= 0)
+            {
+                StartWave(); // No pasa a la siguiente ronda si no mata a todos
             }
         }
         else {
             if (UIManager.Singleton) UIManager.Singleton.UIBetweenWaves(waveTimer);
             waveTimer -= Time.deltaTime;
             if (waveTimer <= 0){
-            //End round
-            inBetweenRounds = true;
-
-            //castigar por no completar satisfactoriamente
-            //aumentar el escalado de los enemigos o repetir
-            OnWaveComplete?.Invoke(false);
-            
-            _musicRounds.StopMusic();
-            _soundManager.PlaySound("FailWave");
+                EndWave(false);
             }
         }
     }
 
-    private void SetWaveBalance(){
-        if (_BalncingInThis){
-            waveValue = currentWave * waveValueScaleMult * currentRound ; //current round en review por balance, seguramente sea un scaleRounsMult
+    private void SetWaveBalance()
+    {
+        if (_BalncingInThis)
+        {
+            waveValue = currentWave * waveValueScaleMult * currentRound; //current round en review por balance, seguramente sea un scaleRounsMult
             waveDuration += currentWave * waveDurationScaleAdd;
-            if (waveDuration > maximunTimeForWaves) waveDuration =maximunTimeForWaves;
+            if (waveDuration > maximunTimeForWaves) waveDuration = maximunTimeForWaves;
 
             GenerateEnemies();
-            
+
             waveTimer = waveDuration;
         }
-        else {
+        else
+        {
             waveDuration += currentWave * waveDurationScaleAdd;
-            if (waveDuration > maximunTimeForWaves) waveDuration =maximunTimeForWaves;
+            if (waveDuration > maximunTimeForWaves) waveDuration = maximunTimeForWaves;
             //List<WeightedSpawnScriptableObject> temp = GameManager.Instance.GetBalanceWave(currentWave);
             //enemyWavesManager.RecieveWaveLimits(temp);
             enemyWavesManager.RecieveWaveOrder(level, waveSize);
@@ -219,7 +197,89 @@ public class RoundManager : MonoBehaviour
         }
     }
 
-    public void recieveWaveData(int enemiesToSpawn){
+    private void EndWave(bool how) //Mas comodo y lindo tenerlo todo junto...
+    {
+        inBetweenRounds = true; //Empezar a descontar para la otra sugiente ronda/oleada
+        enemiesKilledOnWave = 0;
+        _musicRounds.StopMusic();
+        _soundManager.PlaySound(how ? "Winwave" : "FailWave");
+
+        //Santi --> aqui el audio segun si paso la ronda matando a todos o no.
+        //_soundManager?.PlaySound(how? "YourefficienteBirds..." : "ToTheFOrcesRemain");
+
+
+        // if (how)
+        // {
+        //     //OnWaveComplete?.Invoke(true); //Se completo exitosamente la oleada, solo cuando acaba por matar a todos los enemigos
+        //     //_soundManager.PlaySound("WinWave");
+        // }
+        // else
+        // {//End Wave without killing all
+        //     //inBetweenRounds = true;
+        //     //enemiesKilledOnWave = 0;
+
+        //     //castigar por no completar satisfactoriamente
+        //     //aumentar el escalado de los enemigos o repetir
+        //     //OnWaveComplete?.Invoke(false);
+        //     //_musicRounds.StopMusic();
+        //     //_soundManager.PlaySound("FailWave");
+        // }
+
+        OnWaveComplete?.Invoke(how);
+    }
+    private void StartWave()
+    {
+        if (!wantToPassRound) return;
+        currentWave++;
+        level++;
+        SetWaveBalance();
+
+        if (UIManager.Singleton) UIManager.Singleton.UIActualWave(currentWave);
+
+        if (_BalncingInThis) SendWave(enemyIndex); //sin el balance del manager de Alejo (no lo usaremos pero dejemoslo ahi '.')
+
+        inBetweenRounds = false;
+        inBetweenRoundsTimer = inBetweenRoundsWaitTime;
+
+        OnWaveStart?.Invoke(); //Comienza la oleada
+
+        _musicRounds.PlayMusic(); // Empezar la musica
+
+        if (currentWave == 3) wantToPassRound = false; //Al iniciar las terceras oleadas queremos que para pasar de ronda ellos decidan.
+    }
+    private void PassRound()
+    {
+        currentRound++;
+        currentWave = 0;
+        level++;
+            
+            if (UIManager.Singleton) 
+            { 
+                UIManager.Singleton.actualRoundDisplay = true;
+                UIManager.Singleton.UIChangeRound(currentRound);
+
+                //challengeManager.ShowChallenges(); //Mostrar los challenges
+            }
+
+        _musicRounds.StopMusic();
+
+        //SANTI --> Si queda algun audio de la IA mala sin poner, ponelo aqui, sino ahora grabo mas
+        _soundManager.PlaySound("WinRound");
+
+        OnRoundComplete?.Invoke();
+    }
+
+    public void OrderToPassRound()
+    {
+        if (!wantToPassRound && inBetweenRounds)
+        {
+            wantToPassRound = true;
+            inBetweenRoundsTimer = 15; //Para que despues de esperar no tenga que esperar 45 seg; en review
+        }
+    }
+
+    public void recieveWaveData(int enemiesToSpawn)
+    {
         waveSize = enemiesToSpawn;
     }
     public void enemyHaveSpawn(){
