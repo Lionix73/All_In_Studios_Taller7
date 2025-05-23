@@ -354,7 +354,7 @@ public class UIManager : MonoBehaviour
     }
     public void GetPlayerActualAmmo(int actualAmmo, int maxActualAmmo)
     {
-        ammoText.text = $"{actualAmmo} / {maxActualAmmo}";
+        ammoText.text = $"{actualAmmo}/{maxActualAmmo}";
     }
     public void GetPlayerTotalAmmo(int totalAmmo)
     {

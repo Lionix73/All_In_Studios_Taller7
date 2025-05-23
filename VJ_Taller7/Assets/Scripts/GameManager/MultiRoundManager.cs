@@ -356,7 +356,7 @@ public class MultiRoundManager : NetworkBehaviour
         Interlocked.Exchange(ref enemiesKilledOnWave, killed);
 
         // Add to score
-        scoreManager.AddEnemyKilled(1);
+        //scoreManager.AddEnemyKilled(1);
 
         // Update UI with the current value after decrementing
         EnemySpawnUIRpc(currentAlive);

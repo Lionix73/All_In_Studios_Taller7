@@ -83,6 +83,7 @@ public class MultiPlayerState : NetworkBehaviour
     public void AddScoreServerRpc(int scoreAmount)
     {
         playerScore.Value += scoreAmount;
+        playerKills.Value++;
         OnScoreUpdated?.Invoke();
     }
 

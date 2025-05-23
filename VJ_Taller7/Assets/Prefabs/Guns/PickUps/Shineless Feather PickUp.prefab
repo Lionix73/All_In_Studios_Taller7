@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8877127464938791823}
   - component: {fileID: 5802659220582839330}
   m_Layer: 11
-  m_Name: Shineless Feather Pickup
+  m_Name: Shineless Feather PickUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,10 +75,11 @@ MonoBehaviour:
   GunModel: {fileID: 6017590588544610044}
   lookCamera: {fileID: 0}
   gunNameText: {fileID: 8870140055194834637}
-  damageText: {fileID: 9165480300231606182}
-  fireRateText: {fileID: 9184517605284549165}
-  magazineText: {fileID: 2131363383487677335}
+  damageText: {fileID: 0}
+  fireRateText: {fileID: 0}
+  magazineText: {fileID: 0}
   priceText: {fileID: 0}
+  spinDirection: {x: 0, y: 1, z: 0}
 --- !u!1001 &799873181722579876
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -89,7 +90,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 482851280215040111, guid: ad9f2f490c940f24e9ba1034f0de1b00, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.17
       objectReference: {fileID: 0}
     - target: {fileID: 482851280215040111, guid: ad9f2f490c940f24e9ba1034f0de1b00, type: 3}
       propertyPath: m_LocalPosition.y
@@ -222,7 +223,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 520411012503561285, guid: 0c2c050a48e9b544aa85e3f285e0ee81, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.687
+      value: 0.98
       objectReference: {fileID: 0}
     - target: {fileID: 520411012503561285, guid: 0c2c050a48e9b544aa85e3f285e0ee81, type: 3}
       propertyPath: m_LocalPosition.z
@@ -265,17 +266,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c2c050a48e9b544aa85e3f285e0ee81, type: 3}
---- !u!114 &2131363383487677335 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6563482779816986510, guid: 0c2c050a48e9b544aa85e3f285e0ee81, type: 3}
-  m_PrefabInstance: {fileID: 5080679835499250713}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3529335772244632764 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8536726251305705637, guid: 0c2c050a48e9b544aa85e3f285e0ee81, type: 3}
@@ -289,28 +279,6 @@ Transform:
 --- !u!114 &8870140055194834637 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4439179267233174228, guid: 0c2c050a48e9b544aa85e3f285e0ee81, type: 3}
-  m_PrefabInstance: {fileID: 5080679835499250713}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &9165480300231606182 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4156928704951974847, guid: 0c2c050a48e9b544aa85e3f285e0ee81, type: 3}
-  m_PrefabInstance: {fileID: 5080679835499250713}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &9184517605284549165 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4177024324301149748, guid: 0c2c050a48e9b544aa85e3f285e0ee81, type: 3}
   m_PrefabInstance: {fileID: 5080679835499250713}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
