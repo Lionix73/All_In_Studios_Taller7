@@ -8407,6 +8407,75 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7358453020054668420, guid: e54237bc6810cc24cb27563f86aba323, type: 3}
   m_PrefabInstance: {fileID: 495456887}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &496516906
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 496516907}
+  - component: {fileID: 496516908}
+  - component: {fileID: 496516909}
+  m_Layer: 0
+  m_Name: StoreDialoguesTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &496516907
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 496516906}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -3.7, y: 0.02999878, z: -0.18999863}
+  m_LocalScale: {x: 8, y: 8, z: 8}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1982918497}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &496516908
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 496516906}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.148277, y: 1, z: 2.1813278}
+  m_Center: {x: -0.07413855, y: 0, z: 0.025595665}
+--- !u!114 &496516909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 496516906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4817a52c7c28caf4cad18c3922c63b75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BussinessManDialogues: {fileID: 554533954}
+  TheWomenOfBussinessManDialogues: {fileID: 1743664169}
+  cooldownTime: 15
 --- !u!1001 &502402595
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8665,12 +8734,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 521178646}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.5, y: 0, z: 1.73}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -9.118, y: -1.0369987, z: 1.9859962}
+  m_LocalScale: {x: 0.95963025, y: 0.95963037, z: 0.95963025}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 731549642}
+  m_Father: {fileID: 1982918497}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &521178648
 MonoBehaviour:
@@ -9000,6 +9069,69 @@ MonoBehaviour:
   m_Bidirectional: 1
   m_AutoUpdatePosition: 0
   m_Area: 2
+--- !u!1 &554533952
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 554533953}
+  - component: {fileID: 554533954}
+  m_Layer: 0
+  m_Name: StoreManDialogues
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &554533953
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554533952}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.06654004, z: -0, w: 0.9977838}
+  m_LocalPosition: {x: -2.81, y: -1.2400017, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1982918497}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &554533954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554533952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -2052558046
+      Data2: 1242328223
+      Data3: 1714513584
+      Data4: 940059894
+    Path: event:/Dialogues/ShopMan
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &557503375
 GameObject:
   m_ObjectHideFlags: 0
@@ -12252,6 +12384,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1996525037}
+  - {fileID: 1178739973}
   - {fileID: 1228333456}
   - {fileID: 1078211214}
   - {fileID: 807380600}
@@ -12262,7 +12395,7 @@ Transform:
   - {fileID: 860393212}
   - {fileID: 252034086}
   - {fileID: 895088979}
-  - {fileID: 521178647}
+  - {fileID: 1982918497}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &731549643
@@ -20140,6 +20273,80 @@ MonoBehaviour:
   m_Bidirectional: 1
   m_AutoUpdatePosition: 0
   m_Area: 2
+--- !u!1001 &1178739972
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 731549642}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.95963025
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.95963037
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.95963025
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -9.118
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.0369987
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.9859962
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+      propertyPath: m_Name
+      value: GRAMOPHONE
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+--- !u!4 &1178739973 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6a0efa886c5bd8a4997db517ed20c732, type: 3}
+  m_PrefabInstance: {fileID: 1178739972}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1186161327
 GameObject:
   m_ObjectHideFlags: 0
@@ -29776,6 +29983,69 @@ MonoBehaviour:
   m_Bidirectional: 1
   m_AutoUpdatePosition: 0
   m_Area: 2
+--- !u!1 &1743664167
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1743664168}
+  - component: {fileID: 1743664169}
+  m_Layer: 0
+  m_Name: StoreGirlDialogues
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1743664168
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743664167}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.50119716, z: -0, w: 0.86533314}
+  m_LocalPosition: {x: -8.97, y: -1.2599983, z: 0.9900017}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1982918497}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1743664169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743664167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1055505289
+      Data2: 1306382817
+      Data3: -2071009903
+      Data4: 1587899613
+    Path: event:/Dialogues/ShopGirl
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1001 &1758027863
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33038,6 +33308,41 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 768927913046153411, guid: d5c5551998e357d449ceb1728fa4a734, type: 3}
+--- !u!1 &1982918496
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1982918497}
+  m_Layer: 0
+  m_Name: '[Sound]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1982918497
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982918496}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 521178647}
+  - {fileID: 554533953}
+  - {fileID: 1743664168}
+  - {fileID: 496516907}
+  m_Father: {fileID: 731549642}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1985247892
 PrefabInstance:
   m_ObjectHideFlags: 0

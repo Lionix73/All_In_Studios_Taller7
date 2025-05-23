@@ -177,7 +177,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638831610562656340
+  lastModified: 638835574066493523
   FileSizes:
   - Name: Desktop
     Value: 291904
@@ -506,6 +506,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 4430
+--- !u!114 &-6285911288304813612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Dialogues.bank
+  m_EditorClassIdentifier: 
+  Path: ../FMOD/Build/Desktop/Dialogues.bank
+  Name: Dialogues
+  StudioPath: bank:/Dialogues
+  lastModified: 638835581221407349
+  FileSizes:
+  - Name: Desktop
+    Value: 1307136
+  Exists: 1
 --- !u!114 &-5870085695636950124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -818,7 +838,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Guns.bank
   Name: Guns
   StudioPath: bank:/Guns
-  lastModified: 638835290066943922
+  lastModified: 638832041496774015
   FileSizes:
   - Name: Desktop
     Value: 495456
@@ -1078,7 +1098,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Environment.bank
   Name: Environment
   StudioPath: bank:/Environment
-  lastModified: 638831610562526357
+  lastModified: 638831174117720890
   FileSizes:
   - Name: Desktop
     Value: 158816
@@ -1317,6 +1337,7 @@ MonoBehaviour:
   - {fileID: 7047122884356888304}
   - {fileID: 107825808030671681}
   - {fileID: -2558496573077115599}
+  - {fileID: -6285911288304813612}
   EditorEvents:
   - {fileID: -4303300845778931015}
   - {fileID: -1296149345757234199}
@@ -1394,12 +1415,14 @@ MonoBehaviour:
   - {fileID: -5870085695636950124}
   - {fileID: 6956967232832435409}
   - {fileID: -5174703559511900873}
+  - {fileID: 805824989391912606}
+  - {fileID: 7129035449470165753}
   EditorParameters: []
   MasterBanks:
   - {fileID: -8195523702505923715}
   StringsBanks:
   - {fileID: 5092639294113453569}
-  cacheTime: 638835290066943922
+  cacheTime: 638835581221407349
   cacheVersion: 131622
 --- !u!114 &10818181712237557
 MonoBehaviour:
@@ -1497,7 +1520,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Enemies.bank
   Name: Enemies
   StudioPath: bank:/Enemies
-  lastModified: 638831610562476435
+  lastModified: 638831174116995959
   FileSizes:
   - Name: Desktop
     Value: 2463232
@@ -1556,6 +1579,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2708
+--- !u!114 &805824989391912606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Dialogues/ShopGirl
+  m_EditorClassIdentifier: 
+  Path: event:/Dialogues/ShopGirl
+  Guid:
+    Data1: 1055505289
+    Data2: 1306382817
+    Data3: -2071009903
+    Data4: 1587899613
+  Banks:
+  - {fileID: -6285911288304813612}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 30
+  Length: 6900
 --- !u!114 &1312478745403810463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1571,7 +1621,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Player.bank
   Name: Player
   StudioPath: bank:/Player
-  lastModified: 638831610564914554
+  lastModified: 638835581220912464
   FileSizes:
   - Name: Desktop
     Value: 1895776
@@ -1863,10 +1913,10 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638831610562666392
+  lastModified: 638835574066518745
   FileSizes:
   - Name: Desktop
-    Value: 5120
+    Value: 5258
   Exists: 1
 --- !u!114 &5951964841540460801
 MonoBehaviour:
@@ -2130,7 +2180,7 @@ MonoBehaviour:
     Data3: 1068441528
     Data4: 2074986088
   Banks:
-  - {fileID: 7047122884356888304}
+  - {fileID: -6285911288304813612}
   IsStream: 1
   Is3D: 0
   IsOneShot: 1
@@ -2153,10 +2203,10 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/UI.bank
   Name: UI
   StudioPath: bank:/UI
-  lastModified: 638831610565325271
+  lastModified: 638835571623834423
   FileSizes:
   - Name: Desktop
-    Value: 3419776
+    Value: 2412928
   Exists: 1
 --- !u!114 &7090888100674422147
 MonoBehaviour:
@@ -2200,11 +2250,38 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638831610564679524
+  lastModified: 638831254599233033
   FileSizes:
   - Name: Desktop
     Value: 39396384
   Exists: 1
+--- !u!114 &7129035449470165753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Dialogues/ShopMan
+  m_EditorClassIdentifier: 
+  Path: event:/Dialogues/ShopMan
+  Guid:
+    Data1: -2052558046
+    Data2: 1242328223
+    Data3: 1714513584
+    Data4: 940059894
+  Banks:
+  - {fileID: -6285911288304813612}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 30
+  Length: 6200
 --- !u!114 &7532505577097846175
 MonoBehaviour:
   m_ObjectHideFlags: 0
