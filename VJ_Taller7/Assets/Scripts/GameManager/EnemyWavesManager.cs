@@ -109,7 +109,10 @@ public class EnemyWavesManager : MonoBehaviour
         GameManager.Instance.roundManager.recieveWaveData(numberOfEnemiesToSpawn);
         
         Debug.Log($"{actualWave} : Nivel acutal para la restriccion de enemigos");
-        if (actualWave > 2) actualWave = 3;
+        if (actualWave > 2 && actualWave < 6) actualWave = 3;
+        if (actualWave >= 6 && actualWave < 9) actualWave = 4;
+        if (actualWave == 9) actualWave = 5;
+        if (actualWave > 9) actualWave = 6;
         availableEnemiesToSpawn = GameManager.Instance.availableEnemiesForWave[actualWave-1].availableEnemies;
     }
 
