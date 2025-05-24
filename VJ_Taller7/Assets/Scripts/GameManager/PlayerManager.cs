@@ -74,8 +74,8 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void RoundComplete(){
+        playerHealth.ScaleHealth(maxHealthIncreasePerRound);//Primero subir vida, luego curar
         playerHealth.TakeHeal(healPerRound);
-        playerHealth.ScaleHealth(maxHealthIncreasePerRound);
     }
 
     public void PlayerDie(GameObject player){

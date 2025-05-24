@@ -263,7 +263,7 @@ public class RoundManager : MonoBehaviour
 
         if (currentWave == 3) wantToPassRound = false; //Al iniciar las terceras oleadas queremos que para pasar de ronda ellos decidan.
 
-        if(currentWave == 1)
+        if(level == 1)
         {
             _soundManager.PlaySound("IntrudersDetected");
         }
@@ -272,7 +272,7 @@ public class RoundManager : MonoBehaviour
     {
         UnityEngine.Debug.Log("Pasar Ronda");
         currentRound++;
-        currentWave = 0;
+        currentWave = 1;
         level++;
             
             if (UIManager.Singleton) 
@@ -295,6 +295,9 @@ public class RoundManager : MonoBehaviour
         {
             wantToPassRound = true;
             inBetweenRoundsTimer = 15; //Para que despues de esperar no tenga que esperar 45 seg; en review
+
+            //Aqui deberia salir el aviso de RONDA 2, el que no tiene oleadas
+            //Y en caso de que tengamos el aviso de pasar con la E, tambien aqui...
         }
     }
 
