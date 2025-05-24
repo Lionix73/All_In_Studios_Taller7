@@ -62,7 +62,7 @@ public class PlayerSoundsManager : MonoBehaviour
 
     public void OnShoot(InputAction.CallbackContext context)
     {
-        if (!gunManager.canShoot || !firerateAllowShoot || !pControl.PlayerCanMove) return;
+        if (!gunManager.canShoot || !firerateAllowShoot || !pControl.PlayerCanMove || gunManager.CurrentGun.bulletsLeft < 1) return;
 
         if (context.started)
         {

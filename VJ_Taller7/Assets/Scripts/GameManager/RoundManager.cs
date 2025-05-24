@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -198,9 +199,16 @@ public class RoundManager : MonoBehaviour
             if (waveDuration > maximunTimeForWaves) waveDuration = maximunTimeForWaves;
             //List<WeightedSpawnScriptableObject> temp = GameManager.Instance.GetBalanceWave(currentWave);
             //enemyWavesManager.RecieveWaveLimits(temp);
-            enemyWavesManager.RecieveWaveOrder(level, waveSize);
+            //enemyWavesManager.RecieveWaveOrder(level, waveSize);
+            StartCoroutine(WaitUIToHideAtStartingWave());
             waveTimer = waveDuration;
         }
+    }
+
+    private IEnumerator WaitUIToHideAtStartingWave()
+    {
+        yield return new WaitForSeconds(3.0f);
+        enemyWavesManager.RecieveWaveOrder(level, waveSize);
     }
 
     private void EndWave(bool how) //Mas comodo y lindo tenerlo todo junto...
