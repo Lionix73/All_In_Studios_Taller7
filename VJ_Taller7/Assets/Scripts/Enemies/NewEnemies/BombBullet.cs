@@ -44,28 +44,38 @@ public class BombBullet : BulletEnemie
         this.target = target;
 
         if(Rb != null){
-            Rb.linearVelocity = CalculateLaunchVelocity(target.position);
+            Rb.isKinematic = false;
+            Rb.linearVelocity = Vector3.zero;
+            Vector3 launchVelocity = CalculateLaunchVelocity(target.position);
+            Rb.AddForce(launchVelocity, ForceMode.VelocityChange);
         }
     }
 
     private Vector3 CalculateLaunchVelocity(Vector3 targetPosition)
     {
-        Vector3 direction = targetPosition - transform.position;
-        float heightDifference = direction.y;
-        direction.y = 0;
-        float distance = direction.magnitude;
-        direction.y = distance;
-        distance += heightDifference;
-
+        // Direction to target
+        Vector3 targetDir = targetPosition - transform.position;
+        float distance = targetDir.magnitude;
+        
+        // Calculate launch angle (45 degrees is optimal for maximum distance)
         float angle = 45f * Mathf.Deg2Rad;
-        float velocity = Mathf.Sqrt(distance * Physics.gravity.magnitude / Mathf.Sin(2 * angle));
-
-        if (float.IsNaN(velocity))
+        
+        // Calculate initial velocity magnitude needed to reach the target
+        float gravity = Physics.gravity.magnitude;
+        float velocityMagnitude = Mathf.Sqrt(distance * gravity / Mathf.Sin(2 * angle));
+        
+        // If we get NaN (target too close or other issues), use a default value
+        if (float.IsNaN(velocityMagnitude) || velocityMagnitude <= 0)
         {
-            velocity = 0;
+            velocityMagnitude = 10f; // Default velocity
         }
-
-        return velocity * direction.normalized + Vector3.up * upwardForce;
+        
+        // Calculate the launch direction
+        Vector3 horizontalDir = new Vector3(targetDir.x, 0, targetDir.z).normalized;
+        Vector3 launchDir = horizontalDir * Mathf.Cos(angle) + Vector3.up * Mathf.Sin(angle);
+        
+        // Return the final velocity vector
+        return launchDir * velocityMagnitude;
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
@@ -116,5 +126,22 @@ public class BombBullet : BulletEnemie
         
         gameObject.GetComponent<Collider>().enabled = false;
         StartCoroutine(WaitForDisable());
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (gameObject.activeSelf)
+        {
+            Vector3 velocity = CalculateLaunchVelocity(target.position);
+            Vector3 position = transform.position;
+            
+            Gizmos.color = Color.yellow;
+            for (int i = 0; i < 50; i++)
+            {
+                float t = i * 0.1f;
+                Vector3 nextPos = position + velocity * t + 0.5f * Physics.gravity * t * t;
+                Gizmos.DrawSphere(nextPos, 0.1f);
+            }
+        }
     }
 }

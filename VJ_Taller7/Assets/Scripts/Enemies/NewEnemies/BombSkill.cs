@@ -92,7 +92,7 @@ public class BombSkill : SkillScriptableObject
         ObjectPool pool = ObjectPool.CreateInstance(prefab, 10);
         PoolableObject instance = pool.GetObject();
 
-        Debug.Log($"Bomb instantiated: {instance.name}, Parent: {instance.transform.parent?.name ?? "None"}");
+        //Debug.Log($"Bomb instantiated: {instance.name}, Parent: {instance.transform.parent?.name ?? "None"}");
 
         instance.transform.SetParent(enemy.transform, false);
         instance.transform.localPosition = bulletSpawnOffSet;

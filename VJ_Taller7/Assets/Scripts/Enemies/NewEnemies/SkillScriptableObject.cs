@@ -134,6 +134,6 @@ public class SkillScriptableObject : ScriptableObject
         // Clear the dictionaries to avoid memory leaks
         isActivatingPerEnemy.Clear();
         useTimePerEnemy.Clear();
-        Debug.Log("SkillScriptableObject: Cleared enemy-specific states on disable.");
+        //Debug.Log("SkillScriptableObject: Cleared enemy-specific states on disable.");
     }
 }
