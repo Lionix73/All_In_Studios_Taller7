@@ -68,6 +68,7 @@ public class AttackRadius : MonoBehaviour
             if(damageables.Count == 0)
             {
                 StopCoroutine(attackCoroutine);
+                enemy.Animator.SetTrigger(Enemy.STOPATTACK_TRIGGER);
                 enemy.Movement.ResumeMovement();
                 attackCoroutine = null;
             }
@@ -147,6 +148,7 @@ public class AttackRadius : MonoBehaviour
             damageables.RemoveAll(DisabledDamageables);
         }
 
+        enemy.Animator.SetTrigger(Enemy.STOPATTACK_TRIGGER);
         attackCoroutine = null;
     }
 

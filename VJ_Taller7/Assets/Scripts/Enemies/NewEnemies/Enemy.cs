@@ -87,6 +87,7 @@ public class Enemy : PoolableObject, IDamageable
     }
 
     public const string ATTACK_TRIGGER = "Attack";
+    public const string STOPATTACK_TRIGGER = "StopAttack";
     public const string SHOOT_TRIGGER = "Shoot";
     public const string SKILL_TRIGGER = "UsingSkill";
     public const string IsHit = "IsHit";
