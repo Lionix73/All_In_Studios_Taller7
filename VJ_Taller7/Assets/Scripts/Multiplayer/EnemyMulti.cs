@@ -151,7 +151,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
     public PlayerControllerMulti Player { get; set; }
     public int Level { get; set; }
 
-    public void RespawmEnemy(float baseOffset)
+    public void RespawmEnemy()
     {
         RagdollEnabler.EnableAnimator();
         RagdollEnabler.DisableAllRigidbodies();
@@ -167,11 +167,11 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         }
         HealthBarProgressRpc((int)maxHealth, maxHealth);
 
-        RespawmEnemyRpc(baseOffset);
+        RespawmEnemyRpc();
     }
 
     [Rpc(SendTo.Everyone)]
-    public void RespawmEnemyRpc(float baseOffset)
+    public void RespawmEnemyRpc()
     {
         if(IsServer) return;
 
@@ -179,7 +179,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         RagdollEnabler.DisableAllRigidbodies();
         if (!isStatic)
         {
-              agent.enabled = false;
+              //agent.enabled = false;
             //agent.baseOffset = baseOffset;
             
             IsDead = false;
@@ -190,7 +190,6 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
             }
         }
         HealthBarProgressRpc((int)maxHealth, maxHealth);
-        agent.enabled = true;
         gameObject.SetActive(true);
         Debug.Log(agent.isActiveAndEnabled);
     }
@@ -360,10 +359,9 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
     [Rpc(SendTo.Server)]
     private void HandleDeathOnServerRpc()
     {
-
+        agent.enabled = false;
         Debug.Log("Enemigo Muerto");
         // Replicar a todos los clientes
-        agent.enabled = false;
         DiedAnimationRpc();
 
     }
@@ -378,6 +376,8 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
     [Rpc(SendTo.Everyone)]
     public void DiedAnimationRpc()
     {
+        agent.enabled = false;
+
         if (!isStatic)
         {
             //agent.enabled = false;

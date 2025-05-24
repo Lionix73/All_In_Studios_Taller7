@@ -1,11 +1,11 @@
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
-public abstract class PassiveSkillBase : MonoBehaviour, IPassiveSkill
+public abstract class MultiPassiveSkillBase : NetworkBehaviour, IPassiveSkill
 {
+    private MultiPassiveSkillManager skillManager;
     public Skill_Info skillInfo;
-    private PassiveSkillManager skillManager;
-    protected ThisObjectSounds soundManager;
 
     protected float cooldown;
     protected bool isOnCooldown = false;
@@ -15,14 +15,14 @@ public abstract class PassiveSkillBase : MonoBehaviour, IPassiveSkill
 
     private void Awake()
     {
-        skillManager = GetComponentInParent<PassiveSkillManager>();
-        soundManager = GetComponentInParent<ThisObjectSounds>();
+        skillManager = GetComponentInParent<MultiPassiveSkillManager>();
     }
 
     public virtual void Activate()
     {
         if (!isOnCooldown)
         {
+            skillManager.DecreasePassiveSkillMaskRpc(skillManager.passiveSkills[skillManager.activeSkillIndex].WhatIsTheCooldown);
             CheckCondition();
         }
     }
@@ -34,10 +34,7 @@ public abstract class PassiveSkillBase : MonoBehaviour, IPassiveSkill
     protected IEnumerator CooldownRoutine()
     {
         isOnCooldown = true;
-        StartCoroutine(skillManager.DecreasePassiveSkillMask(skillManager.passiveSkills[skillManager.activeSkillIndex].WhatIsTheCooldown));
         yield return new WaitForSeconds(cooldown);
         isOnCooldown = false;
-
-        if (cooldown > 0) soundManager.PlaySound("ReloadSkill");
     }
 }

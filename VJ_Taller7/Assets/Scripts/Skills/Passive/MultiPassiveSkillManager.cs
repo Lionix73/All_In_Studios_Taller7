@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-public class PassiveSkillManager : SkillsManagerBase
+public class MultiPassiveSkillManager : MultiSkillsManagerBase
 {
-    public PassiveSkillBase[] passiveSkills;
+    public MultiPassiveSkillBase[] passiveSkills;
     public int activeSkillIndex;
 
     private void Start()
@@ -13,14 +13,15 @@ public class PassiveSkillManager : SkillsManagerBase
             activeSkillIndex = CharacterManager.Instance.indexPassiveSkill;
 
         DeactivateUnusedSkills();
-        SearchSkillsUI();
 
+        SearchSkillsUI();
         _pasSkillImg.sprite = passiveSkills[activeSkillIndex].skillInfo.image;
         _pasSkillMask.sprite = passiveSkills[activeSkillIndex].skillInfo.image;
     }
 
     private void Update()
     {
+        if(!IsServer && NetworkObject.IsSpawned) return;
         if (!passiveSkills[activeSkillIndex].IsOnCooldown)
             passiveSkills[activeSkillIndex].Activate();
     }

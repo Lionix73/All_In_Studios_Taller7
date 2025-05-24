@@ -72,6 +72,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5170942915732086442, guid: 67979ce69ffaa964496fec69c93e254f, type: 3}
       insertIndex: 3
       addedObject: {fileID: 7227132562663583414}
+    - targetCorrespondingSourceObject: {fileID: 5170942915732086442, guid: 67979ce69ffaa964496fec69c93e254f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4025420363447302773}
     - targetCorrespondingSourceObject: {fileID: 92340831482207095, guid: 67979ce69ffaa964496fec69c93e254f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2618815426368484193}
@@ -219,6 +222,24 @@ MonoBehaviour:
   blinkDuration: 0.4
   scoreOnKill: 100
   lastAttackerId: 0
+--- !u!114 &4025420363447302773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3343289136184340493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bf059c0df9fd4846b3ae63a27db3510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  EnableProximity: 0
+  ProximityRange: 50
+  CorrectionDelay: 3
+  DriftCorrectionPercentage: 0.1
+  WarpOnDestinationChange: 0
 --- !u!114 &4729678802674982455 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2883551852280623248, guid: 67979ce69ffaa964496fec69c93e254f, type: 3}
@@ -291,6 +312,7 @@ MonoBehaviour:
   damage: 10
   attackDelay: 1
   onRangeBehvaiorMethod: 0
+  networkObjectPool: {fileID: 0}
 --- !u!1 &7798365151834311889 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 404766684229313142, guid: 67979ce69ffaa964496fec69c93e254f, type: 3}

@@ -100,6 +100,7 @@ public class MultiPlayerState : NetworkBehaviour
     }
     public void OnReady(InputAction.CallbackContext context)
     {
+        if (NetworkManager.Singleton.ConnectedClients.Count == 1) return;
         if (!IsOwner) return;
 
         if (IsReady) return;

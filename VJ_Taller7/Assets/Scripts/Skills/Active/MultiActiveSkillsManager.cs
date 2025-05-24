@@ -4,7 +4,7 @@ using Unity.Services.Vivox;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MultiActiveSkillManager : SkillsManagerBase
+public class MultiActiveSkillManager : MultiSkillsManagerBase
 {
     public MultiSkillBase[] skills;
     public int activeSkillIndex;
