@@ -76,8 +76,6 @@ public class PlayerManager : MonoBehaviour
     public void RoundComplete(){
         playerHealth.TakeHeal(healPerRound);
         playerHealth.ScaleHealth(maxHealthIncreasePerRound);
-
-        //Agregar tambien el escalado de las armas desde este manager. Por determinar como
     }
 
     public void PlayerDie(GameObject player){

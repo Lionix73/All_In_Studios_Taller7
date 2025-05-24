@@ -270,6 +270,7 @@ public class RoundManager : MonoBehaviour
     }
     private void PassRound()
     {
+        UnityEngine.Debug.Log("Pasar Ronda");
         currentRound++;
         currentWave = 0;
         level++;
