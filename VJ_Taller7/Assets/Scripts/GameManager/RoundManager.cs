@@ -16,6 +16,7 @@ public class RoundManager : MonoBehaviour
     [SerializeField] private int currentRound =1 ; //Rondas
     private int level = 0; //For the game balance (in case)
     public int CurrentRound {get {return currentRound;}}
+    public int CurrentWave { get { return currentWave; } }
 
     [Tooltip("Para saber si quieren pasar de ronda o esperar")]
     public bool wantToPassRound;
@@ -111,7 +112,8 @@ public class RoundManager : MonoBehaviour
         {
             _RoundUI.SetActive(false);
             _Simulating = true;
-            UIManager.Singleton.UIChangeRound(currentRound);
+            UIManager.Singleton.UIChangeImageRound(CurrentRound);
+            UIManager.Singleton.ShowPartialPanel("RoundStartUI", 2);
 
             //challengeManager.ShowChallenges(); //Mostrar los challenges
         }

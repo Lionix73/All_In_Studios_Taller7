@@ -73,6 +73,7 @@ public class GameManager : MonoBehaviour
         // Crear la logica para el juego en si
         roundManager.OnWaveStart += WaveStarted;
         roundManager.OnWaveComplete += WaveFinished;
+        roundManager.OnRoundComplete += RoundFinished;
 
     }
 
@@ -131,14 +132,24 @@ public class GameManager : MonoBehaviour
 
     public void WaveStarted(){
         GunShop?.GetComponent<ShopLimit>().WaveStarted();
+        UIManager.Singleton.UIChangeImageWave(roundManager.CurrentWave);
+        UIManager.Singleton.ShowPartialPanel("WaveStartUI", 2);
     }
     
     private void WaveFinished(bool killedAll){
         GunShop?.GetComponent<ShopLimit>().WaveFinished(killedAll);
 
-        if (killedAll) gunManager.ScaleDamage(10);
+        if (!killedAll) return;
+        UIManager.Singleton.ShowPartialPanel("WaveCompleteUI", 3);
+        gunManager.ScaleDamage(10);
         //El escalado de las armas tengo que mirar si hacerlo que cada arma tenga su esacalado, o un entero pa todas
         //La segunda opcion me gusta mas porque es mas facil de hacer... xd
+    }
+
+    private void RoundFinished()
+    {
+        UIManager.Singleton.UIChangeImageRound(roundManager.CurrentRound);
+        UIManager.Singleton.ShowPartialPanel("RoundStartUI", 2);
     }
 
     public void ScoreChange(float actualScore){
