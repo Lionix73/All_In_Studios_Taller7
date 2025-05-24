@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -124,7 +123,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI UiWaveCounter;
     [SerializeField] private TextMeshProUGUI UiRoundCounter;
     [SerializeField] private TextMeshProUGUI UiEnemyCounter;
-    [SerializeField] private  List<GameObject> playerNameText = new List<GameObject>();
+    [SerializeField] private List<GameObject> playerNameText = new List<GameObject>();
     [SerializeField] private GameObject UIWaves;
 
     private ThisObjectSounds soundManager;
@@ -140,6 +139,13 @@ public class UIManager : MonoBehaviour
     public Color decreasingColor = Color.red;   // Color cuando el puntaje disminuye
     private Color defaultColor;
 
+    [Header("Round Number UI (Units Only)")]
+    [SerializeField] private List <Image> unitDigitImageRound;  // Imagen donde se mostrará el dígito (0-9)
+    [SerializeField] private List<Sprite> digitSpritesRound;  // Sprites de los números 0 al 9 (en orden)
+    [Header("Round Number UI (Units Only)")]
+    [SerializeField] private List<Image> unitDigitImageWave;  // Imagen donde se mostrará el dígito (0-9)
+    [SerializeField] private List<Sprite> digitSpritesWave;  // Sprites de los números 0 al 9 (en orden)
+
     private Dictionary<string, AnimationList> panelDictionary = new Dictionary<string, AnimationList>();
 
     // Función pública para mostrar un panel con fade in
@@ -148,6 +154,18 @@ public class UIManager : MonoBehaviour
         if (panelDictionary.TryGetValue(panelName, out AnimationList panel))
         {
             panel.PanelFadeIn(fadeTime);
+        }
+        else
+        {
+            Debug.LogWarning($"Panel '{panelName}' no encontrado en UIManager");
+        }
+    }
+
+    public void ShowPartialPanel(string panelName, float delayBetwwenPanel)
+    {
+        if (panelDictionary.TryGetValue(panelName, out AnimationList panel))
+        {
+            panel.ShowPanelAndHide(delayBetwwenPanel);
         }
         else
         {
@@ -434,6 +452,74 @@ public class UIManager : MonoBehaviour
 
     }
 
+    public void UIChangeImageRound(int currentRound)
+    {
+        Debug.Log(currentRound);
+        //if (!actualRoundDisplay) return;
+
+        // Limpiar otros textos si es necesario
+        UiWaveTimer.text = "";
+        UiWaveCounter.text = "";
+        UiEnemyCounter.text = "";
+
+        // --- Actualizar el dígito de unidades ---
+        UpdateUnitDigitRound(currentRound -1);
+        //actualRoundDisplay=false;
+
+    }
+    private void UpdateUnitDigitRound(int number)
+    {
+        // Asegurar que el número esté en el rango 0-9
+        int unitDigit = Mathf.Clamp(number, 0, 9) % 10;  // % 10 por si acaso recibe un número > 9
+
+        // Verificar que el sprite exista
+        if (unitDigit >= 0 && unitDigit < digitSpritesRound.Count && digitSpritesRound[unitDigit] != null)
+        {
+            foreach (var image in unitDigitImageRound)
+            {
+                image.sprite = digitSpritesRound[unitDigit];
+            }
+            //unitDigitImageRound.gameObject.SetActive(true);  // Asegurarse de que esté visible
+        }
+        else
+        {
+            Debug.LogWarning($"No hay un sprite asignado para el dígito {unitDigit}");
+            //unitDigitImageRound.gameObject.SetActive(false);
+        }
+    }
+    public void UIChangeImageWave(int currentWave)
+    {
+        Debug.Log(currentWave);
+        //if (!actualRoundDisplay) return;
+
+        // Limpiar otros textos si es necesario
+
+
+        // --- Actualizar el dígito de unidades ---
+        UpdateUnitDigitWave(currentWave - 1);
+        //actualRoundDisplay=false;
+
+    }
+    private void UpdateUnitDigitWave(int number)
+    {
+        // Asegurar que el número esté en el rango 0-9
+        int unitDigit = Mathf.Clamp(number, 0, 9) % 10;  // % 10 por si acaso recibe un número > 9
+
+        // Verificar que el sprite exista
+        if (unitDigit >= 0 && unitDigit < digitSpritesWave.Count && digitSpritesWave[unitDigit] != null)
+        {
+            foreach (var image in unitDigitImageWave)
+            {
+                image.sprite = digitSpritesWave[unitDigit];
+            }
+            //unitDigitImageRound.gameObject.SetActive(true);  // Asegurarse de que esté visible
+        }
+        else
+        {
+            Debug.LogWarning($"No hay un sprite asignado para el dígito {unitDigit}");
+            //unitDigitImageRound.gameObject.SetActive(false);
+        }
+    }
     public void UIBetweenWavesTimer(float inBetweenRoundsTimer)
     {
         Dialogue roundDialogue = UiRoundCounter.GetComponent<Dialogue>();

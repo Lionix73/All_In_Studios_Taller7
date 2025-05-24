@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class AnimationList : MonoBehaviour
 {
@@ -53,6 +54,7 @@ public class AnimationList : MonoBehaviour
         StartCoroutine("ItemsAnimation");
     }
 
+
     public void PanelFadeOut(float fadeTime)
     {
         StartCoroutine(PanelFadeOutRoutine(fadeTime));
@@ -95,6 +97,11 @@ public class AnimationList : MonoBehaviour
         rectTransformBG.DOScale(1, fadeTime);
 
     }
+    public void ShowPanelAndHide(float delayBetweenAnimations)
+    {
+        gameObject.SetActive(true);
+        StartCoroutine(AnimateItemsSequence(delayBetweenAnimations));
+    }
 
     IEnumerator ItemsAnimation()
     {
@@ -109,12 +116,29 @@ public class AnimationList : MonoBehaviour
         }
 
     }
+    public IEnumerator AnimateItemsSequence(float delayBetweenAnimations)
+    {
+        // Animación de aparición (orden normal)
+        yield return ItemsAnimation();
+
+        // Espera antes de desaparecer
+        yield return new WaitForSeconds(delayBetweenAnimations);
+
+        // Animación de desaparición (orden inverso)
+        yield return ItemsDissapear();
+    }
     IEnumerator ItemsDissapear()
     {
+        items.Reverse(); // Invierte la lista (afecta el orden original)
+
         foreach (var item in items)
         {
             item.transform.DOScale(0f, fadeTime / 2);
-            yield return new WaitForSeconds(fadeTime / 8);
+            yield return new WaitForSeconds(fadeTime / 4);
         }
+
+        items.Reverse(); // Restaura el orden original
     }
+
+
 }

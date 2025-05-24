@@ -14,6 +14,7 @@ public class MultiRoundManager : NetworkBehaviour
     [SerializeField] private int currentRound; //Rondas
     private int level = 0; //For the game balance (in case)
     public int CurrentRound {get {return currentRound;}}
+    public int CurrentWave { get { return currentWave; } }
 
     [SerializeField] private int waveSize; //Tamaño de la oleada en cantidad de enemigos 
     private int waveValue;
@@ -33,8 +34,11 @@ public class MultiRoundManager : NetworkBehaviour
     public List<EnemyScriptableObject> enemiesToSpawn = new List<EnemyScriptableObject>();
     private List<int> enemyIndex;
     private GameObject lastEnemyOfWave; //saber el último enemigo con vida para el drop
-    //public Transform[] spawnPoints;
-    
+                                        //public Transform[] spawnPoints;
+    [Tooltip("Para saber si quieren pasar de ronda o esperar")]
+    public bool wantToPassRound; //private bool startOfTheGame; //
+
+
     [Space]
     [Tooltip("Tiempo de duración base de las oleadas")]
     public float waveDuration;
@@ -77,6 +81,9 @@ public class MultiRoundManager : NetworkBehaviour
     public event WaveStarted OnWaveStart;
     public event WaveComplete OnWaveComplete;
     public event RoundComplete OnRoundComplete;
+
+    private RoundsMusicManager _musicRounds;
+    private ThisObjectSounds _soundManager;
 
     public void PauseGame(bool state){
         _simulating = !state;
@@ -125,33 +132,12 @@ public class MultiRoundManager : NetworkBehaviour
 
         if (aliveEnemies == 0 && !inBetweenRounds && enemiesKilledOnWave > 1)
         {
-
-            inBetweenRounds = true; //Next round
-            OnWaveComplete?.Invoke(true); //Se completo exitosamente la oleada, solo cuando acaba por matar a todos los enemigos
-            //_musicRounds.StopMusic();
-            //_soundManager.PlaySound("WinWave");
-            enemiesKilledOnWave = 0;
+            EndWave(true);
         }
 
         if (currentWave > 3)
         {
-            //POR AHORA: AQUI TERMINARA LA ALPHA
-            currentRound++;
-            currentWave = 0;
-            level++;
-
-            if (UIManager.Singleton)
-            {
-                UIManager.Singleton.actualRoundDisplay = true;
-                UIManager.Singleton.UIChangeRound(currentRound);
-
-                //challengeManager.ShowChallenges(); //Mostrar los challenges
-            }
-
-            OnRoundComplete?.Invoke(); // Se completo la ronda, avisar para escalados y eso, aqui solo importa sobrevivir
-
-            //_musicRounds.StopMusic();
-            //_soundManager.PlaySound("WinRound");
+            PassRound();
         }
 
         if (_Simulating) UpdateTimers();
@@ -177,17 +163,7 @@ public class MultiRoundManager : NetworkBehaviour
                 lastDisplayedSecond = currentSecond;
             }
             if (inBetweenRoundsTimer<=0){
-            currentWave++;
-            level++;
-            SetWaveBalance();
-
-            UIActualWaveRpc(currentWave);
-
-            if (_BalncingInThis) SendWave(enemyIndex); //sin el balance del manager de Alejo (no lo usaremos pero dejemoslo ahi '.')
-            inBetweenRounds = false;
-            OnWaveStart?.Invoke(); //Comienza la oleada
-            inBetweenRoundsTimer = inBetweenRoundsWaitTime;
-            lastDisplayedSecond = Mathf.CeilToInt(inBetweenRoundsWaitTime); // Reset para el próximo ciclo
+                StartWave();
             }
         }
         else {
@@ -202,18 +178,8 @@ public class MultiRoundManager : NetworkBehaviour
 
             if (waveTimer <= 0)
             {
-            //End round
-            inBetweenRounds = true;
-            lastDisplayedSecond = Mathf.CeilToInt(inBetweenRoundsTimer); // Reset para el próximo ciclo
-            //castigar por no completar
-            //aumentar el escalado de los enemigos o repetir
 
-            OnWaveComplete?.Invoke(false);
-            
-            //_musicRounds.StopMusic();
-           // _soundManager.PlaySound("FailWave");
-
-
+                EndWave(false);
 
             }
         }
@@ -241,6 +207,85 @@ public class MultiRoundManager : NetworkBehaviour
         }
     }
 
+    private void EndWave(bool how) //Mas comodo y lindo tenerlo todo junto...
+    {
+        inBetweenRounds = true; //Empezar a descontar para la otra sugiente ronda/oleada
+        enemiesKilledOnWave = 0;
+        //_musicRounds.StopMusic();
+        //_soundManager.PlaySound(how ? "Winwave" : "FailWave");
+
+        //Santi --> aqui el audio segun si paso la ronda matando a todos o no.
+        //_soundManager?.PlaySound(how? "YourefficienteBirds..." : "ToTheFOrcesRemain");
+
+
+        // if (how)
+        // {
+        //     //OnWaveComplete?.Invoke(true); //Se completo exitosamente la oleada, solo cuando acaba por matar a todos los enemigos
+        //     //_soundManager.PlaySound("WinWave");
+        // }
+        // else
+        // {//End Wave without killing all
+        //     //inBetweenRounds = true;
+        //     //enemiesKilledOnWave = 0;
+
+        //     //castigar por no completar satisfactoriamente
+        //     //aumentar el escalado de los enemigos o repetir
+        //     //OnWaveComplete?.Invoke(false);
+        //     //_musicRounds.StopMusic();
+        //     //_soundManager.PlaySound("FailWave");
+        // }
+
+        OnWaveComplete?.Invoke(how);
+    }
+    private void StartWave()
+    {
+        if (!wantToPassRound) return;
+        currentWave++;
+        level++;
+        SetWaveBalance();
+
+        if (UIManager.Singleton) UIManager.Singleton.UIActualWave(currentWave);
+
+        if (_BalncingInThis) SendWave(enemyIndex); //sin el balance del manager de Alejo (no lo usaremos pero dejemoslo ahi '.')
+
+        inBetweenRounds = false;
+        inBetweenRoundsTimer = inBetweenRoundsWaitTime;
+
+        OnWaveStart?.Invoke(); //Comienza la oleada
+
+        //_musicRounds.PlayMusic(); // Empezar la musica
+
+        if (currentWave == 3) wantToPassRound = false; //Al iniciar las terceras oleadas queremos que para pasar de ronda ellos decidan.
+    }
+    private void PassRound()
+    {
+        currentRound++;
+        currentWave = 0;
+        level++;
+
+        if (UIManager.Singleton)
+        {
+            //UIManager.Singleton.UIChangeRound(currentRound);
+
+            //challengeManager.ShowChallenges(); //Mostrar los challenges
+        }
+
+        _musicRounds.StopMusic();
+
+        //SANTI --> Si queda algun audio de la IA mala sin poner, ponelo aqui, sino ahora grabo mas
+        //_soundManager.PlaySound("WinRound");
+
+        OnRoundComplete?.Invoke();
+    }
+
+    public void OrderToPassRound()
+    {
+        if (!wantToPassRound && inBetweenRounds)
+        {
+            wantToPassRound = true;
+            inBetweenRoundsTimer = 15; //Para que despues de esperar no tenga que esperar 45 seg; en review
+        }
+    }
     public void recieveWaveData(int enemiesToSpawn){
         waveSize = enemiesToSpawn;
     }

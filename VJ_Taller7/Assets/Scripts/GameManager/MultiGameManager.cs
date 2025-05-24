@@ -70,6 +70,8 @@ public class MultiGameManager : NetworkBehaviour
         if (!IsServer) return;
         roundManager.OnWaveStart += WaveStarted;
         roundManager.OnWaveComplete += WaveFinished;
+        roundManager.OnRoundComplete += RoundStarted;
+        //roundManager.OnRoundComplete +=
 
         //SpawnPlayer();
 
@@ -78,10 +80,10 @@ public class MultiGameManager : NetworkBehaviour
     }
 
     [ContextMenu("SpawnPlayer")]
-    public void SpawnPlayer(ulong clientId ,GameObject playerGO) {
+    public void SpawnPlayer(ulong clientId, GameObject playerGO) {
         playerPrefab = playerGO;
         // spawn player\
-        if (spawnPlayerWithMenu){
+        if (spawnPlayerWithMenu) {
             playerManager.RegisterPlayer(clientId, playerPrefab);
             isGameOver = false;
         }
@@ -106,12 +108,12 @@ public class MultiGameManager : NetworkBehaviour
         if (spawnPlayerWithMenu) return;
 
         //playerManager.RespawnPlayerOrder(playerPrefab,spawntPoint);
-        
+
     }
 
     public void PlayerScore(ulong clientId, int score)
     {
-        if(clientId == 10) return;
+        if (clientId == 10) return;
 
         NetworkObject playerNet = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject;
         if (playerNet != null)
@@ -122,21 +124,21 @@ public class MultiGameManager : NetworkBehaviour
         }
     }
     //Para que todo lo que necesite al player lo encuentre una vez que se haya creado; NOTA: Siempre al final de la función
-    public void PlayerSpawn(){
-        PlayerSpawned?.Invoke(playerManager.activePlayer); 
+    public void PlayerSpawn() {
+        PlayerSpawned?.Invoke(playerManager.activePlayer);
     }
-    
+
     public GameObject SelectedPlayer()
     {
         int selectedIndex = CharacterManager.Instance.selectedIndexCharacter;
         return CharacterManager.Instance.characters[selectedIndex].playableCharacter;
     }
 
-    public void RestartScene(){
+    public void RestartScene() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void PauseGame(){
+    public void PauseGame() {
         isPaused = !isPaused;
         if (UIManager.Singleton) roundManager.PauseGame(isPaused);
     }
@@ -151,28 +153,52 @@ public class MultiGameManager : NetworkBehaviour
     {
         Debug.Log("GameOver");
         LostGameUIRpc();
-        isGameOver = true; 
+        isGameOver = true;
     }
-
     public void WaveStarted()
     {
         GunShop?.GetComponent<MultiShopLimit>().WaveStarted();
         playerManager.CheckDeadPlayersAndRespawn();
+        StartWaveUIRpc(roundManager.CurrentRound);
+
+    }
+    [Rpc(SendTo.Everyone)]
+    public void StartWaveUIRpc(int currentWave)
+    {
+        UIManager.Singleton.UIChangeImageWave(currentWave);
+        UIManager.Singleton.ShowPartialPanel("WaveStartUI", 2);
     }
 
+    public void RoundStarted()
+    {
+        StartRoundUIRpc(roundManager.CurrentRound);
+
+    }
+    [Rpc(SendTo.Everyone)]
+    public void StartRoundUIRpc(int currentRound)
+    {
+        UIManager.Singleton.UIChangeImageRound(currentRound);
+        UIManager.Singleton.ShowPartialPanel("RoundStartUI", 2);
+    }
+
+
+    [Rpc(SendTo.Everyone)]
+    public void CompleteWaveUIRpc(int currentRound)
+    {
+        UIManager.Singleton.ShowPartialPanel("WaveCompleteUI", 3);
+    }
     private void WaveFinished(bool killedAll)
     {
         GunShop?.GetComponent<MultiShopLimit>().WaveFinished(killedAll);
+
+        if (!killedAll) return;
+        CompleteWaveUIRpc(roundManager.CurrentRound);
 
         //if (killedAll) gunManager.ScaleDamage(10);
         //El escalado de las armas tengo que mirar si hacerlo que cada arma tenga su esacalado, o un entero pa todas
         //La segunda opcion me gusta mas porque es mas facil de hacer... xd
     }
 
-    [Rpc(SendTo.Everyone)]
-    public void StartRoundUIRpc(int currentRound) {
-        UIManager.Singleton.UIChangeRound(currentRound);
-    }
 
     [Rpc(SendTo.Everyone)]
     public void LostGameUIRpc()
