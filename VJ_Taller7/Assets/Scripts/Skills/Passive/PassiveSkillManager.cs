@@ -13,8 +13,8 @@ public class PassiveSkillManager : SkillsManagerBase
             activeSkillIndex = CharacterManager.Instance.indexPassiveSkill;
 
         DeactivateUnusedSkills();
-
         SearchSkillsUI();
+
         _pasSkillImg.sprite = passiveSkills[activeSkillIndex].skillInfo.image;
         _pasSkillMask.sprite = passiveSkills[activeSkillIndex].skillInfo.image;
     }

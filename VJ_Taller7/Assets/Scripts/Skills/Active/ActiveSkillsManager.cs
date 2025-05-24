@@ -15,8 +15,8 @@ public class ActiveSkillManager : SkillsManagerBase
             activeSkillIndex = CharacterManager.Instance.indexActiveSkill;
 
         DeactivateUnusedSkills();
-
         SearchSkillsUI();
+
         _actSkillImg.sprite = skills[activeSkillIndex].skillInfo.image;
         _actSkillMask.sprite = skills[activeSkillIndex].skillInfo.image;
     }

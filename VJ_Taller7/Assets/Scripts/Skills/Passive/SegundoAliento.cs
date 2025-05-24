@@ -17,6 +17,7 @@ public class SegundoAliento : PassiveSkillBase
     private void Start()
     {
         playerHealth = GetComponentInParent<Health>();
+        cooldown = cooldownThisSkill;
     }
 
     public override void CheckCondition()
@@ -25,7 +26,6 @@ public class SegundoAliento : PassiveSkillBase
 
         if (playerHealth.GetCurrentHeath <= playerHealth.GetMaxHeath * 0.1f && secondBreathActive)
         {
-            cooldown = cooldownThisSkill;
             IsSecondBreathActive = false;
             StartCoroutine(Execute());
             StartCoroutine(CooldownRoutine());

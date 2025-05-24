@@ -23,7 +23,6 @@ public abstract class PassiveSkillBase : MonoBehaviour, IPassiveSkill
     {
         if (!isOnCooldown)
         {
-            skillManager.DecreasePassiveSkillMask(skillManager.passiveSkills[skillManager.activeSkillIndex].WhatIsTheCooldown);
             CheckCondition();
         }
     }
@@ -35,6 +34,7 @@ public abstract class PassiveSkillBase : MonoBehaviour, IPassiveSkill
     protected IEnumerator CooldownRoutine()
     {
         isOnCooldown = true;
+        StartCoroutine(skillManager.DecreasePassiveSkillMask(skillManager.passiveSkills[skillManager.activeSkillIndex].WhatIsTheCooldown));
         yield return new WaitForSeconds(cooldown);
         isOnCooldown = false;
 
