@@ -163,69 +163,6 @@ Transform:
   - {fileID: 689727330458828175}
   m_Father: {fileID: 4428461248049656484}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &551551203375346458
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3281744965222315097}
-  - component: {fileID: 3790814708392538318}
-  m_Layer: 0
-  m_Name: pistolReload
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3281744965222315097
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 551551203375346458}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4260930925709263417}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3790814708392538318
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 551551203375346458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 452026315
-      Data2: 1134017878
-      Data3: 1131443901
-      Data4: 1947460726
-    Path: event:/Guns/Pistol Reload
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &602934446729311793
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,69 +421,6 @@ Transform:
   - {fileID: 5864985496024118872}
   m_Father: {fileID: 7344009175494770094}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &973105099283942850
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1183132782591086910}
-  - component: {fileID: 5241221328010200335}
-  m_Layer: 0
-  m_Name: sniperReload
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1183132782591086910
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 973105099283942850}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2938741606391899801}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5241221328010200335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 973105099283942850}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 1201896545
-      Data2: 1233046108
-      Data3: -5386879
-      Data4: -780924491
-    Path: event:/Guns/Sniper Reload
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &988803572028365533
 GameObject:
   m_ObjectHideFlags: 0
@@ -871,37 +745,6 @@ Transform:
   - {fileID: 7865396617113906105}
   m_Father: {fileID: 2065352694835220034}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2025896611250186049
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9026764328995260625}
-  m_Layer: 0
-  m_Name: -Crossbow-
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9026764328995260625
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2025896611250186049}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7114314822558058942}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2070005145591699928
 GameObject:
   m_ObjectHideFlags: 0
@@ -1028,39 +871,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6773504799195155404}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2286051782259552979
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5751902755907075676}
-  m_Layer: 0
-  m_Name: -Rifle-
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5751902755907075676
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2286051782259552979}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6450161880492707324}
-  - {fileID: 855708249625152498}
-  m_Father: {fileID: 7114314822558058942}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2327428394861798795
 GameObject:
   m_ObjectHideFlags: 0
@@ -1093,132 +903,6 @@ Transform:
   - {fileID: 3511497881785231357}
   m_Father: {fileID: 7195329372663615510}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2332139345257370588
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 548764107490670199}
-  - component: {fileID: 1658010715039713082}
-  m_Layer: 0
-  m_Name: noFeather
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &548764107490670199
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2332139345257370588}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8621644195085397559}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1658010715039713082
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2332139345257370588}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 1969866190
-      Data2: 1158811350
-      Data3: 1322651789
-      Data4: -1869065346
-    Path: event:/Guns/featherEmpty
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 30
---- !u!1 &2391999186289718754
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8065816008494366000}
-  - component: {fileID: 7548039842354369441}
-  m_Layer: 0
-  m_Name: featherThrow
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8065816008494366000
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2391999186289718754}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8621644195085397559}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7548039842354369441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2391999186289718754}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -962979043
-      Data2: 1214764466
-      Data3: -1589014649
-      Data4: -1348333081
-    Path: event:/Guns/featherThrow
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 30
 --- !u!1 &2415888253527039161
 GameObject:
   m_ObjectHideFlags: 0
@@ -1331,7 +1015,7 @@ Transform:
   - {fileID: 6251306417004767347}
   - {fileID: 853435216812929250}
   - {fileID: 7654746420750570695}
-  - {fileID: 612481706718923517}
+  - {fileID: 1091078079740119190}
   - {fileID: 7594846210876738783}
   - {fileID: 2424946155018680044}
   m_Father: {fileID: 4468175175659240506}
@@ -1849,13 +1533,6 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   TransitionStateInfoList:
   - IsCrossFadeExit: 0
-    Layer: 0
-    OriginatingState: -2015693266
-    DestinationState: -1450844771
-    TransitionDuration: 1.6573225
-    TriggerNameHash: -1525363869
-    TransitionIndex: 2
-  - IsCrossFadeExit: 0
     Layer: 1
     OriginatingState: -2015693266
     DestinationState: -1450844771
@@ -1863,70 +1540,70 @@ MonoBehaviour:
     TriggerNameHash: -1525363869
     TransitionIndex: 0
   - IsCrossFadeExit: 0
-    Layer: 6
+    Layer: 4
     OriginatingState: -499022955
-    DestinationState: -1564946859
-    TransitionDuration: 0.1
+    DestinationState: -820974814
+    TransitionDuration: 0.2
     TriggerNameHash: -1525363869
     TransitionIndex: 0
   - IsCrossFadeExit: 0
-    Layer: 7
+    Layer: 5
     OriginatingState: -499022955
     DestinationState: -1383311792
     TransitionDuration: 0.1
     TriggerNameHash: 237393061
     TransitionIndex: 0
   - IsCrossFadeExit: 0
-    Layer: 7
+    Layer: 5
     OriginatingState: -499022955
     DestinationState: -1408821888
     TransitionDuration: 0.1
     TriggerNameHash: 237393061
     TransitionIndex: 1
   - IsCrossFadeExit: 0
-    Layer: 8
+    Layer: 6
     OriginatingState: -499022955
     DestinationState: -1350518669
     TransitionDuration: 0.25
     TriggerNameHash: -1218818084
     TransitionIndex: 0
   - IsCrossFadeExit: 0
-    Layer: 8
+    Layer: 6
     OriginatingState: -499022955
     DestinationState: -2027287457
     TransitionDuration: 0.25
     TriggerNameHash: -1218818084
     TransitionIndex: 1
   - IsCrossFadeExit: 0
-    Layer: 9
+    Layer: 7
     OriginatingState: -499022955
     DestinationState: -1120194998
     TransitionDuration: 0.15506458
     TriggerNameHash: 1654612129
     TransitionIndex: 0
   - IsCrossFadeExit: 0
-    Layer: 11
+    Layer: 9
     OriginatingState: -499022955
     DestinationState: -1220444935
     TransitionDuration: 0.5793795
     TriggerNameHash: 1293411866
     TransitionIndex: 0
   - IsCrossFadeExit: 0
-    Layer: 11
+    Layer: 9
     OriginatingState: -499022955
     DestinationState: -648460631
     TransitionDuration: 0.25
     TriggerNameHash: -323374038
     TransitionIndex: 1
   - IsCrossFadeExit: 0
-    Layer: 11
+    Layer: 9
     OriginatingState: -1220444935
     DestinationState: -648460631
     TransitionDuration: 0.25
     TriggerNameHash: -323374038
     TransitionIndex: 0
   - IsCrossFadeExit: 0
-    Layer: 11
+    Layer: 9
     OriginatingState: -648460631
     DestinationState: -1220444935
     TransitionDuration: 0.25
@@ -2173,37 +1850,6 @@ Transform:
   m_Children:
   - {fileID: 917256289101580149}
   m_Father: {fileID: 1211981881043311961}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2555169095853794753
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7704981501382861526}
-  m_Layer: 0
-  m_Name: -AncientTome-
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7704981501382861526
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2555169095853794753}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7114314822558058942}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2631120035986863979
 GameObject:
@@ -2538,102 +2184,6 @@ Transform:
   - {fileID: 232630046822406134}
   m_Father: {fileID: 7266484111632339994}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3011233301160674022
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1442246086148029838}
-  - component: {fileID: 8240065114358574671}
-  m_Layer: 0
-  m_Name: Landing
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1442246086148029838
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3011233301160674022}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7857862337044380823}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8240065114358574671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3011233301160674022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -872773201
-      Data2: 1229831855
-      Data3: 412583323
-      Data4: -1600606717
-    Path: event:/Player/Landing
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
---- !u!1 &3064920583993552031
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7731456861020770467}
-  m_Layer: 0
-  m_Name: -Shotgun-
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7731456861020770467
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3064920583993552031}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7003789013487637197}
-  - {fileID: 7268868519765604363}
-  m_Father: {fileID: 7114314822558058942}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3089796806575674178
 GameObject:
   m_ObjectHideFlags: 0
@@ -2729,40 +2279,6 @@ Transform:
   - {fileID: 3616613758497680539}
   m_Father: {fileID: 6902812962559358787}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3354771621679694887
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 612481706718923517}
-  m_Layer: 0
-  m_Name: ----[Sounds]----
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &612481706718923517
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3354771621679694887}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7857862337044380823}
-  - {fileID: 3698389147950754374}
-  - {fileID: 7114314822558058942}
-  m_Father: {fileID: 353403930743934515}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3382570830216326668
 GameObject:
   m_ObjectHideFlags: 0
@@ -2825,69 +2341,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6421661980943842903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3572907267248092030
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2585815524706797178}
-  - component: {fileID: 7061426022817666764}
-  m_Layer: 0
-  m_Name: Run
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2585815524706797178
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3572907267248092030}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7857862337044380823}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7061426022817666764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3572907267248092030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -28865357
-      Data2: 1250310341
-      Data3: 984888214
-      Data4: 139091356
-    Path: event:/Player/Run
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &3602038266996988146
 GameObject:
   m_ObjectHideFlags: 0
@@ -2951,38 +2404,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3782816198649437537}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3810650467005159343
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3698389147950754374}
-  m_Layer: 0
-  m_Name: '[Emotes]'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3698389147950754374
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3810650467005159343}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2243119789174239656}
-  m_Father: {fileID: 612481706718923517}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3839446492626894175
 GameObject:
   m_ObjectHideFlags: 0
@@ -3043,69 +2464,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!1 &3925682421598573419
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6450161880492707324}
-  - component: {fileID: 3353034701130775162}
-  m_Layer: 0
-  m_Name: rifleFire
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6450161880492707324
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3925682421598573419}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5751902755907075676}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3353034701130775162
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3925682421598573419}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 1159084170
-      Data2: 1124307749
-      Data3: 1767200929
-      Data4: 474641123
-    Path: event:/Guns/Rifle Fire
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &3928833489448940687
 GameObject:
   m_ObjectHideFlags: 0
@@ -3168,110 +2526,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 75259466358142714}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3974200130915583102
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7287863270417093142}
-  - component: {fileID: 1330243022581229055}
-  m_Layer: 0
-  m_Name: Slide
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7287863270417093142
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3974200130915583102}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7857862337044380823}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1330243022581229055
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3974200130915583102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -1266668781
-      Data2: 1095374103
-      Data3: -86154099
-      Data4: 2079273480
-    Path: event:/Player/Slide
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
---- !u!1 &3984260232600712354
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7114314822558058942}
-  m_Layer: 0
-  m_Name: '[Guns]'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7114314822558058942
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3984260232600712354}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7731456861020770467}
-  - {fileID: 2938741606391899801}
-  - {fileID: 5751902755907075676}
-  - {fileID: 4260930925709263417}
-  - {fileID: 1231182285945363816}
-  - {fileID: 8621644195085397559}
-  - {fileID: 9026764328995260625}
-  - {fileID: 7704981501382861526}
-  - {fileID: 2426288178900961743}
-  - {fileID: 8449270122107566206}
-  m_Father: {fileID: 612481706718923517}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4075072264471976353
 GameObject:
@@ -3336,132 +2590,6 @@ Transform:
   - {fileID: 210456761405111800}
   m_Father: {fileID: 5821827454693613883}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4164162309687071548
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7003789013487637197}
-  - component: {fileID: 8037210053877348104}
-  m_Layer: 0
-  m_Name: shotgunFire
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7003789013487637197
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4164162309687071548}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7731456861020770467}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8037210053877348104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4164162309687071548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -56936913
-      Data2: 1078136851
-      Data3: -1242683991
-      Data4: 2010932609
-    Path: event:/Guns/Shotgun Fire
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
---- !u!1 &4332898855491652894
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 391212851570930334}
-  - component: {fileID: 4145091602877470410}
-  m_Layer: 0
-  m_Name: sniperFire
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &391212851570930334
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4332898855491652894}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2938741606391899801}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4145091602877470410
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4332898855491652894}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 1509426480
-      Data2: 1114207439
-      Data3: -1405918328
-      Data4: 222673048
-    Path: event:/Guns/Sniper Fire
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &4407532648167618186
 GameObject:
   m_ObjectHideFlags: 0
@@ -3621,69 +2749,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3958700103688613608}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4736742158697165407
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5286066729974987070}
-  - component: {fileID: 70913963266520469}
-  m_Layer: 0
-  m_Name: featherBreak
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5286066729974987070
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4736742158697165407}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8621644195085397559}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &70913963266520469
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4736742158697165407}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -210635952
-      Data2: 1158686078
-      Data3: 566339974
-      Data4: 2119969893
-    Path: event:/Guns/featherBreak
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 20
 --- !u!1 &4790221176015153564
 GameObject:
   m_ObjectHideFlags: 0
@@ -3814,37 +2879,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunManager: {fileID: 6274603480792431093}
---- !u!1 &4854695730406680652
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2426288178900961743}
-  m_Layer: 0
-  m_Name: -MysticCanon-
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2426288178900961743
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4854695730406680652}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7114314822558058942}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4921026489574267848
 GameObject:
   m_ObjectHideFlags: 0
@@ -4020,39 +3054,6 @@ MonoBehaviour:
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
     m_Visible: 1
---- !u!1 &5046478655276285171
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2938741606391899801}
-  m_Layer: 0
-  m_Name: -Sniper-
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2938741606391899801
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5046478655276285171}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 391212851570930334}
-  - {fileID: 1183132782591086910}
-  m_Father: {fileID: 7114314822558058942}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5157790907068315874
 GameObject:
   m_ObjectHideFlags: 0
@@ -4212,69 +3213,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5025914530563280170}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5472350318980201175
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2553092248740358574}
-  - component: {fileID: 5963838925703253674}
-  m_Layer: 0
-  m_Name: revolverReload
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2553092248740358574
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5472350318980201175}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1231182285945363816}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5963838925703253674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5472350318980201175}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -492774507
-      Data2: 1159890427
-      Data3: 491210428
-      Data4: 241051011
-    Path: event:/Guns/Revolver Reload
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &5498679496867732623
 GameObject:
   m_ObjectHideFlags: 0
@@ -4339,132 +3277,6 @@ Transform:
   - {fileID: 7778002608599135319}
   m_Father: {fileID: 8439384455572449471}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5601533254768088533
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1253562550283235837}
-  - component: {fileID: 6444590778662616110}
-  m_Layer: 0
-  m_Name: Dash
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1253562550283235837
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5601533254768088533}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7857862337044380823}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6444590778662616110
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5601533254768088533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -491808367
-      Data2: 1151516212
-      Data3: -1474050640
-      Data4: -1633662981
-    Path: event:/Player/Dash
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
---- !u!1 &5887957585016324472
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7960281451095708512}
-  - component: {fileID: 916274881411215113}
-  m_Layer: 0
-  m_Name: Jump
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7960281451095708512
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5887957585016324472}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7857862337044380823}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &916274881411215113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5887957585016324472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -526697350
-      Data2: 1333794502
-      Data3: -1463689032
-      Data4: 2142528418
-    Path: event:/Player/Jump
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &6030516414075574353
 GameObject:
   m_ObjectHideFlags: 0
@@ -4696,69 +3508,6 @@ Transform:
   - {fileID: 6717789704259924751}
   m_Father: {fileID: 6629954065992758142}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6166757295514038821
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6290578829734701479}
-  - component: {fileID: 1279480264445890562}
-  m_Layer: 0
-  m_Name: Walk
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6290578829734701479
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6166757295514038821}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7857862337044380823}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1279480264445890562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6166757295514038821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 390748577
-      Data2: 1215460137
-      Data3: 558902450
-      Data4: 1026445351
-    Path: event:/Player/Walk
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &6262460310436014759
 GameObject:
   m_ObjectHideFlags: 0
@@ -4855,107 +3604,6 @@ Transform:
   - {fileID: 4282497330380281171}
   m_Father: {fileID: 5821827454693613883}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6377094382447958913
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1311669649247560839}
-  - component: {fileID: 1530085733702355691}
-  m_Layer: 0
-  m_Name: Falling
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1311669649247560839
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6377094382447958913}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7857862337044380823}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1530085733702355691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6377094382447958913}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 1579246702
-      Data2: 1108463561
-      Data3: -658509643
-      Data4: -2045436389
-    Path: event:/Player/Falling
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
---- !u!1 &6549447034435411623
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7857862337044380823}
-  m_Layer: 0
-  m_Name: '[Movement]'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7857862337044380823
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6549447034435411623}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6290578829734701479}
-  - {fileID: 2585815524706797178}
-  - {fileID: 7287863270417093142}
-  - {fileID: 7960281451095708512}
-  - {fileID: 1253562550283235837}
-  - {fileID: 1442246086148029838}
-  - {fileID: 1311669649247560839}
-  m_Father: {fileID: 612481706718923517}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6564573155329985812
 GameObject:
   m_ObjectHideFlags: 0
@@ -4987,37 +3635,6 @@ Transform:
   m_Children:
   - {fileID: 4046516757267435818}
   m_Father: {fileID: 1955126602663557200}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6609483832952694068
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8449270122107566206}
-  m_Layer: 0
-  m_Name: -GranadeLaucher-
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8449270122107566206
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6609483832952694068}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7114314822558058942}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6677848540420988705
 GameObject:
@@ -5415,39 +4032,6 @@ Transform:
   - {fileID: 4134284622415693775}
   m_Father: {fileID: 6888471600230770969}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7435079513912277664
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4260930925709263417}
-  m_Layer: 0
-  m_Name: -Pistol-
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4260930925709263417
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7435079513912277664}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4333658213735863256}
-  - {fileID: 3281744965222315097}
-  m_Father: {fileID: 7114314822558058942}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7440114947245437242
 GameObject:
   m_ObjectHideFlags: 0
@@ -5512,40 +4096,6 @@ Transform:
   - {fileID: 75259466358142714}
   m_Father: {fileID: 6717789704259924751}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7507596153590278109
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8621644195085397559}
-  m_Layer: 0
-  m_Name: -Feathers-
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8621644195085397559
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7507596153590278109}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8065816008494366000}
-  - {fileID: 5286066729974987070}
-  - {fileID: 548764107490670199}
-  m_Father: {fileID: 7114314822558058942}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7559795402551252484
 GameObject:
   m_ObjectHideFlags: 0
@@ -5578,69 +4128,6 @@ Transform:
   - {fileID: 8000554602333239846}
   m_Father: {fileID: 5821827454693613883}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7581533790012510198
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2243119789174239656}
-  - component: {fileID: 2243264513790001053}
-  m_Layer: 0
-  m_Name: GangamStyle
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2243119789174239656
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7581533790012510198}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3698389147950754374}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2243264513790001053
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7581533790012510198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -1434722758
-      Data2: 1313183614
-      Data3: 1545560201
-      Data4: -1467334416
-    Path: event:/Music/GangnamStyle
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &7711364820166619625
 GameObject:
   m_ObjectHideFlags: 0
@@ -5704,69 +4191,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 210456761405111800}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7895910338749427645
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 855708249625152498}
-  - component: {fileID: 8674659921175059978}
-  m_Layer: 0
-  m_Name: rifleReload
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &855708249625152498
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7895910338749427645}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5751902755907075676}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8674659921175059978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7895910338749427645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 1474863232
-      Data2: 1183794801
-      Data3: 974619324
-      Data4: 1662865195
-    Path: event:/Guns/Rifle Reload
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &7906282591200312872
 GameObject:
   m_ObjectHideFlags: 0
@@ -5798,69 +4222,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 358608621057551115}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7924027933277092104
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4333658213735863256}
-  - component: {fileID: 1468502147051493841}
-  m_Layer: 0
-  m_Name: pistolFire
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4333658213735863256
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7924027933277092104}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4260930925709263417}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1468502147051493841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7924027933277092104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -1559048711
-      Data2: 1209367460
-      Data3: 1218510212
-      Data4: -554526305
-    Path: event:/Guns/Pistol Fire
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &7973308605198812818
 GameObject:
   m_ObjectHideFlags: 0
@@ -6116,102 +4477,6 @@ Transform:
   - {fileID: 7344009175494770094}
   m_Father: {fileID: 9195439810830512903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8260516364109442988
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1231182285945363816}
-  m_Layer: 0
-  m_Name: -Revolver-
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1231182285945363816
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8260516364109442988}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 9123247924066694784}
-  - {fileID: 2553092248740358574}
-  m_Father: {fileID: 7114314822558058942}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8423517649949350983
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7268868519765604363}
-  - component: {fileID: 5854927365849123808}
-  m_Layer: 0
-  m_Name: shotgunReload
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7268868519765604363
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8423517649949350983}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7731456861020770467}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5854927365849123808
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8423517649949350983}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 761142989
-      Data2: 1116470402
-      Data3: -1844673888
-      Data4: -943720308
-    Path: event:/Guns/Shotgun Reload
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &8445844364046240750
 GameObject:
   m_ObjectHideFlags: 0
@@ -6445,69 +4710,6 @@ Transform:
   - {fileID: 5822850880806126053}
   m_Father: {fileID: 353403930743934515}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8984775345905673127
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9123247924066694784}
-  - component: {fileID: 2392084497995404215}
-  m_Layer: 0
-  m_Name: revolverFire
-  m_TagString: Sound
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9123247924066694784
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8984775345905673127}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1231182285945363816}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2392084497995404215
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8984775345905673127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: -791237574
-      Data2: 1213558420
-      Data3: 116411536
-      Data4: -523496090
-    Path: event:/Guns/Revolver Fire
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &9060759052364692964
 GameObject:
   m_ObjectHideFlags: 0
@@ -6794,6 +4996,68 @@ ParticleSystem:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5507769946751969985, guid: 27d89b746a2da194c80e775a16b20d6d, type: 3}
   m_PrefabInstance: {fileID: 3959876726033766859}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4171535861160324028
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 353403930743934515}
+    m_Modifications:
+    - target: {fileID: 3945166983135470378, guid: 1b1cf2ba42f4cf14fbde00342ef9fc2c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3945166983135470378, guid: 1b1cf2ba42f4cf14fbde00342ef9fc2c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3945166983135470378, guid: 1b1cf2ba42f4cf14fbde00342ef9fc2c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3945166983135470378, guid: 1b1cf2ba42f4cf14fbde00342ef9fc2c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3945166983135470378, guid: 1b1cf2ba42f4cf14fbde00342ef9fc2c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3945166983135470378, guid: 1b1cf2ba42f4cf14fbde00342ef9fc2c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3945166983135470378, guid: 1b1cf2ba42f4cf14fbde00342ef9fc2c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3945166983135470378, guid: 1b1cf2ba42f4cf14fbde00342ef9fc2c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3945166983135470378, guid: 1b1cf2ba42f4cf14fbde00342ef9fc2c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3945166983135470378, guid: 1b1cf2ba42f4cf14fbde00342ef9fc2c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8979661668788919318, guid: 1b1cf2ba42f4cf14fbde00342ef9fc2c, type: 3}
+      propertyPath: m_Name
+      value: ----[PlayerSounds]----
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1b1cf2ba42f4cf14fbde00342ef9fc2c, type: 3}
+--- !u!4 &1091078079740119190 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3945166983135470378, guid: 1b1cf2ba42f4cf14fbde00342ef9fc2c, type: 3}
+  m_PrefabInstance: {fileID: 4171535861160324028}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5822961351931438070
 PrefabInstance:

@@ -191,6 +191,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         }
         HealthBarProgressRpc((int)maxHealth, maxHealth);
         agent.enabled = true;
+        gameObject.SetActive(true);
         Debug.Log(agent.isActiveAndEnabled);
     }
     private void Awake()

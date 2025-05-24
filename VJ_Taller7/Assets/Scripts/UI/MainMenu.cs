@@ -480,6 +480,7 @@ public class UIManager : MonoBehaviour
                 image.sprite = digitSpritesRound[unitDigit];
             }
             //unitDigitImageRound.gameObject.SetActive(true);  // Asegurarse de que esté visible
+            ShowPartialPanel("RoundStartUI", 2);
         }
         else
         {
@@ -513,6 +514,7 @@ public class UIManager : MonoBehaviour
                 image.sprite = digitSpritesWave[unitDigit];
             }
             //unitDigitImageRound.gameObject.SetActive(true);  // Asegurarse de que esté visible
+            ShowPartialPanel("WaveStartUI", 2);
         }
         else
         {

@@ -159,14 +159,13 @@ public class MultiGameManager : NetworkBehaviour
     {
         GunShop?.GetComponent<MultiShopLimit>().WaveStarted();
         playerManager.CheckDeadPlayersAndRespawn();
-        StartWaveUIRpc(roundManager.CurrentRound);
+        StartWaveUIRpc(roundManager.CurrentWave);
 
     }
     [Rpc(SendTo.Everyone)]
     public void StartWaveUIRpc(int currentWave)
     {
         UIManager.Singleton.UIChangeImageWave(currentWave);
-        UIManager.Singleton.ShowPartialPanel("WaveStartUI", 2);
     }
 
     public void RoundStarted()
@@ -178,21 +177,20 @@ public class MultiGameManager : NetworkBehaviour
     public void StartRoundUIRpc(int currentRound)
     {
         UIManager.Singleton.UIChangeImageRound(currentRound);
-        UIManager.Singleton.ShowPartialPanel("RoundStartUI", 2);
     }
 
 
     [Rpc(SendTo.Everyone)]
     public void CompleteWaveUIRpc(int currentRound)
     {
-        UIManager.Singleton.ShowPartialPanel("WaveCompleteUI", 3);
+        //UIManager.Singleton.ShowPartialPanel("WaveCompleteUI", 3);
     }
     private void WaveFinished(bool killedAll)
     {
         GunShop?.GetComponent<MultiShopLimit>().WaveFinished(killedAll);
 
         if (!killedAll) return;
-        CompleteWaveUIRpc(roundManager.CurrentRound);
+        //CompleteWaveUIRpc(roundManager.CurrentRound);
 
         //if (killedAll) gunManager.ScaleDamage(10);
         //El escalado de las armas tengo que mirar si hacerlo que cada arma tenga su esacalado, o un entero pa todas

@@ -234,7 +234,7 @@ public class MultiRoundManager : NetworkBehaviour
         //     //_musicRounds.StopMusic();
         //     //_soundManager.PlaySound("FailWave");
         // }
-
+        Debug.Log("Pasar Oleada");
         OnWaveComplete?.Invoke(how);
     }
     private void StartWave()
@@ -250,7 +250,7 @@ public class MultiRoundManager : NetworkBehaviour
 
         inBetweenRounds = false;
         inBetweenRoundsTimer = inBetweenRoundsWaitTime;
-
+        Debug.Log("Comienza Oleada");
         OnWaveStart?.Invoke(); //Comienza la oleada
 
         //_musicRounds.PlayMusic(); // Empezar la musica
@@ -274,6 +274,7 @@ public class MultiRoundManager : NetworkBehaviour
 
         //SANTI --> Si queda algun audio de la IA mala sin poner, ponelo aqui, sino ahora grabo mas
         //_soundManager.PlaySound("WinRound");
+        Debug.Log("Pasar Ronda");
 
         OnRoundComplete?.Invoke();
     }

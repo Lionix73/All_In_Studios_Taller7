@@ -133,7 +133,6 @@ public class GameManager : MonoBehaviour
     public void WaveStarted(){
         GunShop?.GetComponent<ShopLimit>().WaveStarted();
         UIManager.Singleton.UIChangeImageWave(roundManager.CurrentWave);
-        UIManager.Singleton.ShowPartialPanel("WaveStartUI", 2);
     }
     
     private void WaveFinished(bool killedAll){
@@ -149,7 +148,6 @@ public class GameManager : MonoBehaviour
     private void RoundFinished()
     {
         UIManager.Singleton.UIChangeImageRound(roundManager.CurrentRound);
-        UIManager.Singleton.ShowPartialPanel("RoundStartUI", 2);
     }
 
     public void ScoreChange(float actualScore){
