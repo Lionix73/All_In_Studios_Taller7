@@ -148,6 +148,7 @@ public class GameManager : MonoBehaviour
     private void RoundFinished()
     {
         UIManager.Singleton.UIChangeImageRound(roundManager.CurrentRound);
+        playerManager.RoundComplete();
     }
 
     public void ScoreChange(float actualScore){
