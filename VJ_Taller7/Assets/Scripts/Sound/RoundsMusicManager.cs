@@ -15,6 +15,7 @@ public class RoundsMusicManager : MonoBehaviour
 
     private void Start()
     {
+        GameObject.Find("Menu").GetComponentInChildren<ThisObjectSounds>().StopAllSounds();
         stopMusicDampener.TargetValue = 1f;
 
         health = GameObject.FindWithTag("Player").GetComponent<Health>();

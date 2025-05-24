@@ -8765,7 +8765,7 @@ MonoBehaviour:
       Data4: 791801784
     Path: event:/Music/StoreMusic
   Event: 
-  EventPlayTrigger: 1
+  EventPlayTrigger: 0
   EventStopTrigger: 0
   AllowFadeout: 1
   TriggerOnce: 0
@@ -9134,7 +9134,7 @@ MonoBehaviour:
   Params: []
   OverrideAttenuation: 0
   OverrideMinDistance: 1
-  OverrideMaxDistance: 20
+  OverrideMaxDistance: 30
 --- !u!1 &557503375
 GameObject:
   m_ObjectHideFlags: 0
@@ -30790,7 +30790,7 @@ MonoBehaviour:
   Params: []
   OverrideAttenuation: 0
   OverrideMinDistance: 1
-  OverrideMaxDistance: 20
+  OverrideMaxDistance: 30
 --- !u!1001 &1758027863
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34125,6 +34125,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1982918497}
+  - component: {fileID: 1982918499}
+  - component: {fileID: 1982918498}
   m_Layer: 0
   m_Name: '[Sound]'
   m_TagString: Untagged
@@ -34151,6 +34153,33 @@ Transform:
   - {fileID: 496516907}
   m_Father: {fileID: 731549642}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1982918498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982918496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 184276187e51b994392143d74b40cc80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: StoreMusic
+  soundManager: {fileID: 1982918499}
+--- !u!114 &1982918499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982918496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3da4c8252207fc84ba39f03847507014, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds: []
 --- !u!1001 &1985247892
 PrefabInstance:
   m_ObjectHideFlags: 0
