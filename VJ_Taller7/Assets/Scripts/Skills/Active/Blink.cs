@@ -12,12 +12,14 @@ public class Blink : SkillBase
     private Transform freeLookCamera;
     private Rigidbody rb;
     private Animator animator;
+    private PlayerController playerController;
 
     private void Start()
     {
         rb = GetComponentInParent<Rigidbody>();
+
         animator = GetComponentInParent<Animator>();
-        freeLookCamera = GameObject.FindWithTag("MainCamera").GetComponent<Transform>();
+        freeLookCamera = GameObject.FindWithTag("FreeLookCamera").GetComponent<Transform>();
     }
     public override IEnumerator Execute()
     {
@@ -30,11 +32,12 @@ public class Blink : SkillBase
         rb.useGravity = false;
 
         rb.linearVelocity = Vector3.zero;
-        rb.AddForce(freeLookCamera.forward * blinkSpeed, ForceMode.Impulse);
+        rb.AddForce(freeLookCamera.forward.normalized * blinkSpeed, ForceMode.Impulse);
 
         yield return new WaitForSeconds(duration);
 
         animator.applyRootMotion = true;
         rb.useGravity = true;
+        rb.linearVelocity = Vector3.zero;
     }
 }

@@ -397,8 +397,8 @@ public class GunManager : MonoBehaviour
 
         soundManager.StopSound("rifleReload", "pistolReload", "revolverReload", "shotgunReload", "sniperReload");
     }
-    private void ReloadingFeedback(){
-        
+    private void ReloadingFeedback()
+    {    
             playerAnimator.SetTrigger("Reload");
 
             StartCoroutine(AnimLayerCountdown("Reload", 4.5f));
@@ -407,25 +407,34 @@ public class GunManager : MonoBehaviour
             {
                 case GunType.Rifle:
                     soundManager.PlaySound("rifleReload");
-                    //StartCoroutine(Reload(2));
                     break;
                 case GunType.BasicPistol:
                     soundManager.PlaySound("pistolReload");
-                    //StartCoroutine(Reload(2.12f));
                     break;
                 case GunType.Revolver:
                     soundManager.PlaySound("revolverReload");
-                    //StartCoroutine(Reload(4.3f));
                     break;
                 case GunType.Shotgun:
                     soundManager.PlaySound("shotgunReload");
-                    //StartCoroutine(Reload(5.4f));
                     break;
                 case GunType.Sniper:
                     soundManager.PlaySound("sniperReload");
-                    //StartCoroutine(Reload(1.45f));
                     break;
-            }
+                case GunType.ShinelessFeather:
+                    break;
+                case GunType.GoldenFeather:
+                    break;
+                case GunType.GranadeLaucher:
+                    soundManager.PlaySound("GLReload");
+                    break;
+                case GunType.AncientTome:
+                    break;
+                case GunType.Crossbow:
+                    soundManager.PlaySound("CrossbowReload");
+                    break;
+                case GunType.MysticCanon:
+                    break;
+        }
             StartCoroutine(Reload(CurrentGun.ReloadTime));
         
     }

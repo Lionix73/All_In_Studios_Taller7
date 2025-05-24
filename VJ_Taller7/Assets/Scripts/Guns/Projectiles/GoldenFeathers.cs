@@ -77,7 +77,8 @@ public class GoldenFeathers : Bullet
         if(!isFlying) return;
 
         if (isReturning){
-            if(other.gameObject.layer == LayerMask.NameToLayer("Enemy")){
+            if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            {
                 InvokeCollisionEvent(other);
             }
         }

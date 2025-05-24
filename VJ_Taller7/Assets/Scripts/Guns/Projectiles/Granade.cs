@@ -7,8 +7,11 @@ public class Granade : Bullet
     [SerializeField] int explotionDamage;
     [SerializeField] float curveForce;
 
+    protected ThisObjectSounds soundManager;
+
     private void Awake() {
-        Rigidbody = GetComponent<Rigidbody>();    
+        Rigidbody = GetComponent<Rigidbody>();
+        soundManager = GetComponent<ThisObjectSounds>();
     }
 
     public override void Spawn(Vector3 SpawnForce)
@@ -23,7 +26,10 @@ public class Granade : Bullet
         Explode();
     }
 
-    private void Explode(){
+    private void Explode()
+    {
+        soundManager.PlaySound("GrenadeExplosion");
+
         Collider[] inRadius = Physics.OverlapSphere(transform.position, explotionRadius);
         foreach (Collider e in inRadius){
             e.TryGetComponent<IDamageable>(out IDamageable enemy);

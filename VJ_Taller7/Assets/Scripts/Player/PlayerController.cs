@@ -172,7 +172,7 @@ public class PlayerController : MonoBehaviour
             isRunning = false;
         }
 
-        rb.useGravity = !isGrounded && !isDashing ? true : !OnSlope();
+        rb.useGravity = !isGrounded ? true : !OnSlope();
 
         if (OnSlope() && !isJumping)
         {

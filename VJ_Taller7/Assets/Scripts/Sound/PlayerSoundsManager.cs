@@ -93,16 +93,14 @@ public class PlayerSoundsManager : MonoBehaviour
                     soundManager.PlaySound("featherThrow");
                     break;
                 case GunType.GranadeLaucher:
-                    soundManager.PlaySound("featherThrow");
+                    soundManager.PlaySound("GLFire");
                     break;
                 case GunType.AncientTome:
-                    soundManager.PlaySound("featherThrow");
                     break;
                 case GunType.Crossbow:
-                    soundManager.PlaySound("featherThrow");
+                    soundManager.PlaySound("CrossbowFire");
                     break;
                 case GunType.MysticCanon:
-                    soundManager.PlaySound("featherThrow");
                     break;
             }
         }
