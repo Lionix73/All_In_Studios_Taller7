@@ -50,6 +50,8 @@ public class WeaponLogic : NetworkBehaviour
 
     private NetworkObjectPool networkObjectPool;
 
+    public bool noFriendsInWar;
+
     public void SetBullets(int amount)
     {
         if (IsServer)

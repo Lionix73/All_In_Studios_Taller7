@@ -41,7 +41,7 @@ public class MultiGlassCannon : MultiPassiveSkillBase
         {
             float reducedHealth = playerHealth.MaxHealth * (remainingHealthPercentage / 100);
             Debug.Log(reducedHealth);
-            playerHealth.TakeDamage((int)reducedHealth);
+            playerHealth.TakeDamage((int)reducedHealth, 10);
             healthApplied = true;
         }
         

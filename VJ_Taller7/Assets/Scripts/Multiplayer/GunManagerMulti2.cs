@@ -119,7 +119,7 @@ public class GunManagerMulti2 : NetworkBehaviour
     }
 
     private void Update() {
-        if (!IsOwner || weapon == null) return;
+        if (!IsOwner || weapon == null ) return;
 
 
         if (shooting && weapon.BulletsLeft > 0) {
