@@ -297,14 +297,21 @@ public class GunScriptableObject : ScriptableObject {
             }
         }
     }
-    private void HandleGoldenBulletCollision(Bullet bullet, Collision collision){
+    private void HandleGoldenBulletCollision(Bullet bullet, Collision collision)
+    {
         bullet.gameObject.SetActive(false);
         GFeatherPool.Release(bullet);
+        bullet.OnCollision -= HandleBulletCollision;
+        bullet.OnBulletEnd -= HandleGoldenBulletCollision;
     }
-    private void HandleShinelessFeather(Bullet bullet, Collision collision){
+    private void HandleShinelessFeather(Bullet bullet, Collision collision)
+    {
         bullet.gameObject.SetActive(false);
         GFeatherPool.Release(bullet);
         bulletsLeft = 1;
+        
+        bullet.OnCollision -= HandleBulletCollision;
+        bullet.OnBulletEnd -= HandleShinelessFeather;
     }
 
     public TrailRenderer CreateTrail() {
