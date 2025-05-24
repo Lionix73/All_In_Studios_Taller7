@@ -234,8 +234,8 @@ public class MultiEnemyWavesManager : NetworkBehaviour
 
         if(poolableObject != null){
             EnemyMulti enemy = poolableObject.GetComponent<EnemyMulti>();
-            scaledEnemies[spawnIndex].SetUpEnemyMulti(enemy);
-            
+
+            SetUpEnemy(spawnIndex, enemy);
             int vertexIndex = Random.Range(0, navMeshTriangulation.vertices.Length);
 
             NavMeshHit hit;
@@ -246,7 +246,22 @@ public class MultiEnemyWavesManager : NetworkBehaviour
                 //enemy.RagdollEnabler.EnableAnimator();
                 //enemy.RagdollEnabler.DisableAllRigidbodies();
                 //enemy.ColliderEnemy.enabled = true;
-                float baseOffset = scaledEnemies[spawnIndex].baseOffset;
+                // Crear y enviar configuración de red
+                MultiEnemyAgentConfig config = new MultiEnemyAgentConfig
+                {
+                    acceleration = enemy.Agent.acceleration,
+                    angularSpeed = enemy.Agent.angularSpeed,
+                    areaMask = enemy.Agent.areaMask,
+                    avoidancePriority = enemy.Agent.avoidancePriority,
+                    baseOffset = enemy.Agent.baseOffset,
+                    height = enemy.Agent.height,
+                    obstacleAvoidanceType = (int)enemy.Agent.obstacleAvoidanceType,
+                    radius = enemy.Agent.radius,
+                    speed = enemy.Agent.speed,
+                    stoppingDistance = enemy.Agent.stoppingDistance
+                };
+
+                enemy.Movement.netAgentConfig.Value = config;
                 enemy.IsDead = false;
 
                 enemy.MainCamera = mainCamera;
@@ -271,7 +286,7 @@ public class MultiEnemyWavesManager : NetworkBehaviour
                 enemiesAlive++;
                 enemiesSpawned++;
                 OnEnemySpawned?.Invoke();
-                enemy.RespawmEnemy(baseOffset);
+                enemy.RespawmEnemy();
 
             }
             else
@@ -282,6 +297,10 @@ public class MultiEnemyWavesManager : NetworkBehaviour
         else{
             Debug.LogError($"No se logro spawnear un enemigo tipo {spawnIndex} del object pool");
         }
+    }
+    public void SetUpEnemy(int spawnIndex , EnemyMulti enemy)
+    {
+        scaledEnemies[spawnIndex].SetUpEnemyMulti(enemy); 
     }
 
     private void ScaleUpSpawns(){

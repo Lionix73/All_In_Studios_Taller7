@@ -101,16 +101,7 @@ public class EnemyScriptableObject : ScriptableObject
     }
     public void SetUpEnemyMulti(EnemyMulti enemy)
     {
-        enemy.Agent.acceleration = acceleration;
-        enemy.Agent.angularSpeed = angularSpeed;
-        enemy.Agent.areaMask = areaMask;
-        enemy.Agent.avoidancePriority = avoidancePriority;
-        enemy.Agent.baseOffset = baseOffset;
-        enemy.Agent.height = height;
-        enemy.Agent.obstacleAvoidanceType = obstacleAvoidanceType;
-        enemy.Agent.radius = radius;
-        enemy.Agent.speed = speed;
-        enemy.Agent.stoppingDistance = stoppingDistance;
+        SetUpEnemyAgentMulti(enemy);
 
         enemy.Movement.UpdateRate = aIUpdateInterval;
         enemy.Movement.DefaultState = defaultState;
@@ -124,6 +115,19 @@ public class EnemyScriptableObject : ScriptableObject
         enemy.Health = health;
         enemy.maxHealth = health;
         attackConfiguration.SetUpEnemyMulti(enemy);
+    }
+    public void SetUpEnemyAgentMulti(EnemyMulti enemy)
+    {
+        enemy.Agent.acceleration = acceleration;
+        enemy.Agent.angularSpeed = angularSpeed;
+        enemy.Agent.areaMask = areaMask;
+        enemy.Agent.avoidancePriority = avoidancePriority;
+        enemy.Agent.baseOffset = baseOffset;
+        enemy.Agent.height = height;
+        enemy.Agent.obstacleAvoidanceType = obstacleAvoidanceType;
+        enemy.Agent.radius = radius;
+        enemy.Agent.speed = speed;
+        enemy.Agent.stoppingDistance = stoppingDistance;
     }
 
 }
