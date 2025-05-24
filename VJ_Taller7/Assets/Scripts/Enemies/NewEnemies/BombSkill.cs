@@ -94,8 +94,7 @@ public class BombSkill : SkillScriptableObject
 
         //Debug.Log($"Bomb instantiated: {instance.name}, Parent: {instance.transform.parent?.name ?? "None"}");
 
-        instance.transform.SetParent(enemy.transform, false);
-        instance.transform.localPosition = bulletSpawnOffSet;
+        instance.transform.position = enemy.transform.position + bulletSpawnOffSet;
         instance.transform.rotation = enemy.Agent.transform.rotation;
 
         BombBullet bomb = instance.GetComponent<BombBullet>();

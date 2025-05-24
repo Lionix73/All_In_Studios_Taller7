@@ -23,8 +23,9 @@ public class BombBullet : BulletEnemie
 
     private ThisObjectSounds soundManager;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         soundManager = GetComponent<ThisObjectSounds>();
     }
 
@@ -34,6 +35,7 @@ public class BombBullet : BulletEnemie
     {
         base.OnEnable();
         hasExploded = false; // Reset the explosion state
+        gameObject.GetComponent<Collider>().enabled = true; // Ensure the collider is enabled.
         if (bulletModel != null) bulletModel.enabled = true; // Reset the model visibility
         if (explosionEffect != null) explosionEffect.SetActive(false); // Reset the explosion effect
     }
@@ -43,12 +45,10 @@ public class BombBullet : BulletEnemie
         this.damage = damage;
         this.target = target;
 
-        if(Rb != null){
-            Rb.isKinematic = false;
-            Rb.linearVelocity = Vector3.zero;
-            Vector3 launchVelocity = CalculateLaunchVelocity(target.position);
-            Rb.AddForce(launchVelocity, ForceMode.VelocityChange);
-        }
+        Rb.isKinematic = false;
+        Rb.linearVelocity = Vector3.zero;
+        Vector3 launchVelocity = CalculateLaunchVelocity(target.position);
+        Rb.AddForce(launchVelocity, ForceMode.VelocityChange);
     }
 
     private Vector3 CalculateLaunchVelocity(Vector3 targetPosition)
@@ -74,6 +74,8 @@ public class BombBullet : BulletEnemie
         Vector3 horizontalDir = new Vector3(targetDir.x, 0, targetDir.z).normalized;
         Vector3 launchDir = horizontalDir * Mathf.Cos(angle) + Vector3.up * Mathf.Sin(angle);
         
+        //Debug.Log($"BombBullet: CalculateLaunchVelocity - Target: {targetPosition}, Launch Direction: {launchDir}, Velocity Magnitude: {velocityMagnitude}");
+
         // Return the final velocity vector
         return launchDir * velocityMagnitude;
     }
@@ -110,7 +112,6 @@ public class BombBullet : BulletEnemie
 
         // Track which enemies are damaged to prevent double-counting
         HashSet<IDamageable> damagedEnemies = new HashSet<IDamageable>();
-
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, damageableLayer);
         foreach (Collider collider in colliders)

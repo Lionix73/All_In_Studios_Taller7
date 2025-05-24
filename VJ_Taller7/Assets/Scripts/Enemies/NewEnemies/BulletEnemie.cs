@@ -33,7 +33,7 @@ public class BulletEnemie : PoolableObject
     protected const string DISABLE_METHOD_NAME = "Disable";
 
 
-    private void Awake()
+    protected virtual void Awake()
     {
         Rb = GetComponent<Rigidbody>();
     }

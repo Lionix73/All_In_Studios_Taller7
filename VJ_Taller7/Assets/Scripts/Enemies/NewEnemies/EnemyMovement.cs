@@ -156,12 +156,14 @@ public class EnemyMovement : MonoBehaviour
 
     private void Update()
     {
+        if (animator.updateMode != AnimatorUpdateMode.Normal) return;
+
         HandleAnims();
     }
 
     private void HandleAnims()
     {
-        if(agent.hasPath && !agent.isOnOffMeshLink){
+        if(agent.hasPath && !agent.isOnOffMeshLink && !agent.isStopped && agent.velocity.magnitude > 0.3f){
             Vector3 dir = (agent.steeringTarget - transform.position).normalized;
             Vector3 animDir = transform.InverseTransformDirection(dir);
 
@@ -176,10 +178,16 @@ public class EnemyMovement : MonoBehaviour
 
             //transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir), 180 * Time.deltaTime);        
         }
-        else{
-            animator.SetFloat("Horizontal", 0, 0.25f, Time.deltaTime);
-            animator.SetFloat("Vertical", 0, 0.25f, Time.deltaTime);
-        }    
+        else {
+            // Agent is stopped or has no path
+            speedX.TargetValue = 0;
+            speedY.TargetValue = 0;
+            speedX.Update();
+            speedY.Update();
+            
+            animator.SetFloat("Horizontal", speedX.CurrentValue);
+            animator.SetFloat("Vertical", speedY.CurrentValue);
+        }       
     }
 
     private void HandleStateChange(EnemyState oldState, EnemyState newState)
@@ -280,17 +288,23 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    public void StopMovement()
-    {
-        soundManager.StopSound("Move");
+public void StopMovement()
+{
+    soundManager.StopSound("Move");
 
-        if (agent != null && agent.enabled)
-        {
-            StopAllCoroutines();
-            agent.isStopped = true;
-            agent.ResetPath();
-        }
+    if (agent != null && agent.enabled)
+    {
+        StopAllCoroutines();
+        agent.isStopped = true;
+        agent.ResetPath();
+        
+        // Force animation to stop
+        animator.SetFloat("Horizontal", 0);
+        animator.SetFloat("Vertical", 0);
+        speedX.TargetValue = 0;
+        speedY.TargetValue = 0;
     }
+}
 
     public void ResumeMovement()
     {
