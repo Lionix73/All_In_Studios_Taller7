@@ -4,10 +4,6 @@ using UnityEngine.UI;
 
 public class AsignSkillToSkillCard : MonoBehaviour
 {
-    [Header("Skill Info")]
-    [Tooltip("Sctiptable object con la info de la skill")]
-    //public Skill_Info info;
-    
     private Image iconSkill;
     private Image bGSkill;
     private Image titleSkill;
@@ -19,8 +15,6 @@ public class AsignSkillToSkillCard : MonoBehaviour
         bGSkill = GameObject.Find("BGSkill").GetComponent<Image>();
         titleSkill = GameObject.Find("TitleSkill").GetComponent<Image>();
         texts = GetComponentsInChildren<TextMeshProUGUI>();
-
-        //AsignInfo();
     }
 
     public void AsignInfo(Skill_Info info)
@@ -30,16 +24,18 @@ public class AsignSkillToSkillCard : MonoBehaviour
         titleSkill.sprite = info.titleImage;
         texts[0].text = info.title;
 
-        int lengthDescriptionList = info.descriptionItems.Length;
-
-        for (int i = 0; i < lengthDescriptionList; i++)
+        // Asignar descriptionItems (índices 1-4)
+        for (int i = 0; i < 4; i++)
         {
-            texts[i+1].text = info.descriptionItems[i];
+            texts[i + 1].text = i < info.descriptionItems.Length ?
+                info.descriptionItems[i] : string.Empty;
         }
-        
-        for (int i = 0; i < lengthDescriptionList; i++)
+
+        // Asignar descriptionText (índices 5-8)
+        for (int i = 0; i < 4; i++)
         {
-            texts[i+5].text = info.descriptionText[i];
+            texts[i + 5].text = i < info.descriptionText.Length ?
+                info.descriptionText[i] : string.Empty;
         }
     }
 }
