@@ -241,6 +241,7 @@ public class RoundManager : MonoBehaviour
         //     //_soundManager.PlaySound("FailWave");
         // }
 
+        if (currentWave ==3 ) UIManager.Singleton.UIInstructionToPass("Press E to start next ROUND");
         OnWaveComplete?.Invoke(how);
     }
     private void StartWave()
@@ -297,6 +298,7 @@ public class RoundManager : MonoBehaviour
             inBetweenRoundsTimer = 15; //Para que despues de esperar no tenga que esperar 45 seg; en review
             wantToPassRound = true;
 
+            UIManager.Singleton.UIInstructionToPass("");
             UIManager.Singleton.UIChangeImageRound(currentRound);
             //Aqui deberia salir el aviso de RONDA 2, el que no tiene oleadas
             //Y en caso de que tengamos el aviso de pasar con la E, tambien aqui...

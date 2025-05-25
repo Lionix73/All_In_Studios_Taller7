@@ -123,6 +123,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI UiWaveCounter;
     [SerializeField] private TextMeshProUGUI UiRoundCounter;
     [SerializeField] private TextMeshProUGUI UiEnemyCounter;
+    [SerializeField] private TextMeshProUGUI UiInstructionToPassRound;
     [SerializeField] private List<GameObject> playerNameText = new List<GameObject>();
     [SerializeField] private GameObject UIWaves;
 
@@ -547,6 +548,12 @@ public class UIManager : MonoBehaviour
     public void UIEnemiesAlive(int enemiesAlive)
     {
         UiEnemyCounter.text = $"Enemigos Restantes: {enemiesAlive}";
+    }
+
+    public void UIInstructionToPass(string instruction)
+    {
+        //sisas
+        UiInstructionToPassRound.text = $"{instruction}";
     }
 
     public void SetPlayerName()
