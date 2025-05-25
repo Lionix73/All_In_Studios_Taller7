@@ -276,8 +276,8 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.1
-  far clip plane: 300
-  field of view: 64.99
+  far clip plane: 100
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 10
   m_Depth: 0
@@ -335,8 +335,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5160925}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.12218326, y: -2.7531946e-10, z: 3.3893364e-11, w: 0.9925076}
-  m_LocalPosition: {x: 0.73062295, y: 2.27634, z: -3.357542}
+  m_LocalRotation: {x: 0.6596668, y: 0, z: 0, w: 0.7515582}
+  m_LocalPosition: {x: 0.73062295, y: 12.2763405, z: -3.357542}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4164,7 +4164,6 @@ GameObject:
   - component: {fileID: 257495738}
   - component: {fileID: 257495737}
   - component: {fileID: 257495736}
-  - component: {fileID: 257495745}
   m_Layer: 0
   m_Name: FreeLook Camera
   m_TagString: FreeLookCamera
@@ -4265,7 +4264,7 @@ MonoBehaviour:
       Enabled: 1
       Input:
         InputAction: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-        Gain: 2
+        Gain: 1
         LegacyInput: Mouse X
         LegacyGain: 200
         CancelDeltaTime: 0
@@ -4482,18 +4481,6 @@ Transform:
   - {fileID: 1087171554}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &257495745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 257495735}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a2229e19ef8dee41b3cc773b05f2dd9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &257817243
 GameObject:
   m_ObjectHideFlags: 0
@@ -15304,9 +15291,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4655524513962330554, guid: 79a7244cac8682b4493040d5807b54b8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4655524513962330554, guid: 79a7244cac8682b4493040d5807b54b8, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4655524513962330554, guid: 79a7244cac8682b4493040d5807b54b8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4655524513962330554, guid: 79a7244cac8682b4493040d5807b54b8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5465129523892283296, guid: 79a7244cac8682b4493040d5807b54b8, type: 3}
       propertyPath: m_Name
       value: AmmoPickable
+      objectReference: {fileID: 0}
+    - target: {fileID: 6385990895234189708, guid: 79a7244cac8682b4493040d5807b54b8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6385990895234189708, guid: 79a7244cac8682b4493040d5807b54b8, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6385990895234189708, guid: 79a7244cac8682b4493040d5807b54b8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6385990895234189708, guid: 79a7244cac8682b4493040d5807b54b8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

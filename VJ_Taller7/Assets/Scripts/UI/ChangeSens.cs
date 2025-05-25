@@ -1,27 +1,43 @@
 using UnityEngine;
 using Unity.Cinemachine;
+using UnityEngine.UI;
 
 public class ChangeSens : MonoBehaviour
 {
+    [SerializeField] private bool vertical;
     private CinemachineInputAxisController axisController;
+    private Slider slider;
 
     private void Awake()
     {
-        axisController = GetComponent<CinemachineInputAxisController>();
+        slider = GetComponent<Slider>();
     }
 
-    public void ChangeSensGain(float gainMultiplier)
+    public void ChangeSensGain()
     {
+        if(axisController == null)
+        {
+            try
+            {
+                axisController = GameObject.FindGameObjectWithTag("FreeLookCamera").GetComponent<CinemachineInputAxisController>();
+            }
+            catch
+            {
+                Debug.Log("No se encontro la camara");
+                return;
+            }
+        }
+
         foreach (InputAxisControllerBase<CinemachineInputAxisController.Reader>.Controller c in axisController.Controllers)
         {
-            if (c.Name == "Look Orbit X")
+            if (c.Name == "Look Orbit X" && !vertical)
             {
-                c.Input.Gain = c.Input.Gain * gainMultiplier;
+                c.Input.Gain = 1f * slider.value;
             }
-
-            if (c.Name == "Look Orbit Y")
+            else if (c.Name == "Look Orbit Y" && vertical)
             {
-                c.Input.Gain = c.Input.Gain * gainMultiplier * -1f;
+                c.Input.LegacyGain = -200f * slider.value;
+                return;
             }
         }
     }
