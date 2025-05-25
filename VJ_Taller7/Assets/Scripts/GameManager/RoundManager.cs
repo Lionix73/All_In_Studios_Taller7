@@ -272,7 +272,7 @@ public class RoundManager : MonoBehaviour
     {
         UnityEngine.Debug.Log("Pasar Ronda");
         currentRound++;
-        currentWave = 1;
+        currentWave = 0;
         level++;
             
             if (UIManager.Singleton) 
@@ -293,8 +293,9 @@ public class RoundManager : MonoBehaviour
     {
         if (!wantToPassRound && inBetweenRounds)
         {
-            wantToPassRound = true;
+            currentWave++;
             inBetweenRoundsTimer = 15; //Para que despues de esperar no tenga que esperar 45 seg; en review
+            wantToPassRound = true;
 
             UIManager.Singleton.UIChangeImageRound(currentRound);
             //Aqui deberia salir el aviso de RONDA 2, el que no tiene oleadas

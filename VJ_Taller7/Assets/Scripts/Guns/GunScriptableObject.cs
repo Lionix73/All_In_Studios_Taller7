@@ -117,16 +117,22 @@ public class GunScriptableObject : ScriptableObject {
                 }
                 shootDirection.Normalize();
 
-                switch(ShootConfig.ShootingType){
-                    case ShootType.HitScan:
-                        DoHitScanShooting(shootDirection, ShootSystem.transform.position, ShootSystem.transform.position);
-                    return;
-                    case ShootType.Projectile:
-                        DoProjectileShooting(shootDirection);
-                    return;
-                    case ShootType.Special:
-                        DoSpecialShooting(shootDirection);
-                    return;
+                if (ShootConfig.ShootingType == ShootType.HitScan)
+                DoHitScanShooting(shootDirection, ShootSystem.transform.position, ShootSystem.transform.position);
+                else
+                {
+                    switch (ShootConfig.ShootingType)
+                    {
+                        case ShootType.HitScan:
+
+                            return;
+                        case ShootType.Projectile:
+                            DoProjectileShooting(shootDirection);
+                            return;
+                        case ShootType.Special:
+                            DoSpecialShooting(shootDirection);
+                            return;
+                    }
                 }
             }
         }
