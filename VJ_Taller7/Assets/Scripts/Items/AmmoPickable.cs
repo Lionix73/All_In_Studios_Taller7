@@ -60,10 +60,14 @@ public class AmmoPickable : MonoBehaviour
 
     public void BuyCollectable()
     {
-        if (!canBuy) return;
+        if (!canBuy)
+        {
+            soundManager.PlaySound("CantBuyItem");
+            return;
+        }
 
         playerAmmo.actualTotalAmmo += amountOfAmmo;
-        soundManager?.PlaySound("Ammo");
+        soundManager?.PlaySound("AmmoPickable");
 
         GameManager.Instance.scoreManager.SetScore(-scoreToBuy);
     }

@@ -57,11 +57,15 @@ public class HealthPickable : MonoBehaviour
 
     public void BuyCollectable()
     {
-        if (!canBuy) return;
+        if (!canBuy)
+        {
+            soundManager.PlaySound("CantBuyItem");
+            return;
+        }
 
         if (playerHealth.GetCurrentHeath == playerHealth.GetMaxHeath) return; //Evitar curar sin queres al tener toda la vida
         playerHealth.TakeHeal(amountOfHealing);
-        soundManager?.PlaySound("Health");
+        soundManager?.PlaySound("HalthPickable");
 
         GameManager.Instance.scoreManager.SetScore(-scoreToBuy);
     }
