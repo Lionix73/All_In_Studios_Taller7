@@ -130,7 +130,7 @@ public class RoundManager : MonoBehaviour
             _Simulating = false;
             _soundManager.PlaySound("CompleteGame");
             
-            if (UIManager.Singleton) UIManager.Singleton.WinUI(7);
+            
             GameManager.Instance.WinGame();
         }
         
