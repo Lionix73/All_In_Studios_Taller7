@@ -25,7 +25,7 @@ public class HealthPickable : MonoBehaviour
             GameManager.Instance.ScoreChanged += CheckIfBuyable;
         }
 
-        //descriptionText = pickeableUI.GetComponentInChildren<TextMeshProUGUI>();
+        //''descriptionText = pickeableUI.GetComponentInChildren<TextMeshProUGUI>();
         descriptionText.text = $"Get {amountOfHealing} points of health";
         uiForLook = pickeableUI.GetComponent<ObjectLookAtCamera>();
         pickeableUI.SetActive(false);
