@@ -32,6 +32,8 @@ public class MultiPlayerState : NetworkBehaviour
     public int Kills => playerKills.Value;
     public int Damage => playerDamage.Value;
     public int Score => playerScore.Value;
+    
+    private bool waitingForNewRound;
 
     public override void OnNetworkSpawn()
     {
@@ -100,9 +102,10 @@ public class MultiPlayerState : NetworkBehaviour
     }
     public void OnReady(InputAction.CallbackContext context)
     {
-        if (NetworkManager.Singleton.ConnectedClients.Count == 1) return;
+        //if (NetworkManager.Singleton.ConnectedClients.Count == 1) return;
         if (!IsOwner) return;
-
+        GunManagerMulti2 gunManager = transform.root.GetComponentInChildren<GunManagerMulti2>();
+        if (gunManager.InAPickeableGun) return;
         if (IsReady) return;
 
         if(context.started)

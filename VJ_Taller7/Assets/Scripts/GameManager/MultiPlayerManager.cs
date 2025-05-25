@@ -44,7 +44,7 @@ public class MultiPlayerManager : NetworkBehaviour
 
         set { playersDead.Value = value; }
     }
-    
+    private bool OnGameStartFlag = false;
 
     public delegate void StartGame();
     public event StartGame OnGameStart;
@@ -269,11 +269,12 @@ public class MultiPlayerManager : NetworkBehaviour
     {
         foreach (var player in activePlayers.Values)
         {
+            player.playerHealth.ScaleHealth(maxHealthIncreasePerRound);
             if (!player.playerHealth.IsDead)
             {
                 player.playerHealth.TakeHeal(healPerRound);
             }
-            player.playerHealth.ScaleHealth(maxHealthIncreasePerRound);
+
 
         }
     }
@@ -306,9 +307,19 @@ public class MultiPlayerManager : NetworkBehaviour
         if (PlayersReady == activePlayers.Count)
         {
             Debug.Log("Start Game");
-            OnGameStart?.Invoke();
+            if(!OnGameStartFlag)
+            {
+                OnGameStart?.Invoke();
+                OnGameStartFlag = true;
+            }
+
             MultiGameManager.Instance.PlayGame();
+            foreach (var player in activePlayers.Values)
+            {
+                player.playerState.IsReady = false;
+            }
         }
+
     }
 
   /*  public void RespawnPlayerOrder(GameObject playerPrefab, Transform spawntPoint){

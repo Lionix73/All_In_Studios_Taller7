@@ -9,6 +9,7 @@ public class FollowTarget : MonoBehaviour
 
     private void Update()
     {
+        if (target == null) return;
         transform.position = target.position + offset;
     }
 }

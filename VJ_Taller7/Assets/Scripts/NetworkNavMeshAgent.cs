@@ -72,7 +72,7 @@ namespace MLAPI.Prototyping
                         }
                     }
 
-                    OnNavMeshStateUpdateClientRpc(m_Agent.destination, m_Agent.velocity, transform.position, new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = proximityClients.ToArray() } });
+                    //OnNavMeshStateUpdateClientRpc(m_Agent.destination, m_Agent.velocity, transform.position, new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = proximityClients.ToArray() } });
                 }
             }
 
@@ -93,16 +93,17 @@ namespace MLAPI.Prototyping
                         }
                     }
 
-                    OnNavMeshCorrectionUpdateClientRpc(m_Agent.velocity, transform.position, new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = proximityClients.ToArray() } });
+                    //OnNavMeshCorrectionUpdateClientRpc(m_Agent.velocity, transform.position, new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = proximityClients.ToArray() } });
                 }
 
                 m_LastCorrectionTime = (float)NetworkManager.Singleton.NetworkTimeSystem.LocalTime;
             }
         }
 
-        [ClientRpc]
-        private void OnNavMeshStateUpdateClientRpc(Vector3 destination, Vector3 velocity, Vector3 position, ClientRpcParams rpcParams = default)
+        [Rpc(SendTo.Everyone)]
+        private void OnNavMeshStateUpdateClientRpc(Vector3 destination, Vector3 velocity, Vector3 position/*, ClientRpcParams rpcParams = default*/)
         {
+            if (IsServer) return;
             if (enemy.IsDead) return;
 
             m_Agent.Warp(WarpOnDestinationChange ? position : Vector3.Lerp(transform.position, position, DriftCorrectionPercentage));
@@ -110,11 +111,12 @@ namespace MLAPI.Prototyping
             m_Agent.velocity = velocity;
         }
 
-        [ClientRpc]
-        private void OnNavMeshCorrectionUpdateClientRpc(Vector3 velocity, Vector3 position, ClientRpcParams rpcParams = default)
+        [Rpc(SendTo.Everyone)]
+        private void OnNavMeshCorrectionUpdateClientRpc(Vector3 velocity, Vector3 position/*, ClientRpcParams rpcParams = default*/)
         {
-            m_Agent.Warp(Vector3.Lerp(transform.position, position, DriftCorrectionPercentage));
-            m_Agent.velocity = velocity;
+            if (IsServer) return;
+            //m_Agent.Warp(Vector3.Lerp(transform.position, position, DriftCorrectionPercentage));
+           m_Agent.velocity = velocity;
         }
     }
 }

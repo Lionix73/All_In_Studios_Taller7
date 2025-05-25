@@ -2,6 +2,7 @@ using Unity.Netcode;
 
 public struct MultiEnemyAgentConfig : INetworkSerializable
 {
+    public float updateRate;
     public float acceleration;
     public float angularSpeed;
     public int areaMask;
@@ -15,6 +16,7 @@ public struct MultiEnemyAgentConfig : INetworkSerializable
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
+        serializer.SerializeValue(ref updateRate);
         serializer.SerializeValue(ref acceleration);
         serializer.SerializeValue(ref angularSpeed);
         serializer.SerializeValue(ref areaMask);

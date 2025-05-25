@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
 using Unity.Netcode;
+using System.Collections.Generic;
 
 
 public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
@@ -83,6 +84,8 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         get => healthBar;
         set => healthBar = value;
     }
+
+    private List<HealthMulti> subscribedPlayers = new List<HealthMulti>();
 
 
 
@@ -191,7 +194,6 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         }
         HealthBarProgressRpc((int)maxHealth, maxHealth);
         gameObject.SetActive(true);
-        Debug.Log(agent.isActiveAndEnabled);
     }
     private void Awake()
     {
@@ -214,7 +216,6 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
     {
         base.OnNetworkSpawn();
         if (!IsServer) return;
-        
         multiRoundManager = GameObject.FindFirstObjectByType<MultiRoundManager>();
         attackRadius.Player = Player;
         LineOfSightChecker.OnGainSight += GetPlayer;
@@ -229,7 +230,7 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
         //Health = (int)maxHealth;
     }
 
-    private void LostPlayer(PlayerControllerMulti player)
+    private void LostPlayer(HealthMulti player)
     {
         Player = null;
     }
@@ -479,10 +480,35 @@ public class EnemyMulti : PoolableObjectMulti, IDamageableMulti
             skinnedMeshRenderer.material.color = Color.white * intensity;
         }
     }
-    public void GetPlayer(PlayerControllerMulti player)
+    public void GetPlayer(HealthMulti player)
     {
-        //Debug.Log("Detected player");
+        Debug.Log("Detected player" + player.gameObject);
         Movement.Player = player.transform;
     }
+    // Actualización manual (llamar desde Update() o cuando necesites)
+    public void FindClosestPlayer()
+    {
+        // Obtener todos los jugadores en escena
+        HealthMulti[] allPlayers = FindObjectsOfType<HealthMulti>();
 
+        float closestDistance = Mathf.Infinity;
+        HealthMulti newClosestPlayer = null;
+
+        foreach (HealthMulti player in allPlayers)
+        {
+            if (player == null) continue;
+
+            float distance = Vector3.Distance(transform.position, player.transform.position);
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                newClosestPlayer = player;
+            }
+        }
+
+        GetPlayer(newClosestPlayer);
+    }
+
+  
 }

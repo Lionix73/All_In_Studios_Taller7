@@ -71,7 +71,6 @@ public class MultiEnemyWavesManager : NetworkBehaviour
     {
         if (!IsServer) return;
 
-        MultiGameManager.Instance.PlayerSpawned += GetPlayer;
         OnEnemySpawned += MultiGameManager.Instance.roundManager.enemyHaveSpawn;
 
         for (int i = 0; i < weightedEnemies.Count; i++)
@@ -133,7 +132,11 @@ public class MultiEnemyWavesManager : NetworkBehaviour
         MultiGameManager.Instance.roundManager.recieveWaveData(numberOfEnemiesToSpawn);
 
         //availableEnemiesToSpawn = MultiGameManager.Instance.availableEnemiesForWave[actualWave-1].availableEnemies;
-        if (actualWave > 2) actualWave = 2;
+        Debug.Log($"{actualWave} : Nivel acutal para la restriccion de enemigos");
+        if (actualWave > 2 && actualWave < 6) actualWave = 3;
+        if (actualWave >= 6 && actualWave < 9) actualWave = 4;
+        if (actualWave == 9) actualWave = 5;
+        if (actualWave > 9) actualWave = 6;
         availableEnemiesToSpawn = MultiGameManager.Instance.availableEnemiesForWave[actualWave - 1].availableEnemies;
     }
 
@@ -241,6 +244,8 @@ public class MultiEnemyWavesManager : NetworkBehaviour
             NavMeshHit hit;
             if(NavMesh.SamplePosition(navMeshTriangulation.vertices[vertexIndex], out hit, 2f, -1)){
                 enemy.Agent.Warp(hit.position);
+                ulong enemyNetId = enemy.GetComponent<NetworkObject>().NetworkObjectId;
+                WarpAgentRpc(enemyNetId, hit.position);
 
                 //Enable Collider and Disable Ragdoll
                 //enemy.RagdollEnabler.EnableAnimator();
@@ -249,6 +254,7 @@ public class MultiEnemyWavesManager : NetworkBehaviour
                 // Crear y enviar configuración de red
                 MultiEnemyAgentConfig config = new MultiEnemyAgentConfig
                 {
+                    updateRate = enemy.Movement.UpdateRate,
                     acceleration = enemy.Agent.acceleration,
                     angularSpeed = enemy.Agent.angularSpeed,
                     areaMask = enemy.Agent.areaMask,
@@ -265,10 +271,10 @@ public class MultiEnemyWavesManager : NetworkBehaviour
                 enemy.IsDead = false;
 
                 enemy.MainCamera = mainCamera;
-                enemy.Player = player;
+                enemy.FindClosestPlayer();
 
                 enemy.Movement.Triangulation = navMeshTriangulation;
-                enemy.Movement.Player = player.transform;
+                //enemy.Movement.Player = player.transform;
                 enemy.Agent.enabled = true;
 
 
@@ -297,6 +303,24 @@ public class MultiEnemyWavesManager : NetworkBehaviour
         else{
             Debug.LogError($"No se logro spawnear un enemigo tipo {spawnIndex} del object pool");
         }
+    }
+    [Rpc(SendTo.Everyone)]
+    public void WarpAgentRpc(ulong modelNetworkObjectId, Vector3 hit)
+    {
+        if (IsServer) return;
+
+            // Obtén el NetworkObject correspondiente al ID
+            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(modelNetworkObjectId, out NetworkObject enemy))
+            {
+                // Asigna el padre
+                EnemyMulti enemySpawn = enemy.GetComponent<EnemyMulti>();
+                enemySpawn.Agent.Warp(hit);
+            }
+            else
+            {
+                Debug.LogError("Failed to find NetworkObject with ID: " + modelNetworkObjectId);
+            }
+      
     }
     public void SetUpEnemy(int spawnIndex , EnemyMulti enemy)
     {
