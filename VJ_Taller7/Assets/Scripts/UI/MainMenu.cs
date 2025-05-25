@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -34,6 +35,7 @@ public class UIManager : MonoBehaviour
     public void Awake()
     {
         Singleton = this;
+        playerNameProfile = "Sigma";
 
         // Aseg�rate de que ambas listas tengan la misma cantidad de elementos
         if (sceneList.Count != gameObjectsScenes.Count)
@@ -126,6 +128,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI UiInstructionToPassRound;
     [SerializeField] private List<GameObject> playerNameText = new List<GameObject>();
     [SerializeField] private GameObject UIWaves;
+
+    private string playerNameProfile;
 
     private ThisObjectSounds soundManager;
 
@@ -563,7 +567,14 @@ public class UIManager : MonoBehaviour
             TextMeshProUGUI playerName = playerNameGO.GetComponent<TextMeshProUGUI>();
             playerName.text = inputFieldName.text;
 
+
         }
+        playerNameProfile = inputFieldName.text;
+    }
+    public string GetPlayerName()
+    {
+        AuthenticationService.Instance.UpdatePlayerNameAsync(playerNameProfile);
+        return playerNameProfile;
     }
     public void SetCameraCanva(int indexPanel)
     {

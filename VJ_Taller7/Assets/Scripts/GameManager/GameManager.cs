@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Unity.Services.Leaderboards;
+using Unity.Services.Leaderboards.Exceptions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -91,6 +94,8 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
     }
     public void PlayerDied(GameObject player) {
+        SetScoreLeaderboard();
+
         PlayerDie?.Invoke(player);
         isGameOver = true; //Primero saber si el otro jugador esta vivo y depues si confirmar el game over
         cameraAnim.SetActive(true);
@@ -126,7 +131,7 @@ public class GameManager : MonoBehaviour
     public void WinGame(){
         //Evento de victoria si es necesario
         cameraAnim.SetActive(true);
-
+        SetScoreLeaderboard();
         if (UIManager.Singleton) UIManager.Singleton.FinalUI(true);
     }
 
@@ -154,7 +159,7 @@ public class GameManager : MonoBehaviour
     public void ScoreChange(float actualScore){
         ScoreChanged?.Invoke(actualScore);
     }
-    
+
 
     /*
     public List<WeightedSpawnScriptableObject> GetBalanceWave(int wave){
@@ -162,6 +167,20 @@ public class GameManager : MonoBehaviour
         return wavesBalance[wave-1].enemiesForTheWave;
     }
     */
+    public async void SetScoreLeaderboard()
+    {
+        string leaderboardID = LeaderboardsManager.Singleton.GetLeaderboardID();
+        double score = scoreManager.GetScore();
+
+        try
+        {
+            await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardID, score);
+        }
+        catch (LeaderboardsException e)
+        {
+            Debug.LogException(e);
+        }
+    }
 }
 
 /*
