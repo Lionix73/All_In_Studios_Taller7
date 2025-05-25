@@ -177,7 +177,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638836253256127965
+  lastModified: 638837699499532689
   FileSizes:
   - Name: Desktop
     Value: 3026
@@ -548,7 +548,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Dialogues.bank
   Name: Dialogues
   StudioPath: bank:/Dialogues
-  lastModified: 638836253256063235
+  lastModified: 638836151310733548
   FileSizes:
   - Name: Desktop
     Value: 2264512
@@ -741,7 +741,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 30
-  Length: 1152
+  Length: 1494
 --- !u!114 &-5174703559511900873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -946,7 +946,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Guns.bank
   Name: Guns
   StudioPath: bank:/Guns
-  lastModified: 638837696712988311
+  lastModified: 638837400820693030
   FileSizes:
   - Name: Desktop
     Value: 921536
@@ -1179,7 +1179,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Environment.bank
   Name: Environment
   StudioPath: bank:/Environment
-  lastModified: 638831838758496135
+  lastModified: 638831174117720890
   FileSizes:
   - Name: Desktop
     Value: 158816
@@ -1508,12 +1508,15 @@ MonoBehaviour:
   - {fileID: 4808643123442914296}
   - {fileID: -5066089504249131012}
   - {fileID: 8843912381369993257}
+  - {fileID: 2830155820562923812}
+  - {fileID: 7147692588666847225}
+  - {fileID: 7435714813979766785}
   EditorParameters: []
   MasterBanks:
   - {fileID: -8195523702505923715}
   StringsBanks:
   - {fileID: 5092639294113453569}
-  cacheTime: 638837696715295512
+  cacheTime: 638837720572576697
   cacheVersion: 131622
 --- !u!114 &10818181712237557
 MonoBehaviour:
@@ -1611,10 +1614,10 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Enemies.bank
   Name: Enemies
   StudioPath: bank:/Enemies
-  lastModified: 638837355399253437
+  lastModified: 638837720572566657
   FileSizes:
   - Name: Desktop
-    Value: 5176128
+    Value: 5396704
   Exists: 1
 --- !u!114 &261594735946619378
 MonoBehaviour:
@@ -1766,7 +1769,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Player.bank
   Name: Player
   StudioPath: bank:/Player
-  lastModified: 638837696715295512
+  lastModified: 638837400878859454
   FileSizes:
   - Name: Desktop
     Value: 1889952
@@ -1906,6 +1909,33 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 15
   Length: 200
+--- !u!114 &2830155820562923812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemies/Rhino/Attack
+  m_EditorClassIdentifier: 
+  Path: event:/Enemies/Rhino/Attack
+  Guid:
+    Data1: -1248654280
+    Data2: 1097286535
+    Data3: -1425950832
+    Data4: -269339526
+  Banks:
+  - {fileID: 107825808030671681}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 70
+  Length: 5464
 --- !u!114 &3436491144952579986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2139,10 +2169,10 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638837355399253437
+  lastModified: 638837720572576697
   FileSizes:
   - Name: Desktop
-    Value: 5736
+    Value: 5886
   Exists: 1
 --- !u!114 &5153171398601022900
 MonoBehaviour:
@@ -2456,7 +2486,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/UI.bank
   Name: UI
   StudioPath: bank:/UI
-  lastModified: 638836253258236137
+  lastModified: 638836106043304390
   FileSizes:
   - Name: Desktop
     Value: 114880
@@ -2503,7 +2533,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638837696715108444
+  lastModified: 638837400877626362
   FileSizes:
   - Name: Desktop
     Value: 52648608
@@ -2535,6 +2565,60 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 30
   Length: 6200
+--- !u!114 &7147692588666847225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemies/Komodo/Idle
+  m_EditorClassIdentifier: 
+  Path: event:/Enemies/Komodo/Idle
+  Guid:
+    Data1: 415667054
+    Data2: 1144534873
+    Data3: 1166498741
+    Data4: 1940622153
+  Banks:
+  - {fileID: 107825808030671681}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 30
+  Length: 12000
+--- !u!114 &7435714813979766785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemies/Komodo/MeleeAttack
+  m_EditorClassIdentifier: 
+  Path: event:/Enemies/Komodo/MeleeAttack
+  Guid:
+    Data1: -534598422
+    Data2: 1129469561
+    Data3: -1884410995
+    Data4: 1752201173
+  Banks:
+  - {fileID: 107825808030671681}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 30
+  Length: 1152
 --- !u!114 &7532505577097846175
 MonoBehaviour:
   m_ObjectHideFlags: 0
