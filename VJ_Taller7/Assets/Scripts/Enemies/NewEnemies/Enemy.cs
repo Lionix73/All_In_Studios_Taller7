@@ -175,7 +175,6 @@ public class Enemy : PoolableObject, IDamageable
     private void Start()
     {
         maxHealth = Health;
-
         carnivoros = FindObjectsByType<CarnivoroTemporal>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
     }
 
@@ -192,6 +191,11 @@ public class Enemy : PoolableObject, IDamageable
                 skills[i].UseSkill(this, Player);
             }
         }
+    }
+
+    public void PlaySpawnSound()
+    {
+        soundManager.PlaySound("Spawn");
     }
 
     private void OnAttack(IDamageable target)

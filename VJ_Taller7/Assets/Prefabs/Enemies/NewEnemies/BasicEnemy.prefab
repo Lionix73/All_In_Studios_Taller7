@@ -656,11 +656,11 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: 91165735
-      Data2: 1205929981
-      Data3: 1754632600
-      Data4: -1125560777
-    Path: event:/Enemies/PufferFish/Shoot
+      Data1: -96376704
+      Data2: 1259235263
+      Data3: 1684467638
+      Data4: -269637277
+    Path: event:/Enemies/Baboon/Attack
   Event: 
   EventPlayTrigger: 0
   EventStopTrigger: 0
@@ -671,7 +671,70 @@ MonoBehaviour:
   Params: []
   OverrideAttenuation: 0
   OverrideMinDistance: 1
-  OverrideMaxDistance: 50
+  OverrideMaxDistance: 30
+--- !u!1 &1865439584978092759
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5496706082574167892}
+  - component: {fileID: 3248491614385380966}
+  m_Layer: 9
+  m_Name: Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5496706082574167892
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865439584978092759}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2335277273915558459}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3248491614385380966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865439584978092759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1269637072
+      Data2: 1107298640
+      Data3: -1422353231
+      Data4: -1380839654
+    Path: event:/Enemies/EnemySpawn
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &2035409861456778773
 GameObject:
   m_ObjectHideFlags: 0
@@ -2728,11 +2791,11 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: -48971573
-      Data2: 1164802237
-      Data3: -1926259571
-      Data4: 1843652756
-    Path: event:/Enemies/PufferFish/Move
+      Data1: 1880923240
+      Data2: 1296716898
+      Data3: 1656167300
+      Data4: -592239905
+    Path: event:/Enemies/Kamikaze/Move
   Event: 
   EventPlayTrigger: 0
   EventStopTrigger: 0
@@ -3349,11 +3412,11 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: -1251891431
-      Data2: 1093405304
-      Data3: -546240350
-      Data4: -354102805
-    Path: event:/Enemies/PufferFish/Idle
+      Data1: -1165515122
+      Data2: 1320067709
+      Data3: 1220702851
+      Data4: -1102752282
+    Path: event:/Enemies/Kamikaze/Idle
   Event: 
   EventPlayTrigger: 1
   EventStopTrigger: 0
@@ -3492,8 +3555,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6145633589580903093}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.0853968, y: 0, z: 5.0139556}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3502,6 +3565,7 @@ Transform:
   - {fileID: 5621325555280184765}
   - {fileID: 5098389175895175087}
   - {fileID: 4644925956180826932}
+  - {fileID: 5496706082574167892}
   m_Father: {fileID: 7185059666713373341}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6424577672544340536

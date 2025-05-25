@@ -177,7 +177,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638836278348488383
+  lastModified: 638837251410421144
   FileSizes:
   - Name: Desktop
     Value: 3026
@@ -946,7 +946,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Guns.bank
   Name: Guns
   StudioPath: bank:/Guns
-  lastModified: 638836367934722205
+  lastModified: 638837251410202703
   FileSizes:
   - Name: Desktop
     Value: 910656
@@ -1205,7 +1205,7 @@ MonoBehaviour:
   Banks:
   - {fileID: 107825808030671681}
   IsStream: 0
-  Is3D: 0
+  Is3D: 1
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -1507,12 +1507,13 @@ MonoBehaviour:
   - {fileID: 1502585651871897520}
   - {fileID: 4808643123442914296}
   - {fileID: -5066089504249131012}
+  - {fileID: 8843912381369993257}
   EditorParameters: []
   MasterBanks:
   - {fileID: -8195523702505923715}
   StringsBanks:
   - {fileID: 5092639294113453569}
-  cacheTime: 638836367936922771
+  cacheTime: 638837277441224566
   cacheVersion: 131622
 --- !u!114 &10818181712237557
 MonoBehaviour:
@@ -1610,10 +1611,10 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Enemies.bank
   Name: Enemies
   StudioPath: bank:/Enemies
-  lastModified: 638831174116995959
+  lastModified: 638837277441224566
   FileSizes:
   - Name: Desktop
-    Value: 2463232
+    Value: 5176128
   Exists: 1
 --- !u!114 &261594735946619378
 MonoBehaviour:
@@ -2138,10 +2139,10 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638836278348508554
+  lastModified: 638837251410441145
   FileSizes:
   - Name: Desktop
-    Value: 5684
+    Value: 5736
   Exists: 1
 --- !u!114 &5153171398601022900
 MonoBehaviour:
@@ -2502,7 +2503,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638836367936922771
+  lastModified: 638837251413417615
   FileSizes:
   - Name: Desktop
     Value: 41884320
@@ -2669,6 +2670,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 30
   Length: 8200
+--- !u!114 &8843912381369993257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Enemies/EnemySpawn
+  m_EditorClassIdentifier: 
+  Path: event:/Enemies/EnemySpawn
+  Guid:
+    Data1: 1269637072
+    Data2: 1107298640
+    Data3: -1422353231
+    Data4: -1380839654
+  Banks:
+  - {fileID: 107825808030671681}
+  IsStream: 1
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2920
 --- !u!114 &8950682892178635890
 MonoBehaviour:
   m_ObjectHideFlags: 0
