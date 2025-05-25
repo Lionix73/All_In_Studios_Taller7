@@ -92,22 +92,21 @@ public class HealthMulti : NetworkBehaviour, IDamageableMulti
         if (IsDead) return;
 
         CurrentHealth -= damage;
+        HealthChange(CurrentHealth);
+
+        if (CurrentHealth <= 0)
+        {
+            IsDead = true;
+            OnPlayerDeath?.Invoke(gameObject);
+        }
         TakeDamageRpc(CurrentHealth);
+
+
 
     }
     [Rpc(SendTo.Everyone)]
     public void TakeDamageRpc(int updatedHealth)
     { 
-        if(IsServer)
-        {
-            HealthChange(updatedHealth);
-            
-            if(updatedHealth <= 0)
-            {
-                IsDead = true;
-                OnPlayerDeath.Invoke(gameObject);
-            }
-        }
 
         if (!IsOwner) return;
 

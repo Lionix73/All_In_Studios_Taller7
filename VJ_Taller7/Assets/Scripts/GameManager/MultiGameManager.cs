@@ -147,6 +147,7 @@ public class MultiGameManager : NetworkBehaviour
     {
         PlayerSpawned?.Invoke(playerPrefab);
         roundManager._Simulating = true;
+        roundManager.WantToPassRound = true;
         StartRoundUIRpc(roundManager.CurrentRound);
     }
     public void GameOver()
@@ -171,6 +172,7 @@ public class MultiGameManager : NetworkBehaviour
     public void RoundStarted()
     {
         StartRoundUIRpc(roundManager.CurrentRound);
+        playerManager.RoundComplete();
 
     }
     [Rpc(SendTo.Everyone)]
@@ -216,6 +218,12 @@ public class MultiGameManager : NetworkBehaviour
     {
         cameraAnim.SetActive(true);
         if (UIManager.Singleton != null) UIManager.Singleton.FinalUI(true);
+    }
+
+    private void RoundFinished()
+    {
+        UIManager.Singleton.UIChangeImageRound(roundManager.CurrentRound);
+        playerManager.RoundComplete();
     }
 
     public override void OnNetworkDespawn()

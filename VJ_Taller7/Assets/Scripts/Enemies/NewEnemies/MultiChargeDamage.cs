@@ -21,10 +21,10 @@ public class MultiChargeDamage : MonoBehaviour
         if (enemy == null || enemy.IsDead) return;
 
         // Apply damage to IDamageable objects
-        IDamageable damageable = other.GetComponent<IDamageable>();
+        IDamageableMulti damageable = other.GetComponent<IDamageableMulti>();
         if (damageable != null)
         {
-            damageable.TakeDamage(damage);
+            damageable.TakeDamage(damage,10);
             Debug.Log($"Enemy {enemy.name} dealt {damage} damage to {other.name}.");
         }
 

@@ -103,7 +103,7 @@ public class EnemyScriptableObject : ScriptableObject
     {
         SetUpEnemyAgentMulti(enemy);
 
-        enemy.Movement.UpdateRate = aIUpdateInterval;
+        
         enemy.Movement.DefaultState = defaultState;
         enemy.Movement.IdleMoveSpeedMultiplier = idleMoveSpeedMultiplier;
         enemy.Movement.IdleLocationRadius = idleLocationRadius;
@@ -118,6 +118,8 @@ public class EnemyScriptableObject : ScriptableObject
     }
     public void SetUpEnemyAgentMulti(EnemyMulti enemy)
     {
+        enemy.Movement.UpdateRate = aIUpdateInterval;
+
         enemy.Agent.acceleration = acceleration;
         enemy.Agent.angularSpeed = angularSpeed;
         enemy.Agent.areaMask = areaMask;

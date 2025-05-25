@@ -92,11 +92,11 @@ public class MultiEnemyMovement : NetworkBehaviour
     public const string Landed = "Landed";
 
     [Header("NetworkSettings")]
-    [SerializeField] private Vector3 lastSyncedPos; // Última posición sincronizada
+    [SerializeField] private Vector3 lastSyncedPos; // ï¿½ltima posiciï¿½n sincronizada
     [SerializeField] private Quaternion lastSyncedRot;
     [SerializeField] private float syncThreshold = 0.5f; // Umbral de distancia para sincronizar
-    [SerializeField] private float syncInterval = 0.2f; // Intervalo mínimo entre sincronizaciones
-    [SerializeField] private float lastSyncTime; // Tiempo de la última sincronización
+    [SerializeField] private float syncInterval = 0.2f; // Intervalo mï¿½nimo entre sincronizaciones
+    [SerializeField] private float lastSyncTime; // Tiempo de la ï¿½ltima sincronizaciï¿½n
     public NetworkVariable<MultiEnemyAgentConfig> netAgentConfig = new NetworkVariable<MultiEnemyAgentConfig>();
 
     [Rpc(SendTo.Everyone)]
@@ -129,6 +129,8 @@ public class MultiEnemyMovement : NetworkBehaviour
 
         OnStateChange += HandleStateChange;
         netAgentConfig.OnValueChanged += OnAgentConfigChanged;
+        snapDistanceThreshold = 0.25f;
+
         if (enemy != null)
         {
             enemy = GetComponent<EnemyMulti>();
@@ -146,6 +148,7 @@ public class MultiEnemyMovement : NetworkBehaviour
     {
         if (agent != null)
         {
+            updateRate = config.updateRate;
             agent.acceleration = config.acceleration;
             agent.angularSpeed = config.angularSpeed;
             agent.areaMask = config.areaMask;
@@ -158,14 +161,15 @@ public class MultiEnemyMovement : NetworkBehaviour
             agent.stoppingDistance = config.stoppingDistance;
         }
     }
-    private void HandleGainSight(PlayerControllerMulti player)
+    private void HandleGainSight(HealthMulti player)
     {
         Player = player.transform;
         State = EnemyState.Chase;
     }
 
-    private void HandleLoseSight(PlayerControllerMulti player)
+    private void HandleLoseSight(HealthMulti player)
     {
+        Player = player.transform;
         State = EnemyState.Patrol;
     }
 
@@ -212,39 +216,9 @@ public class MultiEnemyMovement : NetworkBehaviour
 
     private void Update()
     {
+        if(!IsServer) return;
 
-        if (Time.time - lastSyncTime > syncInterval ||
-            Vector3.Distance(transform.position, lastSyncedPos) > syncThreshold)
-        {
-            lastSyncedPos = transform.position;
-            lastSyncedRot = transform.rotation;
-            lastSyncTime = Time.time;
-
-            /*SyncPositionClientRpc(
-                lastSyncedPos,
-                lastSyncedRot,
-                agent.isOnOffMeshLink,
-                agent.baseOffset
-            );*/
-        }
         HandleAnims();
-    }
-    [Rpc(SendTo.Everyone)]
-    private void SyncPositionClientRpc(Vector3 serverPosition, Quaternion rotation, bool isJumping, float currentBaseOffset)
-    {
-        if (IsServer) return;
-
-        // Aplicar el offset a la posición Y
-        Vector3 adjustedPosition = new Vector3(
-            serverPosition.x,
-            serverPosition.y + currentBaseOffset,
-            serverPosition.z
-        );
-
-        // Interpolación
-        float lerpFactor = isJumping ? 0.7f : 0.3f;
-        transform.position = Vector3.Lerp(transform.position, adjustedPosition, lerpFactor);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, lerpFactor);
     }
     private void HandleAnims()
     {
@@ -317,7 +291,7 @@ public class MultiEnemyMovement : NetworkBehaviour
                 NavMeshHit hit;
 
                 if(NavMesh.SamplePosition(agent.transform.position + new Vector3(point.x, 0, point.y), out hit, 2f, agent.areaMask)){
-                    agent.SetDestination(hit.position);
+                    SetDestination(hit.position);
                 }
             }
 
@@ -329,7 +303,7 @@ public class MultiEnemyMovement : NetworkBehaviour
         WaitForSeconds wait = new WaitForSeconds(updateRate);
         
         yield return new WaitUntil(() => agent.isOnNavMesh && agent.enabled);
-        agent.SetDestination(waypoints[waypointIndex]);
+        SetDestination(waypoints[waypointIndex]);
 
         while (!enemy.IsDead)
         {
@@ -340,7 +314,7 @@ public class MultiEnemyMovement : NetworkBehaviour
                     waypointIndex = 0;
                 }
 
-                agent.SetDestination(waypoints[waypointIndex]);
+                SetDestination(waypoints[waypointIndex]);
             }
 
             yield return wait;
@@ -364,7 +338,7 @@ public class MultiEnemyMovement : NetworkBehaviour
             if (player == null) State = EnemyState.Patrol;
 
             if(agent.enabled){
-                agent.SetDestination(player.transform.position);
+                SetDestination(player.transform.position);
             }
             yield return wait;
         }
@@ -406,7 +380,7 @@ public class MultiEnemyMovement : NetworkBehaviour
         if (agent.isOnNavMesh && agent.enabled)
         {
             StopCoroutine(followCoroutine);
-            agent.SetDestination(randomPoint);
+            SetDestination(randomPoint);
         }
     }
 
@@ -417,7 +391,7 @@ public class MultiEnemyMovement : NetworkBehaviour
             Vector3 randomPoint = GenerateRandomPointInRadius(player.position, radius);
 
             StopCoroutine(followCoroutine); 
-            agent.SetDestination(randomPoint);
+            SetDestination(randomPoint);
         }
     }
 
@@ -443,8 +417,43 @@ public class MultiEnemyMovement : NetworkBehaviour
         NavMeshHit hit;
         if (NavMesh.SamplePosition(targetPosition, out hit, 2f, agent.areaMask) && agent.isOnNavMesh)
         {
-            agent.SetDestination(hit.position);
+            SetDestination(hit.position);
         }
+    }
+    
+    public void SetDestination(Vector3 hit)
+    {
+        agent.SetDestination(hit);
+        OnNavMeshStateUpdateClientRpc(transform.position, hit);
+        //SetDestinationRpc(hit);
+    }
+
+    [Header("Network Sync Settings")]
+    [SerializeField] private float snapDistanceThreshold = 1.5f; // Distancia para hacer snap
+    [SerializeField] private float lerpSpeed = 10f; // Velocidad de interpolaciï¿½n normal
+
+    [Rpc(SendTo.Everyone)]
+    private void OnNavMeshStateUpdateClientRpc(Vector3 serverPosition, Vector3 destination)
+    {
+        if (IsServer || enemy.IsDead) return;
+
+        // Calcular distancia entre posiciï¿½n actual y la del servidor
+        float distanceToServer = Vector3.Distance(transform.position, serverPosition);
+
+        // Snap condicional
+        if (distanceToServer > snapDistanceThreshold)
+        {
+            transform.position = new Vector3(serverPosition.x, transform.position.y, serverPosition.z); // Teletransportar si hay gran discrepancia
+        }
+        /*
+        else
+        {
+            // Interpolaciï¿½n suave para diferencias pequeï¿½as
+            transform.position = Vector3.Lerp(transform.position, serverPosition, lerpSpeed * Time.deltaTime);
+        }*/
+
+        // Actualizar agente de navegaciï¿½n
+        agent.SetDestination(destination);
     }
 
     private void OnDrawGizmosSelected()

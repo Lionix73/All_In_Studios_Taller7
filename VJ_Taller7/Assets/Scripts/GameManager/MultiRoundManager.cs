@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using TMPro;
@@ -16,9 +17,20 @@ public class MultiRoundManager : NetworkBehaviour
     public int CurrentRound {get {return currentRound;}}
     public int CurrentWave { get { return currentWave; } }
 
+    [Tooltip("Para saber si quieren pasar de ronda o esperar")]
+    NetworkVariable <bool> wantToPassRound = new NetworkVariable<bool>();
+    public bool WantToPassRound { 
+        
+        get => wantToPassRound.Value; 
+        
+        set { if (!IsServer) return; wantToPassRound.Value = value; }
+    }
+    private bool omnipresentWaveCummingWarning;
+
     [SerializeField] private int waveSize; //Tamaño de la oleada en cantidad de enemigos 
     private int waveValue;
     private int enemiesKilledOnWave = 0;
+
     
 
     [Space]
@@ -34,9 +46,7 @@ public class MultiRoundManager : NetworkBehaviour
     public List<EnemyScriptableObject> enemiesToSpawn = new List<EnemyScriptableObject>();
     private List<int> enemyIndex;
     private GameObject lastEnemyOfWave; //saber el último enemigo con vida para el drop
-                                        //public Transform[] spawnPoints;
-    [Tooltip("Para saber si quieren pasar de ronda o esperar")]
-    public bool wantToPassRound; //private bool startOfTheGame; //
+                                        //public Transform[] spawnPoints
 
 
     [Space]
@@ -117,7 +127,9 @@ public class MultiRoundManager : NetworkBehaviour
 
             //challengeManager.ShowChallenges(); //Mostrar los challenges
         }
-        
+
+        WantToPassRound = true; //Las rondas empiezan de una, para el multiplayer controlar esto con lo de darle a la E para empezar;
+        omnipresentWaveCummingWarning = true;
         //SetEnemiesInSpawner();
     }
     private void Update()
@@ -153,7 +165,17 @@ public class MultiRoundManager : NetworkBehaviour
     /// </summary>
     private void UpdateTimers(){
         if (inBetweenRounds) {
+            if (!WantToPassRound) return; //Para que no pase el tiempo de espera
             inBetweenRoundsTimer -= Time.deltaTime;
+
+            if (omnipresentWaveCummingWarning && inBetweenRoundsTimer <= 7) // se supone que el audio dura 7 seg, y el conteo esta calculdo
+            {
+                //Santi --> Aqui pones que suene el audio del conteo para la ronda, supongo que podes hacer que suene una vez y ya, sino me decis.
+                //_soundManager.PlaySound("SendingReiforcement");
+                omnipresentWaveCummingWarning = false;
+                //_soundManager?.PlaySound("SendindReinforcements....");
+            }
+
             // Actualizar UI solo cuando cambie el valor entero del timer
             int currentSecond = Mathf.CeilToInt(inBetweenRoundsTimer);
             if (currentSecond != lastDisplayedSecond && UIManager.Singleton)
@@ -202,13 +224,20 @@ public class MultiRoundManager : NetworkBehaviour
             if (waveDuration > maximunTimeForWaves) waveDuration = maximunTimeForWaves;
             //List<WeightedSpawnScriptableObject> temp = GameManager.Instance.GetBalanceWave(currentWave);
             //enemyWavesManager.RecieveWaveLimits(temp);
-            enemyWavesManager.RecieveWaveOrder(level, waveSize);
+            StartCoroutine(WaitUIToHideAtStartingWave());
             waveTimer = waveDuration;
         }
     }
 
+    private IEnumerator WaitUIToHideAtStartingWave()
+    {
+        yield return new WaitForSeconds(3.0f);
+        enemyWavesManager.RecieveWaveOrder(level, waveSize);
+    }
+
     private void EndWave(bool how) //Mas comodo y lindo tenerlo todo junto...
     {
+        if (currentWave == 3) WantToPassRound = false; //Al iniciar las terceras oleadas queremos que para pasar de ronda ellos decidan.
         inBetweenRounds = true; //Empezar a descontar para la otra sugiente ronda/oleada
         enemiesKilledOnWave = 0;
         //_musicRounds.StopMusic();
@@ -239,7 +268,7 @@ public class MultiRoundManager : NetworkBehaviour
     }
     private void StartWave()
     {
-        if (!wantToPassRound) return;
+        if (!WantToPassRound) return;
         currentWave++;
         level++;
         SetWaveBalance();
@@ -253,14 +282,26 @@ public class MultiRoundManager : NetworkBehaviour
         Debug.Log("Comienza Oleada");
         OnWaveStart?.Invoke(); //Comienza la oleada
 
-        //_musicRounds.PlayMusic(); // Empezar la musica
+        _musicRounds.PlayMusic(); // Empezar la musica
 
-        if (currentWave == 3) wantToPassRound = false; //Al iniciar las terceras oleadas queremos que para pasar de ronda ellos decidan.
+
+
+        if (level == 1)
+        {
+            _soundManager.PlaySound("IntrudersDetected");
+            PlaySoundRpc("IntrudersDetected");
+        }
+    }
+    [Rpc(SendTo.Everyone)]
+    public void PlaySoundRpc(string soundName)
+    {
+        if(IsServer) return;
+        _soundManager.PlaySound(soundName);
     }
     private void PassRound()
     {
         currentRound++;
-        currentWave = 0;
+        currentWave = 1;
         level++;
 
         if (UIManager.Singleton)
@@ -281,9 +322,9 @@ public class MultiRoundManager : NetworkBehaviour
 
     public void OrderToPassRound()
     {
-        if (!wantToPassRound && inBetweenRounds)
+        if (!WantToPassRound && inBetweenRounds)
         {
-            wantToPassRound = true;
+            WantToPassRound = true;
             inBetweenRoundsTimer = 15; //Para que despues de esperar no tenga que esperar 45 seg; en review
         }
     }

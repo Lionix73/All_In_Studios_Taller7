@@ -45,6 +45,7 @@ public class GunManagerMulti2 : NetworkBehaviour
     [SerializeField] private Transform secondHandRigTarget; //el Rig en sí
 
     [SerializeField] private bool inAPickeableGun;
+    public bool InAPickeableGun { get => inAPickeableGun; }
     private GunType gunToPick;
     private NetworkObject modelNetworkObject;
 
