@@ -197,6 +197,8 @@ public class EnemySpawner : MonoBehaviour
                 enemy.RagdollEnabler.DisableAllRigidbodies();
                 enemy.IsDead = false;
 
+                enemy.PlaySpawnSound();
+
                 //Set Enemy Properties
                 enemy.MainCamera = mainCamera;
                 enemy.Player = player;

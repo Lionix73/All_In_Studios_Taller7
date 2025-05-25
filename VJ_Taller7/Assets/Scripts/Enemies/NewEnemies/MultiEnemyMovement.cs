@@ -36,6 +36,7 @@ public class MultiEnemyMovement : NetworkBehaviour
     private NavMeshAgent agent;
     private AgentLinkMover linkMover;
     private Coroutine followCoroutine;
+    private ThisObjectSounds soundManager;
 
     [Header("State Settings")]
     [SerializeField] private EnemyState defaultState;
@@ -98,11 +99,27 @@ public class MultiEnemyMovement : NetworkBehaviour
     [SerializeField] private float lastSyncTime; // Tiempo de la última sincronización
     public NetworkVariable<MultiEnemyAgentConfig> netAgentConfig = new NetworkVariable<MultiEnemyAgentConfig>();
 
+    [Rpc(SendTo.Everyone)]
+    public void PlaySoundMultiRpc(string soundName)
+    {
+        if (IsServer) return;
+
+        soundManager.PlaySound(soundName);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void StopSoundMultiRpc(string soundName)
+    {
+        if (IsServer) return;
+
+        soundManager.StopSound(soundName);
+    }
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         linkMover = GetComponent<AgentLinkMover>();
+        soundManager = GetComponent<ThisObjectSounds>();
 
         linkMover.OnLinkStart += HandleLinkStart;
         linkMover.OnLinkEnd += HandleLinkEnd;
@@ -282,7 +299,11 @@ public class MultiEnemyMovement : NetworkBehaviour
         }
     }
 
-    private IEnumerator DoIdleMotion(){
+    private IEnumerator DoIdleMotion()
+    {
+        soundManager.PlaySound("Idle");
+        PlaySoundMultiRpc("Idle");
+
         WaitForSeconds wait = new WaitForSeconds(updateRate);
         agent.speed *= idleMoveSpeedMultiplier;
 
@@ -326,7 +347,11 @@ public class MultiEnemyMovement : NetworkBehaviour
         }
     }
 
-    private IEnumerator FollowTarget(){
+    private IEnumerator FollowTarget()
+    {
+        soundManager.PlaySound("Chase");
+        PlaySoundMultiRpc("Chase");
+
         WaitForSeconds wait = new WaitForSeconds(updateRate);
 
         while (!enemy.IsDead)
@@ -345,7 +370,11 @@ public class MultiEnemyMovement : NetworkBehaviour
         }
     }
 
-    public void StopMovement(){
+    public void StopMovement()
+    {
+        soundManager.StopSound("Move");
+        StopSoundMultiRpc("Move");
+
         if (agent != null && agent.enabled)
         {
             agent.isStopped = true;
@@ -353,7 +382,12 @@ public class MultiEnemyMovement : NetworkBehaviour
         }
     }
 
-    public void ResumeMovement(){
+    public void ResumeMovement()
+    {
+        soundManager.PlaySound("Move");
+        soundManager.StopSound("Idle");
+        StopSoundMultiRpc("Idle");
+
         if (agent != null && agent.enabled)
         {
             agent.isStopped = false;
