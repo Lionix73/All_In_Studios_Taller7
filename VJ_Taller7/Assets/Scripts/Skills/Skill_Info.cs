@@ -9,9 +9,11 @@ public class Skill_Info : ScriptableObject
 
     [Header("Skill Icon")]
     public Sprite image;
+    public Sprite backgroundImage;
 
     [Header("Skill Title")]
     public string title;
+    public Sprite titleImage;
 
     [Header("Skill Description")]
     public string[] descriptionItems;

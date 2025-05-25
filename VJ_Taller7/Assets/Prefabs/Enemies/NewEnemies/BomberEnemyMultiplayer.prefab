@@ -127,6 +127,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5170942915732086442, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4049097988359818130}
+    - targetCorrespondingSourceObject: {fileID: 5170942915732086442, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2192270673379046198}
     - targetCorrespondingSourceObject: {fileID: 92340831482207095, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5863454670721412523}
@@ -223,6 +226,8 @@ MonoBehaviour:
   syncThreshold: 0.5
   syncInterval: 0.2
   lastSyncTime: 0
+  snapDistanceThreshold: 1.5
+  lerpSpeed: 10
 --- !u!114 &3685222571716998412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318,6 +323,26 @@ MonoBehaviour:
     TriggerNameHash: 2006285284
     TransitionIndex: 0
   m_Animator: {fileID: 5985304592103947457}
+--- !u!114 &2192270673379046198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685712732517191812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bf059c0df9fd4846b3ae63a27db3510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  EnableProximity: 0
+  ProximityRange: 50
+  CorrectionDelay: 3
+  DriftCorrectionPercentage: 0.5
+  WarpOnDestinationChange: 0
+  snapDistanceThreshold: 1.5
+  lerpSpeed: 10
 --- !u!198 &2448235015234007831 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 8052196379673296185, guid: 97ce59da3f93eda45921ef253c6916c8, type: 3}

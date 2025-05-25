@@ -129,7 +129,7 @@ public class MultiEnemyMovement : NetworkBehaviour
 
         OnStateChange += HandleStateChange;
         netAgentConfig.OnValueChanged += OnAgentConfigChanged;
-        snapDistanceThreshold = 0.25f;
+        snapDistanceThreshold = 1.5f;
 
         if (enemy != null)
         {
@@ -424,7 +424,7 @@ public class MultiEnemyMovement : NetworkBehaviour
     public void SetDestination(Vector3 hit)
     {
         agent.SetDestination(hit);
-        OnNavMeshStateUpdateClientRpc(transform.position, hit);
+        //OnNavMeshStateUpdateClientRpc(transform.position, hit);
         //SetDestinationRpc(hit);
     }
 
@@ -445,12 +445,11 @@ public class MultiEnemyMovement : NetworkBehaviour
         {
             transform.position = new Vector3(serverPosition.x, transform.position.y, serverPosition.z); // Teletransportar si hay gran discrepancia
         }
-        /*
         else
         {
             // Interpolaci�n suave para diferencias peque�as
-            transform.position = Vector3.Lerp(transform.position, serverPosition, lerpSpeed * Time.deltaTime);
-        }*/
+            transform.position = Vector3.Lerp(transform.position, new Vector3 (serverPosition.x , transform.position.y , serverPosition.z), lerpSpeed * Time.deltaTime);
+        }
 
         // Actualizar agente de navegaci�n
         agent.SetDestination(destination);

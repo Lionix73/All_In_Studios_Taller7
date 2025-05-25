@@ -84,6 +84,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2755460205172945919, guid: 01e57bf583dbfb94f8f3847a2c9c3d5d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6248700533175420337}
+    - targetCorrespondingSourceObject: {fileID: 2755460205172945919, guid: 01e57bf583dbfb94f8f3847a2c9c3d5d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4237328815507198236}
     - targetCorrespondingSourceObject: {fileID: 8114704660290776985, guid: 01e57bf583dbfb94f8f3847a2c9c3d5d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2547358099915011363}
@@ -237,6 +240,8 @@ MonoBehaviour:
   CorrectionDelay: 3
   DriftCorrectionPercentage: 0.1
   WarpOnDestinationChange: 0
+  snapDistanceThreshold: 1.5
+  lerpSpeed: 10
 --- !u!114 &6748926160678779085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,6 +273,8 @@ MonoBehaviour:
   syncThreshold: 0.1
   syncInterval: 0.2
   lastSyncTime: 0
+  snapDistanceThreshold: 1.5
+  lerpSpeed: 10
 --- !u!114 &8050460932584834126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,6 +324,26 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   TransitionStateInfoList: []
   m_Animator: {fileID: 4682836729526299219}
+--- !u!114 &4237328815507198236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7225457922421057986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bf059c0df9fd4846b3ae63a27db3510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  EnableProximity: 0
+  ProximityRange: 50
+  CorrectionDelay: 3
+  DriftCorrectionPercentage: 0.5
+  WarpOnDestinationChange: 0
+  snapDistanceThreshold: 1.5
+  lerpSpeed: 10
 --- !u!195 &7234800549213081353 stripped
 NavMeshAgent:
   m_CorrespondingSourceObject: {fileID: 2747067144664192308, guid: 01e57bf583dbfb94f8f3847a2c9c3d5d, type: 3}
