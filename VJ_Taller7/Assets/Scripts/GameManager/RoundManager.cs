@@ -296,6 +296,7 @@ public class RoundManager : MonoBehaviour
             wantToPassRound = true;
             inBetweenRoundsTimer = 15; //Para que despues de esperar no tenga que esperar 45 seg; en review
 
+            UIManager.Singleton.UIChangeImageRound(currentRound);
             //Aqui deberia salir el aviso de RONDA 2, el que no tiene oleadas
             //Y en caso de que tengamos el aviso de pasar con la E, tambien aqui...
         }

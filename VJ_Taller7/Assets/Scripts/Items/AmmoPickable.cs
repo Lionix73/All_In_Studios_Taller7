@@ -7,7 +7,7 @@ public class AmmoPickable : MonoBehaviour
     [SerializeField] private TextMeshProUGUI priceText;
 
     public GameObject pickeableUI; //En caso de que queramos agregar una descripcion de la cantida que da
-    private TextMeshProUGUI descriptionText;
+    [SerializeField] private TextMeshProUGUI descriptionText;
     private ObjectLookAtCamera uiForLook;
     [SerializeField] private int amountOfAmmo;
     [SerializeField] private float scoreToBuy; private bool canBuy;
@@ -28,7 +28,7 @@ public class AmmoPickable : MonoBehaviour
         respawn = GetComponentInParent<RespawnInteractables>();
     }
     private void Awake() {
-        descriptionText = pickeableUI.GetComponentInChildren<TextMeshProUGUI>();
+        //descriptionText = pickeableUI.GetComponentInChildren<TextMeshProUGUI>();
         descriptionText.text = $"Get {amountOfAmmo} bullets";
         uiForLook = pickeableUI.GetComponent<ObjectLookAtCamera>();
         pickeableUI.SetActive(false);

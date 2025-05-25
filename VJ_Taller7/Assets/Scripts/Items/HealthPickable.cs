@@ -6,7 +6,7 @@ public class HealthPickable : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI priceText;
     public GameObject pickeableUI;
-    private TextMeshProUGUI descriptionText;
+    [SerializeField] private TextMeshProUGUI descriptionText;
     private ObjectLookAtCamera uiForLook;
     [SerializeField] private float scoreToBuy; private bool canBuy;
     [SerializeField] private float amountOfHealing;
@@ -25,7 +25,7 @@ public class HealthPickable : MonoBehaviour
             GameManager.Instance.ScoreChanged += CheckIfBuyable;
         }
 
-        descriptionText = pickeableUI.GetComponentInChildren<TextMeshProUGUI>();
+        //descriptionText = pickeableUI.GetComponentInChildren<TextMeshProUGUI>();
         descriptionText.text = $"Get {amountOfHealing} points of health";
         uiForLook = pickeableUI.GetComponent<ObjectLookAtCamera>();
         pickeableUI.SetActive(false);
