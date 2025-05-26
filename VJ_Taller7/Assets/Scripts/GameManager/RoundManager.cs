@@ -126,15 +126,17 @@ public class RoundManager : MonoBehaviour
     }
     private void Update() {
 
-        if (currentRound > 3){ // ez win
+        if (currentRound > 3)
+        { // ez win
             _Simulating = false;
             _soundManager.PlaySound("CompleteGame");
-            
-            
+
+
             GameManager.Instance.WinGame();
+            currentRound = 0;
         }
         
-        if (aliveEnemies == 0 && !inBetweenRounds && enemiesKilledOnWave>1){
+        if (aliveEnemies == 0 && !inBetweenRounds && enemiesKilledOnWave>2){
             EndWave(true);
         }
 
@@ -242,7 +244,11 @@ public class RoundManager : MonoBehaviour
         //     //_soundManager.PlaySound("FailWave");
         // }
 
-        if (currentWave ==3 ) UIManager.Singleton.UIInstructionToPass("Press E to start next ROUND");
+        if (currentWave == 3)
+        {
+            UIManager.Singleton.UIInstructionToPass("Press E to start next ROUND");
+            if (currentRound == 3) UIManager.Singleton.UIInstructionToPass("Press E to END the Game");
+        }
         OnWaveComplete?.Invoke(how);
     }
     private void StartWave()
