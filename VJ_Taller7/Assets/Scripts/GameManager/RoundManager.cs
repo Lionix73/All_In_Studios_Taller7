@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
@@ -247,7 +248,10 @@ public class RoundManager : MonoBehaviour
     }
     private void StartWave()
     {
-        if (currentRound == 3 && currentWave == 3) //Penetrar sonido aqui... creo
+        if (currentRound == 3 && currentWave == 3)
+        {
+            _soundManager.PlaySound("CompleteGame");
+        }
         if (!wantToPassRound) return;
         currentWave++;
         level++;
