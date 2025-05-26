@@ -174,6 +174,7 @@ public class RoundManager : MonoBehaviour
         }
         else {
             if (UIManager.Singleton) UIManager.Singleton.UIBetweenWaves(waveTimer);
+            if (currentRound == 3 && currentWave == 3) return; // Para acabar el juego la idea es que tenga que matar todo lo vivo
             waveTimer -= Time.deltaTime;
             if (waveTimer <= 0){
                 EndWave(false);

@@ -37,6 +37,10 @@ public class GameManager : MonoBehaviour
     public GunManager gunManager;
     public ChallengeManager challengeManager;
 
+    [Tooltip("Se escala este dmg al dmg base del jugador cuando completa una ronda satisfactoriamente")]
+    [Header("Escalado")]
+    public int amountOfDamagePlayerScalePerWave;
+
     [Header("Events")] private string paPonerElHeaderXD;
 
     public delegate void OnPlayerSpawn(GameObject player); //Para que todo lo que necesite al player lo encuentre
@@ -145,7 +149,7 @@ public class GameManager : MonoBehaviour
 
         if (!killedAll) return;
         UIManager.Singleton.ShowPartialPanel("WaveCompleteUI", 3);
-        gunManager.ScaleDamage(10);
+        gunManager.ScaleDamage(amountOfDamagePlayerScalePerWave);
         //El escalado de las armas tengo que mirar si hacerlo que cada arma tenga su esacalado, o un entero pa todas
         //La segunda opcion me gusta mas porque es mas facil de hacer... xd
     }
@@ -154,6 +158,7 @@ public class GameManager : MonoBehaviour
     {
         UIManager.Singleton.UIChangeImageRound(roundManager.CurrentRound);
         playerManager.RoundComplete();
+        amountOfDamagePlayerScalePerWave += amountOfDamagePlayerScalePerWave;
     }
 
     public void ScoreChange(float actualScore){
