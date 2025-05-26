@@ -247,6 +247,7 @@ public class RoundManager : MonoBehaviour
     }
     private void StartWave()
     {
+        if (currentRound == 3 && currentWave == 3) //Penetrar sonido aqui... creo
         if (!wantToPassRound) return;
         currentWave++;
         level++;
