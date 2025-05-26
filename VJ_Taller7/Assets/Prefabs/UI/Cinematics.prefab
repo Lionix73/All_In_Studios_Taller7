@@ -44,7 +44,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1159201576650167091}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 92ba4e69beceab048abe7df55eaf6f95, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 6294b1ca181d1654ca23d17ad62b7171, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -64,7 +64,7 @@ VideoPlayer:
   - 1
   m_Url: 
   m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 01
+  m_DirectAudioMutes: 00
   m_ControlledAudioTrackCount: 1
   m_PlayOnAwake: 1
   m_SkipOnDrop: 1
@@ -129,7 +129,7 @@ MonoBehaviour:
       Data4: 2074986088
     Path: event:/Dialogues/CinematicIntro
   Event: 
-  EventPlayTrigger: 0
+  EventPlayTrigger: 1
   EventStopTrigger: 0
   AllowFadeout: 1
   TriggerOnce: 0
@@ -330,10 +330,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea0eb3e2c2ee12a45b6ea54f607cb733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cinematicDuration: 145
+  cinematicDuration: 155
   startWithCinematic: 1
-  dialogueSound: {fileID: 4341161147919456561}
-  music: {fileID: 0}
 --- !u!1 &4491643120121878523
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,7 +357,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4491643120121878523}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -368,7 +366,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -2}
   m_SizeDelta: {x: 1400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4513395320588868545
@@ -506,7 +504,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -385}
+  m_AnchoredPosition: {x: 0, y: -447}
   m_SizeDelta: {x: -400, y: -930}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7777199865297424271
@@ -560,7 +558,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   music: {fileID: 0}
-  textComp: {fileID: 5026708674539375439}
+  textComp: {fileID: 0}
   textSpeed: 0.04
   lines:
   - Many years ago, before human tongues could wag, the wisest of Arcania told a
@@ -583,9 +581,8 @@ MonoBehaviour:
     decided to force itself back into memory."
   - "The dreaded Golden Egg\u2014with strength to tame the mightiest storm, speed
     to outrun any gale, and a mind clearer than the eye of a hurricane\u2014was coming."
-  - The end of Arcania loomed for all.
+  - The end of Arcania.
   - "Well\u2026 "
-  - almost all.
   - "To Nyx and Umbra, it wasn\u2019t doom. Just another sibling\u2014one they\u2019d
     gladly raise to rule beside them."
   - "And so, Arcania\u2019s age of peace would meet its end. the tiny band of Golden
@@ -593,27 +590,26 @@ MonoBehaviour:
   - "an all-or-nothing fight for their brother\u2019s life."
   - "An all-or-nothing fight for Arcania\u2019s future."
   delays:
-  - 7.5
-  - 2.1
   - 10
   - 4
-  - 10
+  - 11
+  - 4
+  - 12
   - 8
   - 3
-  - 5
-  - 12
+  - 5.5
+  - 10
   - 6
   - 7
-  - 2
-  - 9
+  - 3
+  - 10
   - 15
-  - 4.9
-  - 1.5
-  - 1.5
-  - 9
-  - 12
   - 4
-  - 6
+  - 1.5
+  - 10.5
+  - 15
+  - 5.5
+  - 5.5
   finishDialogue: 0
 --- !u!1 &6336937618022035477
 GameObject:
