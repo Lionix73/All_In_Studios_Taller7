@@ -44,6 +44,18 @@ public class RhinoChargeSkill : SkillScriptableObject
         Rigidbody rb = enemy.GetComponent<Rigidbody>();
         NavMeshAgent agent = enemy.Agent;
 
+        ParticleSystem chargeEffect = null;
+        ParticleSystem[] allEffects = enemy.GetComponentsInChildren<ParticleSystem>();
+        
+        foreach (ParticleSystem effect in allEffects)
+        {
+            if (effect.gameObject.name.Contains("StylizedPropulsionVFX"))
+            {
+                chargeEffect = effect;
+                break;
+            }
+        }
+
         // Find the correct collider by tag
         BoxCollider chargeCollider = null;
         foreach (BoxCollider col in enemy.GetComponentsInChildren<BoxCollider>())
@@ -84,12 +96,13 @@ public class RhinoChargeSkill : SkillScriptableObject
         enemy.Animator.SetTrigger(Enemy.SKILL_TRIGGER);
 
         // **Charge preparation phase**
-        float chargePreparationTime = 0.5f; // Time to prepare before charging
+        float chargePreparationTime = 0.8f; // Time to prepare before charging
         Debug.Log("Enemy is preparing to charge...");
         yield return new WaitForSeconds(chargePreparationTime);
 
         // Enable the charge collider
         chargeCollider.enabled = true;
+        chargeEffect?.Play();
 
         // **Charge Movement phase**
         float elapsedTime = 0f;
