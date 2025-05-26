@@ -6,13 +6,9 @@ public class Cinematic : MonoBehaviour
 {
     [SerializeField] private float cinematicDuration;
     [SerializeField] private bool startWithCinematic;
-    [SerializeField] private StudioEventEmitter dialogueSound;
-
-    [SerializeField] private StudioEventEmitter music;
     void Start(){
         if (startWithCinematic) {
             gameObject.SetActive(true);
-            dialogueSound.Play();
             StartCoroutine(WaitForCinematic());
         }
         else gameObject.SetActive(false);
@@ -21,8 +17,6 @@ public class Cinematic : MonoBehaviour
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            dialogueSound.Stop();
-            music.Play();
             EndCinematic();
         }
 

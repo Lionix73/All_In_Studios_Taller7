@@ -33,11 +33,12 @@ public class ChangeSens : MonoBehaviour
             if (c.Name == "Look Orbit X" && !vertical)
             {
                 c.Input.Gain = 1f * slider.value;
+                c.Input.LegacyGain = 200f * slider.value;
             }
             else if (c.Name == "Look Orbit Y" && vertical)
             {
+                c.Input.Gain = -1f * slider.value;
                 c.Input.LegacyGain = -200f * slider.value;
-                return;
             }
         }
     }
