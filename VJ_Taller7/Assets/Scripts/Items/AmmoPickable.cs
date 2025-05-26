@@ -66,6 +66,7 @@ public class AmmoPickable : MonoBehaviour
             return;
         }
 
+        if (playerAmmo.actualTotalAmmo > 599) return;
         playerAmmo.actualTotalAmmo += amountOfAmmo;
         soundManager?.PlaySound("AmmoPickable");
 
