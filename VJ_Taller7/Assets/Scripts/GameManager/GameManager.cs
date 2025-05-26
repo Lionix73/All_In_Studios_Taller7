@@ -98,13 +98,16 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
     }
     public void PlayerDied(GameObject player) {
-        SetScoreLeaderboard();
+        //SetScoreLeaderboard();
 
         PlayerDie?.Invoke(player);
         isGameOver = true; //Primero saber si el otro jugador esta vivo y depues si confirmar el game over
         cameraAnim.SetActive(true);
+        FinalScoreManager.Singleton.UpdateDiedLeaderboard(UIManager.Singleton.GetPlayerName(),(int)scoreManager.GetTotalScore(), (int)scoreManager.GetKilledEnemies());
 
         if (UIManager.Singleton != null) UIManager.Singleton.FinalUI(false);
+
+
 
         if (spawnPlayerWithMenu) return;
 
@@ -135,8 +138,11 @@ public class GameManager : MonoBehaviour
     public void WinGame(){
         //Evento de victoria si es necesario
         cameraAnim.SetActive(true);
-        SetScoreLeaderboard();
+
+        //SetScoreLeaderboard();
         if (UIManager.Singleton) UIManager.Singleton.FinalUI(true);
+        FinalScoreManager.Singleton.UpdateDiedLeaderboard(UIManager.Singleton.GetPlayerName(), (int)scoreManager.GetTotalScore(), (int)scoreManager.GetKilledEnemies());
+
     }
 
     public void WaveStarted(){

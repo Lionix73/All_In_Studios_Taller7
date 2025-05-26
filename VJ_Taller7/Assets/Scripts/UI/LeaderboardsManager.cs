@@ -22,23 +22,37 @@ public class LeaderboardsManager : MonoBehaviour
         {
             Singleton = this;
         }
-
-
     }
+
     private async void Start()
     {
         try
         {
+            // 1?? **Inicializa UnityServices primero**
             await UnityServices.InitializeAsync();
+
+            // 2?? **Cierra sesión si ya existe una activa**
+            if (AuthenticationService.Instance.IsSignedIn)
+            {
+                AuthenticationService.Instance.SignOut();
+                ClearPlayerData();
+            }
+
+            // 3?? **Autenticación anónima (genera nuevo ID)**
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            Debug.Log($"Player ID: {AuthenticationService.Instance.PlayerId}");
         }
         catch (Exception e)
         {
-            Debug.LogException(e);
+            Debug.LogError($"Error en inicialización: {e.Message}");
         }
-
     }
 
+    private void ClearPlayerData()
+    {
+        PlayerPrefs.DeleteKey("UnityServicesToken");
+    }
+ 
     public async void UpdateLeaderboard()
     {
             LeaderboardScoresPage leaderboardScoresPage = await LeaderboardsService.Instance.GetScoresAsync(leaderboardID);

@@ -133,7 +133,6 @@ public class UIManager : MonoBehaviour
 
     private ThisObjectSounds soundManager;
 
-    public static UIManager Instance;
     [SerializeField] private float fadeTime = 1.0f;
     [SerializeField] private AnimationList[] uiPanels; // Todos los paneles que quieres controlar
     [SerializeField] private string mainMenuPannel;
@@ -250,7 +249,7 @@ public class UIManager : MonoBehaviour
             if (hideMenuPanel.isActiveAndEnabled)
                 hideMenuPanel.gameObject.SetActive(false);
         }
-
+        CheckField();
         IsMainMenu = false;
         ShowPanel("UIPlayer");
         actualRoundDisplay = true;
@@ -258,7 +257,8 @@ public class UIManager : MonoBehaviour
         UiWaveCounter.text = "";
         UiEnemyCounter.text = "";
         UiRoundCounter.gameObject.SetActive(true);
-        characterNameText.text = CharacterManager.Instance.characters[CharacterManager.Instance.selectedIndexCharacter].name;
+        //characterNameText.text = CharacterManager.Instance.characters[CharacterManager.Instance.selectedIndexCharacter].name;
+        SetPlayerName();
         UiRoundCounter.text = "";
         scoreInGameText.text = "00";
 
@@ -304,20 +304,21 @@ public class UIManager : MonoBehaviour
 
         if (HasWon)
         {
-            hasWon = true;
             SwitchPanels("UIPlayer/WinScene");
-            StartCoroutine(WaitingTimeForMainMenu("WinScene/MainMenu"));
+            StartCoroutine(WaitingTimeForMainMenu("WinScene/MainMenu", HasWon));
         }
         else
         {
             IsDead = true;
             SwitchPanels("UIPlayer/DeathScene");
-            StartCoroutine(WaitingTimeForMainMenu("DeathScene/MainMenu"));
+            StartCoroutine(WaitingTimeForMainMenu("DeathScene/MainMenu", HasWon));
 
         }
+
+
     }
 
-    public IEnumerator WaitingTimeForMainMenu(string UISwitchingPanels)
+    public IEnumerator WaitingTimeForMainMenu(string UISwitchingPanels, bool hasWon)
     {
         yield return new WaitForSeconds(waitingTimeForMenu);
 
@@ -326,6 +327,7 @@ public class UIManager : MonoBehaviour
             FindFirstObjectByType<OmnipotentSoundManager>().StopEverySound();
         }
         SwitchPanels(UISwitchingPanels);
+
         BackToMenu();
 
     }
@@ -562,18 +564,31 @@ public class UIManager : MonoBehaviour
 
     public void SetPlayerName()
     {
+        if (!string.IsNullOrEmpty(inputFieldName.text))
+        {
+            playerNameProfile = inputFieldName.text;
+        }
+
         foreach (var playerNameGO in playerNameText)
         {
             TextMeshProUGUI playerName = playerNameGO.GetComponent<TextMeshProUGUI>();
-            playerName.text = inputFieldName.text;
-
-
+            playerName.text = playerNameProfile;
         }
-        playerNameProfile = inputFieldName.text;
+    }
+    void CheckField()
+    {
+        if (string.IsNullOrWhiteSpace(inputFieldName.text))
+        {
+            Debug.Log("El campo está vacío o tiene espacios.");
+        }
+        else
+        {
+            Debug.Log("El campo tiene texto válido: " + inputFieldName.text);
+        }
     }
     public string GetPlayerName()
     {
-        AuthenticationService.Instance.UpdatePlayerNameAsync(playerNameProfile);
+        //AuthenticationService.Instance.UpdatePlayerNameAsync(playerNameProfile);
         return playerNameProfile;
     }
     public void SetCameraCanva(int indexPanel)
