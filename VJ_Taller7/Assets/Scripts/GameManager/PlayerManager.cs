@@ -76,7 +76,7 @@ public class PlayerManager : MonoBehaviour
 
     public void RoundComplete(){
         playerHealth.ScaleHealth(maxHealthIncreasePerRound);//Primero subir vida, luego curar
-        UIManager.Singleton.GetPlayerActualHealth(playerHealth.GetMaxHeath);
+        UIManager.Singleton.GetPlayerTotalHealth(playerHealth.GetMaxHeath);
 
         playerHealth.TakeHeal(healPerRound);
     }
