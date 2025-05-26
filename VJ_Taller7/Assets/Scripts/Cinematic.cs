@@ -17,6 +17,7 @@ public class Cinematic : MonoBehaviour
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            
             EndCinematic();
         }
 
@@ -28,6 +29,8 @@ public class Cinematic : MonoBehaviour
 
     public void EndCinematic(){
         StopAllCoroutines();
+        UIManager.Singleton.SelectedScene("BetaFinalMap");
+        UIManager.Singleton.StartGameUI();
         gameObject.SetActive(false);
     }
 }

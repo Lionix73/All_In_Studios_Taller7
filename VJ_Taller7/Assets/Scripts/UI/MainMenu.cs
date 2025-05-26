@@ -120,6 +120,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI characterNameText;
     [SerializeField] private TextMeshProUGUI scoreInGameText;
+    [SerializeField] private TextMeshProUGUI healthInGameText;
     [SerializeField] private TextMeshProUGUI UiWaveTimer;
     [SerializeField] private TextMeshProUGUI UiBetweenWavesTimer;
     [SerializeField] private TextMeshProUGUI UiWaveCounter;
@@ -138,6 +139,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private string mainMenuPannel;
 
     private float currentDisplayedScore;
+    private float currentDisplayedHealth;
     // Colores para los estados
     public Color increasingColor = Color.green; // Color cuando el puntaje aumenta
     public Color decreasingColor = Color.red;   // Color cuando el puntaje disminuye
@@ -263,6 +265,10 @@ public class UIManager : MonoBehaviour
         scoreInGameText.text = "00";
 
     }
+    public void IsMainMenuState(bool isMainMenu)
+    {
+        IsMainMenu = isMainMenu;
+    }
     public void SelectedScene(string scene)
     {
         SceneTransitionManager.LoadScene(scene);
@@ -305,20 +311,20 @@ public class UIManager : MonoBehaviour
         if (HasWon)
         {
             SwitchPanels("UIPlayer/WinScene");
-            StartCoroutine(WaitingTimeForMainMenu("WinScene/MainMenu", HasWon));
+            StartCoroutine(WaitingTimeForMainMenu("WinScene/MainMenu"));
         }
         else
         {
             IsDead = true;
             SwitchPanels("UIPlayer/DeathScene");
-            StartCoroutine(WaitingTimeForMainMenu("DeathScene/MainMenu", HasWon));
+            StartCoroutine(WaitingTimeForMainMenu("DeathScene/MainMenu"));
 
         }
 
 
     }
 
-    public IEnumerator WaitingTimeForMainMenu(string UISwitchingPanels, bool hasWon)
+    public IEnumerator WaitingTimeForMainMenu(string UISwitchingPanels)
     {
         yield return new WaitForSeconds(waitingTimeForMenu);
 
@@ -402,46 +408,54 @@ public class UIManager : MonoBehaviour
 
         // Determinamos si el puntaje está aumentando o disminuyendo
         bool isIncreasing = actualScore > currentDisplayedScore;
-
+        
         // Iniciamos una nueva corrutina para animar el puntaje
-        StartCoroutine(AnimateScoreChange(currentDisplayedScore, actualScore, isIncreasing));
+        StartCoroutine(AnimateValueChange(currentDisplayedScore, actualScore, isIncreasing, scoreInGameText,UpdateScoreTexts));
     }
 
-    // Corrutina para animar el cambio de puntaje
-    private IEnumerator AnimateScoreChange(float fromScore, float toScore, bool isIncreasing)
+    private IEnumerator AnimateValueChange(
+        float fromValue,
+        float toValue,
+        bool isIncreasing,
+        TextMeshProUGUI displayText,
+        System.Action<float> updateMethod
+    )
     {
-        float duration = 0.75f; // Duración de la animación en segundos
+        float duration = 0.75f;
         float elapsedTime = 0f;
 
-        // Aplicamos el color correspondiente
+        // Aplicar color de cambio
         Color targetColor = isIncreasing ? increasingColor : decreasingColor;
-        scoreInGameText.color = targetColor;
+
+        if (displayText != null) displayText.color = targetColor;
 
         while (elapsedTime < duration)
         {
-            // Interpolamos linealmente entre el puntaje anterior y el nuevo
-            currentDisplayedScore = Mathf.Lerp(fromScore, toScore, elapsedTime / duration);
-
-            // Actualizamos los textos
-            UpdateScoreTexts(currentDisplayedScore);
-
+            float currentValue = Mathf.Lerp(fromValue, toValue, elapsedTime / duration);
+            updateMethod(currentValue);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        // Aseguramos que al final muestre el valor exacto
-        currentDisplayedScore = toScore;
-        UpdateScoreTexts(currentDisplayedScore);
+        // Asegurar valor final exacto
+        currentDisplayedScore = toValue;
+        updateMethod(toValue);
 
-        // Restauramos el color original después de un pequeño delay (opcional)
+        // Restaurar color original
         yield return new WaitForSeconds(0.2f);
-        scoreInGameText.color = defaultColor;
+        if (displayText != null) displayText.color = defaultColor;
     }
+
 
     private void UpdateScoreTexts(float score)
     {
-        scoreText.text = $"Score:{Mathf.RoundToInt(score)}";
+        //scoreText.text = $"Score:{Mathf.RoundToInt(score)}";
         scoreInGameText.text = $"{Mathf.RoundToInt(score)}";
+    }
+    private void UpdateHealthTexts(float score)
+    {
+        //scoreText.text = $"Score:{Mathf.RoundToInt(score)}";
+        healthInGameText.text = $"{Mathf.RoundToInt(score)}";
     }
 
     public void UIChangeRound(int currentRound)

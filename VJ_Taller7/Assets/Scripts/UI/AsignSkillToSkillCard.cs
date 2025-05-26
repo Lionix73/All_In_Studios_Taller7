@@ -22,19 +22,19 @@ public class AsignSkillToSkillCard : MonoBehaviour
         iconSkill.sprite = info.image;
         bGSkill.sprite = info.backgroundImage;
         titleSkill.sprite = info.titleImage;
-        texts[0].text = info.title;
+        //texts[0].text = info.title;
 
         // Asignar descriptionItems (índices 1-4)
         for (int i = 0; i < 4; i++)
         {
-            texts[i + 1].text = i < info.descriptionItems.Length ?
+            texts[i].text = i < info.descriptionItems.Length ?
                 info.descriptionItems[i] : string.Empty;
         }
 
         // Asignar descriptionText (índices 5-8)
         for (int i = 0; i < 4; i++)
         {
-            texts[i + 5].text = i < info.descriptionText.Length ?
+            texts[i + 4].text = i < info.descriptionText.Length ?
                 info.descriptionText[i] : string.Empty;
         }
     }

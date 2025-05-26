@@ -18,4 +18,7 @@ public class Skill_Info : ScriptableObject
     [Header("Skill Description")]
     public string[] descriptionItems;
     public string[] descriptionText;
+
+    [Header("SkillMode")]
+    public bool isMultiplayer;
 }

@@ -112,7 +112,7 @@ public class AnimationList : MonoBehaviour
         foreach (var item in items)
         {
             item.transform.DOScale(1f, fadeTime).SetEase(Ease.OutBounce);
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(fadeTime/2);
         }
 
     }

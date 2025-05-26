@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour
 
         //SetScoreLeaderboard();
         if (UIManager.Singleton) UIManager.Singleton.FinalUI(true);
-        FinalScoreManager.Singleton.UpdateDiedLeaderboard(UIManager.Singleton.GetPlayerName(), (int)scoreManager.GetTotalScore(), (int)scoreManager.GetKilledEnemies());
+        FinalScoreManager.Singleton.UpdateWinLeaderboard(UIManager.Singleton.GetPlayerName(), (int)scoreManager.GetTotalScore(), (int)scoreManager.GetKilledEnemies());
 
     }
 

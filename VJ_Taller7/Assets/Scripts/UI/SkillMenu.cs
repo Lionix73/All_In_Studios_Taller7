@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class SkillMenu : MonoBehaviour
 {
     [Header("Skill Lists")]
-    public List<Skill_Info> passiveSkills;
-    public List<Skill_Info> activeSkills;
+    public List<Skill_Info> allPassiveSkills; // Todas las habilidades pasivas
+    public List<Skill_Info> allActiveSkills;  // Todas las habilidades activas
 
     [Header("UI References")]
     public AsignSkillToSkillCard cardSkillInfo;
@@ -17,21 +17,67 @@ public class SkillMenu : MonoBehaviour
     public Button downArrowButton;
     public TextMeshProUGUI skillTypeText;
 
-    private List<Skill_Info> currentSkills;
+    private List<Skill_Info> currentSkills;    // Habilidades actualmente mostradas
+    private List<Skill_Info> passiveSkills;    // Habilidades pasivas filtradas
+    private List<Skill_Info> activeSkills;     // Habilidades activas filtradas
     private int selectedIndex = 0;
     private bool viewingPassiveSkills = true;
+    private bool isMultiplayerMode = false;    // Cambiar según el modo de juego
 
     private void Start()
     {
+        // Inicializar listas filtradas según el modo
+        FilterSkillsByGameMode();
+
         // Configurar listeners de botones
         passiveButton.onClick.AddListener(() => SwitchToPassiveSkills());
         activeButton.onClick.AddListener(() => SwitchToActiveSkills());
         upArrowButton.onClick.AddListener(() => NavigateSkills(-1));
         downArrowButton.onClick.AddListener(() => NavigateSkills(1));
-        SelectedActiveSkill(selectedIndex);
-        SelectedPassiveSkill(selectedIndex);
+
         // Inicializar mostrando habilidades pasivas
         SwitchToPassiveSkills();
+    }
+
+    // Filtra habilidades según el modo de juego
+    private void FilterSkillsByGameMode()
+    {
+        passiveSkills = new List<Skill_Info>();
+        activeSkills = new List<Skill_Info>();
+
+        foreach (var skill in allPassiveSkills)
+        {
+            // Si es Singleplayer, solo mostrar habilidades !isMultiplayer
+            // Si es Multiplayer, mostrar todas o solo isMultiplayer (según necesidad)
+            if (!isMultiplayerMode && !skill.isMultiplayer || isMultiplayerMode)
+            {
+                passiveSkills.Add(skill);
+            }
+        }
+
+        foreach (var skill in allActiveSkills)
+        {
+            if (!isMultiplayerMode && !skill.isMultiplayer || isMultiplayerMode)
+            {
+                activeSkills.Add(skill);
+            }
+        }
+    }
+
+    // Cambiar entre modos (Singleplayer/Multiplayer)
+    public void SetGameMode(bool multiplayer)
+    {
+        isMultiplayerMode = multiplayer;
+        FilterSkillsByGameMode();
+
+        // Resetear la visualización
+        if (viewingPassiveSkills)
+            SwitchToPassiveSkills();
+        else
+            SwitchToActiveSkills();
+
+        SelectedActiveSkill(selectedIndex);
+        SelectedPassiveSkill(selectedIndex);
     }
 
     private void SwitchToPassiveSkills()
@@ -40,7 +86,6 @@ public class SkillMenu : MonoBehaviour
         currentSkills = passiveSkills;
         selectedIndex = Mathf.Clamp(CharacterManager.Instance.indexPassiveSkill, 0, currentSkills.Count - 1);
         UpdateSkillDisplay();
-        //skillTypeText.text = "Habilidades Pasivas";
     }
 
     private void SwitchToActiveSkills()
