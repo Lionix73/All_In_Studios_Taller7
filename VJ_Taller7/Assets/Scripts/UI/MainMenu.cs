@@ -155,6 +155,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private List<Sprite> digitSpritesWave;  // Sprites de los números 0 al 9 (en orden)
 
     private Dictionary<string, AnimationList> panelDictionary = new Dictionary<string, AnimationList>();
+    private bool isMultiplayer;
 
     // Función pública para mostrar un panel con fade in
     public void ShowPanel(string panelName)
@@ -471,7 +472,23 @@ public class UIManager : MonoBehaviour
         if (displayText != null) displayText.color = defaultColor;
     }
 
+    public void SetGameMode(bool multiplayer)
+    {
+        isMultiplayer = multiplayer;
+    }
 
+    public void StartGame()
+    {
+        if(isMultiplayer)
+        {
+            SwitchPanels("SkillsMenu/MainMenu");
+            ShowPartialPanel("ComingSoon", 3);
+        }
+        else
+        {
+            ShowPanel("Cinematics");
+        }
+    }
     private void UpdateScoreTexts(float score)
     {
         //scoreText.text = $"Score:{Mathf.RoundToInt(score)}";

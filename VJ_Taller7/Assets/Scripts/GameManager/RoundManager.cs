@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.Generic;
 using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
@@ -284,8 +283,8 @@ public class RoundManager : MonoBehaviour
             
             if (UIManager.Singleton) 
             { 
-                UIManager.Singleton.actualRoundDisplay = true;
-                UIManager.Singleton.UIChangeRound(currentRound);
+                //UIManager.Singleton.actualRoundDisplay = true;
+                //UIManager.Singleton.UIChangeRound(currentRound);
 
                 //challengeManager.ShowChallenges(); //Mostrar los challenges
             }

@@ -67,6 +67,7 @@ public class SkillMenu : MonoBehaviour
     // Cambiar entre modos (Singleplayer/Multiplayer)
     public void SetGameMode(bool multiplayer)
     {
+        UIManager.Singleton.SetGameMode(multiplayer);
         isMultiplayerMode = multiplayer;
         FilterSkillsByGameMode();
 
