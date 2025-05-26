@@ -16,11 +16,14 @@ public class CharacterMenu : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10f;
     private bool isRotating = false;
     private Vector3 lastMousePosition;
-
+    private void Start()
+    {
+        characterManager = CharacterManager.Instance;
+    }
     private void OnEnable()
     {
 
-        characterManager = CharacterManager.Instance;
+
         //characterManager.characters[selectedIndex]
         RenderAvatar();
     }
@@ -66,8 +69,9 @@ public class CharacterMenu : MonoBehaviour
 
     private void RenderAvatar()
     {
-        characterToDisplay = Instantiate(characterManager.characters[_currentIndex].displayCharacter, posCharacter, rotCharacter);
         _nameCharacter.text = characterManager.characters[_currentIndex].name;
+
+        characterToDisplay = Instantiate(characterManager.characters[_currentIndex].displayCharacter, posCharacter, rotCharacter);
         DisplaySelectionText();
 
     }

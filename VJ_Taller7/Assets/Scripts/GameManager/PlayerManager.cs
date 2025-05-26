@@ -61,7 +61,6 @@ public class PlayerManager : MonoBehaviour
         playerMaxHealth = maxHealth;
 
         UISet();
-        UIManager.Singleton.GetPlayerActualHealth(currentHealth);
 
         if(currentHealth >= damageUI_VFX.HealthThreshold){
             damageUI_VFX.ShowDamageFlash(currentHealth, maxHealth); //Flash cuando recibe un hit

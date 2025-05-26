@@ -19,10 +19,6 @@ public class CharacterManager : MonoBehaviour
             CharacterManager.Instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-        else
-        {
-            Destroy(gameObject);
-        }
 
     }
 }

@@ -378,6 +378,7 @@ public class UIManager : MonoBehaviour
     public void GetPlayerHealth(float playerHealth, float maxHealth)
     {
         healthBar.fillAmount = Mathf.Clamp(playerHealth / maxHealth, 0, 1);
+        GetPlayerActualHealth(playerHealth);
     }
     public void RestartGame()
     {

@@ -29,11 +29,7 @@ public class Health : MonoBehaviour, IDamageable
 
     void Update()
     {
-        //Debug.Log(maxHealth);
-        if (UIManager.Singleton !=null)
-        {
-            UIManager.Singleton.GetPlayerHealth(currentHealth, maxHealth);
-        } 
+
     }
 
     /// <summary>
