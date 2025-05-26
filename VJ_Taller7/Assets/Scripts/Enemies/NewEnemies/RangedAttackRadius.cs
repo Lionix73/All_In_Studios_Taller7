@@ -41,8 +41,6 @@ public class RangedAttackRadius : AttackRadius
     protected override IEnumerator Attack()
     {
         soundManager.PlaySound("Attack");
-        enemy.Animator.SetTrigger(Enemy.SHOOT_TRIGGER);
-
         WaitForSeconds wait = new WaitForSeconds(AttackDelay);
 
         yield return wait;
@@ -94,6 +92,7 @@ public class RangedAttackRadius : AttackRadius
                     bullet.transform.rotation = agent.transform.rotation;
 
                     directionToTarget = targetDamageable.GetTransform().position + new Vector3(0, 1, 0) - (bulletOrigin.position + new Vector3(0, 1, 0));
+                    enemy.Animator.SetTrigger(Enemy.SHOOT_TRIGGER);
                     bullet.Spawn(directionToTarget + new Vector3(0, 0.5f, 0), damage, targetDamageable.GetTransform());
                 }
             }

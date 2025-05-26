@@ -1,9 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
-using Unity.Netcode;
-using Unity.Android.Gradle.Manifest;
-using Unity.Services.Multiplay.Authoring.Core.MultiplayApi;
 
 [RequireComponent(typeof(NavMeshAgent), typeof(AgentLinkMover))]
 public class EnemyMovement : MonoBehaviour
@@ -291,23 +288,23 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-public void StopMovement()
-{
-    soundManager.StopSound("Move");
-
-    if (agent != null && agent.enabled)
+    public void StopMovement()
     {
-        StopAllCoroutines();
-        agent.isStopped = true;
-        agent.ResetPath();
-        
-        // Force animation to stop
-        animator.SetFloat("Horizontal", 0);
-        animator.SetFloat("Vertical", 0);
-        speedX.TargetValue = 0;
-        speedY.TargetValue = 0;
+        soundManager.StopSound("Move");
+
+        if (agent != null && agent.enabled)
+        {
+            StopAllCoroutines();
+            agent.isStopped = true;
+            agent.ResetPath();
+            
+            // Force animation to stop
+            animator.SetFloat("Horizontal", 0);
+            animator.SetFloat("Vertical", 0);
+            speedX.TargetValue = 0;
+            speedY.TargetValue = 0;
+        }
     }
-}
 
     public void ResumeMovement()
     {
