@@ -61,6 +61,7 @@ public class PlayerManager : MonoBehaviour
         playerMaxHealth = maxHealth;
 
         UISet();
+        UIManager.Singleton.GetPlayerActualHealth(currentHealth);
 
         if(currentHealth >= damageUI_VFX.HealthThreshold){
             damageUI_VFX.ShowDamageFlash(currentHealth, maxHealth); //Flash cuando recibe un hit
@@ -75,6 +76,8 @@ public class PlayerManager : MonoBehaviour
 
     public void RoundComplete(){
         playerHealth.ScaleHealth(maxHealthIncreasePerRound);//Primero subir vida, luego curar
+        UIManager.Singleton.GetPlayerActualHealth(playerHealth.GetMaxHeath);
+
         playerHealth.TakeHeal(healPerRound);
     }
 

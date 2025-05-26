@@ -121,6 +121,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI characterNameText;
     [SerializeField] private TextMeshProUGUI scoreInGameText;
     [SerializeField] private TextMeshProUGUI healthInGameText;
+    [SerializeField] private TextMeshProUGUI totalHealthInGameText;
     [SerializeField] private TextMeshProUGUI UiWaveTimer;
     [SerializeField] private TextMeshProUGUI UiBetweenWavesTimer;
     [SerializeField] private TextMeshProUGUI UiWaveCounter;
@@ -140,6 +141,7 @@ public class UIManager : MonoBehaviour
 
     private float currentDisplayedScore;
     private float currentDisplayedHealth;
+    private float currentDisplayedTotalHealth;
     // Colores para los estados
     public Color increasingColor = Color.green; // Color cuando el puntaje aumenta
     public Color decreasingColor = Color.red;   // Color cuando el puntaje disminuye
@@ -412,6 +414,24 @@ public class UIManager : MonoBehaviour
         // Iniciamos una nueva corrutina para animar el puntaje
         StartCoroutine(AnimateValueChange(currentDisplayedScore, actualScore, isIncreasing, scoreInGameText,UpdateScoreTexts));
     }
+    public void GetPlayerActualHealth(float actualHealth)
+    {
+
+        // Determinamos si el puntaje está aumentando o disminuyendo
+        bool isIncreasing = actualHealth > currentDisplayedHealth;
+
+        // Iniciamos una nueva corrutina para animar el puntaje
+        StartCoroutine(AnimateValueChange(currentDisplayedHealth, actualHealth, isIncreasing, healthInGameText, UpdateHealthTexts));
+    }
+    public void GetPlayerTotalHealth(float totalHealth)
+    {
+
+        // Determinamos si el puntaje está aumentando o disminuyendo
+        bool isIncreasing = totalHealth > currentDisplayedTotalHealth;
+
+        // Iniciamos una nueva corrutina para animar el puntaje
+        StartCoroutine(AnimateValueChange(currentDisplayedTotalHealth, totalHealth, isIncreasing, totalHealthInGameText, UpdateTotalHealthTexts));
+    }
 
     private IEnumerator AnimateValueChange(
         float fromValue,
@@ -438,7 +458,12 @@ public class UIManager : MonoBehaviour
         }
 
         // Asegurar valor final exacto
-        currentDisplayedScore = toValue;
+        if(displayText == scoreInGameText) 
+            currentDisplayedScore = toValue;
+        else if (displayText == healthInGameText)
+            currentDisplayedHealth = toValue;
+        else if (displayText == totalHealthInGameText)
+            currentDisplayedTotalHealth = toValue;
         updateMethod(toValue);
 
         // Restaurar color original
@@ -456,6 +481,11 @@ public class UIManager : MonoBehaviour
     {
         //scoreText.text = $"Score:{Mathf.RoundToInt(score)}";
         healthInGameText.text = $"{Mathf.RoundToInt(score)}";
+    }
+    private void UpdateTotalHealthTexts(float score)
+    {
+        //scoreText.text = $"Score:{Mathf.RoundToInt(score)}";
+        totalHealthInGameText.text = $"{Mathf.RoundToInt(score)}";
     }
 
     public void UIChangeRound(int currentRound)
