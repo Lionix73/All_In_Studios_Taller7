@@ -127,6 +127,10 @@ public class CharacterMenu : MonoBehaviour
             lastMousePosition = Input.mousePosition;
         }
     }
+    public void DestroyCharacter()
+    {
+        Destroy(characterToDisplay);
+    }
     public void SelectAvatar()
     {
         //Debug.Log($"Has seleccionado el {_availableAvatars[_currentIndex]}");
