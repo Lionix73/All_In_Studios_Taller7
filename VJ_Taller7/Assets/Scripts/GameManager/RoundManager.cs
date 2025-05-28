@@ -49,7 +49,7 @@ public class RoundManager : MonoBehaviour
     private float waveTimer;
     [Tooltip("Tiempo entre oleadas")]
     [SerializeField] private float inBetweenRoundsWaitTime; //Tiempo entre oleadas
-    private float inBetweenRoundsTimer = 10f; //Tiempo entre oleadas
+    private float inBetweenRoundsTimer = 35f; //Tiempo entre oleadas
     private bool inBetweenRounds=true;
     private int aliveEnemies;
 
