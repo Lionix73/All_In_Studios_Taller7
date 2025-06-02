@@ -757,6 +757,7 @@ GameObject:
   - component: {fileID: 1914418167501450766}
   - component: {fileID: 904133795709367156}
   - component: {fileID: 7447458872189218883}
+  - component: {fileID: 4074162885070750720}
   - component: {fileID: 6746573183159165536}
   - component: {fileID: 8834524075110823324}
   - component: {fileID: 4045626260707534013}
@@ -892,6 +893,26 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4074162885070750720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937287128208277315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27a56a33db6098145a3be4cb9cfb4864, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedX:
+    smoothTime: 0.3
+  speedY:
+    smoothTime: 0.3
+  layersDampener1:
+    smoothTime: 0.3
+  layersDampener2:
+    smoothTime: 0.3
 --- !u!114 &6746573183159165536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -907,15 +928,6 @@ MonoBehaviour:
   canMove: 1
   walkSpeed: 2
   runSpeed: 5
-  animator: {fileID: 7447458872189218883}
-  speedX:
-    smoothTime: 0.4
-  speedY:
-    smoothTime: 0.4
-  layersDampener1:
-    smoothTime: 0.3
-  layersDampener2:
-    smoothTime: 0.3
   slideDuration: 1
   slideCooldown: 0.5
   maxJumps: 2
@@ -1085,19 +1097,7 @@ MonoBehaviour:
     m_ActionId: 351f2ccd-1f9f-44bf-9bec-d62ac5c5f408
     m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6746573183159165536}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnLook
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 6b444451-8a00-4d00-a97e-f47457f736a8
     m_ActionName: 'Player/Look[/Mouse/delta,/Pen/delta]'
   - m_PersistentCalls:
@@ -1306,9 +1306,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 6746573183159165536}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnChangeGun
+      - m_Target: {fileID: 4074162885070750720}
+        m_TargetAssemblyTypeName: PlayerAnimations, Assembly-CSharp
+        m_MethodName: OnWeaponChange
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

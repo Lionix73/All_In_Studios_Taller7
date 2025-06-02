@@ -6,18 +6,15 @@ public class Cinematic : MonoBehaviour
 {
     [SerializeField] private float cinematicDuration;
     [SerializeField] private bool startWithCinematic;
-    void Start(){
-        if (startWithCinematic) {
-            gameObject.SetActive(true);
-            StartCoroutine(WaitForCinematic());
-        }
-        else gameObject.SetActive(false);
+    void OnEnable()
+    {
+        gameObject.SetActive(true);
+        StartCoroutine(WaitForCinematic());
     }
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            
             EndCinematic();
         }
 

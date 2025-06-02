@@ -14,13 +14,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float walkSpeed = 2f;
     [SerializeField] private float runSpeed = 5f;
 
-    [Header("Animator")]
-    [SerializeField] private Animator animator;
-    [SerializeField] private FloatDampener speedX;
-    [SerializeField] private FloatDampener speedY;
-    [SerializeField] private FloatDampener layersDampener1;
-    [SerializeField] private FloatDampener layersDampener2;
-
     [Header("Slide")]
     [SerializeField] private float slideDuration = 3f;
     [SerializeField] private float slideCooldown = 0.5f;
@@ -32,7 +25,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpDuration = 1.4f;
 
     [Header("Components")]
-    [SerializeField] private Rigidbody rb;
     [SerializeField] private CapsuleCollider playerCollider;
     [SerializeField] private CapsuleCollider crouchCollider;
     [SerializeField] private Transform cameraTransform;
@@ -49,6 +41,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float tFOV = 1;
     [SerializeField] private float rotationSpeed = 10f;
 
+    [Header("Rigs")]
     [SerializeField] private MultiAimConstraint aimRig;
     [SerializeField] private TwoBoneIKConstraint gripRig;
     #endregion
@@ -97,8 +90,10 @@ public class PlayerController : MonoBehaviour
     private GunManager gunManager;
     private ThisObjectSounds soundManager;
     private CheckTerrainHeight checkTerrainHeight;
+    private Animator animator;
     private Health health;
     private Rig rig;
+    private Rigidbody rb;
     #endregion
 
     private void Awake()
@@ -108,6 +103,7 @@ public class PlayerController : MonoBehaviour
         gunManager = FindAnyObjectByType<GunManager>();
         soundManager = GetComponent<ThisObjectSounds>();
         checkTerrainHeight = GetComponent<CheckTerrainHeight>();
+        animator = GetComponent<Animator>();
         health = GetComponent<Health>();
         rig = GetComponentInChildren<Rig>();
     }
@@ -116,19 +112,15 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        cameraTransform = GameObject.FindGameObjectWithTag("FreeLookCamera").transform;
         freeLookCamera = GameObject.FindGameObjectWithTag("FreeLookCamera").GetComponent<CinemachineCamera>();
+        cameraTransform = freeLookCamera.transform;
         freeLookCamera.Target.TrackingTarget = camTarget;
     }
 
     private void Update()
     {
-        HandleAnimations();
-        UpdateAnimLayer();
-        adjustFOV();
-
+        AdjustFOV();
         AdjustRigs();
-        ChangeRigWeightDuringEmote();
     }
 
     private void FixedUpdate()
@@ -151,7 +143,6 @@ public class PlayerController : MonoBehaviour
         if (moveDirection != Vector3.zero)
         {
             rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
-            animator.SetBool("isEmoting", false);
         }
         else
         {
@@ -171,134 +162,6 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
     }
-
-    #region -----Animations / Animation Layers Management------
-    private void HandleAnimations()
-    {
-        animator.SetBool("ShortGun", gunManager.CurrentGun.Type == GunType.BasicPistol || gunManager.CurrentGun.Type == GunType.Revolver ? true : false);
-
-        speedX.Update();
-        speedY.Update();
-        layersDampener1.Update();
-        layersDampener2.Update();
-        ChangeAnimLayer(SelectAnimLayer());
-
-        speedX.TargetValue = moveInput.x;
-        speedY.TargetValue = moveInput.y;
-
-        animator.SetBool("isGrounded", checkTerrainHeight.isGrounded);
-        animator.SetBool("isMoving", isMoving);
-        animator.SetBool("isRunning", isRunning);
-        animator.SetBool("isCrouching", isCrouching);
-        animator.SetBool("isSliding", isSliding);
-        isEmoting = animator.GetBool("isEmoting");
-
-        animator.SetFloat("SpeedX", speedX.CurrentValue);
-        animator.SetFloat("SpeedY", speedY.CurrentValue);
-    }
-
-    private void ChangeAnimLayer(int index)
-    {
-        if (animationLayerToShow == index) return;
-
-        animationLayerToShow = index;
-
-        if(Mathf.Abs(layersDampener1.TargetValue - layersDampener1.CurrentValue) <= 0.05f)
-        {
-            if(layersDampener1.TargetValue == 0)
-            {
-                layersDampener1.TargetValue = 1;
-                layersDampener2.TargetValue = 0;
-            }
-            else
-            {
-                layersDampener1.TargetValue = 0;
-                layersDampener2.TargetValue = 1;
-            }
-        }
-    }
-
-    private void UpdateAnimLayer()
-    {
-        animator.SetLayerWeight(animationLayerToShow, layersDampener1.TargetValue == 1 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
-        int layersAmount = animator.GetLayerIndex("Aim");
-
-        for (int i = 0; i <= layersAmount; i++)
-        {
-            if (i != animationLayerToShow && animator.GetLayerWeight(i) > 0.05f)
-            {
-                animator.SetLayerWeight(i, layersDampener1.TargetValue == 0 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
-            }
-
-            if (i != animationLayerToShow && animator.GetLayerWeight(i) < 0.05f && animator.GetLayerWeight(i) > 0f)
-            {
-                animator.SetLayerWeight(i, 0);
-            }
-        }
-    }
-
-    private int SelectAnimLayer()
-    {
-        if (gunManager.CurrentGun.Type == GunType.BasicPistol || gunManager.CurrentGun.Type == GunType.Revolver)
-        {
-            return isAiming ? 2 : 1;
-        }
-        else
-        {
-            return isAiming ? 2 : 0;
-        }
-    }
-
-    private void SelectGunType()
-    {
-        switch (gunManager.CurrentGun.Type)
-        {
-            case GunType.Rifle:
-                animator.SetFloat("GunType", 1f);
-                break;
-
-            case GunType.BasicPistol:
-                animator.SetFloat("GunType", 2f);
-                break;
-
-            case GunType.Revolver:
-                animator.SetFloat("GunType", 3f);
-                break;
-
-            case GunType.Shotgun:
-                animator.SetFloat("GunType", 4f);
-                break;
-
-            case GunType.Sniper:
-                animator.SetFloat("GunType", 5f);
-                break;
-
-            case GunType.ShinelessFeather:
-                animator.SetFloat("GunType", 6f);
-                break;
-
-            case GunType.GoldenFeather:
-                animator.SetFloat("GunType", 7f);
-                break;
-
-            case GunType.GranadeLaucher:
-                animator.SetFloat("GunType", 8f);
-                break;
-
-            case GunType.AncientTome:
-                animator.SetFloat("GunType", 9f);
-                break;
-
-            case GunType.Crossbow:
-                animator.SetFloat("GunType", 10f);
-                break;
-
-            case GunType.MysticCanon:
-                animator.SetFloat("GunType", 11f);
-                break;
-        }
-    }
-    #endregion
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -331,16 +194,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnChangeGun(InputAction.CallbackContext context)
-    {
-        if(context.performed) 
-        {
-            animator.SetTrigger("ChangeGun");
-        }
-    }
-
     #region -----FOV-----
-    public void adjustFOV()
+    public void AdjustFOV()
     {
         if (aimInput > 0.1f)
         {
@@ -377,14 +232,6 @@ public class PlayerController : MonoBehaviour
         if (moveInput.magnitude!=0){
             aimRig.weight = 1.0f;
         }
-    }
-
-    private void ChangeRigWeightDuringEmote()
-    {
-        if (isEmoting)
-            rig.weight = 0f;
-        else 
-            rig.weight = 1f;
     }
     #endregion
 
@@ -544,10 +391,22 @@ public class PlayerController : MonoBehaviour
         set => jumpCount = value;
     }
 
-    public bool PlayerRunning
+    public bool PlayerIsRunning
     {
         get => isRunning;
         set => isRunning = value;
+    }
+
+    public bool PlayerIsCrouching
+    {
+        get => isCrouching;
+        set => isCrouching = value;
+    }
+
+    public bool PlayerIsSliding
+    {
+        get => isSliding;
+        set => isSliding = value;
     }
 
     public bool PlayerInGround
@@ -560,6 +419,12 @@ public class PlayerController : MonoBehaviour
     {
         get => playerAllowedToJump;
         set => playerAllowedToJump = value;
+    }
+
+    public bool PlayerIsAiming
+    {
+        get => isAiming;
+        set => isAiming = value;
     }
 
     public int MaxJumps
@@ -577,6 +442,11 @@ public class PlayerController : MonoBehaviour
     public Vector2 MovementDirection
     {
         get => desiredMoveDirection;
+    }
+
+    public Vector2 MovInput
+    {
+        get => moveInput;
     }
     #endregion
 }

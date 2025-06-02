@@ -2106,6 +2106,7 @@ GameObject:
   - component: {fileID: 6056541049057602337}
   - component: {fileID: 6132906695882440174}
   - component: {fileID: 2010401642892508666}
+  - component: {fileID: 1274504187425630910}
   - component: {fileID: 5374355282723326770}
   - component: {fileID: 7685599645581169795}
   - component: {fileID: 7179029444552531254}
@@ -2203,7 +2204,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5065878726692420922}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a4015eb993ad7d8499e777059ec51678, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2241,6 +2242,26 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1274504187425630910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5065878726692420922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27a56a33db6098145a3be4cb9cfb4864, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedX:
+    smoothTime: 0.3
+  speedY:
+    smoothTime: 0.3
+  layersDampener1:
+    smoothTime: 0.3
+  layersDampener2:
+    smoothTime: 0.3
 --- !u!114 &5374355282723326770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2256,15 +2277,6 @@ MonoBehaviour:
   canMove: 1
   walkSpeed: 2
   runSpeed: 5
-  animator: {fileID: 2010401642892508666}
-  speedX:
-    smoothTime: 0.4
-  speedY:
-    smoothTime: 0.4
-  layersDampener1:
-    smoothTime: 0.3
-  layersDampener2:
-    smoothTime: 0.3
   slideDuration: 1
   slideCooldown: 0.5
   maxJumps: 2
@@ -2434,19 +2446,7 @@ MonoBehaviour:
     m_ActionId: 351f2ccd-1f9f-44bf-9bec-d62ac5c5f408
     m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5374355282723326770}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnLook
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 6b444451-8a00-4d00-a97e-f47457f736a8
     m_ActionName: 'Player/Look[/Mouse/delta,/Pen/delta]'
   - m_PersistentCalls:
@@ -2655,9 +2655,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 5374355282723326770}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnChangeGun
+      - m_Target: {fileID: 1274504187425630910}
+        m_TargetAssemblyTypeName: PlayerAnimations, Assembly-CSharp
+        m_MethodName: OnWeaponChange
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4748,6 +4748,10 @@ PrefabInstance:
       propertyPath: dashVFX
       value: 
       objectReference: {fileID: 1708539224786374927}
+    - target: {fileID: 2744293802038122738, guid: b9c827cc0ef8f7d40b4e952a288beaf0, type: 3}
+      propertyPath: activeSkillIndex
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3431865317813529851, guid: b9c827cc0ef8f7d40b4e952a288beaf0, type: 3}
       propertyPath: vfx
       value: 
@@ -4964,6 +4968,10 @@ PrefabInstance:
       propertyPath: crosshairManager
       value: 
       objectReference: {fileID: 7651989067049072090}
+    - target: {fileID: 7857538833840811330, guid: 3a86f6857b16dda45b04b2520db434cc, type: 3}
+      propertyPath: CurrentSecondGunType
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

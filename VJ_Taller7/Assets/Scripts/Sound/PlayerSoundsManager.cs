@@ -34,7 +34,7 @@ public class PlayerSoundsManager : MonoBehaviour
             StopEmoteMusic();
             soundManager.StopSound("Idle");
 
-            if (_playerController.PlayerRunning && _playerController.PlayerInGround)
+            if (_playerController.PlayerIsRunning && _playerController.PlayerInGround)
             {
                 soundManager.PlaySound("Run");
                 soundManager.StopSound("Walk");

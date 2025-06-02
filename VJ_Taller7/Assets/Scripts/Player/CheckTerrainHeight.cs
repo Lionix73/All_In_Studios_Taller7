@@ -17,13 +17,13 @@ public class CheckTerrainHeight : MonoBehaviour
     public bool isGrounded;
 
     [Tooltip("Useful for rough ground")]
-    public float GroundedOffset = 0.05f;
+    [SerializeField] private float GroundedOffset = 0.05f;
 
     [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
-    public float GroundedRadius = 0.1f;
+    [SerializeField] private float GroundedRadius = 0.1f;
 
     [Tooltip("What layers the character uses as ground")]
-    public LayerMask GroundLayers;
+    [SerializeField] private LayerMask GroundLayers;
 
     private bool wasOnGround;
     private float maxVerticalVelocity = 0;
