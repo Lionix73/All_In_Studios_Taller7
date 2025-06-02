@@ -8,14 +8,14 @@ using FMOD;
 
 public class PlayerController : MonoBehaviour
 {
-    #region VariablesAndComponents
+    #region Visible Variables
     [Header("Movement Settings")]
     [SerializeField] private bool canMove = true;
     [SerializeField] private float walkSpeed = 2f;
     [SerializeField] private float runSpeed = 5f;
 
     [Header("Animator")]
-    public Animator animator;
+    [SerializeField] private Animator animator;
     [SerializeField] private FloatDampener speedX;
     [SerializeField] private FloatDampener speedY;
     [SerializeField] private FloatDampener layersDampener1;
@@ -24,36 +24,23 @@ public class PlayerController : MonoBehaviour
     [Header("Slide")]
     [SerializeField] private float slideDuration = 3f;
     [SerializeField] private float slideCooldown = 0.5f;
-
-    [Header("Dash")]
-    [SerializeField] private float dashSpeed = 15f;
-    [SerializeField] private float dashDuration = 0.2f;
-    [SerializeField] private float dashCooldown = 1f;
     
     [Header("Jump")]
-    public int maxJumps = 2;
-    public float jumpVerticalForce = 10f;
-    public float jumpHorizontalForce = 5f;
+    [SerializeField] private int maxJumps = 2;
+    [SerializeField] private float jumpVerticalForce = 10f;
+    [SerializeField] private float jumpHorizontalForce = 5f;
     [SerializeField] private float jumpDuration = 1.4f;
-    [SerializeField] private float jumpCooldown = 1f;
-    [SerializeField] private float SlopeJumpDownforce = 50f;
-
-    [Header("Slope Handling")]
-    [SerializeField] private float maxSlopeAngle;
-    [SerializeField] private GameObject stepRayLower;
-    private RaycastHit slopeHit;
 
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private CapsuleCollider playerCollider;
     [SerializeField] private CapsuleCollider crouchCollider;
     [SerializeField] private Transform cameraTransform;
-    [System.Obsolete] public CinemachineCamera freeLookCamera;
+    public CinemachineCamera freeLookCamera;
 
     [Header("VFX")]
     [SerializeField] private ParticleSystem slideVFX;
     [SerializeField] private ParticleSystem jumpVFX;
-    [SerializeField] private MeshTrail dashVFX;
 
     [Header("Camera Settings")]
     [SerializeField] private Transform camTarget;
@@ -61,29 +48,23 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float aimFOV = 55;
     [SerializeField] private float tFOV = 1;
     [SerializeField] private float rotationSpeed = 10f;
-    private bool wasAiming;
-
-    [Header("Player Grounded")]
-    [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
-    public bool isGrounded;
-
-    [Tooltip("Useful for rough ground")]
-    public float GroundedOffset = -0.14f;
-
-    [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
-    public float GroundedRadius = 0.28f;
-
-    [Tooltip("What layers the character uses as ground")]
-    public LayerMask GroundLayers;
 
     [SerializeField] private MultiAimConstraint aimRig;
     [SerializeField] private TwoBoneIKConstraint gripRig;
+    #endregion
 
+    #region Private Floats
     private float aimInput;
+    private float speed;
+    #endregion
 
+    #region Private Ints
     private int jumpCount = 0;
     private int animationLayerToShow = 0;
+    #endregion
 
+    #region Private Bools
+    private bool wasAiming;
     private bool isRunning = false;
     private bool isCrouching = false;
     private bool isSliding = false;
@@ -102,15 +83,20 @@ public class PlayerController : MonoBehaviour
     private bool canMelee = true;
     private bool canShoot = true;
     private bool canReload = true;
+    #endregion
 
+    #region Private Vectors
     private Vector2 moveInput;
     private Vector2 lookInput;
     private Vector3 slideDirection;
     private Vector3 desiredMoveDirection;
+    #endregion
 
+    #region Private Components
     private PlayerInput playerInput;
     private GunManager gunManager;
     private ThisObjectSounds soundManager;
+    private CheckTerrainHeight checkTerrainHeight;
     private Health health;
     private Rig rig;
     #endregion
@@ -121,6 +107,7 @@ public class PlayerController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         gunManager = FindAnyObjectByType<GunManager>();
         soundManager = GetComponent<ThisObjectSounds>();
+        checkTerrainHeight = GetComponent<CheckTerrainHeight>();
         health = GetComponent<Health>();
         rig = GetComponentInChildren<Rig>();
     }
@@ -146,7 +133,6 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        CheckGround();
         HandleMovement();
         HandleRotation();
     }
@@ -160,7 +146,7 @@ public class PlayerController : MonoBehaviour
 
         desiredMoveDirection = (transform.right * moveDirection.x + transform.forward * moveDirection.z);
 
-        float speed = isRunning ? runSpeed : walkSpeed;
+        speed = isRunning ? runSpeed : walkSpeed;
 
         if (moveDirection != Vector3.zero)
         {
@@ -170,18 +156,6 @@ public class PlayerController : MonoBehaviour
         else
         {
             isRunning = false;
-        }
-
-        rb.useGravity = !isGrounded ? true : !OnSlope();
-
-        if (OnSlope() && !isJumping)
-        {
-            rb.AddForce(GetSlopeMovement() * speed * 10f, ForceMode.Force);
-
-            if (rb.linearVelocity.y > 0)
-            {
-                rb.AddForce(Vector3.down * SlopeJumpDownforce, ForceMode.Force);
-            }
         }
     }
 
@@ -212,7 +186,7 @@ public class PlayerController : MonoBehaviour
         speedX.TargetValue = moveInput.x;
         speedY.TargetValue = moveInput.y;
 
-        animator.SetBool("isGrounded", isGrounded);
+        animator.SetBool("isGrounded", checkTerrainHeight.isGrounded);
         animator.SetBool("isMoving", isMoving);
         animator.SetBool("isRunning", isRunning);
         animator.SetBool("isCrouching", isCrouching);
@@ -419,28 +393,13 @@ public class PlayerController : MonoBehaviour
     {
         if (!playerAllowedToJump) return;
 
-        if(isGrounded) 
-        { 
-            canJump = true;
-            jumpCount = 0;
-        }
-
-        if (jumpCount > 1 || aimInput > 0.05f)
-        {
-            canJump = false;
-            return;
-        }
-        else 
-            canJump = true;
-
-        if (context.performed && jumpCount < maxJumps && canJump)
+        if (context.performed && jumpCount < maxJumps)
         {
             animator.applyRootMotion = false;
 
             jumpCount++;
             animator.SetTrigger("Jump");
             animator.SetBool("isJumping", true);
-            canJump = false;
             isJumping = true;
 
             StartCoroutine(Jump());
@@ -451,9 +410,6 @@ public class PlayerController : MonoBehaviour
     {
         jumpVFX.Play();
 
-        soundManager.StopSound("Walk", "Run");
-        soundManager.PlaySound("Jump");
-
         rb.linearVelocity = Vector3.zero;
         rb.AddForce((desiredMoveDirection * jumpHorizontalForce) + (jumpVerticalForce * Vector3.up), ForceMode.Impulse);
 
@@ -461,7 +417,6 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("isJumping", false);
         isJumping = false;
-        canJump = true;
     }
     #endregion
 
@@ -483,12 +438,7 @@ public class PlayerController : MonoBehaviour
 
         GetComponentInChildren<Melee>().ActivateMelee();
 
-        float timer = 0f;
-        while (timer < 1.1f)
-        {
-            timer += Time.deltaTime;
-            yield return null;
-        }
+        yield return new WaitForSeconds(1.1f);
 
         canMove = true;
         canMelee = true;
@@ -499,7 +449,7 @@ public class PlayerController : MonoBehaviour
     #region -----Crouch / Slide-----
     public void OnCrouch(InputAction.CallbackContext context)
     {
-        if (context.performed && canCrouch && isGrounded)
+        if (context.performed && canCrouch && checkTerrainHeight.isGrounded)
         {
             ExchangeColliders();
             isCrouching = !isCrouching;
@@ -563,109 +513,6 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region -----Dash-----
-    public void OnDash()
-    {
-        if (!canDash || isCrouching || isSliding) return;
-
-        canDash = false;
-        isDashing = true;
-
-        soundManager.PlaySound("Dash");
-
-        dashVFX.StartTrail();
-
-        StartCoroutine(DashCoroutine());
-    }
-
-    private IEnumerator DashCoroutine()
-    {
-        animator.applyRootMotion = false;
-        rb.useGravity = false;
-
-        rb.linearVelocity = Vector3.zero;
-        rb.AddForce(desiredMoveDirection.normalized * dashSpeed, ForceMode.Impulse);
-
-        float timer = 0;
-
-        while (timer < dashDuration)
-        {
-            soundManager.StopSound("Run");
-            timer += Time.deltaTime;
-            yield return null;
-        }
-        animator.applyRootMotion = true;
-        isDashing = false;
-        rb.useGravity = true;
-
-        yield return new WaitForSeconds(dashCooldown);
-        canDash = true;
-    }
-    #endregion
-
-    #region -----Check Terrain and Height-----
-    private void CheckGround()
-    {
-        wasOnGround = isGrounded;
-
-        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
-        isGrounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
-
-        if (isGrounded && !wasOnGround)
-        {
-            soundManager.StopSound("Falling");
-            animator.applyRootMotion = true;
-        }
-
-        if(isGrounded && Mathf.Abs(rb.linearVelocity.y) > 8)
-        {
-            soundManager.PlaySound("Landing");
-        }
-
-        wasOnGround = isGrounded;
-
-        CheckHeight();
-    }
-
-    private void CheckHeight()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 50f))
-        {
-            if (!isGrounded && this.rb.linearVelocity.y < 0.1f && this.rb.linearVelocity.y > -0.1f && hit.distance > 30) soundManager.PlaySound("Falling");
-        }
-    }
-
-    private bool OnSlope()
-    {
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerCollider.height * 0.5f + 0.3f))
-        {
-            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-            return angle < maxSlopeAngle && angle != 0;
-        }
-        return false;
-    }
-
-    private Vector3 GetSlopeMovement()
-    {
-        return Vector3.ProjectOnPlane(desiredMoveDirection, slopeHit.normal).normalized;
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
-        Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
-
-        if (isGrounded) Gizmos.color = transparentGreen;
-        else Gizmos.color = transparentRed;
-
-        // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
-        Gizmos.DrawSphere(
-            new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
-            GroundedRadius);
-    }
-    #endregion
-
     #region -----Getters Setters-----
     public bool PlayerCanMove
     {
@@ -685,6 +532,18 @@ public class PlayerController : MonoBehaviour
         set => isEmoting = value;
     }
 
+    public bool PlayerIsJumping
+    {
+        get => isJumping;
+        set => isJumping = value;
+    }
+
+    public int JumpCount
+    {
+        get => jumpCount;
+        set => jumpCount = value;
+    }
+
     public bool PlayerRunning
     {
         get => isRunning;
@@ -693,14 +552,31 @@ public class PlayerController : MonoBehaviour
 
     public bool PlayerInGround
     {
-        get => isGrounded;
-        set => isGrounded = value;
+        get => checkTerrainHeight.isGrounded;
+        set => checkTerrainHeight.isGrounded = value;
     }
 
     public bool PlayerCanJump
     {
         get => playerAllowedToJump;
         set => playerAllowedToJump = value;
+    }
+
+    public int MaxJumps
+    {
+        get => maxJumps;
+        set => maxJumps = value;
+    }
+
+    public float PlayerSpeed
+    {
+        get => speed;
+        set => speed = value;
+    }
+
+    public Vector2 MovementDirection
+    {
+        get => desiredMoveDirection;
     }
     #endregion
 }

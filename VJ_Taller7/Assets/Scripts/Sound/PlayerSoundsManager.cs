@@ -7,13 +7,13 @@ public class PlayerSoundsManager : MonoBehaviour
 {
     private ThisObjectSounds soundManager;
     private GunManager gunManager;
-    private PlayerController pControl;
+    private PlayerController _playerController;
 
     private void Awake()
     {
         soundManager = GetComponent<ThisObjectSounds>();
         gunManager = FindAnyObjectByType<GunManager>();
-        pControl = GetComponent<PlayerController>();
+        _playerController = GetComponent<PlayerController>();
     }
 
     private void Update()
@@ -23,23 +23,23 @@ public class PlayerSoundsManager : MonoBehaviour
 
     private void MovSounds()
     {
-        if (!pControl.PlayerCanMove)
+        if (!_playerController.PlayerCanMove)
         {
             soundManager.StopSound("Walk", "Run");
             return;
         }
 
-        if(pControl.PlayerIsMoving)
+        if(_playerController.PlayerIsMoving)
         {
             StopEmoteMusic();
             soundManager.StopSound("Idle");
 
-            if (pControl.PlayerRunning && pControl.PlayerInGround)
+            if (_playerController.PlayerRunning && _playerController.PlayerInGround)
             {
                 soundManager.PlaySound("Run");
                 soundManager.StopSound("Walk");
             }
-            else if (pControl.PlayerInGround)
+            else if (_playerController.PlayerInGround)
             {
                 soundManager.PlaySound("Walk");
                 soundManager.StopSound("Run");
@@ -56,6 +56,15 @@ public class PlayerSoundsManager : MonoBehaviour
         }
     }
 
+    public void JumpSound(InputAction.CallbackContext context)
+    {
+        if (context.performed && _playerController.JumpCount < _playerController.MaxJumps + 1)
+        {
+            soundManager.StopSound("Walk", "Run");
+            soundManager.PlaySound("Jump");
+        }
+    }
+
     #region -----SHOOTING SOUNDS-----
 
     public bool brokenFeather;
@@ -63,7 +72,7 @@ public class PlayerSoundsManager : MonoBehaviour
 
     public void OnShoot(InputAction.CallbackContext context)
     {
-        if (!gunManager.canShoot || !firerateAllowShoot || !pControl.PlayerCanMove || gunManager.CurrentGun.bulletsLeft < 1) return;
+        if (!gunManager.canShoot || !firerateAllowShoot || !_playerController.PlayerCanMove || gunManager.CurrentGun.bulletsLeft < 1) return;
 
         if (context.started)
         {
@@ -135,7 +144,7 @@ public class PlayerSoundsManager : MonoBehaviour
         StopEmoteMusic();
         activeEmoteMusic = musicName;
 
-        if(pControl.PlayerCanMove)
+        if(_playerController.PlayerCanMove)
         {
             soundManager.PlaySound(musicName);
         }

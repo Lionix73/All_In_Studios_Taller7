@@ -758,6 +758,7 @@ GameObject:
   - component: {fileID: 904133795709367156}
   - component: {fileID: 7447458872189218883}
   - component: {fileID: 6746573183159165536}
+  - component: {fileID: 8834524075110823324}
   - component: {fileID: 4045626260707534013}
   - component: {fileID: 5397145135221162187}
   - component: {fileID: 5775372356692187957}
@@ -917,17 +918,10 @@ MonoBehaviour:
     smoothTime: 0.3
   slideDuration: 1
   slideCooldown: 0.5
-  dashSpeed: 40
-  dashDuration: 0.1
-  dashCooldown: 1
   maxJumps: 2
   jumpVerticalForce: 10
   jumpHorizontalForce: 5
   jumpDuration: 0.5
-  jumpCooldown: 0.1
-  SlopeJumpDownforce: 50
-  maxSlopeAngle: 45
-  stepRayLower: {fileID: 7889855849140284393}
   rb: {fileID: 2427977591579756396}
   playerCollider: {fileID: 1914418167501450766}
   crouchCollider: {fileID: 904133795709367156}
@@ -935,20 +929,36 @@ MonoBehaviour:
   freeLookCamera: {fileID: 0}
   slideVFX: {fileID: 2065159594767801565}
   jumpVFX: {fileID: 8470606784871313049}
-  dashVFX: {fileID: 1708539224786374927}
   camTarget: {fileID: 372600786206281558}
   currentFOV: 65
   aimFOV: 55
   tFOV: 0.001
   rotationSpeed: 10
+  aimRig: {fileID: 4468059767758155451}
+  gripRig: {fileID: 9186655726205670463}
+--- !u!114 &8834524075110823324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937287128208277315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65c5fbf71cc3e724fad0c286d0cacbd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heightThreshold: 20
+  velocityThreshold: -15
   isGrounded: 0
   GroundedOffset: 0.05
   GroundedRadius: 0.1
   GroundLayers:
     serializedVersion: 2
     m_Bits: 128
-  aimRig: {fileID: 4468059767758155451}
-  gripRig: {fileID: 9186655726205670463}
+  maxSlopeAngle: 45
+  SlopeJumpDownforce: 50
+  playerCollider: {fileID: 1914418167501450766}
 --- !u!114 &4045626260707534013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1164,16 +1174,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 4045626260707534013}
+        m_TargetAssemblyTypeName: PlayerSoundsManager, Assembly-CSharp
+        m_MethodName: JumpSound
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: f1ba0d36-48eb-4cd5-b651-1c94a6531f70
     m_ActionName: 'Player/Jump[/Keyboard/space]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 2776c80d-3c14-4091-8c56-d04ced07a2b0
-    m_ActionName: 'Player/Previous[/Keyboard/1]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba
-    m_ActionName: 'Player/Next[/Keyboard/2]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6746573183159165536}
@@ -1322,10 +1336,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 8ee4792f-48b1-499c-8851-ec9ab0ece1c7
     m_ActionName: 'Player/Melee[/Mouse/middleButton]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 1afee5c7-9eaf-4bc1-9f4c-b9fe14732c80
-    m_ActionName: 'Player/Active Skill[/Keyboard/leftAlt]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 4aaf605b-8538-41b9-8f09-af467af43948
