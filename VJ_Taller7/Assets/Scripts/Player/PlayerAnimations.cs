@@ -22,7 +22,7 @@ public class PlayerAnimations : MonoBehaviour
         _playerController = GetComponent<PlayerController>();
         _gunManager = transform.root.GetComponentInChildren<GunManager>();
         _rig = GetComponentInChildren<Rig>();
-        animator = GetComponentInChildren<Animator>();
+        animator = GetComponent<Animator>();
     }
 
     private void Start()
@@ -179,13 +179,24 @@ public class PlayerAnimations : MonoBehaviour
         }
     }
 
-    public void OnWeaponChange(InputAction.CallbackContext context)
+    public void WeaponChangeAnimation(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
             animator.SetTrigger("ChangeGun");
 
             SelectGunType();
+        }
+    }
+
+    public void ReloadAnimation(InputAction.CallbackContext context)
+    {
+        //if (_gunManager.CurrentGun.Realoading) return;
+        if (_gunManager.CurrentGun.Type == GunType.ShinelessFeather) return;
+
+        if (context.performed)
+        {
+            animator.SetTrigger("Reload");
         }
     }
     #endregion

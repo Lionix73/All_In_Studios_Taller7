@@ -4,11 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using Unity.Cinemachine;
-using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
-using NUnit.Framework;
-using UnityEngine.UIElements;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(CrosshairManager))]
 public class GunManager : MonoBehaviour
@@ -25,6 +21,7 @@ public class GunManager : MonoBehaviour
 
     public TextMeshProUGUI totalAmmoDisplay; //UI de la municion total que le queda al jugador
     public TextMeshProUGUI ammunitionDisplay; //UI de la municion que le queda en el cargador
+    private Image reloadCircle;
 
     [Space][Header("Gun General Info")]
     [SerializeField] private int basePlayerDamage; //Con este se escala el game
@@ -59,6 +56,7 @@ public class GunManager : MonoBehaviour
 
     private void Awake() {
         cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
+        reloadCircle = GameObject.Find("ReloadingCircle").GetComponent<Image>();
         Camera = cinemachineBrain.GetComponent<Camera>();
         playerObject = transform.parent.gameObject;
         GetPlayer(playerObject);
@@ -290,7 +288,6 @@ public class GunManager : MonoBehaviour
     #region Ammo management //Aqui recibimos el input de recarga y llamamos a la funciond de recarga
     public void OnReload(InputAction.CallbackContext context)
     {
-
         if (context.started)
         {
             if (!CurrentGun.Realoading)
@@ -307,27 +304,44 @@ public class GunManager : MonoBehaviour
         CurrentGun.Reload(actualTotalAmmo);
         actualTotalAmmo -= CurrentGun.MagazineSize - CurrentGun.BulletsLeft;
         ReloadingFeedback();
-        //StartCoroutine(Reload(CurrentGun.ReloadTime)); //Deberia cordinarse la animacion al tiempo de recarga de las armas
-        /*
-        switch (Gun)
+    }
+
+    private void ReloadingFeedback()
+    {
+        switch (CurrentGun.Type)
         {
             case GunType.Rifle:
-                StartCoroutine(Reload(2));
+                soundManager.PlaySound("rifleReload");
                 break;
             case GunType.BasicPistol:
-                StartCoroutine(Reload(2.12f));
+                soundManager.PlaySound("pistolReload");
                 break;
             case GunType.Revolver:
-                StartCoroutine(Reload(4.3f));
+                soundManager.PlaySound("revolverReload");
                 break;
             case GunType.Shotgun:
-                StartCoroutine(Reload(5.4f));
+                soundManager.PlaySound("shotgunReload");
                 break;
             case GunType.Sniper:
-                StartCoroutine(Reload(1.45f));
+                soundManager.PlaySound("sniperReload");
+                break;
+            case GunType.ShinelessFeather:
+                break;
+            case GunType.GoldenFeather:
+                break;
+            case GunType.GranadeLaucher:
+                soundManager.PlaySound("GLReload");
+                break;
+            case GunType.AncientTome:
+                break;
+            case GunType.Crossbow:
+                soundManager.PlaySound("CrossbowReload");
+                break;
+            case GunType.MysticCanon:
                 break;
         }
-        */
+        StartCoroutine(Reload(CurrentGun.ReloadTime));
+        StartCoroutine(ReloadCircleUI(CurrentGun.ReloadTime));
     }
 
     private IEnumerator Reload(float delay)
@@ -337,6 +351,28 @@ public class GunManager : MonoBehaviour
         yield return new WaitForSeconds(delay);
         StopFeedback();
         canShoot = true;
+    }
+
+    public IEnumerator ReloadCircleUI(float cooldown)
+    {
+        if (cooldown > 0)
+        {
+            reloadCircle.fillAmount = 1;
+
+            float epsilon = 0f;
+
+            while (epsilon < cooldown)
+            {
+                epsilon += Time.deltaTime;
+                float t = Mathf.Clamp01(epsilon / cooldown);
+
+                reloadCircle.fillAmount = Mathf.Lerp(1, 0, t);
+                yield return null;
+            }
+        }
+
+        reloadCircle.fillAmount = 0;
+        yield return null;
     }
     #endregion
 
@@ -396,61 +432,6 @@ public class GunManager : MonoBehaviour
         playerAnimator.SetBool("ShootBurst", false);
 
         soundManager.StopSound("rifleReload", "pistolReload", "revolverReload", "shotgunReload", "sniperReload");
-    }
-    private void ReloadingFeedback()
-    {    
-            playerAnimator.SetTrigger("Reload");
-
-            StartCoroutine(AnimLayerCountdown("Reload", 4.5f));
-
-            switch (CurrentGun.Type)
-            {
-                case GunType.Rifle:
-                    soundManager.PlaySound("rifleReload");
-                    break;
-                case GunType.BasicPistol:
-                    soundManager.PlaySound("pistolReload");
-                    break;
-                case GunType.Revolver:
-                    soundManager.PlaySound("revolverReload");
-                    break;
-                case GunType.Shotgun:
-                    soundManager.PlaySound("shotgunReload");
-                    break;
-                case GunType.Sniper:
-                    soundManager.PlaySound("sniperReload");
-                    break;
-                case GunType.ShinelessFeather:
-                    break;
-                case GunType.GoldenFeather:
-                    break;
-                case GunType.GranadeLaucher:
-                    soundManager.PlaySound("GLReload");
-                    break;
-                case GunType.AncientTome:
-                    break;
-                case GunType.Crossbow:
-                    soundManager.PlaySound("CrossbowReload");
-                    break;
-                case GunType.MysticCanon:
-                    break;
-        }
-            StartCoroutine(Reload(CurrentGun.ReloadTime));
-        
-    }
-    private IEnumerator AnimLayerCountdown(string layer, float delay)
-    {
-        float timer = 0f;
-        int layerI = playerAnimator.GetLayerIndex(layer);
-        playerAnimator.SetLayerWeight(layerI, 1);
-
-        while (timer < delay)
-        {
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-        playerAnimator.SetLayerWeight(layerI, 0);
     }
 
     public void CheckZoomIn(){
