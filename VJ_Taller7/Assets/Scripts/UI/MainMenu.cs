@@ -157,6 +157,11 @@ public class UIManager : MonoBehaviour
     private Dictionary<string, AnimationList> panelDictionary = new Dictionary<string, AnimationList>();
     private bool isMultiplayer;
 
+    public float SensibilityGainX { get; set; } = 1;
+    public float SensibilityLegacyGainX { get; set; } = 100;
+    public float SensibilityGainY { get; set; } = -1;
+    public float SensibilityLegacyGainY { get; set; } = -100;
+
     // Función pública para mostrar un panel con fade in
     public void ShowPanel(string panelName)
     {

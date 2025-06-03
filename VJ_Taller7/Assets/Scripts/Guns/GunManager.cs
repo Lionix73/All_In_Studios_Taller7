@@ -93,8 +93,15 @@ public class GunManager : MonoBehaviour
         {
             CurrentGun.Shoot();
         }
-        else if (CurrentGun.BulletsLeft<=0 && !CurrentGun.Realoading && actualTotalAmmo > 0){
+        // Automatic Reload
+        else if (CurrentGun.BulletsLeft<=0 && !CurrentGun.Realoading && actualTotalAmmo > 0)
+        {
             RealoadGun();
+        }
+        else
+        {
+            // No bullets left
+            soundManager.PlaySound("EmptyMAG");
         }
 
 

@@ -5,40 +5,32 @@ using UnityEngine.UI;
 public class ChangeSens : MonoBehaviour
 {
     [SerializeField] private bool vertical;
-    private CinemachineInputAxisController axisController;
+    
     private Slider slider;
+    private UIManager uiManager;
 
     private void Awake()
     {
         slider = GetComponent<Slider>();
+        uiManager = UIManager.Singleton;
     }
 
     public void ChangeSensGain()
     {
-        if(axisController == null)
+        if (!vertical)
         {
-            try
+            if (uiManager != null)
             {
-                axisController = GameObject.FindGameObjectWithTag("FreeLookCamera").GetComponent<CinemachineInputAxisController>();
-            }
-            catch
-            {
-                Debug.Log("No se encontro la camara");
-                return;
+                uiManager.SensibilityGainX = slider.value;
+                uiManager.SensibilityLegacyGainX = slider.value * 100;
             }
         }
-
-        foreach (InputAxisControllerBase<CinemachineInputAxisController.Reader>.Controller c in axisController.Controllers)
+        else if (vertical)
         {
-            if (c.Name == "Look Orbit X" && !vertical)
+            if (uiManager != null)
             {
-                c.Input.Gain = 1f * slider.value;
-                c.Input.LegacyGain = 200f * slider.value;
-            }
-            else if (c.Name == "Look Orbit Y" && vertical)
-            {
-                c.Input.Gain = -1f * slider.value;
-                c.Input.LegacyGain = -200f * slider.value;
+                uiManager.SensibilityGainY = slider.value * -1;
+                uiManager.SensibilityLegacyGainY = slider.value * -100;
             }
         }
     }
