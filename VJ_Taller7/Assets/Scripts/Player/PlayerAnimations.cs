@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.InputSystem;
@@ -28,6 +29,9 @@ public class PlayerAnimations : MonoBehaviour
     private void Start()
     {
         SelectGunType();
+
+        _playerController.JumpingEvent += JumpAnimation;
+        _gunManager.ReloadEvent += ReloadAnimation;
     }
 
     private void Update()
@@ -178,6 +182,7 @@ public class PlayerAnimations : MonoBehaviour
                 break;
         }
     }
+    #endregion
 
     public void WeaponChangeAnimation(InputAction.CallbackContext context)
     {
@@ -189,16 +194,25 @@ public class PlayerAnimations : MonoBehaviour
         }
     }
 
-    public void ReloadAnimation(InputAction.CallbackContext context)
+    public void ReloadAnimation()
     {
-        if (_gunManager.CurrentGun.BulletsLeft <= 0) return;
-        //if (_gunManager.CurrentGun.Realoading) return;
-        if (_gunManager.CurrentGun.Type == GunType.ShinelessFeather) return;
-
-        if (context.performed)
-        {
-            animator.SetTrigger("Reload");
-        }
+        animator.SetBool("ShootBurst", false);
+        animator.SetTrigger("Reload");
     }
-    #endregion
+
+    private void JumpAnimation()
+    {
+        StartCoroutine(Jumping());
+    }
+
+    private IEnumerator Jumping()
+    {
+        animator.applyRootMotion = false;
+        animator.SetTrigger("Jump");
+        animator.SetBool("isJumping", true);
+
+        yield return new WaitForSeconds(_playerController.JumpDuration);
+
+        animator.SetBool("isJumping", false);
+    }
 }

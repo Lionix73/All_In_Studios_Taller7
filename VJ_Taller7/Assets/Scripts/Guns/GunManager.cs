@@ -40,7 +40,13 @@ public class GunManager : MonoBehaviour
     [SerializeField] private bool inAPickeableCollectable; //true para coger municion, false para vida
 
     private bool shooting;
-    public bool canShoot = true;
+    private bool canShoot = true;
+
+    public bool GunCanShoot
+    {
+        get => canShoot;
+        set => canShoot = value;
+    }
 
     [Space]
     [Header("Active Guns Info")]
@@ -290,7 +296,7 @@ public class GunManager : MonoBehaviour
     {
         if (context.started)
         {
-            if (!CurrentGun.Realoading)
+            if (!CurrentGun.Realoading && actualTotalAmmo > 0 && CurrentGun.bulletsLeft < CurrentGun.MagazineSize)
             {
                 RealoadGun();
             }
@@ -300,7 +306,6 @@ public class GunManager : MonoBehaviour
         if (CurrentGun.Type == GunType.ShinelessFeather) return;
         ReloadEvent?.Invoke();
 
-        StopFeedback();
         CurrentGun.Reload(actualTotalAmmo);
         actualTotalAmmo -= CurrentGun.MagazineSize - CurrentGun.BulletsLeft;
         ReloadingFeedback();
@@ -308,38 +313,6 @@ public class GunManager : MonoBehaviour
 
     private void ReloadingFeedback()
     {
-        switch (CurrentGun.Type)
-        {
-            case GunType.Rifle:
-                soundManager.PlaySound("rifleReload");
-                break;
-            case GunType.BasicPistol:
-                soundManager.PlaySound("pistolReload");
-                break;
-            case GunType.Revolver:
-                soundManager.PlaySound("revolverReload");
-                break;
-            case GunType.Shotgun:
-                soundManager.PlaySound("shotgunReload");
-                break;
-            case GunType.Sniper:
-                soundManager.PlaySound("sniperReload");
-                break;
-            case GunType.ShinelessFeather:
-                break;
-            case GunType.GoldenFeather:
-                break;
-            case GunType.GranadeLaucher:
-                soundManager.PlaySound("GLReload");
-                break;
-            case GunType.AncientTome:
-                break;
-            case GunType.Crossbow:
-                soundManager.PlaySound("CrossbowReload");
-                break;
-            case GunType.MysticCanon:
-                break;
-        }
         StartCoroutine(Reload(CurrentGun.ReloadTime));
         StartCoroutine(ReloadCircleUI(CurrentGun.ReloadTime));
     }

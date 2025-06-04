@@ -81,6 +81,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 136366
+--- !u!114 &-8405506213338459480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Guns/Melee
+  m_EditorClassIdentifier: 
+  Path: event:/Guns/Melee
+  Guid:
+    Data1: -1555570824
+    Data2: 1085335521
+    Data3: 752948402
+    Data4: -1499983210
+  Banks:
+  - {fileID: 1312478745403810463}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1515
 --- !u!114 &-8370958787269278622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,7 +204,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638844986778319667
+  lastModified: 638845889036034095
   FileSizes:
   - Name: Desktop
     Value: 3026
@@ -946,10 +973,10 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Guns.bank
   Name: Guns
   StudioPath: bank:/Guns
-  lastModified: 638845811612844305
+  lastModified: 638845887106347329
   FileSizes:
   - Name: Desktop
-    Value: 923328
+    Value: 993696
   Exists: 1
 --- !u!114 &-4469666605943453525
 MonoBehaviour:
@@ -1052,13 +1079,13 @@ MonoBehaviour:
     Data4: 2010932609
   Banks:
   - {fileID: -4513784106951406516}
-  IsStream: 1
+  IsStream: 0
   Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 1240
+  Length: 500
 --- !u!114 &-3669555007062422821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1164,6 +1191,33 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
+--- !u!114 &-2657487596926786352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Guns/ChangeGun
+  m_EditorClassIdentifier: 
+  Path: event:/Guns/ChangeGun
+  Guid:
+    Data1: -1435807329
+    Data2: 1282824664
+    Data3: 1739503522
+    Data4: -518299120
+  Banks:
+  - {fileID: -4513784106951406516}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2000
 --- !u!114 &-2558496573077115599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1512,12 +1566,14 @@ MonoBehaviour:
   - {fileID: 7147692588666847225}
   - {fileID: 7435714813979766785}
   - {fileID: 5820258102177697155}
+  - {fileID: -2657487596926786352}
+  - {fileID: -8405506213338459480}
   EditorParameters: []
   MasterBanks:
   - {fileID: -8195523702505923715}
   StringsBanks:
   - {fileID: 5092639294113453569}
-  cacheTime: 638845811617691458
+  cacheTime: 638845889038830568
   cacheVersion: 131622
 --- !u!114 &10818181712237557
 MonoBehaviour:
@@ -1615,7 +1671,7 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Enemies.bank
   Name: Enemies
   StudioPath: bank:/Enemies
-  lastModified: 638845811611770797
+  lastModified: 638845869869623535
   FileSizes:
   - Name: Desktop
     Value: 5396704
@@ -1770,10 +1826,10 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Player.bank
   Name: Player
   StudioPath: bank:/Player
-  lastModified: 638845811616890990
+  lastModified: 638845889038830568
   FileSizes:
   - Name: Desktop
-    Value: 1889952
+    Value: 1903456
   Exists: 1
 --- !u!114 &1318553803241570733
 MonoBehaviour:
@@ -1936,7 +1992,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 70
-  Length: 5464
+  Length: 5264
 --- !u!114 &3436491144952579986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2170,10 +2226,10 @@ MonoBehaviour:
   Path: ../FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638844986778347424
+  lastModified: 638845889036064103
   FileSizes:
   - Name: Desktop
-    Value: 5924
+    Value: 6012
   Exists: 1
 --- !u!114 &5153171398601022900
 MonoBehaviour:

@@ -2522,18 +2522,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 7179029444552531254}
-        m_TargetAssemblyTypeName: PlayerSoundsManager, Assembly-CSharp
-        m_MethodName: JumpSound
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
     m_ActionId: f1ba0d36-48eb-4cd5-b651-1c94a6531f70
     m_ActionName: 'Player/Jump[/Keyboard/space]'
   - m_PersistentCalls:
@@ -2678,6 +2666,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7179029444552531254}
+        m_TargetAssemblyTypeName: PlayerSoundsManager, Assembly-CSharp
+        m_MethodName: WeaponChangeSound
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 014bf4dc-f36d-4001-9ad9-7b4e1ad9137d
     m_ActionName: 'Player/ChangeGun[/Keyboard/q]'
   - m_PersistentCalls:
@@ -2685,6 +2685,18 @@ MonoBehaviour:
       - m_Target: {fileID: 5374355282723326770}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: OnMelee
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7179029444552531254}
+        m_TargetAssemblyTypeName: PlayerSoundsManager, Assembly-CSharp
+        m_MethodName: MeleeSound
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4981,7 +4993,7 @@ PrefabInstance:
       objectReference: {fileID: 7651989067049072090}
     - target: {fileID: 7857538833840811330, guid: 3a86f6857b16dda45b04b2520db434cc, type: 3}
       propertyPath: CurrentSecondGunType
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

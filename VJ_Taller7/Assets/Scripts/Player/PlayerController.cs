@@ -96,6 +96,9 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     #endregion
 
+    public delegate void JumpEvent();
+    public event JumpEvent JumpingEvent;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -242,29 +245,23 @@ public class PlayerController : MonoBehaviour
 
         if (context.performed && jumpCount < maxJumps)
         {
-            animator.applyRootMotion = false;
-
-            jumpCount++;
-            animator.SetTrigger("Jump");
-            animator.SetBool("isJumping", true);
-            soundManager.PlaySound("Jump");
-
-            isJumping = true;
-
+            JumpingEvent?.Invoke();
             StartCoroutine(Jump());
         }
     }
 
     private IEnumerator Jump()
     {
+        jumpCount++;
+        isJumping = true;
         jumpVFX.Play();
 
         rb.linearVelocity = Vector3.zero;
-        rb.AddForce((desiredMoveDirection * jumpHorizontalForce) + (jumpVerticalForce * Vector3.up), ForceMode.Impulse);
+        Vector3 force = (desiredMoveDirection.normalized * jumpHorizontalForce) + (jumpVerticalForce * Vector3.up);
+        rb.AddForce(force, ForceMode.Impulse);
 
         yield return new WaitForSeconds(jumpDuration);
 
-        animator.SetBool("isJumping", false);
         isJumping = false;
     }
     #endregion
@@ -429,6 +426,12 @@ public class PlayerController : MonoBehaviour
     {
         get => maxJumps;
         set => maxJumps = value;
+    }
+
+    public float JumpDuration
+    {
+        get => jumpDuration;
+        set => jumpDuration = value;
     }
 
     public float PlayerSpeed
