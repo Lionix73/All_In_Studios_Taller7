@@ -31,6 +31,7 @@ public class PlayerAnimations : MonoBehaviour
         SelectGunType();
 
         _playerController.JumpingEvent += JumpAnimation;
+        _playerController.MeleeAttackEvent += MeleeAnimation;
         _gunManager.ReloadEvent += ReloadAnimation;
     }
 
@@ -231,7 +232,7 @@ public class PlayerAnimations : MonoBehaviour
     }
     #endregion
 
-    #region Jump
+    #region -----INPUT ACTIONS-----
     private void JumpAnimation()
     {
         StartCoroutine(Jumping());
@@ -246,6 +247,11 @@ public class PlayerAnimations : MonoBehaviour
         yield return new WaitForSeconds(_playerController.JumpDuration);
 
         animator.SetBool("isJumping", false);
+    }
+
+    private void MeleeAnimation()
+    {
+        animator.SetTrigger("Melee");
     }
     #endregion
 }

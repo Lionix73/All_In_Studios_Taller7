@@ -1249,18 +1249,6 @@ MonoBehaviour:
     m_ActionName: 'Player/Aim[/Mouse/rightButton]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4074162885070750720}
-        m_TargetAssemblyTypeName: PlayerAnimations, Assembly-CSharp
-        m_MethodName: ReloadAnimation
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 5148926526768909708}
         m_TargetAssemblyTypeName: GunManager, Assembly-CSharp
         m_MethodName: OnReload
@@ -1336,18 +1324,6 @@ MonoBehaviour:
       - m_Target: {fileID: 6746573183159165536}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: OnMelee
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 4045626260707534013}
-        m_TargetAssemblyTypeName: PlayerSoundsManager, Assembly-CSharp
-        m_MethodName: MeleeSound
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2201,7 +2177,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3.36, y: 3.24, z: 3.06}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5312625763831057041}
@@ -2240,6 +2216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 30
+  activeWindow: 1.2
 --- !u!1 &3443416757472886787
 GameObject:
   m_ObjectHideFlags: 0

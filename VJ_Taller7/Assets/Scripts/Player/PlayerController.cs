@@ -3,8 +3,6 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Animations.Rigging;
-using FMOD;
-
 
 public class PlayerController : MonoBehaviour
 {
@@ -88,27 +86,31 @@ public class PlayerController : MonoBehaviour
     #region Private Components
     private PlayerInput playerInput;
     private GunManager gunManager;
-    private ThisObjectSounds soundManager;
     private CheckTerrainHeight checkTerrainHeight;
-    private Animator animator;
-    private Health health;
     private Rig rig;
     private Rigidbody rb;
+    private Melee melee;
     #endregion
 
+    #region Events
     public delegate void JumpEvent();
     public event JumpEvent JumpingEvent;
+
+    public delegate void MeleeEvent();
+    public event MeleeEvent MeleeAttackEvent;
+
+    public delegate void SlideEvent();
+    public event SlideEvent SlidingEvent;
+    #endregion
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         gunManager = FindAnyObjectByType<GunManager>();
-        soundManager = GetComponent<ThisObjectSounds>();
         checkTerrainHeight = GetComponent<CheckTerrainHeight>();
-        animator = GetComponent<Animator>();
-        health = GetComponent<Health>();
         rig = GetComponentInChildren<Rig>();
+        melee = GetComponentInChildren<Melee>();
     }
 
     private void Start()
@@ -213,9 +215,10 @@ public class PlayerController : MonoBehaviour
         }
 
     }
-    public void SetAimFOV(float gunAimFOV){
+    public void SetAimFOV(float gunAimFOV)
+    {
         aimFOV = gunAimFOV;
-        UnityEngine.Debug.Log(gunAimFOV);
+        //Debug.Log(gunAimFOV);
     }
     #endregion
 
@@ -224,15 +227,23 @@ public class PlayerController : MonoBehaviour
     /// Ajusta los rigs que se tienen para el agarre del arma
     /// con la otra mano y el punto donde se apunta
     /// </summary>
-    private void AdjustRigs(){
+    private void AdjustRigs()
+    {
         if (aimRig==null || gripRig == null) return;
-        else if (wasAiming){
+
+        else if (wasAiming)
+        {
             aimRig.weight=1.0f;
             gripRig.weight = 1.0f;
         }
-        else {aimRig.weight=0; gripRig.weight = 0.5f;}
+        else 
+        {
+            aimRig.weight=0; 
+            gripRig.weight = 0.5f;
+        }
 
-        if (moveInput.magnitude!=0){
+        if (moveInput.magnitude!=0)
+        {
             aimRig.weight = 1.0f;
         }
     }
@@ -271,18 +282,16 @@ public class PlayerController : MonoBehaviour
     {
         if(context.performed && canMelee)
         {
+            MeleeAttackEvent?.Invoke();
             StartCoroutine(Melee());
         }
     }
 
     private IEnumerator Melee()
     {
-        animator.SetTrigger("Melee");
-        Melee melee = GetComponentInChildren<Melee>();
-
         canMelee = false;
         melee.ActivateMelee();
-        yield return new WaitForSeconds(1.1f);
+        yield return new WaitForSeconds(melee.MeleeWindow);
         canMelee = true;
         melee.DeactivateMelee();
     }
@@ -299,7 +308,7 @@ public class PlayerController : MonoBehaviour
 
             if(isRunning && canSlide && !isSliding)
             {
-                soundManager.PlaySound("Slide");
+                SlidingEvent?.Invoke();
                 StartCoroutine(Slide());
             }
 
@@ -313,15 +322,7 @@ public class PlayerController : MonoBehaviour
 
         isSliding = true;
         canSlide = false;
-
-        //yield return new WaitForSeconds(slideDuration);
-        float timer = 0f;
-        while (timer < slideDuration)
-        {
-            soundManager.StopSound("Run");
-            timer += Time.deltaTime;
-            yield return null;
-        }
+        yield return new WaitForSeconds(slideDuration);
 
         isSliding = false;
         isCrouching = false;
@@ -356,98 +357,46 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region -----Getters Setters-----
-    public bool PlayerCanMove
-    {
-        get => canMove;
-        set => canMove = value;
-    }
+    #region Bools
+    public bool PlayerCanMove { get => canMove; set => canMove = value; }
 
-    public bool PlayerIsMoving
-    {
-        get => isMoving;
-        set => isMoving = value;
-    }
+    public bool PlayerIsMoving { get => isMoving; set => isMoving = value; }
 
-    public bool PlayerIsEmoting
-    {
-        get => isEmoting;
-        set => isEmoting = value;
-    }
+    public bool PlayerIsEmoting { get => isEmoting; set => isEmoting = value; }
 
-    public bool PlayerIsJumping
-    {
-        get => isJumping;
-        set => isJumping = value;
-    }
+    public bool PlayerIsJumping { get => isJumping; set => isJumping = value; }
 
-    public int JumpCount
-    {
-        get => jumpCount;
-        set => jumpCount = value;
-    }
+    public bool PlayerIsRunning { get => isRunning; set => isRunning = value; }
 
-    public bool PlayerIsRunning
-    {
-        get => isRunning;
-        set => isRunning = value;
-    }
+    public bool PlayerIsCrouching { get => isCrouching; set => isCrouching = value; }
 
-    public bool PlayerIsCrouching
-    {
-        get => isCrouching;
-        set => isCrouching = value;
-    }
+    public bool PlayerIsSliding { get => isSliding; set => isSliding = value; }
 
-    public bool PlayerIsSliding
-    {
-        get => isSliding;
-        set => isSliding = value;
-    }
+    public bool PlayerInGround { get => checkTerrainHeight.isGrounded; set => checkTerrainHeight.isGrounded = value; }
 
-    public bool PlayerInGround
-    {
-        get => checkTerrainHeight.isGrounded;
-        set => checkTerrainHeight.isGrounded = value;
-    }
+    public bool PlayerCanJump { get => playerAllowedToJump; set => playerAllowedToJump = value; }
 
-    public bool PlayerCanJump
-    {
-        get => playerAllowedToJump;
-        set => playerAllowedToJump = value;
-    }
+    public bool PlayerIsAiming { get => isAiming; set => isAiming = value; }
+    #endregion
 
-    public bool PlayerIsAiming
-    {
-        get => isAiming;
-        set => isAiming = value;
-    }
+    #region Ints
+    public int JumpCount { get => jumpCount; set => jumpCount = value; }
 
-    public int MaxJumps
-    {
-        get => maxJumps;
-        set => maxJumps = value;
-    }
+    public int MaxJumps { get => maxJumps; set => maxJumps = value; }
+    #endregion
 
-    public float JumpDuration
-    {
-        get => jumpDuration;
-        set => jumpDuration = value;
-    }
+    #region Floats
+    public float JumpDuration { get => jumpDuration; set => jumpDuration = value; }
 
-    public float PlayerSpeed
-    {
-        get => speed;
-        set => speed = value;
-    }
+    public float SlideDuration { get => slideDuration; set => slideDuration = value; }
 
-    public Vector2 MovementDirection
-    {
-        get => desiredMoveDirection;
-    }
+    public float PlayerSpeed { get => speed; set => speed = value; }
+    #endregion
 
-    public Vector2 MovInput
-    {
-        get => moveInput;
-    }
+    #region Vectors
+    public Vector2 MovementDirection { get => desiredMoveDirection; }
+
+    public Vector2 MovInput { get => moveInput; }
+    #endregion
     #endregion
 }

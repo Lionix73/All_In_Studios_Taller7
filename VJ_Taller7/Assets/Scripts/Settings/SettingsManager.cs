@@ -15,20 +15,21 @@ public class SettingsManager : MonoBehaviour
     public static SettingsManager Singleton
     {
         get => _singleton;
-
-        set
-        {
-            if (_singleton == null)
-            {
-                _singleton = value;
-                DontDestroyOnLoad(value);
-            }
-        }
+        set => _singleton = value;
     }
 
     private void Awake()
     {
-        Singleton = this;
+        if (Singleton == null)
+        {
+            Singleton = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
 
         SensibilityGainX = defaultSensiX;
         SensibilityGainY = defaultSensiY;

@@ -3,6 +3,15 @@ using UnityEngine;
 public class Melee : MonoBehaviour
 {
     [SerializeField] private int damage;
+    
+    [SerializeField][Tooltip("Amount of time the collider of the melee is active")]
+    private float activeWindow = 1f;
+
+    public float MeleeWindow
+    {
+        get => activeWindow; set => activeWindow = value;
+    }
+
     private BoxCollider gunCollider;
 
     public void Start()

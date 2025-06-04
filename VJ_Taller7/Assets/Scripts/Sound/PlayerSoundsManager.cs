@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.ProBuilder;
 
 public class PlayerSoundsManager : MonoBehaviour
 {
@@ -20,6 +19,8 @@ public class PlayerSoundsManager : MonoBehaviour
     {
         _gunManager.ReloadEvent += ReloadingFeedback;
         _playerController.JumpingEvent += JumpSound;
+        _playerController.MeleeAttackEvent += MeleeSound;
+        _playerController.SlidingEvent += SlideSound;
     }
 
     private void Update()
@@ -189,15 +190,29 @@ public class PlayerSoundsManager : MonoBehaviour
         }
     }
 
-    public void MeleeSound(InputAction.CallbackContext context)
+    private void MeleeSound()
     {
-        if (context.performed)
+        soundManager.PlaySound("Melee");
+    }
+
+    private void SlideSound()
+    {
+        soundManager.PlaySound("Slide");
+        StartCoroutine(Sliding());
+    }
+
+    private IEnumerator Sliding()
+    {
+        float timer = 0f;
+        while (timer < _playerController.SlideDuration)
         {
-            soundManager.PlaySound("Melee");
+            soundManager.StopSound("Run");
+            timer += Time.deltaTime;
+            yield return null;
         }
     }
 
-    public void JumpSound()
+    private void JumpSound()
     {
         soundManager.StopSound("Walk", "Run");
         soundManager.PlaySound("Jump");
