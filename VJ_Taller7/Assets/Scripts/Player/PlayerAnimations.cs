@@ -59,6 +59,7 @@ public class PlayerAnimations : MonoBehaviour
         animator.SetBool("isRunning", _playerController.PlayerIsRunning);
         animator.SetBool("isCrouching", _playerController.PlayerIsCrouching);
         animator.SetBool("isSliding", _playerController.PlayerIsSliding);
+        animator.SetBool("isAiming", _playerController.PlayerIsAiming);
         _playerController.PlayerIsEmoting = animator.GetBool("isEmoting");
 
         animator.SetFloat("SpeedX", speedX.CurrentValue);
@@ -103,9 +104,9 @@ public class PlayerAnimations : MonoBehaviour
     private void UpdateAnimLayer()
     {
         animator.SetLayerWeight(animationLayerToShow, layersDampener1.TargetValue == 1 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
-        int layersAmount = animator.GetLayerIndex("Aim");
+        int layersAmount = animator.GetLayerIndex("Fire");
 
-        for (int i = 0; i <= layersAmount; i++)
+        for (int i = 0; i < layersAmount; i++)
         {
             if (i != animationLayerToShow && animator.GetLayerWeight(i) > 0.05f)
             {
@@ -121,18 +122,48 @@ public class PlayerAnimations : MonoBehaviour
 
     private int SelectAnimLayer()
     {
-        if (_gunManager.CurrentGun.Type == GunType.BasicPistol || _gunManager.CurrentGun.Type == GunType.Revolver)
+        switch (_gunManager.CurrentGun.Type)
         {
-            return _playerController.PlayerIsAiming ? 2 : 1;
-        }
-        else
-        {
-            return _playerController.PlayerIsAiming ? 2 : 0;
+            case GunType.Rifle:
+                return 0;
+
+            case GunType.BasicPistol:
+                return 1;
+
+            case GunType.Revolver:
+                return 1;
+
+            case GunType.Shotgun:
+                return 0;
+
+            case GunType.Sniper:
+                return 0;
+
+            case GunType.ShinelessFeather:
+                return 0;
+
+            case GunType.GoldenFeather:
+                return 0;
+
+            case GunType.GranadeLaucher:
+                return 0;
+
+            case GunType.AncientTome:
+                return 0;
+
+            case GunType.Crossbow:
+                return 0;
+
+            case GunType.MysticCanon:
+                return 0;
+            
+            default: 
+                return 0;
         }
     }
     #endregion
 
-    #region Guns
+    #region -----GUNS-----
     private void SelectGunType()
     {
         switch (_gunManager.CurrentGun.Type)
@@ -182,7 +213,6 @@ public class PlayerAnimations : MonoBehaviour
                 break;
         }
     }
-    #endregion
 
     public void WeaponChangeAnimation(InputAction.CallbackContext context)
     {
@@ -199,7 +229,9 @@ public class PlayerAnimations : MonoBehaviour
         animator.SetBool("ShootBurst", false);
         animator.SetTrigger("Reload");
     }
+    #endregion
 
+    #region Jump
     private void JumpAnimation()
     {
         StartCoroutine(Jumping());
@@ -215,4 +247,5 @@ public class PlayerAnimations : MonoBehaviour
 
         animator.SetBool("isJumping", false);
     }
+    #endregion
 }

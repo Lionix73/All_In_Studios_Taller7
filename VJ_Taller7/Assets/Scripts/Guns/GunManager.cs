@@ -105,7 +105,6 @@ public class GunManager : MonoBehaviour
             RealoadGun();
         }
 
-
         if (ammunitionDisplay != null) {
             ammunitionDisplay.SetText(CurrentGun.BulletsLeft + "/" + CurrentGun.MagazineSize);
         }
@@ -188,9 +187,10 @@ public class GunManager : MonoBehaviour
             shooting=true;
         else if (!CurrentGun.ShootConfig.IsAutomatic) shooting = context.started;
 
-        if (context.canceled && CurrentGun.ShootConfig.IsAutomatic){
-            shooting = false; StopFeedback();
-            //Debug.Log("Fase: " + shooting);
+        if (context.canceled && CurrentGun.ShootConfig.IsAutomatic)
+        {
+            shooting = false;
+            StopFeedback();
         }
     }
 
@@ -322,7 +322,6 @@ public class GunManager : MonoBehaviour
         if(shooting) shooting = false;
         canShoot = false;
         yield return new WaitForSeconds(delay);
-        StopFeedback();
         canShoot = true;
     }
 
@@ -378,7 +377,8 @@ public class GunManager : MonoBehaviour
     {
         playerAnimator.SetBool("ShootBurst", false);
 
-        soundManager.StopSound("rifleReload", "pistolReload", "revolverReload", "shotgunReload", "sniperReload");
+        //soundManager.StopSound("rifleReload", "pistolReload", "revolverReload", "shotgunReload", "sniperReload");
+        soundManager.StopSound("rifleFire");
     }
 
     public void CheckZoomIn(){
