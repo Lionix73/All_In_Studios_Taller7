@@ -18,7 +18,7 @@ public class ChangeSens : MonoBehaviour
     private void Start()
     {
         if (vertical)
-            slider.value = settingsManager.defaultSensiY;
+            slider.value = Mathf.Abs(settingsManager.defaultSensiY);
         else
             slider.value = settingsManager.defaultSensiX;
     }

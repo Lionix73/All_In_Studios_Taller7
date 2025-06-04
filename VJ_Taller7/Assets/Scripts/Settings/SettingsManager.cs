@@ -3,7 +3,7 @@ using UnityEngine;
 public class SettingsManager : MonoBehaviour
 {
     public float defaultSensiX = 5f;
-    public float defaultSensiY = 2f;
+    public float defaultSensiY = -2f;
 
     public float SensibilityGainX { get; set; }
     public float SensibilityLegacyGainX { get; set; }

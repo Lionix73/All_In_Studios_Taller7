@@ -87,6 +87,9 @@
 		</relationship>
 	</object>
 	<object class="SingleSound" id="{437b85a3-807b-4538-a9e4-dcc3fb3ae0cd}">
+		<property name="start">
+			<value>0.02</value>
+		</property>
 		<property name="length">
 			<value>0.38</value>
 		</property>
@@ -94,7 +97,7 @@
 			<value>0.49999999999999978</value>
 		</property>
 		<property name="volume">
-			<value>-3</value>
+			<value>-17</value>
 		</property>
 		<relationship name="fadeInCurve">
 			<destination>{de69bf07-784f-4244-adc0-02421a715045}</destination>
@@ -180,7 +183,11 @@
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{002481af-b91b-471d-9fd3-e94eab86e8e3}" />
-	<object class="SpatialiserEffect" id="{94f1ec39-bc8e-4303-b196-0d35bf1a9e5c}" />
+	<object class="SpatialiserEffect" id="{94f1ec39-bc8e-4303-b196-0d35bf1a9e5c}">
+		<property name="bypass">
+			<value>true</value>
+		</property>
+	</object>
 	<object class="SFXReverbEffect" id="{0e0ff0c0-1be1-4e56-bc7d-436e4edd1083}">
 		<property name="density">
 			<value>31.5</value>
@@ -191,7 +198,7 @@
 	</object>
 	<object class="AutomationPoint" id="{24a0a1df-bf73-45e1-b07d-d8fbf24b678e}">
 		<property name="position">
-			<value>0</value>
+			<value>0.02</value>
 		</property>
 		<property name="value">
 			<value>0</value>
@@ -202,7 +209,7 @@
 	</object>
 	<object class="AutomationPoint" id="{31c12d6a-4eab-44e5-af81-b9da804a2dda}">
 		<property name="position">
-			<value>0.040000000000000001</value>
+			<value>0.060000000000000005</value>
 		</property>
 		<property name="value">
 			<value>1</value>
@@ -210,7 +217,7 @@
 	</object>
 	<object class="AutomationPoint" id="{14498612-aedb-469d-91db-5e0938b57f8f}">
 		<property name="position">
-			<value>0.34000000000000002</value>
+			<value>0.36000000000000004</value>
 		</property>
 		<property name="value">
 			<value>1</value>
@@ -221,7 +228,7 @@
 	</object>
 	<object class="AutomationPoint" id="{3955349f-a0a2-45fe-83ed-1f0e31a88b06}">
 		<property name="position">
-			<value>0.37999999999999989</value>
+			<value>0.39999999999999991</value>
 		</property>
 		<property name="value">
 			<value>0</value>

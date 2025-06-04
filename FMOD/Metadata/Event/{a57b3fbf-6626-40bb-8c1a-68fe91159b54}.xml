@@ -5,7 +5,7 @@
 			<value>featherHitEnemy</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{ebe39f79-8094-4e3f-b4d5-4d3745719375}</destination>
@@ -71,6 +71,12 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{e00dd89e-5d9b-4a02-a456-a35615baf6f4}">
+		<property name="volume">
+			<value>-2</value>
+		</property>
+		<property name="pitch">
+			<value>2.60000014</value>
+		</property>
 		<relationship name="effectChain">
 			<destination>{8dbee35d-5a6a-49b3-93f8-3f43597e5b1d}</destination>
 		</relationship>
@@ -98,14 +104,12 @@
 	<object class="MixerBusEffectChain" id="{8dbee35d-5a6a-49b3-93f8-3f43597e5b1d}">
 		<relationship name="effects">
 			<destination>{3baa286c-beb1-4178-a74e-fb313219ec5a}</destination>
-			<destination>{fb3dac2c-48af-4be6-92a0-2a5354563b41}</destination>
 			<destination>{81df0950-b9c1-46a6-9c69-97e2e35a7aa9}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{73115a14-aae8-4ee7-9693-b1da6308fab6}" />
 	<object class="MixerBusFader" id="{ed629540-36c6-49b3-a49f-3e62cff680d7}" />
 	<object class="MixerBusFader" id="{3baa286c-beb1-4178-a74e-fb313219ec5a}" />
-	<object class="SpatialiserEffect" id="{fb3dac2c-48af-4be6-92a0-2a5354563b41}" />
 	<object class="SFXReverbEffect" id="{81df0950-b9c1-46a6-9c69-97e2e35a7aa9}">
 		<property name="density">
 			<value>31.5</value>
