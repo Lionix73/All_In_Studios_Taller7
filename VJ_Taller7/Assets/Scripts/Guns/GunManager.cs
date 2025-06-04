@@ -98,11 +98,6 @@ public class GunManager : MonoBehaviour
         {
             RealoadGun();
         }
-        else
-        {
-            // No bullets left
-            soundManager.PlaySound("EmptyMAG");
-        }
 
 
         if (ammunitionDisplay != null) {
@@ -191,8 +186,6 @@ public class GunManager : MonoBehaviour
             shooting = false; StopFeedback();
             //Debug.Log("Fase: " + shooting);
         }
-
-        if (context.started) ShootingFeedback();
     }
 
     public void OnWeaponChange(InputAction.CallbackContext context){
@@ -408,34 +401,8 @@ public class GunManager : MonoBehaviour
         Gizmos.DrawWireSphere(dondePegaElRayDelArma, 0.3f);
     }
 
-    private void ShootingFeedback(){
-        if (CurrentGun.bulletsLeft < 1) return;
-        switch (CurrentGun.Type)
-        {
-            case GunType.Rifle:
-
-                playerAnimator.SetBool("ShootBurst", true);
-                break;
-            case GunType.BasicPistol:
-
-                playerAnimator.SetTrigger("ShootOnce");
-                break;
-            case GunType.Revolver:
-
-                playerAnimator.SetTrigger("ShootOnce");
-                break;
-            case GunType.Shotgun:
-
-                playerAnimator.SetTrigger("ShootOnce");
-                break;
-            case GunType.Sniper:
-
-                playerAnimator.SetTrigger("ShootOnce");
-                break;
-        }
-    }
-    private void StopFeedback(){
-        soundManager.StopSound("rifleFire");
+    private void StopFeedback()
+    {
         playerAnimator.SetBool("ShootBurst", false);
 
         soundManager.StopSound("rifleReload", "pistolReload", "revolverReload", "shotgunReload", "sniperReload");

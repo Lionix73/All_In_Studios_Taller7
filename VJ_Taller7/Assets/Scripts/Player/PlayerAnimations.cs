@@ -191,6 +191,7 @@ public class PlayerAnimations : MonoBehaviour
 
     public void ReloadAnimation(InputAction.CallbackContext context)
     {
+        if (_gunManager.CurrentGun.BulletsLeft <= 0) return;
         //if (_gunManager.CurrentGun.Realoading) return;
         if (_gunManager.CurrentGun.Type == GunType.ShinelessFeather) return;
 

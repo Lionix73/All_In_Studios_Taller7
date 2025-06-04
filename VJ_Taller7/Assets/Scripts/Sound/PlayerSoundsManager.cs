@@ -1,3 +1,4 @@
+using FMODUnity;
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -19,6 +20,8 @@ public class PlayerSoundsManager : MonoBehaviour
     private void Update()
     {
         MovSounds();
+
+        if(gunManager.CurrentGun.bulletsLeft < 1) soundManager.StopSound("rifleFire");
     }
 
     private void MovSounds()
@@ -61,7 +64,7 @@ public class PlayerSoundsManager : MonoBehaviour
         if (context.performed && _playerController.JumpCount < _playerController.MaxJumps + 1)
         {
             soundManager.StopSound("Walk", "Run");
-            soundManager.PlaySound("Jump");
+            //soundManager.PlaySound("Jump");
         }
     }
 
@@ -72,7 +75,13 @@ public class PlayerSoundsManager : MonoBehaviour
 
     public void OnShoot(InputAction.CallbackContext context)
     {
-        if (!gunManager.canShoot || !firerateAllowShoot || !_playerController.PlayerCanMove || gunManager.CurrentGun.bulletsLeft < 1) return;
+        if (!gunManager.canShoot || !firerateAllowShoot || !_playerController.PlayerCanMove) return;
+
+        if(gunManager.CurrentGun.bulletsLeft < 1)
+        {
+            soundManager.PlaySound("EmptyMAG");
+            return;
+        }
 
         if (context.started)
         {

@@ -159,6 +159,7 @@ public class EnemyMovement : MonoBehaviour
         if (animator.updateMode != AnimatorUpdateMode.Normal) return;
 
         HandleAnims();
+        HandleSounds();
     }
 
     private void HandleAnims()
@@ -188,6 +189,18 @@ public class EnemyMovement : MonoBehaviour
             animator.SetFloat("Horizontal", speedX.CurrentValue);
             animator.SetFloat("Vertical", speedY.CurrentValue);
         }       
+    }
+
+    private void HandleSounds()
+    {
+        if (agent.hasPath && !agent.isOnOffMeshLink && !agent.isStopped && agent.velocity.magnitude > 0.1f)
+        {
+            soundManager.PlaySound("Move");
+        }
+        else
+        {
+            soundManager.StopSound("Move");
+        }
     }
 
     private void HandleStateChange(EnemyState oldState, EnemyState newState)
@@ -246,7 +259,6 @@ public class EnemyMovement : MonoBehaviour
 
     private IEnumerator DoPatrolMotion()
     {
-
         WaitForSeconds wait = new WaitForSeconds(updateRate);
         
         yield return new WaitUntil(() => agent.isOnNavMesh && agent.enabled);
@@ -290,8 +302,6 @@ public class EnemyMovement : MonoBehaviour
 
     public void StopMovement()
     {
-        soundManager.StopSound("Move");
-
         if (agent != null && agent.enabled)
         {
             StopAllCoroutines();
@@ -308,8 +318,6 @@ public class EnemyMovement : MonoBehaviour
 
     public void ResumeMovement()
     {
-        soundManager.PlaySound("Move");
-
         if (agent != null && agent.enabled)
         {
             agent.isStopped = false;

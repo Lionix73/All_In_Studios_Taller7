@@ -839,13 +839,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 529502198}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15991126, y: 0.021547215, z: -0.0034914142, w: 0.98689}
-  m_LocalPosition: {x: 0.27386236, y: 1.9383096, z: -2.046856}
+  m_LocalRotation: {x: 0.13639113, y: -0.5156516, z: 0.08355387, w: 0.8417361}
+  m_LocalPosition: {x: 1.9180274, y: 0.5, z: -0.6412258}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1798000816}
-  m_Father: {fileID: 543450652409199155}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &529502201
 MonoBehaviour:
@@ -1081,8 +1081,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 762984746}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15991125, y: 0.021547215, z: -0.0034914138, w: 0.9868901}
-  m_LocalPosition: {x: 4.711226, y: 1.9383096, z: -2.402182}
+  m_LocalRotation: {x: 0.13639115, y: -0.5156516, z: 0.08355388, w: 0.8417361}
+  m_LocalPosition: {x: 1.7817541, y: 0.5, z: -0.908489}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1290,7 +1290,7 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 7078722786346378309}
+    TrackingTarget: {fileID: 0}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
@@ -1783,46 +1783,23 @@ MonoBehaviour:
   canMove: 1
   walkSpeed: 2
   runSpeed: 5
-  animator: {fileID: 1332780507}
-  speedX:
-    smoothTime: 0
-  speedY:
-    smoothTime: 0
-  layersDampener1:
-    smoothTime: 0
-  layersDampener2:
-    smoothTime: 0
   slideDuration: 3
   slideCooldown: 0.5
-  dashSpeed: 15
-  dashDuration: 0.2
-  dashCooldown: 1
   maxJumps: 2
   jumpVerticalForce: 10
   jumpHorizontalForce: 5
   jumpDuration: 1.4
-  jumpCooldown: 1
-  SlopeJumpDownforce: 50
-  maxSlopeAngle: 0
-  stepRayLower: {fileID: 0}
-  rb: {fileID: 1332780509}
   playerCollider: {fileID: 1332780508}
   crouchCollider: {fileID: 0}
   cameraTransform: {fileID: 762984747}
   freeLookCamera: {fileID: 762984753}
   slideVFX: {fileID: 0}
   jumpVFX: {fileID: 0}
-  dashVFX: {fileID: 0}
+  camTarget: {fileID: 0}
   currentFOV: 65
   aimFOV: 55
   tFOV: 0.05
   rotationSpeed: 10
-  isGrounded: 0
-  GroundedOffset: -0.14
-  GroundedRadius: 0.28
-  GroundLayers:
-    serializedVersion: 2
-    m_Bits: 0
   aimRig: {fileID: 0}
   gripRig: {fileID: 0}
 --- !u!95 &1332780507
@@ -2853,7 +2830,6 @@ Transform:
   - {fileID: 268055663547778013}
   - {fileID: 2484128539783919900}
   - {fileID: 5465940245524748967}
-  - {fileID: 529502200}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &608321760480344996
@@ -2931,7 +2907,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &919132148206510218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3042,14 +3018,6 @@ MonoBehaviour:
     m_ActionId: f1ba0d36-48eb-4cd5-b651-1c94a6531f70
     m_ActionName: 'Player/Jump[/Keyboard/space]'
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 2776c80d-3c14-4091-8c56-d04ced07a2b0
-    m_ActionName: 'Player/Previous[/Keyboard/1]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba
-    m_ActionName: 'Player/Next[/Keyboard/2]'
-  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1332780506}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
@@ -3122,10 +3090,6 @@ MonoBehaviour:
     m_ActionId: cbd2104c-c1c7-4fbe-82b6-b21ad5ebf8ec
     m_ActionName: 'Player/Aim[/Mouse/rightButton]'
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 1636524e-f6b0-4e9c-8d0e-46517f48edd6
-    m_ActionName: 'Player/Slide[/Keyboard/c,/Keyboard/ctrl]'
-  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2135041847}
         m_TargetAssemblyTypeName: ProjectileGuns, Assembly-CSharp
@@ -3147,10 +3111,6 @@ MonoBehaviour:
     m_ActionName: 'Player/Dash[/Keyboard/f]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 7a190d22-6fd6-4739-a82c-6474fd638490
-    m_ActionName: 'Player/Emote[/Keyboard/t]'
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 014bf4dc-f36d-4001-9ad9-7b4e1ad9137d
     m_ActionName: 'Player/ChangeGun[/Keyboard/q]'
   - m_PersistentCalls:
@@ -3159,12 +3119,12 @@ MonoBehaviour:
     m_ActionName: 'Player/Melee[/Mouse/middleButton]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 1afee5c7-9eaf-4bc1-9f4c-b9fe14732c80
-    m_ActionName: 'Player/Active Skill[/Keyboard/leftAlt]'
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 30b90059-ed83-4820-b016-bb6d0f5a1633
     m_ActionName: 'UI/Emotiza[/Keyboard/tab]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4aaf605b-8538-41b9-8f09-af467af43948
+    m_ActionName: 'Player/StartGame[/Keyboard/e]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -6284,6 +6244,7 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 226903715}
+  - {fileID: 529502200}
   - {fileID: 762984747}
   - {fileID: 543450652409199155}
   - {fileID: 1012613895}

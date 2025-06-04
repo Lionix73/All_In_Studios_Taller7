@@ -1,45 +1,42 @@
 using Unity.Cinemachine;
-using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SensibilitySettings : MonoBehaviour
 {
     private CinemachineInputAxisController axisController;
-    private UIManager uiManager;
-
-    private float lastSensiX;
-    private float lastSensiY;
+    private SettingsManager settingsManager;
 
     private void Awake()
     {
-        uiManager = UIManager.Singleton;
+        settingsManager = SettingsManager.Singleton;
         axisController = GetComponent<CinemachineInputAxisController>();
     }
 
-    private void Update()
+    private void Start()
     {
-        if (lastSensiX == uiManager.SensibilityGainX && lastSensiY == uiManager.SensibilityGainY) return;
-        
-        AdjustSensibility();
+        AdjustSensibility(1);
+
+        foreach (var item in FindObjectsByType<ChangeSens>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            Slider s = item.gameObject.GetComponent<Slider>();
+            s.onValueChanged.AddListener(AdjustSensibility);
+        }
     }
 
-    public void AdjustSensibility()
+    public void AdjustSensibility(float _)
     {
-        lastSensiX = uiManager.SensibilityGainX;
-        lastSensiY = uiManager.SensibilityGainY;
-
         foreach (InputAxisControllerBase<CinemachineInputAxisController.Reader>.Controller c in axisController.Controllers)
         {
             if (c.Name == "Look Orbit X")
             {
-                c.Input.Gain = uiManager.SensibilityGainX;
-                c.Input.LegacyGain = uiManager.SensibilityLegacyGainX;
+                c.Input.Gain = settingsManager.SensibilityGainX;
+                c.Input.LegacyGain = settingsManager.SensibilityLegacyGainX;
             }
             else if (c.Name == "Look Orbit Y")
             {
-                c.Input.Gain = uiManager.SensibilityGainY;
-                c.Input.LegacyGain = uiManager.SensibilityLegacyGainY;
+                c.Input.Gain = settingsManager.SensibilityGainY;
+                c.Input.LegacyGain = settingsManager.SensibilityLegacyGainY;
             }
         }
     }

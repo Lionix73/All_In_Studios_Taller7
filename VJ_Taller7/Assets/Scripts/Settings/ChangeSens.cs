@@ -7,30 +7,38 @@ public class ChangeSens : MonoBehaviour
     [SerializeField] private bool vertical;
     
     private Slider slider;
-    private UIManager uiManager;
+    private SettingsManager settingsManager;
 
     private void Awake()
     {
         slider = GetComponent<Slider>();
-        uiManager = UIManager.Singleton;
+        settingsManager = SettingsManager.Singleton;
+    }
+
+    private void Start()
+    {
+        if (vertical)
+            slider.value = settingsManager.defaultSensiY;
+        else
+            slider.value = settingsManager.defaultSensiX;
     }
 
     public void ChangeSensGain()
     {
         if (!vertical)
         {
-            if (uiManager != null)
+            if (settingsManager != null)
             {
-                uiManager.SensibilityGainX = slider.value;
-                uiManager.SensibilityLegacyGainX = slider.value * 100;
+                settingsManager.SensibilityGainX = slider.value;
+                settingsManager.SensibilityLegacyGainX = slider.value * 100;
             }
         }
         else if (vertical)
         {
-            if (uiManager != null)
+            if (settingsManager != null)
             {
-                uiManager.SensibilityGainY = slider.value * -1;
-                uiManager.SensibilityLegacyGainY = slider.value * -100;
+                settingsManager.SensibilityGainY = slider.value * -1;
+                settingsManager.SensibilityLegacyGainY = slider.value * -100;
             }
         }
     }

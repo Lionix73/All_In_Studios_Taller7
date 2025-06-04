@@ -247,6 +247,8 @@ public class PlayerController : MonoBehaviour
             jumpCount++;
             animator.SetTrigger("Jump");
             animator.SetBool("isJumping", true);
+            soundManager.PlaySound("Jump");
+
             isJumping = true;
 
             StartCoroutine(Jump());
@@ -279,17 +281,13 @@ public class PlayerController : MonoBehaviour
     private IEnumerator Melee()
     {
         animator.SetTrigger("Melee");
-        
-        canMove = false;
+        Melee melee = GetComponentInChildren<Melee>();
+
         canMelee = false;
-
-        GetComponentInChildren<Melee>().ActivateMelee();
-
+        melee.ActivateMelee();
         yield return new WaitForSeconds(1.1f);
-
-        canMove = true;
         canMelee = true;
-        GetComponentInChildren<Melee>().DeactivateMelee();
+        melee.DeactivateMelee();
     }
     #endregion
 
