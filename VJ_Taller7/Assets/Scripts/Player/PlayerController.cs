@@ -34,9 +34,6 @@ public class PlayerController : MonoBehaviour
 
     [Header("Camera Settings")]
     [SerializeField] private Transform camTarget;
-    [SerializeField] private float currentFOV = 65;
-    [SerializeField] private float aimFOV = 55;
-    [SerializeField] private float tFOV = 1;
     [SerializeField] private float rotationSpeed = 10f;
 
     [Header("Rigs")]
@@ -56,20 +53,20 @@ public class PlayerController : MonoBehaviour
 
     #region Private Bools
     private bool wasAiming;
-    private bool isRunning = false;
-    private bool isCrouching = false;
-    private bool isSliding = false;
+    private bool isRunning;
+    private bool isCrouching;
+    private bool isSliding;
     private bool canSlide = true;
     private bool canCrouch = true;
     private bool canJump = true;
     private bool playerAllowedToJump = true;
-    private bool isEmoting = false;
-    private bool isAiming = false;
+    private bool isEmoting;
+    private bool isAiming;
     private bool isMoving;
     private bool usingRifle = true;
     private bool isJumping;
     private bool wasOnGround;
-    private bool isDashing = false;
+    private bool isDashing;
     private bool canDash = true;
     private bool canMelee = true;
     private bool canShoot = true;
@@ -87,6 +84,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private GunManager gunManager;
     private CheckTerrainHeight checkTerrainHeight;
+    private FOVHandler fov;
     private Rig rig;
     private Rigidbody rb;
     private Melee melee;
@@ -111,6 +109,7 @@ public class PlayerController : MonoBehaviour
         checkTerrainHeight = GetComponent<CheckTerrainHeight>();
         rig = GetComponentInChildren<Rig>();
         melee = GetComponentInChildren<Melee>();
+        fov = GetComponent<FOVHandler>();
     }
 
     private void Start()
@@ -124,7 +123,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        AdjustFOV();
+        PlayerAiming();
         AdjustRigs();
     }
 
@@ -189,7 +188,22 @@ public class PlayerController : MonoBehaviour
         if (context.started) gunManager.CheckZoomIn();
         if (context.canceled) gunManager.CheckZoomOut();
     }
-    
+
+    public void PlayerAiming()
+    {
+        if (aimInput > 0.1f)
+        {
+            fov.AimFOV();
+            wasAiming = true;
+            isRunning = false;
+        }
+        else if (aimInput < 0.05f && wasAiming)
+        {
+            fov.NormalFOV();
+            wasAiming = false;
+        }
+    }
+
     public void OnRun(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -198,29 +212,6 @@ public class PlayerController : MonoBehaviour
             isCrouching = false;
         }
     }
-
-    #region -----FOV-----
-    public void AdjustFOV()
-    {
-        if (aimInput > 0.1f)
-        {
-            freeLookCamera.Lens.FieldOfView = Mathf.Lerp(aimFOV, currentFOV, tFOV);
-            wasAiming = true;
-            isRunning = false;
-        }
-        else if (aimInput == 0 && wasAiming == true)
-        {
-            freeLookCamera.Lens.FieldOfView = Mathf.Lerp(currentFOV, aimFOV, tFOV);
-            wasAiming = false;
-        }
-
-    }
-    public void SetAimFOV(float gunAimFOV)
-    {
-        aimFOV = gunAimFOV;
-        //Debug.Log(gunAimFOV);
-    }
-    #endregion
 
     #region -----Adjust Rigs-----
     /// <summary>
@@ -377,6 +368,8 @@ public class PlayerController : MonoBehaviour
     public bool PlayerCanJump { get => playerAllowedToJump; set => playerAllowedToJump = value; }
 
     public bool PlayerIsAiming { get => isAiming; set => isAiming = value; }
+
+    public bool PlayerWasAiming { get => wasAiming; set => wasAiming = value; }
     #endregion
 
     #region Ints

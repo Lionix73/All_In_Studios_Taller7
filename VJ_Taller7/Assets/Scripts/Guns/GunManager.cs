@@ -138,7 +138,7 @@ public class GunManager : MonoBehaviour
         crosshairManager.SetCrosshairImage(CurrentGun.CrosshairImage);
 
         if (player!= null)
-        player.SetAimFOV(CurrentGun.aimFov);
+        player.gameObject.GetComponent<FOVHandler>().SetAimFOV(CurrentGun.aimFov);
 
         Debug.Log($"Zoom set to: {CurrentGun.aimFov}");
     }

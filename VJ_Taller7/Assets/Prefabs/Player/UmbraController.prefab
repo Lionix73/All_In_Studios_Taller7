@@ -761,6 +761,7 @@ GameObject:
   - component: {fileID: 4074162885070750720}
   - component: {fileID: 6746573183159165536}
   - component: {fileID: 8834524075110823324}
+  - component: {fileID: 4328760497901184189}
   - component: {fileID: 4045626260707534013}
   - component: {fileID: 5397145135221162187}
   - component: {fileID: 5775372356692187957}
@@ -942,9 +943,6 @@ MonoBehaviour:
   slideVFX: {fileID: 2065159594767801565}
   jumpVFX: {fileID: 8470606784871313049}
   camTarget: {fileID: 5342781938661206311}
-  currentFOV: 65
-  aimFOV: 55
-  tFOV: 0.001
   rotationSpeed: 10
   aimRig: {fileID: 4468059767758155451}
   gripRig: {fileID: 9186655726205670463}
@@ -971,6 +969,22 @@ MonoBehaviour:
   maxSlopeAngle: 45
   SlopeJumpDownforce: 50
   playerCollider: {fileID: 1914418167501450766}
+--- !u!114 &4328760497901184189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937287128208277315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6210cc90dab62b43ad2ddadfed65567, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  normalFOV: 65
+  aimFOV: 55
+  timeToAim:
+    smoothTime: 0.1
 --- !u!114 &4045626260707534013
 MonoBehaviour:
   m_ObjectHideFlags: 0
