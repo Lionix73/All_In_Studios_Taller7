@@ -50,8 +50,10 @@ public class GunScriptableObject : ScriptableObject {
     public ObjectPool<Bullet> SFeatherPool;
 
     public Vector3 dondePegaElRayoPaDisparar;
+    private HitFeedback hitFeedback;
 
-    private void Awake() {
+    private void Awake() 
+    {
         bulletsLeft = MagazineSize;
     }
 
@@ -77,6 +79,7 @@ public class GunScriptableObject : ScriptableObject {
         activeCamera = camera;
 
         ShootSystem = Model.GetComponentInChildren<ParticleSystem>();
+        hitFeedback = FindFirstObjectByType<HitFeedback>();
     }
 
     public void DeSpawn(){
@@ -97,7 +100,6 @@ public class GunScriptableObject : ScriptableObject {
         if (Time.time > ShootConfig.FireRate + LastShootTime && bulletsLeft > 0 && !realoading){
             LastShootTime = Time.time;
             ShootSystem.Play(); 
-            ActiveMonoBehaviour.StartCoroutine(ShootingFeedback());
             bulletsLeft -= ShootConfig.BulletsPerShot;
 
             for (int i = 0; i < ShootConfig.BulletsPerShot; i++){
@@ -150,13 +152,15 @@ public class GunScriptableObject : ScriptableObject {
             if (hit.collider.TryGetComponent(out IDamageable enemy))
             {
                 enemy.TakeDamage(Damage);
+
+                hitFeedback.ShowHitMarker();
             }
             else if (hit.collider.TryGetComponent(out EnemyHealthMulti enemyM))
             {
                 enemyM.TakeDamageRpc(Damage);
 
             }
-            }
+        }
         else
         {
             ActiveMonoBehaviour.StartCoroutine(PlayTrail(
@@ -176,6 +180,7 @@ public class GunScriptableObject : ScriptableObject {
                  );
         return origin;
     }
+
     public Vector3 GetGunForward(){
         return Model.transform.forward;
     }
@@ -294,8 +299,10 @@ public class GunScriptableObject : ScriptableObject {
 
             if (colliderHit.gameObject.layer != LayerMask.NameToLayer("Enemy")) return;
 
-            if (colliderHit.TryGetComponent(out IDamageable enemy)){
+            if (colliderHit.TryGetComponent(out IDamageable enemy))
+            {
                 enemy.TakeDamage(Damage);
+                hitFeedback.ShowHitMarker();
             }
             else if(colliderHit.TryGetComponent(out EnemyHealthMulti enemyM))
             {
@@ -341,36 +348,6 @@ public class GunScriptableObject : ScriptableObject {
         return Instantiate(ShootConfig.BulletPrefab);
     }
 
-    private IEnumerator ShootingFeedback(){
-        yield return null;
-        //SoundManager soundManager = FindFirstObjectByType<SoundManager>();
-        //switch(Type)
-        //    {
-        //        case GunType.Rifle:
-        //            soundManager.PlaySound("rifleFire");
-                    
-        //            break;
-        //        case GunType.BasicPistol:
-        //            soundManager.PlaySound("pistolFire");
-                   
-        //            break;
-        //        case GunType.Revolver:
-        //            soundManager.PlaySound("revolverFire");
-                    
-        //            break;
-        //        case GunType.Shotgun:
-        //            soundManager.PlaySound("shotgunFire");
-                   
-        //            break;
-        //        case GunType.Sniper:
-        //            soundManager.PlaySound("sniperFire");
-                    
-        //            break;
-        //    }
-        //    yield return new WaitForSeconds(ShootConfig.FireRate);
-        //    //StopFeedback();
-    }
-
     ///<summary>
     ///Funcion de copia manual, asignar valores del objeto general a una instancia nueva
     ///evita errores de referencias compartidas.
@@ -380,7 +357,6 @@ public class GunScriptableObject : ScriptableObject {
     ///      pero no tengo idea real de como funciona. aunque si siguen los saltos que da
     ///      todo tiene sentido...
     ///</summary>
-
     public object Clone() {
         GunScriptableObject clone = CreateInstance<GunScriptableObject>();
 

@@ -63,9 +63,10 @@ public class BulletEnemie : PoolableObject
             bulletCollisionEffect.SetActive(true);
         }
 
-        if (other.TryGetComponent<IDamageable>(out damageable))
+        if (other.TryGetComponent(out damageable))
         {
             // SONIDO golpeo Jugador/emigo, cosa damageable
+
             damageable.TakeDamage(damage);
         }
         else

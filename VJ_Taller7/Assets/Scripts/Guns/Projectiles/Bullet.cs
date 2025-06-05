@@ -18,7 +18,7 @@ public class Bullet : MonoBehaviour {
 
     public delegate void ColisionEvent(Bullet Bullet, Collision collision);
     public event ColisionEvent OnCollision;
-     public delegate void EndBulletEvent(Bullet Bullet, Collision collision);
+    public delegate void EndBulletEvent(Bullet Bullet, Collision collision);
     public event EndBulletEvent OnBulletEnd;
 
 
@@ -42,6 +42,7 @@ public class Bullet : MonoBehaviour {
     }
     public virtual void OnCollisionEnter(Collision other) {
         ImpactEffect(other);
+        Debug.Log("bala hizo dano");
 
         InvokeCollisionEvent(other);
         objectPenetrated++;
@@ -59,7 +60,8 @@ public class Bullet : MonoBehaviour {
         }
     }
 
-    protected void InvokeCollisionEvent(Collision other){
+    protected void InvokeCollisionEvent(Collision other)
+    {
         OnCollision?.Invoke(this, other);
     }
 

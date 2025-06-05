@@ -2026,6 +2026,37 @@ Transform:
   - {fileID: 1009350104998244369}
   m_Father: {fileID: 8232556901832933770}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4930042111321788967
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5139932971030815211}
+  m_Layer: 0
+  m_Name: ShoulderTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5139932971030815211
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4930042111321788967}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.6141115, y: 0.35095826, z: 0.35095832, w: 0.6136152}
+  m_LocalPosition: {x: 0.034999978, y: 0.343, z: 0.06299925}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1498411135652957107}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5042039936779156767
 GameObject:
   m_ObjectHideFlags: 0
@@ -2289,7 +2320,7 @@ MonoBehaviour:
   freeLookCamera: {fileID: 0}
   slideVFX: {fileID: 2065159594767801565}
   jumpVFX: {fileID: 8470606784871313049}
-  camTarget: {fileID: 1498411135652957107}
+  camTarget: {fileID: 5139932971030815211}
   currentFOV: 65
   aimFOV: 55
   tFOV: 0.001
@@ -3079,6 +3110,7 @@ Transform:
   m_LocalScale: {x: 0.9999999, y: 0.99999994, z: 0.9999998}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5139932971030815211}
   - {fileID: 1421389747942723376}
   m_Father: {fileID: 8778740525108030868}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

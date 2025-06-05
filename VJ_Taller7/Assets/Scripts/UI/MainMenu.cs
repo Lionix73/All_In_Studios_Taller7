@@ -131,6 +131,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private List<GameObject> playerNameText = new List<GameObject>();
     [SerializeField] private GameObject UIWaves;
 
+    [SerializeField] private TextMeshProUGUI currentWaveText;
+    [SerializeField] private TextMeshProUGUI currentRoundText;
+
     private string playerNameProfile;
 
     private ThisObjectSounds soundManager;
@@ -515,10 +518,10 @@ public class UIManager : MonoBehaviour
         UiEnemyCounter.text = "";
         Dialogue roundDialogue = UiRoundCounter.GetComponent<Dialogue>();
         roundDialogue.Lines[0] = $"RONDA {currentRound}";
+        currentRoundText.text = $"{currentRound}";
         roundDialogue.Delays[0] = (roundDialogue.TextSpeed * 9);
         roundDialogue.StartDialogue();
         actualRoundDisplay = false;
-
     }
 
     public void UIChangeImageRound(int currentRound)
@@ -611,6 +614,7 @@ public class UIManager : MonoBehaviour
     public void UIActualWave(int currentWave)
     {
         UiWaveCounter.text = $"Oleada: {currentWave} /3";
+        currentWaveText.text = $"{currentWave}";
     }
 
     public void UIEnemiesAlive(int enemiesAlive)

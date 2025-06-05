@@ -77,10 +77,12 @@ public class RoundManager : MonoBehaviour
     public delegate void WaveStarted();
     public delegate void WaveComplete(bool completeSatisfactory);
     public delegate void RoundComplete();
+    public delegate void EnemyKilled();
 
     public event WaveStarted OnWaveStart;
     public event WaveComplete OnWaveComplete;
     public event RoundComplete OnRoundComplete;
+    public event EnemyKilled OnEnemyKilled;
 
     private RoundsMusicManager _musicRounds;
     private ThisObjectSounds _soundManager;
@@ -396,7 +398,8 @@ public class RoundManager : MonoBehaviour
     public void EnemyDied(Enemy enemy)
     {
         if (enemy == null) return;
-        
+
+        OnEnemyKilled?.Invoke();
         _musicRounds.OnEnemyKilled();
 
         // Use Interlocked for atomic operations

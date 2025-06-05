@@ -21,7 +21,6 @@ public class GunManager : MonoBehaviour
 
     public TextMeshProUGUI totalAmmoDisplay; //UI de la municion total que le queda al jugador
     public TextMeshProUGUI ammunitionDisplay; //UI de la municion que le queda en el cargador
-    private Image reloadCircle;
 
     [Space][Header("Gun General Info")]
     [SerializeField] private int basePlayerDamage; //Con este se escala el game
@@ -62,7 +61,6 @@ public class GunManager : MonoBehaviour
 
     private void Awake() {
         cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
-        reloadCircle = GameObject.Find("ReloadingCircle").GetComponent<Image>();
         Camera = cinemachineBrain.GetComponent<Camera>();
         playerObject = transform.parent.gameObject;
         GetPlayer(playerObject);
@@ -163,25 +161,18 @@ public class GunManager : MonoBehaviour
         }
     }
 
-    public void OnShoot(InputAction.CallbackContext context) { //RECORDAR ASIGNAR MANUALMENTE EN LOS EVENTOS DEL INPUT
-        //if (CurrentGun.ShootConfig.IsAutomatic) {
-        //    shooting = context.performed;
-        //}
-        //else { shooting = context.started; }
-
+    public void OnShoot(InputAction.CallbackContext context) //RECORDAR ASIGNAR MANUALMENTE EN LOS EVENTOS DEL INPUT
+    {
         UIManager ui = UIManager.Singleton;
         if (ui!=null){ 
             if (ui.IsPaused || ui.IsMainMenu || ui.IsDead)
             {
                 canShoot = false;
             }
-            else canShoot = true;
-            //else if (!ui.IsPaused && !ui.IsMainMenu && !ui.IsDead)
-            //{
-            //    canShoot = true;
-            //}
+            else
+                canShoot = true;
         }
-        if (!canShoot) return;
+        if (!canShoot || CurrentGun.realoading || CurrentGun.bulletsLeft < 1) return;
 
         if (context.started && CurrentGun.ShootConfig.IsAutomatic) 
             shooting=true;
@@ -294,6 +285,8 @@ public class GunManager : MonoBehaviour
     #region Ammo management //Aqui recibimos el input de recarga y llamamos a la funciond de recarga
     public void OnReload(InputAction.CallbackContext context)
     {
+        if (CurrentGun.Type == GunType.ShinelessFeather) return;
+
         if (context.started)
         {
             if (!CurrentGun.Realoading && actualTotalAmmo > 0 && CurrentGun.bulletsLeft < CurrentGun.MagazineSize)
@@ -302,49 +295,22 @@ public class GunManager : MonoBehaviour
             }
         }
     }
-    private void RealoadGun(){
-        if (CurrentGun.Type == GunType.ShinelessFeather) return;
+    private void RealoadGun()
+    {
         ReloadEvent?.Invoke();
 
         CurrentGun.Reload(actualTotalAmmo);
         actualTotalAmmo -= CurrentGun.MagazineSize - CurrentGun.BulletsLeft;
-        ReloadingFeedback();
+
+        StartCoroutine(ReloadDelay(CurrentGun.ReloadTime));
     }
 
-    private void ReloadingFeedback()
-    {
-        StartCoroutine(Reload(CurrentGun.ReloadTime));
-        StartCoroutine(ReloadCircleUI(CurrentGun.ReloadTime));
-    }
-
-    private IEnumerator Reload(float delay)
+    private IEnumerator ReloadDelay(float delay)
     {
         if(shooting) shooting = false;
         canShoot = false;
         yield return new WaitForSeconds(delay);
         canShoot = true;
-    }
-
-    public IEnumerator ReloadCircleUI(float cooldown)
-    {
-        if (cooldown > 0)
-        {
-            reloadCircle.fillAmount = 1;
-
-            float epsilon = 0f;
-
-            while (epsilon < cooldown)
-            {
-                epsilon += Time.deltaTime;
-                float t = Mathf.Clamp01(epsilon / cooldown);
-
-                reloadCircle.fillAmount = Mathf.Lerp(1, 0, t);
-                yield return null;
-            }
-        }
-
-        reloadCircle.fillAmount = 0;
-        yield return null;
     }
     #endregion
 
