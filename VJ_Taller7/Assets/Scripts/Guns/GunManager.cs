@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using Unity.Cinemachine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(CrosshairManager))]
 public class GunManager : MonoBehaviour
@@ -14,7 +13,7 @@ public class GunManager : MonoBehaviour
     private PlayerController player;
     [Space][Header("Managers")]
     public CrosshairManager crosshairManager;  
-    private ThisObjectSounds soundManager; private Animator playerAnimator;
+    private ThisObjectSounds soundManager;
     [Space][Header("Ammo Info")]
     public int actualTotalAmmo; //Cuanta municion tiene el jugador
     [SerializeField] private int MaxTotalAmmo; //Cuanta municion puede llevar el jugador
@@ -58,6 +57,12 @@ public class GunManager : MonoBehaviour
 
     public delegate void ReloadingEvent();
     public event ReloadingEvent ReloadEvent;
+
+    public delegate void ChangeWeaponEvent();
+    public event ChangeWeaponEvent ChangeGun;
+
+    public delegate void StopFeebackEvent();
+    public event StopFeebackEvent StopShootingFeeback;
 
     private void Awake() {
         cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
@@ -181,13 +186,15 @@ public class GunManager : MonoBehaviour
         if (context.canceled && CurrentGun.ShootConfig.IsAutomatic)
         {
             shooting = false;
-            StopFeedback();
+            StopShootingFeeback?.Invoke();
         }
     }
 
     public void OnWeaponChange(InputAction.CallbackContext context){
         if (context.started){
-            if (CurrentSecondGunType!=CurrentGun.Type){
+            if (CurrentSecondGunType!=CurrentGun.Type)
+            {
+                ChangeGun?.Invoke();
                 ChangeWeapon();
             }
         }
@@ -325,7 +332,6 @@ public class GunManager : MonoBehaviour
 
     private void GetPlayer(GameObject activePlayer){
         player = activePlayer.GetComponentInChildren<PlayerController>();
-        playerAnimator = activePlayer.GetComponentInChildren<Animator>();
         soundManager = activePlayer.GetComponentInChildren<ThisObjectSounds>();
     }
 
@@ -337,14 +343,6 @@ public class GunManager : MonoBehaviour
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(dondePegaElRayDelArma, 0.3f);
-    }
-
-    private void StopFeedback()
-    {
-        playerAnimator.SetBool("ShootBurst", false);
-
-        //soundManager.StopSound("rifleReload", "pistolReload", "revolverReload", "shotgunReload", "sniperReload");
-        soundManager.StopSound("rifleFire");
     }
 
     public void CheckZoomIn(){

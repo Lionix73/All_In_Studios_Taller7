@@ -18,6 +18,8 @@ public class PlayerSoundsManager : MonoBehaviour
     private void Start()
     {
         _gunManager.ReloadEvent += ReloadingFeedback;
+        _gunManager.ChangeGun += WeaponChangeSound;
+        _gunManager.StopShootingFeeback += StopShooting;
         _playerController.JumpingEvent += JumpSound;
         _playerController.MeleeAttackEvent += MeleeSound;
         _playerController.SlidingEvent += SlideSound;
@@ -141,6 +143,11 @@ public class PlayerSoundsManager : MonoBehaviour
 
         firerateAllowShoot = true;
     }
+
+    private void StopShooting()
+    {
+        soundManager.StopSound("rifleFire");
+    }
     #endregion
 
     #region -----RELOAD-----
@@ -183,12 +190,9 @@ public class PlayerSoundsManager : MonoBehaviour
     #endregion
 
     #region -----Input Actions-----
-    public void WeaponChangeSound(InputAction.CallbackContext context)
+    public void WeaponChangeSound()
     {
-        if (context.performed)
-        {
-            soundManager.PlaySound("ChangeGun");
-        }
+        soundManager.PlaySound("ChangeGun");
     }
 
     private void MeleeSound()

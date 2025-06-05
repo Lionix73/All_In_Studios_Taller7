@@ -33,6 +33,8 @@ public class PlayerAnimations : MonoBehaviour
         _playerController.JumpingEvent += JumpAnimation;
         _playerController.MeleeAttackEvent += MeleeAnimation;
         _gunManager.ReloadEvent += ReloadAnimation;
+        _gunManager.ChangeGun += WeaponChangeAnimation;
+        _gunManager.StopShootingFeeback += StopShootingAnimation;
     }
 
     private void Update()
@@ -215,20 +217,22 @@ public class PlayerAnimations : MonoBehaviour
         }
     }
 
-    public void WeaponChangeAnimation(InputAction.CallbackContext context)
+    public void WeaponChangeAnimation()
     {
-        if (context.performed)
-        {
-            animator.SetTrigger("ChangeGun");
+        animator.SetTrigger("ChangeGun");
 
-            SelectGunType();
-        }
+        SelectGunType();
     }
 
     public void ReloadAnimation()
     {
         animator.SetBool("ShootBurst", false);
         animator.SetTrigger("Reload");
+    }
+
+    private void StopShootingAnimation()
+    {
+        animator.SetBool("ShootBurst", false);
     }
     #endregion
 

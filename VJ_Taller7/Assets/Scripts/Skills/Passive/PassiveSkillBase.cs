@@ -37,7 +37,6 @@ public abstract class PassiveSkillBase : MonoBehaviour, IPassiveSkill
         StartCoroutine(skillManager.DecreasePassiveSkillMask(skillManager.passiveSkills[skillManager.activeSkillIndex].WhatIsTheCooldown));
         yield return new WaitForSeconds(cooldown);
         isOnCooldown = false;
-
-        if (cooldown > 0) soundManager.PlaySound("ReloadSkill");
+        soundManager.PlaySound("ReloadSkill");
     }
 }

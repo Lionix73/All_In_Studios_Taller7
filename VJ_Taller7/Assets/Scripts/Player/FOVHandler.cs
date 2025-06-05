@@ -3,11 +3,23 @@ using UnityEngine;
 
 public class FOVHandler : MonoBehaviour
 {
-    [SerializeField] private float normalFOV = 65;
-    [SerializeField] private float aimFOV = 55;
+    [SerializeField][Range(30, 100)] private float normalFOV = 65;
+    [SerializeField][Range(20, 80)] private float aimFOV = 55;
     [SerializeField] private FloatDampener timeToAim;
 
     private CinemachineCamera _freeLookCamera;
+
+    public float CameraNormalFOV
+    {
+        get => normalFOV;
+        set => normalFOV = value;
+    }
+
+    public float CameraAimFOV
+    {
+        get => aimFOV;
+        set => aimFOV = value;
+    }
 
     private void Start()
     {
