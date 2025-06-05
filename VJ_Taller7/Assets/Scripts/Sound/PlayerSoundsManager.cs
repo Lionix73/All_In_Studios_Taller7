@@ -166,6 +166,7 @@ public class PlayerSoundsManager : MonoBehaviour
             case GunType.ShinelessFeather:
                 break;
             case GunType.GoldenFeather:
+                soundManager.PlaySound("featherReturn");
                 break;
             case GunType.GranadeLaucher:
                 soundManager.PlaySound("GLReload");

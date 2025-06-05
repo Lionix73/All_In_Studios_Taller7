@@ -38,8 +38,6 @@ public class GoldenFeathers : Bullet
         Rigidbody.AddForce(direction * returningStrength);
         isReturning = true;
         isFlying = true;
-
-        soundManager.PlaySound("featherReturn");
     }
 
     public override void OnCollisionEnter(Collision other) {
