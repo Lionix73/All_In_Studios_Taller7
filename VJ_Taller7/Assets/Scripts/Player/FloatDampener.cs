@@ -9,6 +9,7 @@ public struct FloatDampener
 
     public float CurrentValue { get; private set; }
     public float TargetValue { get; set; } //metodo de encapsulamiento
+    public float SmoothTime { get; private set; }
 
     public void Update()
     {

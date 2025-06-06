@@ -1,4 +1,5 @@
 using FMODUnity;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,8 +7,12 @@ using UnityEngine;
 public class ThisObjectSounds : MonoBehaviour
 {
     public List<StudioEventEmitter> sounds;
-
     private int sound_index;
+
+    private Queue<string> soundQueue = new Queue<string>();
+    private StudioEventEmitter currentPlaying = null;
+    private bool isChecking = false;
+
     private void Start()
     {
         StudioEventEmitter[] objs = GetComponentsInChildren<StudioEventEmitter>();
@@ -89,5 +94,46 @@ public class ThisObjectSounds : MonoBehaviour
         {
             s.GetComponent<StudioEventEmitter>().Stop();
         }
+    }
+
+    public void QueueSound(string s_name)
+    {
+        soundQueue.Enqueue(s_name);
+        TryPlayNext();
+    }
+
+    private void TryPlayNext()
+    {
+        if (currentPlaying == null || !currentPlaying.IsPlaying())
+        {
+            if (soundQueue.Count > 0)
+            {
+                string nextSound = soundQueue.Dequeue();
+                int index = GetSoundIndex(nextSound);
+
+                if (index != -1)
+                {
+                    currentPlaying = sounds[index];
+                    currentPlaying.Play();
+
+                    if (!isChecking)
+                        StartCoroutine(CheckWhenDone());
+                }
+            }
+        }
+    }
+
+    private IEnumerator CheckWhenDone()
+    {
+        isChecking = true;
+
+        while (currentPlaying != null && currentPlaying.IsPlaying())
+        {
+            yield return null;
+        }
+
+        currentPlaying = null;
+        isChecking = false;
+        TryPlayNext();
     }
 }

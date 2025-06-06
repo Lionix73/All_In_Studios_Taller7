@@ -1,22 +1,27 @@
 using FMODUnity;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Timeline;
 
 public class RoundsMusicManager : MonoBehaviour
 {
+    [Header("Music")]
     [SerializeField] private StudioEventEmitter music;
-    [SerializeField] private FloatDampener intensityDampener;
-    [SerializeField] private FloatDampener stopMusicDampener;
-    [SerializeField][Range(0, 1)] private float volumeDecrease = 0.7f;
-    [SerializeField][Range(0, 1)] private float delay = 0.5f;
-    [SerializeField][Range(0, 5)] private float stopDelay = 3f;
+    
+    [Header("Dampeners")]
+    [SerializeField][Tooltip("Smooth Time is how long it takes to the music to stop completly")]
+    private FloatDampener stopMusicDampener;
+    
+    [Header("Crash Effect")]
+    [SerializeField][Tooltip("How much to reduce music volume, 1 = Max volume, 0 = No music")]
+    [Range(0, 1)] private float volumeDecrease = 0.9f;
+    [SerializeField][Tooltip("How long the music will be with a reduced volume in seconds")]
+    [Range(0, 1)] private float LowIntensityTime = 0.2f;
 
     private Health health;
 
     private void Start()
     {
-        GameObject.Find("Menu").GetComponentInChildren<ThisObjectSounds>().StopAllSounds();
+        //GameObject.Find("Menu").GetComponentInChildren<ThisObjectSounds>().StopAllSounds();
         stopMusicDampener.TargetValue = 1f;
 
         health = GameObject.FindWithTag("Player").GetComponent<Health>();
@@ -28,7 +33,6 @@ public class RoundsMusicManager : MonoBehaviour
             StopMusic();
         }
 
-        intensityDampener.Update();
         stopMusicDampener.Update();
     }
 
@@ -38,16 +42,17 @@ public class RoundsMusicManager : MonoBehaviour
         music.Play();
     }
 
+    #region Stop Music
     public void StopMusic()
     {
         StartCoroutine(FadeOutMusic());
     }
 
-    IEnumerator FadeOutMusic()
+    private IEnumerator FadeOutMusic()
     {
         stopMusicDampener.TargetValue = 0f;
         float t = 0f;
-        while (t < stopDelay)
+        while (t < stopMusicDampener.SmoothTime)
         {
             t += Time.deltaTime;
             music.SetParameter("Intensity", stopMusicDampener.CurrentValue);
@@ -57,28 +62,40 @@ public class RoundsMusicManager : MonoBehaviour
         stopMusicDampener.TargetValue = 1f;
         music.SetParameter("Intensity", 1f);
     }
+    #endregion
 
+    #region Crash Effect
     public void OnEnemyKilled()
     {
-        intensityDampener.TargetValue = volumeDecrease;
-
         // Bajar intensidad (volumen)
-        music.SetParameter("Intensity", volumeDecrease);
-
-        StartCoroutine(RestoreMusicAfterDelay());
+        StartCoroutine(LowIntensity());
     }
 
-    IEnumerator RestoreMusicAfterDelay()
+    private IEnumerator LowIntensity()
     {
-        // Disparar Crash
+        float delay = LowIntensityTime / 2;
+
+        float t = 0f;
+        while (t < delay)
+        {
+            t += Time.deltaTime;
+            float v = Mathf.Lerp(1f, volumeDecrease, t / delay);
+            music.SetParameter("Intensity", v);
+            yield return null;
+        }
+        music.SetParameter("Intensity", volumeDecrease);
         music.SetParameter("PlayCrash", 1f);
 
-        yield return new WaitForSeconds(delay);
-        
-        intensityDampener.TargetValue = 1f;
-
-        // Restaurar valores
+        t = 0f;
+        while (t < delay)
+        {
+            t += Time.deltaTime;
+            float v = Mathf.Lerp(volumeDecrease, 1f, t / delay);
+            music.SetParameter("Intensity", v);
+            yield return null;
+        }
         music.SetParameter("Intensity", 1f);
         music.SetParameter("PlayCrash", 0f);
     }
+    #endregion
 }

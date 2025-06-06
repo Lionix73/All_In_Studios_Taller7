@@ -1,11 +1,8 @@
 using System.Collections.Generic;
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using System.Threading;
-using FMOD;
-using UnityEngine.InputSystem;
 
 public class RoundManager : MonoBehaviour
 {
@@ -131,7 +128,7 @@ public class RoundManager : MonoBehaviour
         if (currentRound > 3)
         { // ez win
             _Simulating = false;
-            _soundManager.PlaySound("CompleteGame");
+            _soundManager.QueueSound("CompleteGame");
 
 
             GameManager.Instance.WinGame();
@@ -166,9 +163,8 @@ public class RoundManager : MonoBehaviour
             if (omnipresentWaveCummingWarning && inBetweenRoundsTimer <= 7) // se supone que el audio dura 7 seg, y el conteo esta calculdo
             {
                 //Santi --> Aqui pones que suene el audio del conteo para la ronda, supongo que podes hacer que suene una vez y ya, sino me decis.
-                _soundManager.PlaySound("SendingReiforcement");
+                _soundManager.QueueSound("SendingReiforcement");
                 omnipresentWaveCummingWarning = false;
-                //_soundManager?.PlaySound("SendindReinforcements....");
             }
 
             if (inBetweenRoundsTimer <= 0)
@@ -221,13 +217,9 @@ public class RoundManager : MonoBehaviour
         inBetweenRounds = true; //Empezar a descontar para la otra sugiente ronda/oleada
         enemiesKilledOnWave = 0;
         _musicRounds.StopMusic();
-        _soundManager.PlaySound(how ? "WinWave" : "FailWave");
+        _soundManager.QueueSound(how ? "WinWave" : "FailWave");
 
         omnipresentWaveCummingWarning = true;
-
-        //Santi --> aqui el audio segun si paso la ronda matando a todos o no.
-        //_soundManager?.PlaySound(how? "YourefficienteBirds..." : "ToTheFOrcesRemain");
-
 
         // if (how)
         // {
@@ -257,7 +249,7 @@ public class RoundManager : MonoBehaviour
     {
         if (currentRound == 3 && currentWave == 3)
         {
-            _soundManager.PlaySound("CompleteGame");
+            _soundManager.QueueSound("CompleteGame");
         }
         if (!wantToPassRound) return;
         currentWave++;
@@ -279,7 +271,7 @@ public class RoundManager : MonoBehaviour
 
         if(level == 1)
         {
-            _soundManager.PlaySound("IntrudersDetected");
+            _soundManager.QueueSound("IntrudersDetected");
         }
     }
     private void PassRound()
@@ -298,7 +290,7 @@ public class RoundManager : MonoBehaviour
             }
 
         _musicRounds.StopMusic();
-        _soundManager.PlaySound("WinRound");
+        _soundManager.QueueSound("WinRound");
 
         OnRoundComplete?.Invoke();
     }
