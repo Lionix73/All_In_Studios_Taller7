@@ -385,7 +385,6 @@ Transform:
   m_LocalScale: {x: 0.9999999, y: 0.99999994, z: 0.9999998}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5342781938661206311}
   - {fileID: 5699014836159892809}
   m_Father: {fileID: 2700862642429112301}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -789,7 +788,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7425978796826450820}
+  - {fileID: 5342781938661206311}
   - {fileID: 7586177610573253697}
   - {fileID: 4952940060978615364}
   - {fileID: 7430070005070010862}
@@ -961,8 +960,8 @@ MonoBehaviour:
   heightThreshold: 20
   velocityThreshold: -15
   isGrounded: 0
-  GroundedOffset: 0.05
-  GroundedRadius: 0.1
+  GroundedOffset: 0.15
+  GroundedRadius: 0.2
   GroundLayers:
     serializedVersion: 2
     m_Bits: 128
@@ -2386,12 +2385,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3566352580148715008}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6141115, y: 0.35095826, z: 0.35095832, w: 0.6136152}
-  m_LocalPosition: {x: 0.441, y: 1.033, z: 0.063}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.000000059604638, y: -2.4136068e-10, z: -0.000000014899205, w: 1}
+  m_LocalPosition: {x: 0.7658159, y: 1.0279127, z: -0.049120307}
+  m_LocalScale: {x: 0.6760698, y: 0.6760696, z: 0.6760695}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5216383606798830026}
+  m_Father: {fileID: 1272672398071178745}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3625466314143976354
 GameObject:
@@ -4165,37 +4164,6 @@ Transform:
   m_Children:
   - {fileID: 6855675963677059919}
   m_Father: {fileID: 1686050255880262250}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7889855849140284393
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7425978796826450820}
-  m_Layer: 0
-  m_Name: StepRayLower
-  m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7425978796826450820
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7889855849140284393}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.0016492624, y: 0.7007887, z: 0.7132731, w: -0.011579254}
-  m_LocalPosition: {x: 0.010000229, y: 0.04, z: 0.37000084}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1272672398071178745}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7903439279267355296
 GameObject:

@@ -99,6 +99,7 @@ public class Enemy : PoolableObject, IDamageable
 
     private EnemySpawner enemySpawner;
     private ThisObjectSounds soundManager;
+    private OnomatopoeiaController onomatopeia;
 
     [Header("Enemy VFX")]
     [SerializeField] private ParticleSystem deathVFX;
@@ -159,6 +160,7 @@ public class Enemy : PoolableObject, IDamageable
     {
         attackRadius.Player = Player;
         soundManager = GetComponent<ThisObjectSounds>();
+        onomatopeia = GetComponentInChildren<OnomatopoeiaController>();
         AttackRadius.OnAttack += OnAttack;
 
         roundManager = GameManager.Instance.roundManager;
@@ -238,7 +240,8 @@ public class Enemy : PoolableObject, IDamageable
         //Debug.Log("Enemy Health: " + Health);
 
         if (Health <= 0)
-        {    
+        {
+            onomatopeia.TryShowOnomatopoeia();
             soundManager.StopAllSounds();
             soundManager.PlaySound("Die");
 

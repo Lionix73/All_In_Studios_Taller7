@@ -69,7 +69,7 @@
 	</object>
 	<object class="EventMixerMaster" id="{fb8ef451-736b-4ec4-8aaa-41285e7a7dcd}">
 		<property name="volume">
-			<value>-1</value>
+			<value>-3</value>
 		</property>
 		<relationship name="effectChain">
 			<destination>{6e8f5c3a-6f73-4d2d-8239-968b42f5ce2f}</destination>
@@ -114,7 +114,7 @@
 	</object>
 	<object class="MixerBusPanner" id="{1aba7a54-a19b-4384-8745-bc45b36b8fb0}">
 		<property name="stereoPan">
-			<value>24</value>
+			<value>32</value>
 		</property>
 	</object>
 	<object class="FadeCurve" id="{b7b59f05-29e6-496f-a4bd-3b29c2600c41}">
@@ -146,6 +146,15 @@
 		</property>
 	</object>
 	<object class="SFXReverbEffect" id="{6eadd5ca-fabb-4fff-9497-6ac42edb444f}">
+		<property name="decayTime">
+			<value>550</value>
+		</property>
+		<property name="lateDelay">
+			<value>19</value>
+		</property>
+		<property name="HFDecayRatio">
+			<value>100</value>
+		</property>
 		<property name="lowShelfGain">
 			<value>-9.5</value>
 		</property>

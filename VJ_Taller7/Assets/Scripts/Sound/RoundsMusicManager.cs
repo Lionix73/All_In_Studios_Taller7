@@ -1,6 +1,7 @@
 using FMODUnity;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Timeline;
 
 public class RoundsMusicManager : MonoBehaviour
 {
@@ -39,18 +40,21 @@ public class RoundsMusicManager : MonoBehaviour
 
     public void StopMusic()
     {
-        music.Stop();
-
-        //stopMusicDampener.TargetValue = 0f;
-        //music.SetParameter("Intensity", stopMusicDampener.CurrentValue);
-
-        //StartCoroutine(FadeOutMusic());
+        StartCoroutine(FadeOutMusic());
     }
 
     IEnumerator FadeOutMusic()
     {
-        yield return new WaitForSeconds(stopDelay);
+        stopMusicDampener.TargetValue = 0f;
+        float t = 0f;
+        while (t < stopDelay)
+        {
+            t += Time.deltaTime;
+            music.SetParameter("Intensity", stopMusicDampener.CurrentValue);
+            yield return null;
+        }
         music.Stop();
+        stopMusicDampener.TargetValue = 1f;
         music.SetParameter("Intensity", 1f);
     }
 
