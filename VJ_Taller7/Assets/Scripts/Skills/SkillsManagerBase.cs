@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,8 +21,19 @@ public class SkillsManagerBase : MonoBehaviour
         _pasSkillMask = GameObject.Find("Passive_Skill_Mask").GetComponent<Image>();
     }
 
+    public void SetupShaderMaterial(Image img, Sprite skillSprite)
+    {
+        img.sprite = skillSprite;
+
+        Texture2D skillTxt = skillSprite.texture;
+        img.material = new Material(img.material);
+        img.material.SetTexture("_Texture", skillTxt);
+    }
+
     public IEnumerator DecreaseActiveSkillMask(float cooldown)
     {
+        _actSkillImg.material.SetFloat("_WaveSpeed", 0f);
+
         _actSkillMask.fillAmount = 1;
 
         float epsilon = 0f;
@@ -38,11 +48,13 @@ public class SkillsManagerBase : MonoBehaviour
         }
 
         _actSkillMask.fillAmount = 0;
+        _actSkillImg.material.SetFloat("_WaveSpeed", 2f);
         yield return null;
     }
 
     public IEnumerator DecreasePassiveSkillMask(float cooldown)
     {
+        _pasSkillImg.material.SetFloat("_WaveSpeed", 0f);
         if (cooldown > 0)
         {
             _pasSkillMask.fillAmount = 1;
@@ -60,6 +72,7 @@ public class SkillsManagerBase : MonoBehaviour
         }
 
         _pasSkillMask.fillAmount = 0;
+        _pasSkillImg.material.SetFloat("_WaveSpeed", 2f);
         yield return null;
     }
 }

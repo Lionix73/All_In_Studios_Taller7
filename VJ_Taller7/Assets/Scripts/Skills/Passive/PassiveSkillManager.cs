@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using UnityEngine;
 
 public class PassiveSkillManager : SkillsManagerBase
@@ -14,9 +12,13 @@ public class PassiveSkillManager : SkillsManagerBase
 
         DeactivateUnusedSkills();
         SearchSkillsUI();
+        SetupSkillsIcons();
+    }
 
-        _pasSkillImg.sprite = passiveSkills[activeSkillIndex].skillInfo.image;
-        _pasSkillMask.sprite = passiveSkills[activeSkillIndex].skillInfo.image;
+    private void SetupSkillsIcons()
+    {
+        Sprite skillSprite = passiveSkills[activeSkillIndex].skillInfo.image;
+        SetupShaderMaterial(_pasSkillImg, skillSprite);
     }
 
     private void Update()

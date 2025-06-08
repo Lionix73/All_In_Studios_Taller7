@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
-using Unity.Services.Vivox;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ActiveSkillManager : SkillsManagerBase
 {
@@ -16,9 +12,13 @@ public class ActiveSkillManager : SkillsManagerBase
 
         DeactivateUnusedSkills();
         SearchSkillsUI();
+        SetupSkillsIcons();
+    }
 
-        _actSkillImg.sprite = skills[activeSkillIndex].skillInfo.image;
-        _actSkillMask.sprite = skills[activeSkillIndex].skillInfo.image;
+    private void SetupSkillsIcons()
+    {
+        Sprite skillSprite = skills[activeSkillIndex].skillInfo.image;
+        SetupShaderMaterial(_actSkillImg, skillSprite);
     }
 
     private void DeactivateUnusedSkills()

@@ -1,7 +1,9 @@
+using FMODUnity;
 using UnityEngine;
 
 public class JumpPad : MonoBehaviour
 {
+    [SerializeField] private StudioEventEmitter JumpPadSound;
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private GameObject rayOrigin;
 
@@ -14,6 +16,7 @@ public class JumpPad : MonoBehaviour
             if (rb != null)
             {
                 Vector3 jumpDirection = GetSurfaceNormal();
+                JumpPadSound.Play();
 
                 rb.linearVelocity = Vector3.zero; // Resetear la velocidad para evitar acumulaciones raras
                 rb.AddForce(jumpForce * jumpDirection, ForceMode.Impulse);
