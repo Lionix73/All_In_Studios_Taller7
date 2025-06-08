@@ -34,7 +34,7 @@ public abstract class PassiveSkillBase : MonoBehaviour, IPassiveSkill
     protected IEnumerator CooldownRoutine()
     {
         isOnCooldown = true;
-        StartCoroutine(skillManager.DecreasePassiveSkillMask(skillManager.passiveSkills[skillManager.activeSkillIndex].WhatIsTheCooldown));
+        skillManager.ActivateMask(false, cooldown);
         yield return new WaitForSeconds(cooldown);
         isOnCooldown = false;
         soundManager.PlaySound("ReloadSkill");

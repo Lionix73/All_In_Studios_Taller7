@@ -33,7 +33,7 @@ public abstract class SkillBase : MonoBehaviour, ISkill
     protected virtual IEnumerator CooldownRoutine()
     {
         isOnCooldown = true;
-        StartCoroutine(skillManager.DecreaseActiveSkillMask(skillManager.skills[skillManager.activeSkillIndex].WhatIsTheCooldown));
+        skillManager.ActivateMask(true, cooldown);
         yield return new WaitForSeconds(cooldown);
         isOnCooldown = false;
         soundManager.PlaySound("ReloadSkill");

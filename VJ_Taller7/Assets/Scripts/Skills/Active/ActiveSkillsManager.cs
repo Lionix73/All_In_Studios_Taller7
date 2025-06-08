@@ -5,6 +5,11 @@ public class ActiveSkillManager : SkillsManagerBase
     public SkillBase[] skills;
     public int activeSkillIndex;
 
+    private void OnValidate()
+    {
+        activeSkillIndex = Mathf.Clamp(activeSkillIndex, 0, skills.Length);
+    }
+
     private void Start()
     {
         if (CharacterManager.Instance != null)

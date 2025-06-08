@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.Cinemachine;
 using UnityEngine;
 
 public class Blink : SkillBase
@@ -12,7 +11,6 @@ public class Blink : SkillBase
     private Transform freeLookCamera;
     private Rigidbody rb;
     private Animator animator;
-    private PlayerController playerController;
 
     private void Start()
     {

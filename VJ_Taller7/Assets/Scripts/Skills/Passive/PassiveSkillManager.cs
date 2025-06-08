@@ -5,6 +5,11 @@ public class PassiveSkillManager : SkillsManagerBase
     public PassiveSkillBase[] passiveSkills;
     public int activeSkillIndex;
 
+    private void OnValidate()
+    {
+        activeSkillIndex = Mathf.Clamp(activeSkillIndex, 0, passiveSkills.Length);
+    }
+
     private void Start()
     {
         if (CharacterManager.Instance != null)

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,11 +31,23 @@ public class SkillsManagerBase : MonoBehaviour
         img.material.SetTexture("_Texture", skillTxt);
     }
 
-    public IEnumerator DecreaseActiveSkillMask(float cooldown)
+    public void ActivateMask(bool isActiveSkill, float cooldown)
     {
-        _actSkillImg.material.SetFloat("_WaveSpeed", 0f);
+        if(isActiveSkill)
+        {
+            StartCoroutine(DecreaseSkillMask(cooldown, _actSkillImg, _actSkillMask));
+            StartCoroutine(SkillReloadEffects(cooldown, _actSkillImg));
+        }
+        else
+        {
+            StartCoroutine(DecreaseSkillMask(cooldown, _pasSkillImg, _pasSkillMask));
+            StartCoroutine(SkillReloadEffects(cooldown, _pasSkillImg));
+        }
+    }
 
-        _actSkillMask.fillAmount = 1;
+    public IEnumerator DecreaseSkillMask(float cooldown, Image img, Image mask)
+    {
+        mask.fillAmount = 1;
 
         float epsilon = 0f;
 
@@ -43,36 +56,26 @@ public class SkillsManagerBase : MonoBehaviour
             epsilon += Time.deltaTime;
             float t = Mathf.Clamp01(epsilon / cooldown);
 
-            _actSkillMask.fillAmount = Mathf.Lerp(1, 0, t);
+            mask.fillAmount = Mathf.Lerp(1, 0, t);
             yield return null;
         }
 
-        _actSkillMask.fillAmount = 0;
-        _actSkillImg.material.SetFloat("_WaveSpeed", 2f);
-        yield return null;
+        mask.fillAmount = 0;
     }
 
-    public IEnumerator DecreasePassiveSkillMask(float cooldown)
+    private IEnumerator SkillReloadEffects(float cooldown, Image img)
     {
-        _pasSkillImg.material.SetFloat("_WaveSpeed", 0f);
-        if (cooldown > 0)
-        {
-            _pasSkillMask.fillAmount = 1;
+        img.material.SetFloat("_WaveSpeed", 0f); // The sinny effect do not activate
 
-            float epsilon = 0f;
+        yield return new WaitForSeconds(cooldown);
 
-            while (epsilon < cooldown)
-            {
-                epsilon += Time.deltaTime;
-                float t = Mathf.Clamp01(epsilon / cooldown);
+        img.material.SetFloat("_WaveSpeed", 2f); // Activate the sinny effect
 
-                _pasSkillMask.fillAmount = Mathf.Lerp(1, 0, t);
-                yield return null;
-            }
-        }
+        img.transform.parent.DOScale(1.15f, 0.5f); // Scale the skill frame and icon
+        yield return new WaitForSeconds(0.5f);
+        img.transform.parent.DOScale(1, 0.5f); // Return to original scale
 
-        _pasSkillMask.fillAmount = 0;
-        _pasSkillImg.material.SetFloat("_WaveSpeed", 2f);
-        yield return null;
+        yield return new WaitForSeconds(3.8f);
+        img.material.SetFloat("_WaveSpeed", 0f);
     }
 }
