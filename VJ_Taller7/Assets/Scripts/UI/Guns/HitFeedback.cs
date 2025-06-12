@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,28 +40,18 @@ public class HitFeedback : MonoBehaviour
     {
         hitMarker.enabled = true;
 
-        // Expand
-        float t = 0f;
-        while (t < expandDuration)
-        {
-            t += Time.deltaTime;
-            float scale = Mathf.Lerp(1f, expandScale, t / expandDuration);
-            hitMarker.rectTransform.localScale = originalScale * scale;
-            yield return null;
-        }
+        hitMarker.rectTransform.DOScale(expandScale, expandDuration); // Expand Scale
+        yield return new WaitForSeconds(expandDuration);
 
-        // Shrink
-        t = 0f;
-        while (t < shrinkDuration)
-        {
-            t += Time.deltaTime;
-            float scale = Mathf.Lerp(expandScale, 1f, t / shrinkDuration);
-            hitMarker.rectTransform.localScale = originalScale * scale;
-            yield return null;
-        }
+        hitMarker.rectTransform.DOScale(originalScale, shrinkDuration); // Shrink Scale
+        yield return new WaitForSeconds(shrinkDuration);
 
-        hitMarker.rectTransform.localScale = originalScale;
+        hitMarker.DOFade(0f, 0.1f); // Fade Image
+        yield return new WaitForSeconds(0.1f);
+
         hitMarker.enabled = false;
+        hitMarker.rectTransform.localScale = originalScale;
+        hitMarker.DOFade(1f, 0f); // Return to alpha = 1
         coroutineHit = null;
     }
 }

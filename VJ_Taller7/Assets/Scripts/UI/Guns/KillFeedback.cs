@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +8,6 @@ public class KillFeedback : MonoBehaviour
     [Header("Kill Feedback")]
     [SerializeField] private float expandScale = 2.0f;
     [SerializeField] private float expandDuration = 0.3f;
-    [SerializeField] private float shrinkDuration = 0.2f;
 
     private Vector3 originalScale;
     private Coroutine coroutineHit;
@@ -43,28 +43,16 @@ public class KillFeedback : MonoBehaviour
     {
         hitMarker.enabled = true;
 
-        // Expand
-        float t = 0f;
-        while (t < expandDuration)
-        {
-            t += Time.deltaTime;
-            float scale = Mathf.Lerp(1f, expandScale, t / expandDuration);
-            hitMarker.rectTransform.localScale = originalScale * scale;
-            yield return null;
-        }
+        hitMarker.rectTransform.DOScale(expandScale, expandDuration); // Expand Scale
+        yield return new WaitForSeconds(expandDuration);
 
-        // Shrink
-        t = 0f;
-        while (t < shrinkDuration)
-        {
-            t += Time.deltaTime;
-            float scale = Mathf.Lerp(expandScale, 1f, t / shrinkDuration);
-            hitMarker.rectTransform.localScale = originalScale * scale;
-            yield return null;
-        }
+        hitMarker.DOFade(0f, 0.3f); // Fade Image
+        yield return new WaitForSeconds(0.3f);
+
+        hitMarker.enabled = false;
 
         hitMarker.rectTransform.localScale = originalScale;
-        hitMarker.enabled = false;
+        hitMarker.DOFade(1f, 0f); // Return to alpha = 1
         coroutineHit = null;
     }
 }
