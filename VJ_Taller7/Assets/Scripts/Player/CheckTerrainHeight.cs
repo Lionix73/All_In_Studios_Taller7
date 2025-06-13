@@ -68,11 +68,7 @@ public class CheckTerrainHeight : MonoBehaviour
         {
             _rb.AddForce(GetSlopeMovement() * _playerController.PlayerSpeed * 10f, ForceMode.Force);
 
-            if (_rb.linearVelocity.y > 0)
-            {
-                _rb.AddForce(Vector3.down * SlopeJumpDownforce, ForceMode.Force);
-            }
-            else if (_rb.linearVelocity.y < 0)
+            if (_rb.linearVelocity.y != 0)
             {
                 _rb.AddForce(Vector3.down * SlopeJumpDownforce, ForceMode.Force);
             }

@@ -25,7 +25,6 @@ public class PlayerController : MonoBehaviour
     [Header("Components")]
     [SerializeField] private CapsuleCollider playerCollider;
     [SerializeField] private CapsuleCollider crouchCollider;
-    [SerializeField] private Transform cameraTransform;
     public CinemachineCamera freeLookCamera;
 
     [Header("VFX")]
@@ -87,7 +86,9 @@ public class PlayerController : MonoBehaviour
     private FOVHandler fov;
     private Rig rig;
     private Rigidbody rb;
+    private Transform cameraTransform;
     private Melee melee;
+    private SensibilitySettings sensibilitySettings;
     #endregion
 
     #region Events
@@ -118,6 +119,7 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         freeLookCamera = GameObject.FindGameObjectWithTag("FreeLookCamera").GetComponent<CinemachineCamera>();
         cameraTransform = freeLookCamera.transform;
+        sensibilitySettings = freeLookCamera.GetComponent<SensibilitySettings>();
         freeLookCamera.Target.TrackingTarget = camTarget;
     }
 
@@ -191,15 +193,21 @@ public class PlayerController : MonoBehaviour
 
     public void PlayerAiming()
     {
-        if (aimInput > 0.1f)
+        if(isAiming && !wasAiming)
+        {
+            sensibilitySettings.AdjustSensiDuringAim();
+        }
+
+        if (isAiming)
         {
             fov.AimFOV();
             wasAiming = true;
             isRunning = false;
         }
-        else if (aimInput < 0.05f && wasAiming)
+        else if (!isAiming && wasAiming)
         {
             fov.NormalFOV();
+            sensibilitySettings.AdjustSensiNoAim();
             wasAiming = false;
         }
     }
