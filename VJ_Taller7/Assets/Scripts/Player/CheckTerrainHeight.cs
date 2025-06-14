@@ -14,7 +14,8 @@ public class CheckTerrainHeight : MonoBehaviour
     #region Ground Variables
     [Header("Player Grounded")]
     [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
-    public bool isGrounded;
+    [SerializeField] private bool isGrounded;
+    public bool IsGrounded { get => isGrounded; }
 
     [Tooltip("Useful for rough ground")]
     [SerializeField] private float GroundedOffset = 0.05f;

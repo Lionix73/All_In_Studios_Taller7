@@ -929,20 +929,19 @@ MonoBehaviour:
   canMove: 1
   walkSpeed: 2
   runSpeed: 5
-  slideDuration: 1
-  slideCooldown: 0.5
+  rotationSpeed: 10
+  slideDuration: 1.4
+  slideCrouchCooldown: 0.5
   maxJumps: 2
   jumpVerticalForce: 10
   jumpHorizontalForce: 5
   jumpDuration: 0.5
   playerCollider: {fileID: 1914418167501450766}
   crouchCollider: {fileID: 904133795709367156}
-  cameraTransform: {fileID: 0}
-  freeLookCamera: {fileID: 0}
   slideVFX: {fileID: 2065159594767801565}
   jumpVFX: {fileID: 8470606784871313049}
   camTarget: {fileID: 5342781938661206311}
-  rotationSpeed: 10
+  freeLookCamera: {fileID: 0}
   aimRig: {fileID: 4468059767758155451}
   gripRig: {fileID: 9186655726205670463}
 --- !u!114 &8834524075110823324
@@ -1250,6 +1249,18 @@ MonoBehaviour:
       - m_Target: {fileID: 6746573183159165536}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: OnAim
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 4328760497901184189}
+        m_TargetAssemblyTypeName: FOVHandler, Assembly-CSharp
+        m_MethodName: CheckZoom
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

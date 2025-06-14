@@ -1,5 +1,7 @@
 using Unity.Cinemachine;
+using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class FOVHandler : MonoBehaviour
 {
@@ -8,6 +10,7 @@ public class FOVHandler : MonoBehaviour
     [SerializeField] private FloatDampener timeToAim;
 
     private CinemachineCamera _freeLookCamera;
+    private GunManager _gunManager;
 
     public float CameraNormalFOV
     {
@@ -19,6 +22,11 @@ public class FOVHandler : MonoBehaviour
     {
         get => aimFOV;
         set => aimFOV = value;
+    }
+
+    private void Awake()
+    {
+        _gunManager = transform.root.GetComponentInChildren<GunManager>();    
     }
 
     private void Start()
@@ -54,4 +62,10 @@ public class FOVHandler : MonoBehaviour
         aimFOV = gunAimFOV;
     }
     #endregion
+
+    public void CheckZoom(InputAction.CallbackContext context)
+    {
+        if (context.started) _gunManager.CheckZoomIn();
+        if (context.canceled) _gunManager.CheckZoomOut();
+    }
 }

@@ -11,10 +11,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool canMove = true;
     [SerializeField] private float walkSpeed = 2f;
     [SerializeField] private float runSpeed = 5f;
+    [SerializeField] private float rotationSpeed = 10f;
 
-    [Header("Slide")]
+    [Header("Slide-Crouch")]
     [SerializeField] private float slideDuration = 3f;
-    [SerializeField] private float slideCooldown = 0.5f;
+    [SerializeField] private float slideCrouchCooldown = 0.5f;
     
     [Header("Jump")]
     [SerializeField] private int maxJumps = 2;
@@ -25,7 +26,6 @@ public class PlayerController : MonoBehaviour
     [Header("Components")]
     [SerializeField] private CapsuleCollider playerCollider;
     [SerializeField] private CapsuleCollider crouchCollider;
-    public CinemachineCamera freeLookCamera;
 
     [Header("VFX")]
     [SerializeField] private ParticleSystem slideVFX;
@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Camera Settings")]
     [SerializeField] private Transform camTarget;
-    [SerializeField] private float rotationSpeed = 10f;
+    [SerializeField] private CinemachineCamera freeLookCamera;
 
     [Header("Rigs")]
     [SerializeField] private MultiAimConstraint aimRig;
@@ -80,8 +80,6 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Private Components
-    private PlayerInput playerInput;
-    private GunManager gunManager;
     private CheckTerrainHeight checkTerrainHeight;
     private FOVHandler fov;
     private Rig rig;
@@ -105,8 +103,6 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        playerInput = GetComponent<PlayerInput>();
-        gunManager = FindAnyObjectByType<GunManager>();
         checkTerrainHeight = GetComponent<CheckTerrainHeight>();
         rig = GetComponentInChildren<Rig>();
         melee = GetComponentInChildren<Melee>();
@@ -148,7 +144,7 @@ public class PlayerController : MonoBehaviour
 
         if (moveDirection != Vector3.zero)
         {
-            rb.MovePosition(rb.position + desiredMoveDirection * speed * Time.deltaTime);
+            rb.MovePosition(rb.position + speed * Time.deltaTime * desiredMoveDirection);
         }
         else
         {
@@ -186,9 +182,6 @@ public class PlayerController : MonoBehaviour
         {
             isAiming = false;
         }
-
-        if (context.started) gunManager.CheckZoomIn();
-        if (context.canceled) gunManager.CheckZoomOut();
     }
 
     public void PlayerAiming()
@@ -299,7 +292,7 @@ public class PlayerController : MonoBehaviour
     #region -----Crouch / Slide-----
     public void OnCrouch(InputAction.CallbackContext context)
     {
-        if (context.performed && canCrouch && checkTerrainHeight.isGrounded)
+        if (context.performed && canCrouch && checkTerrainHeight.IsGrounded)
         {
             ExchangeColliders();
             isCrouching = !isCrouching;
@@ -310,8 +303,10 @@ public class PlayerController : MonoBehaviour
                 SlidingEvent?.Invoke();
                 StartCoroutine(Slide());
             }
-
-            Invoke(nameof(ResetCrouchFlag), 0.5f);
+            else if(!isRunning)
+            {
+                Invoke(nameof(ResetCrouchFlag), slideCrouchCooldown);
+            }
         }
     }
 
@@ -325,11 +320,10 @@ public class PlayerController : MonoBehaviour
 
         isSliding = false;
         isCrouching = false;
-        yield return new WaitForSeconds(slideCooldown);
 
         canSlide = true;
         ExchangeColliders();
-        Invoke(nameof(ResetCrouchFlag), 0.5f);
+        Invoke(nameof(ResetCrouchFlag), slideCrouchCooldown);
     }
 
     private void ExchangeColliders()
@@ -356,6 +350,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region -----Getters Setters-----
+
     #region Bools
     public bool PlayerCanMove { get => canMove; set => canMove = value; }
 
@@ -371,7 +366,7 @@ public class PlayerController : MonoBehaviour
 
     public bool PlayerIsSliding { get => isSliding; set => isSliding = value; }
 
-    public bool PlayerInGround { get => checkTerrainHeight.isGrounded; set => checkTerrainHeight.isGrounded = value; }
+    public bool PlayerInGround { get => checkTerrainHeight.IsGrounded; }
 
     public bool PlayerCanJump { get => playerAllowedToJump; set => playerAllowedToJump = value; }
 
@@ -399,5 +394,6 @@ public class PlayerController : MonoBehaviour
 
     public Vector2 MovInput { get => moveInput; }
     #endregion
+
     #endregion
 }

@@ -8,8 +8,8 @@ public struct FloatDampener
     private float currentVelocity;
 
     public float CurrentValue { get; private set; }
-    public float TargetValue { get; set; } //metodo de encapsulamiento
-    public float SmoothTime { get; private set; }
+    public float TargetValue { get; set; }
+    public float SmoothTime { get; set; }
 
     public void Update()
     {

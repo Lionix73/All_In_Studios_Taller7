@@ -14,12 +14,16 @@ public class SkillsManagerBase : MonoBehaviour
     {
         SearchSkillsUI();
     }
+
     public void SearchSkillsUI()
     {
         _actSkillImg = GameObject.Find("Active_Skill_Img").GetComponent<Image>();
         _actSkillMask = GameObject.Find("Active_Skill_Mask").GetComponent<Image>();
         _pasSkillImg = GameObject.Find("Passive_Skill_Img").GetComponent<Image>();
         _pasSkillMask = GameObject.Find("Passive_Skill_Mask").GetComponent<Image>();
+
+        _actSkillMask.fillAmount = 0;
+        _pasSkillMask.fillAmount = 0;
     }
 
     public void SetupShaderMaterial(Image img, Sprite skillSprite)
@@ -35,17 +39,17 @@ public class SkillsManagerBase : MonoBehaviour
     {
         if(isActiveSkill)
         {
-            StartCoroutine(DecreaseSkillMask(cooldown, _actSkillImg, _actSkillMask));
+            StartCoroutine(DecreaseSkillMask(cooldown, _actSkillMask));
             StartCoroutine(SkillReloadEffects(cooldown, _actSkillImg));
         }
         else
         {
-            StartCoroutine(DecreaseSkillMask(cooldown, _pasSkillImg, _pasSkillMask));
+            StartCoroutine(DecreaseSkillMask(cooldown, _pasSkillMask));
             StartCoroutine(SkillReloadEffects(cooldown, _pasSkillImg));
         }
     }
 
-    public IEnumerator DecreaseSkillMask(float cooldown, Image img, Image mask)
+    public IEnumerator DecreaseSkillMask(float cooldown, Image mask)
     {
         mask.fillAmount = 1;
 
