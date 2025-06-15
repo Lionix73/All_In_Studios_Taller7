@@ -12,8 +12,7 @@ public class GunManager : MonoBehaviour
     public Camera Camera; public CinemachineBrain cinemachineBrain; GameObject playerObject;
     private PlayerController player;
     [Space][Header("Managers")]
-    public CrosshairManager crosshairManager;  
-    private ThisObjectSounds soundManager;
+    public CrosshairManager crosshairManager;
     [Space][Header("Ammo Info")]
     public int actualTotalAmmo; //Cuanta municion tiene el jugador
     [SerializeField] private int MaxTotalAmmo; //Cuanta municion puede llevar el jugador
@@ -55,6 +54,7 @@ public class GunManager : MonoBehaviour
 
     private Vector3 dondePegaElRayDelArma;
 
+    #region Events - Si, cree un monton de eventos... para mas placer
     public delegate void ReloadingEvent();
     public event ReloadingEvent ReloadEvent;
 
@@ -63,6 +63,16 @@ public class GunManager : MonoBehaviour
 
     public delegate void StopFeebackEvent();
     public event StopFeebackEvent StopShootingFeeback;
+
+    public delegate void ShootEvent();
+    public event ShootEvent ShootingEvent;
+
+    public delegate void BuyWeaponEvent(bool canBuy);
+    public event BuyWeaponEvent buyWeaponEvent;
+
+    public delegate void BuyItemEvent(PickeableType type);
+    public event BuyItemEvent buyItemEvent;
+    #endregion
 
     private void Awake() {
         cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
@@ -179,9 +189,17 @@ public class GunManager : MonoBehaviour
         }
         if (!canShoot || CurrentGun.realoading || CurrentGun.bulletsLeft < 1) return;
 
-        if (context.started && CurrentGun.ShootConfig.IsAutomatic) 
-            shooting=true;
-        else if (!CurrentGun.ShootConfig.IsAutomatic) shooting = context.started;
+        if (context.started && CurrentGun.ShootConfig.IsAutomatic)
+        {
+            shooting = true;
+            ShootingEvent?.Invoke();
+        }
+        else if (!CurrentGun.ShootConfig.IsAutomatic)
+        {
+            shooting = context.started;
+
+            if(shooting) ShootingEvent?.Invoke();
+        }
 
         if (context.canceled && CurrentGun.ShootConfig.IsAutomatic)
         {
@@ -217,18 +235,21 @@ public class GunManager : MonoBehaviour
 
         if (actualScore < gun.scoreToBuy)
         {
-            soundManager.PlaySound("CantBuyItem");
+            CannottBuyItem();
             return;
         }
 
-        if (CurrentSecondGunType != gunPicked){
-            if (CurrentSecondGunType == CurrentGun.Type){
+        if (CurrentSecondGunType != gunPicked)
+        {
+            if (CurrentSecondGunType == CurrentGun.Type)
+            {
                 CurrentSecondGunType = CurrentGun.Type;
             }
+
             DespawnActiveGun();
             this.Gun = gunPicked;
-            soundManager.PlaySound("BuyItem");
-            
+            CanBuyWeapon();
+
             SetUpGun(gun);
 
             GameManager.Instance.scoreManager.SetScore(-gun.scoreToBuy);
@@ -262,6 +283,12 @@ public class GunManager : MonoBehaviour
     public void ExitPickeableGun(){
         inAPickeableGun = false;
     }
+
+    public void CanBuyWeapon() => buyWeaponEvent?.Invoke(true);
+
+    public void CanBuyItem(PickeableType type) => buyItemEvent?.Invoke(type);
+
+    public void CannottBuyItem() => buyWeaponEvent?.Invoke(false);
 
     public void EnterPickeableCollectable(PickeableType typeToPick, GameObject colleactable)
     {
@@ -332,7 +359,6 @@ public class GunManager : MonoBehaviour
 
     private void GetPlayer(GameObject activePlayer){
         player = activePlayer.GetComponentInChildren<PlayerController>();
-        soundManager = activePlayer.GetComponentInChildren<ThisObjectSounds>();
     }
 
     private void OnDrawGizmos() {

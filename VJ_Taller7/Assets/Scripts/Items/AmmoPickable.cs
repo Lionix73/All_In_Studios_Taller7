@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class AmmoPickable : MonoBehaviour
 {
@@ -11,7 +10,6 @@ public class AmmoPickable : MonoBehaviour
     private ObjectLookAtCamera uiForLook;
     [SerializeField] private int amountOfAmmo;
     [SerializeField] private float scoreToBuy; private bool canBuy;
-    [SerializeField] private ThisObjectSounds soundManager;
     private GunManager playerAmmo;
     private RespawnInteractables respawn;
     public PickeableType typeOfPickable;
@@ -60,15 +58,14 @@ public class AmmoPickable : MonoBehaviour
 
     public void BuyCollectable()
     {
-        if (!canBuy)
+        if (!canBuy || playerAmmo.actualTotalAmmo > 599)
         {
-            soundManager.PlaySound("CantBuyItem");
+            playerAmmo.CannottBuyItem();
             return;
         }
 
-        if (playerAmmo.actualTotalAmmo > 599) return;
         playerAmmo.actualTotalAmmo += amountOfAmmo;
-        soundManager?.PlaySound("AmmoPickable");
+        playerAmmo.CanBuyItem(typeOfPickable);
 
         GameManager.Instance.scoreManager.SetScore(-scoreToBuy);
     }

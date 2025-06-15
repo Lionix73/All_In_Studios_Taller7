@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using TMPro;
 using UnityEngine;
 
@@ -10,7 +9,6 @@ public class HealthPickable : MonoBehaviour
     private ObjectLookAtCamera uiForLook;
     [SerializeField] private float scoreToBuy; private bool canBuy;
     [SerializeField] private float amountOfHealing;
-    [SerializeField] private ThisObjectSounds soundManager;
     private Health playerHealth;
     private GunManager playerAmmo; //referencia igual a la del ammo pickeable para manegar todo ahi
     private RespawnInteractables respawn;
@@ -57,15 +55,14 @@ public class HealthPickable : MonoBehaviour
 
     public void BuyCollectable()
     {
-        if (!canBuy)
+        if (!canBuy || playerHealth.GetCurrentHeath == playerHealth.GetMaxHeath) //Evitar curar sin queres al tener toda la vida
         {
-            soundManager.PlaySound("CantBuyItem");
+            playerAmmo.CannottBuyItem();
             return;
         }
 
-        if (playerHealth.GetCurrentHeath == playerHealth.GetMaxHeath) return; //Evitar curar sin queres al tener toda la vida
         playerHealth.TakeHeal(amountOfHealing);
-        soundManager?.PlaySound("HalthPickable");
+        playerAmmo.CanBuyItem(typeOfPickable);
 
         GameManager.Instance.scoreManager.SetScore(-scoreToBuy);
     }
@@ -78,7 +75,8 @@ public class HealthPickable : MonoBehaviour
         CheckIfBuyable(1f);
     }
     
-     private void CheckIfBuyable(float score){
+    private void CheckIfBuyable(float score)
+    {
         if (score < scoreToBuy) canBuy = false; 
         else canBuy = true;
         priceText.text = $"{scoreToBuy}"; //necesito porner el score desde el incio y no queria buscar otra vez el gun** 
