@@ -4,24 +4,27 @@ using UnityEngine.UI;
 public class ChangeAimMultiplier : MonoBehaviour
 {
     private Slider slider;
-    private SettingsManager settingsManager;
+    private SensibilitySettingsManager sensiManager;
 
     private void Awake()
     {
         slider = GetComponent<Slider>();
-        settingsManager = SettingsManager.Singleton;
+        sensiManager = SensibilitySettingsManager.Singleton;
     }
 
     private void Start()
     {
-        slider.value = settingsManager.defaultAimMultiplier;
+        slider.value = sensiManager.AimSensiMultiplier;
     }
 
     public void ChangeAimSensitivity()
     {
-        if (settingsManager != null)
+        if (sensiManager != null)
         {
-            settingsManager.AimSensiMultiplier = slider.value;
+            float newValue = slider.value;
+
+            sensiManager.AimSensiMultiplier = newValue;
+            PlayerPrefs.SetFloat("Sensibility_AimMultiplier", newValue); 
         }
     }
 }

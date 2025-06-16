@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class SettingsManager : MonoBehaviour
+[DefaultExecutionOrder(-1)]
+public class SensibilitySettingsManager : MonoBehaviour
 {
     public float defaultSensiX = 5f;
     public float defaultSensiY = -2f;
@@ -12,9 +13,9 @@ public class SettingsManager : MonoBehaviour
     public float SensibilityLegacyGainY { get; set; }
     public float AimSensiMultiplier { get; set; }
 
-    private static SettingsManager _singleton;
+    private static SensibilitySettingsManager _singleton;
 
-    public static SettingsManager Singleton
+    public static SensibilitySettingsManager Singleton
     {
         get => _singleton;
         set => _singleton = value;
@@ -33,12 +34,21 @@ public class SettingsManager : MonoBehaviour
             return;
         }
 
-        SensibilityGainX = defaultSensiX;
-        SensibilityGainY = defaultSensiY;
-        AimSensiMultiplier = defaultAimMultiplier;
+        SetSensibility();
+    }
 
-        SensibilityLegacyGainX = defaultSensiX * 100f;
-        SensibilityLegacyGainY = defaultSensiY * 100f;
+    private void SetSensibility()
+    {
+        float sensibilityX = PlayerPrefs.GetFloat("Sensibility_Horizontal", defaultSensiX);
+        float sensibilityY = PlayerPrefs.GetFloat("Sensibility_Vertical", defaultSensiY);
+        float aimMulti = PlayerPrefs.GetFloat("Sensibility_AimMultiplier", defaultAimMultiplier);
+
+        SensibilityGainX = sensibilityX;
+        SensibilityGainY = sensibilityY;
+        AimSensiMultiplier = aimMulti;
+
+        SensibilityLegacyGainX = sensibilityX * 100f;
+        SensibilityLegacyGainY = sensibilityY * 100f;
     }
 
     private void OnDestroy()

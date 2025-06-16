@@ -47,49 +47,41 @@ public class VolumeController : MonoBehaviour
     public void SetGeneralVolume(float value)
     {
         vcaGeneral.setVolume(value);
-        PlayerPrefs.SetFloat(PREF_GENERAL, value);
     }
 
     public void SetDialoguesVolume(float value)
     {
         vcaDialogues.setVolume(value);
-        PlayerPrefs.SetFloat(PREF_DIALOGUES, value);
     }
 
     public void SetEnemiesVolume(float value)
     {
         vcaEnemies.setVolume(value);
-        PlayerPrefs.SetFloat(PREF_ENEMIES, value);
     }
 
     public void SetEnvironmentVolume(float value)
     {
         vcaEnvironment.setVolume(value);
-        PlayerPrefs.SetFloat(PREF_ENVIRONMENT, value);
     }
 
     public void SetGunsVolume(float value)
     {
         vcaGuns.setVolume(value);
-        PlayerPrefs.SetFloat(PREF_GUNS, value);
     }
 
     public void SetMusicVolume(float value)
     {
         vcaMusic.setVolume(value);
-        PlayerPrefs.SetFloat(PREF_MUSIC, value);
     }
 
     public void SetPlayerVolume(float value)
     {
         vcaPlayer.setVolume(value);
-        PlayerPrefs.SetFloat(PREF_PLAYER, value);
     }
 
     public void SetUIVolume(float value)
     {
         vcaUI.setVolume(value);
-        PlayerPrefs.SetFloat(PREF_UI, value);
     }
 
     // Asegura que los cambios se guarden en disco

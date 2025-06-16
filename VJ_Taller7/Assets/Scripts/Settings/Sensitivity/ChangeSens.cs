@@ -1,5 +1,4 @@
 using UnityEngine;
-using Unity.Cinemachine;
 using UnityEngine.UI;
 
 public class ChangeSens : MonoBehaviour
@@ -7,38 +6,46 @@ public class ChangeSens : MonoBehaviour
     [SerializeField] private bool vertical;
     
     private Slider slider;
-    private SettingsManager settingsManager;
+    private SensibilitySettingsManager sensiManager;
 
     private void Awake()
     {
         slider = GetComponent<Slider>();
-        settingsManager = SettingsManager.Singleton;
+        sensiManager = SensibilitySettingsManager.Singleton;
     }
 
     private void Start()
     {
         if (vertical)
-            slider.value = Mathf.Abs(settingsManager.defaultSensiY);
+        {
+            slider.value = Mathf.Abs(sensiManager.SensibilityGainY);
+        }
         else
-            slider.value = settingsManager.defaultSensiX;
+            slider.value = sensiManager.SensibilityGainX;
     }
 
     public void ChangeSensGain()
     {
         if (!vertical)
         {
-            if (settingsManager != null)
+            if (sensiManager != null)
             {
-                settingsManager.SensibilityGainX = slider.value;
-                settingsManager.SensibilityLegacyGainX = slider.value * 100;
+                float newValue = slider.value;
+
+                sensiManager.SensibilityGainX = newValue;
+                sensiManager.SensibilityLegacyGainX = newValue * 100;
+                PlayerPrefs.SetFloat("Sensibility_Horizontal", newValue);
             }
         }
         else if (vertical)
         {
-            if (settingsManager != null)
+            if (sensiManager != null)
             {
-                settingsManager.SensibilityGainY = slider.value * -1;
-                settingsManager.SensibilityLegacyGainY = slider.value * -100;
+                float newValue = slider.value * -1;
+
+                sensiManager.SensibilityGainY = newValue;
+                sensiManager.SensibilityLegacyGainY = newValue * 100;
+                PlayerPrefs.SetFloat("Sensibility_Vertical", newValue);
             }
         }
     }

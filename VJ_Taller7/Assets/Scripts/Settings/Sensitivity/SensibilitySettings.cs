@@ -5,14 +5,14 @@ using UnityEngine.UI;
 public class SensibilitySettings : MonoBehaviour
 {
     private CinemachineInputAxisController axisController;
-    private SettingsManager settingsManager;
+    private SensibilitySettingsManager SensibilitySettingsManager;
 
     private float currentSensiX;
     private float currentSensiY;
 
     private void Awake()
     {
-        settingsManager = SettingsManager.Singleton;
+        SensibilitySettingsManager = SensibilitySettingsManager.Singleton;
         axisController = GetComponent<CinemachineInputAxisController>();
     }
 
@@ -35,34 +35,34 @@ public class SensibilitySettings : MonoBehaviour
         {
             if (c.Name == "Look Orbit X")
             {
-                c.Input.Gain = settingsManager.SensibilityGainX;
-                c.Input.LegacyGain = settingsManager.SensibilityLegacyGainX;
+                c.Input.Gain = SensibilitySettingsManager.SensibilityGainX;
+                c.Input.LegacyGain = SensibilitySettingsManager.SensibilityLegacyGainX;
             }
             else if (c.Name == "Look Orbit Y")
             {
-                c.Input.Gain = settingsManager.SensibilityGainY;
-                c.Input.LegacyGain = settingsManager.SensibilityLegacyGainY;
+                c.Input.Gain = SensibilitySettingsManager.SensibilityGainY;
+                c.Input.LegacyGain = SensibilitySettingsManager.SensibilityLegacyGainY;
             }
         }
     }
 
     public void AdjustSensiDuringAim()
     {
-        settingsManager.SensibilityGainX *= settingsManager.AimSensiMultiplier;
-        settingsManager.SensibilityGainY *= settingsManager.AimSensiMultiplier;
+        SensibilitySettingsManager.SensibilityGainX *= SensibilitySettingsManager.AimSensiMultiplier;
+        SensibilitySettingsManager.SensibilityGainY *= SensibilitySettingsManager.AimSensiMultiplier;
         ChangeCameraSensitivity(1);
     }
 
     public void AdjustSensiNoAim()
     {
-        settingsManager.SensibilityGainX = currentSensiX;
-        settingsManager.SensibilityGainY = currentSensiY;
+        SensibilitySettingsManager.SensibilityGainX = currentSensiX;
+        SensibilitySettingsManager.SensibilityGainY = currentSensiY;
         ChangeCameraSensitivity(1);
     }
 
     private void GetCurrentSensitivity(float _)
     {
-        currentSensiX = settingsManager.SensibilityGainX;
-        currentSensiY = settingsManager.SensibilityGainY;
+        currentSensiX = SensibilitySettingsManager.SensibilityGainX;
+        currentSensiY = SensibilitySettingsManager.SensibilityGainY;
     }
 }
