@@ -322,9 +322,10 @@ public class UIManager : MonoBehaviour
         else
         {
             IsDead = true;
+            currentRoundText.text = $"{1}";
+            currentWaveText.text = $"{0}";
             SwitchPanels("UIPlayer/DeathScene");
             StartCoroutine(WaitingTimeForMainMenu("DeathScene/MainMenu"));
-
         }
 
 
@@ -518,7 +519,6 @@ public class UIManager : MonoBehaviour
         UiEnemyCounter.text = "";
         Dialogue roundDialogue = UiRoundCounter.GetComponent<Dialogue>();
         roundDialogue.Lines[0] = $"RONDA {currentRound}";
-        currentRoundText.text = $"{currentRound}";
         roundDialogue.Delays[0] = (roundDialogue.TextSpeed * 9);
         roundDialogue.StartDialogue();
         actualRoundDisplay = false;
@@ -527,6 +527,7 @@ public class UIManager : MonoBehaviour
     public void UIChangeImageRound(int currentRound)
     {
         Debug.Log(currentRound);
+        currentRoundText.text = $"{currentRound}";
         //if (!actualRoundDisplay) return;
 
         // Limpiar otros textos si es necesario
@@ -613,13 +614,13 @@ public class UIManager : MonoBehaviour
 
     public void UIActualWave(int currentWave)
     {
-        UiWaveCounter.text = $"Oleada: {currentWave} /3";
+        UiWaveCounter.text = $"Wave: {currentWave} /3";
         currentWaveText.text = $"{currentWave}";
     }
 
     public void UIEnemiesAlive(int enemiesAlive)
     {
-        UiEnemyCounter.text = $"Enemigos Restantes: {enemiesAlive}";
+        UiEnemyCounter.text = $"{enemiesAlive}";
     }
 
     public void UIInstructionToPass(string instruction)

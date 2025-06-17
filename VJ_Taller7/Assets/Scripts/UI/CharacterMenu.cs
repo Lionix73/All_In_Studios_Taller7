@@ -16,16 +16,14 @@ public class CharacterMenu : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10f;
     private bool isRotating = false;
     private Vector3 lastMousePosition;
+    
     private void Start()
     {
         characterManager = CharacterManager.Instance;
     }
     private void OnEnable()
     {
-
-
-        //characterManager.characters[selectedIndex]
-        RenderAvatar();
+        Invoke(nameof(RenderAvatar), 0.3f);
     }
     private void OnDisable()
     {

@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     #region Visible Variables
     [Header("Movement Settings")]
     [SerializeField] private bool canMove = true;
+    [SerializeField] private bool playerAllowedToJump = true;
     [SerializeField] private float walkSpeed = 2f;
     [SerializeField] private float runSpeed = 5f;
     [SerializeField] private float rotationSpeed = 10f;
@@ -47,7 +48,6 @@ public class PlayerController : MonoBehaviour
 
     #region Private Ints
     private int jumpCount = 0;
-    private int animationLayerToShow = 0;
     #endregion
 
     #region Private Bools
@@ -55,27 +55,18 @@ public class PlayerController : MonoBehaviour
     private bool isRunning;
     private bool isCrouching;
     private bool isSliding;
+    private bool isAiming;
+    private bool isMoving;
+    private bool isJumping;
+
     private bool canSlide = true;
     private bool canCrouch = true;
     private bool canJump = true;
-    private bool playerAllowedToJump = true;
-    private bool isEmoting;
-    private bool isAiming;
-    private bool isMoving;
-    private bool usingRifle = true;
-    private bool isJumping;
-    private bool wasOnGround;
-    private bool isDashing;
-    private bool canDash = true;
     private bool canMelee = true;
-    private bool canShoot = true;
-    private bool canReload = true;
     #endregion
 
     #region Private Vectors
     private Vector2 moveInput;
-    private Vector2 lookInput;
-    private Vector3 slideDirection;
     private Vector3 desiredMoveDirection;
     #endregion
 
@@ -127,14 +118,14 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!canMove) return;
+
         HandleMovement();
         HandleRotation();
     }
 
     private void HandleMovement()
     {
-        if (!canMove) return;
-
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
         isMoving = moveInput.sqrMagnitude > 0.1f;
 
@@ -154,8 +145,6 @@ public class PlayerController : MonoBehaviour
 
     private void HandleRotation()
     {
-        if(!canMove) return;
-
         if (moveInput.magnitude > 0.05f || aimInput > 0.05f)
         {
             Vector3 cameraForward = cameraTransform.forward;
@@ -170,6 +159,16 @@ public class PlayerController : MonoBehaviour
         moveInput = context.ReadValue<Vector2>();
     }
 
+    public void OnRun(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            isRunning = !isRunning;
+            isCrouching = false;
+        }
+    }
+
+    #region -----Aim-----
     public void OnAim(InputAction.CallbackContext context)
     {
         aimInput = context.ReadValue<float>();
@@ -204,15 +203,7 @@ public class PlayerController : MonoBehaviour
             wasAiming = false;
         }
     }
-
-    public void OnRun(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            isRunning = !isRunning;
-            isCrouching = false;
-        }
-    }
+    #endregion
 
     #region -----Adjust Rigs-----
     /// <summary>
@@ -355,8 +346,6 @@ public class PlayerController : MonoBehaviour
     public bool PlayerCanMove { get => canMove; set => canMove = value; }
 
     public bool PlayerIsMoving { get => isMoving; set => isMoving = value; }
-
-    public bool PlayerIsEmoting { get => isEmoting; set => isEmoting = value; }
 
     public bool PlayerIsJumping { get => isJumping; set => isJumping = value; }
 

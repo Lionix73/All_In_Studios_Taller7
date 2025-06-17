@@ -7,6 +7,9 @@ using System;
 public class SliderValueUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI valueText;
+    [Space]
+    [SerializeField][Range(0, 3)] private int numberOfTenths = 1;
+    [SerializeField] private float multiplier = 1f;
     private Slider slider;
 
     void Start()
@@ -17,7 +20,6 @@ public class SliderValueUI : MonoBehaviour
 
     public void UpdateSlideNumber()
     {
-        //valueText.text = Mathf.FloorToInt(slider.value).ToString();
-        valueText.text = Math.Round(slider.value, 1).ToString();
+        valueText.text = Math.Round(slider.value * multiplier, numberOfTenths).ToString();
     }
 }

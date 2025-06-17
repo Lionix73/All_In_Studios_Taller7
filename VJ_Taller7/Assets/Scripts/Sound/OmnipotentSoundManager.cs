@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class OmnipotentSoundManager : MonoBehaviour
@@ -7,6 +8,11 @@ public class OmnipotentSoundManager : MonoBehaviour
 
     public void StopEverySound()
     {
+        StartCoroutine(SearchSoundsAndStopThem());
+    }
+
+    private IEnumerator SearchSoundsAndStopThem()
+    {
         sounds = FindObjectsByType<ThisObjectSounds>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         roundsMusic = FindFirstObjectByType<RoundsMusicManager>();
 
@@ -15,5 +21,8 @@ public class OmnipotentSoundManager : MonoBehaviour
             sound.StopAllSounds();
         }
         roundsMusic.StopMusic();
+
+        yield return null;
     }
+
 }
