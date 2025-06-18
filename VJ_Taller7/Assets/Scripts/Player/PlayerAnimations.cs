@@ -1,16 +1,22 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
 public class PlayerAnimations : MonoBehaviour
 {
+    [Header("Animator Controllers")]
+    [SerializeField] private List<RuntimeAnimatorController> animators;
+
     [Header("Animator")]
     [SerializeField] private FloatDampener speedX;
     [SerializeField] private FloatDampener speedY;
-    [SerializeField] private FloatDampener layersDampener1;
-    [SerializeField] private FloatDampener layersDampener2;
+    /*[SerializeField] private FloatDampener layersDampener1;
+    //[SerializeField] private FloatDampener layersDampener2;
+    //private int animationLayerToShow = 0;*/
 
-    private int animationLayerToShow = 0;
+    private bool isEmoting;
+    private GunType lastGun;
 
     private GunManager _gunManager;
     private PlayerController _playerController;
@@ -27,31 +33,32 @@ public class PlayerAnimations : MonoBehaviour
 
     private void Start()
     {
-        SelectGunType();
+        lastGun = _gunManager.CurrentGun.Type;
 
         _playerController.JumpingEvent += JumpAnimation;
         _playerController.MeleeAttackEvent += MeleeAnimation;
         _gunManager.ReloadEvent += ReloadAnimation;
         _gunManager.ChangeGun += WeaponChangeAnimation;
+        _gunManager.ShootingEvent += ShootAnimation;
         _gunManager.StopShootingFeeback += StopShootingAnimation;
     }
 
     private void Update()
     {
+        //UpdateAnimLayer();
         HandleAnimations();
-        UpdateAnimLayer();
         HandleEmotes();
+
+        if(lastGun != _gunManager.CurrentGun.Type) SelectGunType();
     }
 
     private void HandleAnimations()
     {
-        animator.SetBool("ShortGun", _gunManager.CurrentGun.Type == GunType.BasicPistol || _gunManager.CurrentGun.Type == GunType.Revolver ? true : false);
-
         speedX.Update();
         speedY.Update();
-        layersDampener1.Update();
-        layersDampener2.Update();
-        ChangeAnimLayer(SelectAnimLayer());
+        /*layersDampener1.Update();
+        //layersDampener2.Update();
+        //ChangeAnimLayer(SelectAnimLayer());*/
 
         speedX.TargetValue = _playerController.MovInput.x;
         speedY.TargetValue = _playerController.MovInput.y;
@@ -62,7 +69,7 @@ public class PlayerAnimations : MonoBehaviour
         animator.SetBool("isCrouching", _playerController.PlayerIsCrouching);
         animator.SetBool("isSliding", _playerController.PlayerIsSliding);
         animator.SetBool("isAiming", _playerController.PlayerIsAiming);
-        _playerController.PlayerIsEmoting = animator.GetBool("isEmoting");
+        isEmoting = animator.GetBool("isEmoting");
 
         animator.SetFloat("SpeedX", speedX.CurrentValue);
         animator.SetFloat("SpeedY", speedY.CurrentValue);
@@ -75,13 +82,14 @@ public class PlayerAnimations : MonoBehaviour
             animator.SetBool("isEmoting", false);
         }
 
-        if (_playerController.PlayerIsEmoting)
+        if (isEmoting)
             _rig.weight = 0f;
         else
             _rig.weight = 1f;
     }
 
-    #region -----Animation Layers Management------
+    #region -----Animation Layers Management------ NO ESTA EN USO ACTUALMENTE
+    /*
     private void ChangeAnimLayer(int index)
     {
         if (animationLayerToShow == index) return;
@@ -108,7 +116,7 @@ public class PlayerAnimations : MonoBehaviour
         animator.SetLayerWeight(animationLayerToShow, layersDampener1.TargetValue == 1 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
         int layersAmount = animator.GetLayerIndex("Fire");
 
-        for (int i = 0; i < layersAmount; i++)
+        for (int i = 0; i < 2; i++)
         {
             if (i != animationLayerToShow && animator.GetLayerWeight(i) > 0.05f)
             {
@@ -162,56 +170,62 @@ public class PlayerAnimations : MonoBehaviour
             default: 
                 return 0;
         }
-    }
+    }*/
     #endregion
 
     #region -----GUNS-----
+    private void ShootAnimation()
+    {
+        if (!_playerController.PlayerCanMove || _gunManager.CurrentGun.bulletsLeft < 1) return;
+
+        if (_gunManager.CurrentGun.ShootConfig.IsAutomatic)
+        {
+            animator.SetBool("ShootBurst", true);
+        }
+        else
+        {
+            animator.SetTrigger("ShootOnce");
+        }
+    }
+
     private void SelectGunType()
     {
         switch (_gunManager.CurrentGun.Type)
         {
             case GunType.Rifle:
-                animator.SetFloat("GunType", 1f);
+                animator.runtimeAnimatorController = animators[1];
                 break;
 
             case GunType.BasicPistol:
-                animator.SetFloat("GunType", 2f);
+                animator.runtimeAnimatorController = animators[0];
                 break;
 
             case GunType.Revolver:
-                animator.SetFloat("GunType", 3f);
+                animator.runtimeAnimatorController = animators[0];
                 break;
 
             case GunType.Shotgun:
-                animator.SetFloat("GunType", 4f);
                 break;
 
             case GunType.Sniper:
-                animator.SetFloat("GunType", 5f);
                 break;
 
             case GunType.ShinelessFeather:
-                animator.SetFloat("GunType", 6f);
                 break;
 
             case GunType.GoldenFeather:
-                animator.SetFloat("GunType", 7f);
                 break;
 
             case GunType.GranadeLaucher:
-                animator.SetFloat("GunType", 8f);
                 break;
 
             case GunType.AncientTome:
-                animator.SetFloat("GunType", 9f);
                 break;
 
             case GunType.Crossbow:
-                animator.SetFloat("GunType", 10f);
                 break;
 
             case GunType.MysticCanon:
-                animator.SetFloat("GunType", 11f);
                 break;
         }
     }

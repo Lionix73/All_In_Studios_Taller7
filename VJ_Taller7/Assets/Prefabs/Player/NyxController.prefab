@@ -1989,6 +1989,7 @@ Transform:
   m_Children:
   - {fileID: 1740987922999904962}
   - {fileID: 3751603619764762408}
+  - {fileID: 8299287951663620090}
   - {fileID: 8578890993883861829}
   - {fileID: 1594453455783407861}
   - {fileID: 1823466108357260553}
@@ -2255,13 +2256,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27a56a33db6098145a3be4cb9cfb4864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animators:
+  - {fileID: 9100000, guid: 50f57b04bf9a4b349ba43ebd340c646d, type: 2}
+  - {fileID: 9100000, guid: 1596d79b2aa54684b8525e082ca31b6d, type: 2}
   speedX:
     smoothTime: 0.3
   speedY:
-    smoothTime: 0.3
-  layersDampener1:
-    smoothTime: 0.3
-  layersDampener2:
     smoothTime: 0.3
 --- !u!114 &5374355282723326770
 MonoBehaviour:
@@ -2276,6 +2276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canMove: 1
+  playerAllowedToJump: 1
   walkSpeed: 2
   runSpeed: 5
   rotationSpeed: 10
@@ -3358,7 +3359,6 @@ Transform:
   m_LocalScale: {x: 0.99999994, y: 0.9999999, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8299287951663620090}
   - {fileID: 8344783526048416468}
   - {fileID: 5095423944804094529}
   - {fileID: 3704968892864631282}
@@ -3473,7 +3473,7 @@ GameObject:
   - component: {fileID: 5683410643621367551}
   - component: {fileID: 6445423496369197918}
   m_Layer: 0
-  m_Name: GunCollider :P
+  m_Name: ColliderMelee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3487,12 +3487,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6935891122502491615}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.36, y: 3.24, z: 3.06}
+  m_LocalRotation: {x: -0.00000018812712, y: -0.93441933, z: -0.000000089406946, w: 0.35617504}
+  m_LocalPosition: {x: -0.018119268, y: -0.005433384, z: 0.00032531074}
+  m_LocalScale: {x: 3.4118717, y: 3.2900212, z: 3.1072416}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1519121830387042536}
+  m_Father: {fileID: 2137891442159060919}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &5683410643621367551
 BoxCollider:

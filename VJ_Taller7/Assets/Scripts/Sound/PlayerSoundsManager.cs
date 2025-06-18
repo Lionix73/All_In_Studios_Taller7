@@ -80,11 +80,12 @@ public class PlayerSoundsManager : MonoBehaviour
 
     private void OnShootingEvent()
     {
-        if (!firerateAllowShoot || !_playerController.PlayerCanMove || _gunManager.CurrentGun.realoading) return;
+        if (!firerateAllowShoot || !_playerController.PlayerCanMove) return;
         
         if (_gunManager.CurrentGun.bulletsLeft < 1)
         {
             soundManager.PlaySound("EmptyMAG");
+            StartCoroutine(FirerateDelay());
             return;
         }
 

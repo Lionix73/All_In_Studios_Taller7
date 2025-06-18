@@ -38,7 +38,6 @@ public class GunManager : MonoBehaviour
 
     private bool shooting;
     private bool canShoot = true;
-
     public bool GunCanShoot
     {
         get => canShoot;
@@ -136,6 +135,7 @@ public class GunManager : MonoBehaviour
         secondHandRigTarget.position = secondHandGrabPoint.position;
     }
 
+    #region -----Set Up-----
     private void SetUpGun(GunScriptableObject gun){
         CurrentGun = gun.Clone() as GunScriptableObject;
         CurrentGun.Spawn(gunParent, this, Camera);
@@ -157,14 +157,6 @@ public class GunManager : MonoBehaviour
 
         Debug.Log($"Zoom set to: {CurrentGun.aimFov}");
     }
-
-    public void DespawnActiveGun(){
-        if (CurrentGun!=null){
-            CurrentGun.DeSpawn();
-        }
-        Destroy(CurrentGun);
-    }
-
     private void SetUpGunRigs(){
         Transform[] chGun = gunParent.GetComponentsInChildren<Transform>();
         //secondHandGrabPoint = GameObject.Find("SecondHanGrip").transform;
@@ -175,6 +167,7 @@ public class GunManager : MonoBehaviour
             }
         }
     }
+    #endregion
 
     public void OnShoot(InputAction.CallbackContext context) //RECORDAR ASIGNAR MANUALMENTE EN LOS EVENTOS DEL INPUT
     {
@@ -187,7 +180,13 @@ public class GunManager : MonoBehaviour
             else
                 canShoot = true;
         }
-        if (!canShoot || CurrentGun.realoading || CurrentGun.bulletsLeft < 1) return;
+        if (!canShoot || CurrentGun.realoading) return;
+
+        if(context.started && CurrentGun.bulletsLeft < 1)
+        {
+            ShootingEvent?.Invoke();
+            return;
+        }
 
         if (context.started && CurrentGun.ShootConfig.IsAutomatic)
         {
@@ -208,6 +207,7 @@ public class GunManager : MonoBehaviour
         }
     }
 
+    #region -----Weapon Change-----
     public void OnWeaponChange(InputAction.CallbackContext context){
         if (context.started){
             if (CurrentSecondGunType!=CurrentGun.Type)
@@ -229,6 +229,15 @@ public class GunManager : MonoBehaviour
         CurrentGun.BulletsLeft = tempAmmo;
     }
 
+    public void DespawnActiveGun(){
+        if (CurrentGun!=null){
+            CurrentGun.DeSpawn();
+        }
+        Destroy(CurrentGun);
+    }
+    #endregion
+
+    #region -----Grab Gun-----
     public void GrabGun(GunType gunPicked){
         float actualScore = GameManager.Instance.scoreManager.GetScore();
         GunScriptableObject gun = gunsList.Find(gun => gun.Type == gunPicked);
@@ -272,9 +281,10 @@ public class GunManager : MonoBehaviour
             }
         }
     }
+    #endregion
 
-    #region Pickeables management //Aqui sabemos si el jugador esta cerca de un arma, que tipo de arma es y si puede recogerla
-
+    #region -----Pickeables Management-----
+    //Aqui sabemos si el jugador esta cerca de un arma, que tipo de arma es y si puede recogerla
     public void EnterPickeableGun(GunType gunType){
         gunToPick = gunType;
         inAPickeableGun = true;
@@ -316,7 +326,8 @@ public class GunManager : MonoBehaviour
     }
     #endregion
 
-    #region Ammo management //Aqui recibimos el input de recarga y llamamos a la funciond de recarga
+    #region -----Ammo Management-----
+    //Aqui recibimos el input de recarga y llamamos a la funciond de recarga
     public void OnReload(InputAction.CallbackContext context)
     {
         if (CurrentGun.Type == GunType.ShinelessFeather) return;
@@ -348,6 +359,7 @@ public class GunManager : MonoBehaviour
     }
     #endregion
 
+    #region -----Get Objects-----
     /// <summary>
     /// Devuelve el arma que se le pida
     /// </summary>
@@ -360,6 +372,21 @@ public class GunManager : MonoBehaviour
     private void GetPlayer(GameObject activePlayer){
         player = activePlayer.GetComponentInChildren<PlayerController>();
     }
+    #endregion
+
+    #region -----Zoom-----
+    public void CheckZoomIn(){
+        if (CurrentGun.Type == GunType.Sniper) crosshairManager.AimingZoomIn(); 
+    }
+    public void CheckZoomOut(){
+        crosshairManager.AimingZoomOut();
+    }
+    #endregion
+
+    public void ScaleDamage(int damageToAdd)
+    {
+        basePlayerDamage += damageToAdd;
+    }
 
     private void OnDrawGizmos() {
         if (CurrentGun == null) return;
@@ -369,16 +396,5 @@ public class GunManager : MonoBehaviour
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(dondePegaElRayDelArma, 0.3f);
-    }
-
-    public void CheckZoomIn(){
-        if (CurrentGun.Type == GunType.Sniper) crosshairManager.AimingZoomIn(); 
-    }
-    public void CheckZoomOut(){
-        crosshairManager.AimingZoomOut();
-    }
-
-    public void ScaleDamage(int damageToAdd){
-        basePlayerDamage += damageToAdd;
     }
 }
