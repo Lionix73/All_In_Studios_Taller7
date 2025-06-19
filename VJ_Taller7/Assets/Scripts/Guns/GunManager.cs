@@ -52,6 +52,7 @@ public class GunManager : MonoBehaviour
     private int CurrentSecondaryGunBulletsLeft;
 
     private Vector3 dondePegaElRayDelArma;
+    private UIManager ui;
 
     #region Events - Si, cree un monton de eventos... para mas placer
     public delegate void ReloadingEvent();
@@ -76,6 +77,7 @@ public class GunManager : MonoBehaviour
     private void Awake() {
         cinemachineBrain = GameObject.Find("CinemachineBrain").GetComponent<CinemachineBrain>();
         Camera = cinemachineBrain.GetComponent<Camera>();
+        ui = UIManager.Singleton;
         playerObject = transform.parent.gameObject;
         GetPlayer(playerObject);
 
@@ -169,9 +171,9 @@ public class GunManager : MonoBehaviour
     }
     #endregion
 
+    #region -----Shooting-----
     public void OnShoot(InputAction.CallbackContext context) //RECORDAR ASIGNAR MANUALMENTE EN LOS EVENTOS DEL INPUT
     {
-        UIManager ui = UIManager.Singleton;
         if (ui!=null){ 
             if (ui.IsPaused || ui.IsMainMenu || ui.IsDead)
             {
@@ -206,6 +208,7 @@ public class GunManager : MonoBehaviour
             StopShootingFeeback?.Invoke();
         }
     }
+    #endregion
 
     #region -----Weapon Change-----
     public void OnWeaponChange(InputAction.CallbackContext context){

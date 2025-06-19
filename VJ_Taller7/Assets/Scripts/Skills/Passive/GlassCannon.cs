@@ -8,16 +8,14 @@ public class GlassCannon : PassiveSkillBase
 
     private GunManager gunManager;
     private Health playerHealth;
-    private GunType lastGun;
+    private GunType lastGun = GunType.BasicPistol;
     private bool healthApplied = false;
     private bool damageApplied = false;
 
-    private void Start()
+    private void Awake()
     {
-        gunManager = FindAnyObjectByType<GunManager>();
+        gunManager = transform.root.GetComponentInChildren<GunManager>();
         playerHealth = GetComponentInParent<Health>();
-
-        lastGun = gunManager.CurrentGun.Type;
     }
 
     public override void CheckCondition()

@@ -1,37 +1,32 @@
-using System.Collections;
-using TMPro;
 using UnityEngine;
 
 public class Health : MonoBehaviour, IDamageable
 {
-    [SerializeField] private TextMeshProUGUI healthDisplay;
-    [SerializeField] private float currentHealth { get; set; }
-    [SerializeField] private float maxHealth { get; set; } 
+    [SerializeField] private float currentHealth;
+    [SerializeField] private float maxHealth;
+    public bool isDead;
+
+    #region Events
     public delegate void HealthChanged(float currentHealth, float maxHealth);
     public event HealthChanged OnHealthChanged;
 
     public delegate void PlayerDeath(GameObject player);
     public event PlayerDeath OnPlayerDeath; //Este evento es para avisar al player manager, luego ese avisa a todos
-    public bool isDead;
 
-    public Animator animator;
+    public delegate void PlayerDamage();
+    public event PlayerDamage OnPlayerDamage;
+    #endregion
 
     private PlayerController pController;
-    private ThisObjectSounds soundManager;
     private SegundoAliento secondBreath;
 
-    private void Start()
+    private void Awake()
     {
         pController = GetComponent<PlayerController>();
-        soundManager = GetComponentInParent<ThisObjectSounds>();
         secondBreath = GetComponentInChildren<SegundoAliento>();
     }
 
-    void Update()
-    {
-
-    }
-
+    #region -----Set up-----
     /// <summary>
     /// Se llama desde el player manager para los valores inicales de la vida al aparce el jugador.
     /// </summary>
@@ -43,39 +38,40 @@ public class Health : MonoBehaviour, IDamageable
         HealthChange();
         isDead = false;
     }
+    #endregion
 
+    #region -----Damage-----
     public void TakeDamage(int damage)
     {
         if (isDead) return;
 
         currentHealth -= damage;
         HealthChange();
+
         if (currentHealth <= 0)
         {
-            if (secondBreath.IsSecondBreathActive) return;
-
-            StartCoroutine(PlayerDead());
-            OnPlayerDeath?.Invoke(gameObject);
+            PlayerDead();
         }
         else
         {
-            animator.SetTrigger("Hit");
-            soundManager.PlaySound("Hit");
+            OnPlayerDamage?.Invoke();
         }
     }
+    #endregion
 
-    private IEnumerator PlayerDead()
+    #region -----Dead-----
+    private void PlayerDead()
     {
+        if (secondBreath.IsSecondBreathActive) return;
+
         isDead = true;
         pController.PlayerCanMove = false;
         pController.PlayerCanJump = false;
-
-        animator.SetTrigger("Dead");
-        soundManager.PlaySound("Dead");
-        yield return new WaitForSeconds(2f);
-        soundManager.StopAllSounds();
+        OnPlayerDeath?.Invoke(gameObject);
     }
+    #endregion
 
+    #region -----Healing-----
     /// <summary>
     /// Heal the player
     /// </summary>
@@ -91,17 +87,21 @@ public class Health : MonoBehaviour, IDamageable
         }
         HealthChange();
     }
+    #endregion
 
-    public void ScaleHealth(float amount){
+    #region -----Progresion-----
+    public void ScaleHealth(float amount)
+    {
         maxHealth += amount;
         if (currentHealth > maxHealth) currentHealth = maxHealth;
         HealthChange();
     }
-    //Invoke the evento de que cambio la vida, llamar cada vez que ocurre un cambio
-    private void HealthChange()
-    {
-        OnHealthChanged?.Invoke(currentHealth, maxHealth);
-    }
+    #endregion
+
+    //Invocar el evento del cambio de la vida, llamar cada vez que ocurre un cambio
+    private void HealthChange() => OnHealthChanged?.Invoke(currentHealth, maxHealth);
+
+    #region -----Getters-----
     public Transform GetTransform()
     {
         return transform;
@@ -116,4 +116,5 @@ public class Health : MonoBehaviour, IDamageable
     {
         get { return currentHealth; }
     }
+    #endregion
 }

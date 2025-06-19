@@ -1740,6 +1740,28 @@ AnimatorStateTransition:
   m_InterruptionSource: 4
   m_OrderedInterruption: 0
   m_CanTransitionToSelf: 1
+--- !u!1107 &-1744116994639845887
+AnimatorStateMachine:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Walk
+  m_ChildStates:
+  - serializedVersion: 1
+    m_State: {fileID: 8108973185901272653}
+    m_Position: {x: 380, y: 110, z: 0}
+  m_ChildStateMachines: []
+  m_AnyStateTransitions: []
+  m_EntryTransitions: []
+  m_StateMachineTransitions: {}
+  m_StateMachineBehaviours: []
+  m_AnyStatePosition: {x: 50, y: 20, z: 0}
+  m_EntryPosition: {x: 50, y: 120, z: 0}
+  m_ExitPosition: {x: 800, y: 120, z: 0}
+  m_ParentStateMachinePosition: {x: 380, y: 10, z: 0}
+  m_DefaultState: {fileID: 8108973185901272653}
 --- !u!206 &-1658529823170157658
 BlendTree:
   m_ObjectHideFlags: 1
@@ -4925,9 +4947,6 @@ AnimatorStateMachine:
   m_Name: Movement Pistol
   m_ChildStates:
   - serializedVersion: 1
-    m_State: {fileID: 8108973185901272653}
-    m_Position: {x: 630, y: -80, z: 0}
-  - serializedVersion: 1
     m_State: {fileID: 1695694872715772078}
     m_Position: {x: 310, y: 580, z: 0}
   - serializedVersion: 1
@@ -4946,6 +4965,9 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_StateMachine: {fileID: 8582644679235842618}
     m_Position: {x: 890, y: -250, z: 0}
+  - serializedVersion: 1
+    m_StateMachine: {fileID: -1744116994639845887}
+    m_Position: {x: 630, y: -80, z: 0}
   m_AnyStateTransitions:
   - {fileID: 8799733325118414975}
   m_EntryTransitions: []

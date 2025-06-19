@@ -92,7 +92,7 @@ public class ThisObjectSounds : MonoBehaviour
     {
         foreach (var s in sounds)
         {
-            s.GetComponent<StudioEventEmitter>().Stop();
+            s.Stop();
         }
     }
 

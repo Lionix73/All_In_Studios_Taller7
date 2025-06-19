@@ -3,15 +3,19 @@ using UnityEngine;
 
 public class PlayerSoundsManager : MonoBehaviour
 {
-    private ThisObjectSounds soundManager;
+    #region Private Components
+    private ThisObjectSounds _soundManager;
     private GunManager _gunManager;
     private PlayerController _playerController;
+    private Health _health;
+    #endregion
 
     private void Awake()
     {
-        soundManager = GetComponent<ThisObjectSounds>();
+        _soundManager = GetComponent<ThisObjectSounds>();
         _gunManager = FindAnyObjectByType<GunManager>();
         _playerController = GetComponent<PlayerController>();
+        _health = GetComponent<Health>();
     }
 
     private void Start()
@@ -26,13 +30,13 @@ public class PlayerSoundsManager : MonoBehaviour
         _playerController.JumpingEvent += JumpSound;
         _playerController.MeleeAttackEvent += MeleeSound;
         _playerController.SlidingEvent += SlideSound;
+        _health.OnPlayerDamage += HitSound;
+        _health.OnPlayerDeath += DeathSound;
     }
 
     private void Update()
     {
         MovSounds();
-
-        if(_gunManager.CurrentGun.bulletsLeft < 1) soundManager.StopSound("rifleFire");
     }
 
     #region -----Movement-----
@@ -40,34 +44,34 @@ public class PlayerSoundsManager : MonoBehaviour
     {
         if (!_playerController.PlayerCanMove)
         {
-            soundManager.StopSound("Walk", "Run");
+            _soundManager.StopSound("Walk", "Run");
             return;
         }
 
         if(_playerController.PlayerIsMoving)
         {
             StopEmoteMusic();
-            soundManager.StopSound("Idle");
+            _soundManager.StopSound("Idle");
 
             if (_playerController.PlayerIsRunning && _playerController.PlayerInGround)
             {
-                soundManager.PlaySound("Run");
-                soundManager.StopSound("Walk");
+                _soundManager.PlaySound("Run");
+                _soundManager.StopSound("Walk");
             }
             else if (_playerController.PlayerInGround)
             {
-                soundManager.PlaySound("Walk");
-                soundManager.StopSound("Run");
+                _soundManager.PlaySound("Walk");
+                _soundManager.StopSound("Run");
             }
             else
             {
-                soundManager.StopSound("Walk", "Run");
+                _soundManager.StopSound("Walk", "Run");
             }
         }
         else
         {
-            soundManager.PlaySound("Idle");
-            soundManager.StopSound("Walk", "Run");
+            _soundManager.PlaySound("Idle");
+            _soundManager.StopSound("Walk", "Run");
         }
     }
     #endregion
@@ -84,7 +88,7 @@ public class PlayerSoundsManager : MonoBehaviour
         
         if (_gunManager.CurrentGun.bulletsLeft < 1)
         {
-            soundManager.PlaySound("EmptyMAG");
+            _soundManager.PlaySound("EmptyMAG");
             StartCoroutine(FirerateDelay());
             return;
         }
@@ -119,7 +123,7 @@ public class PlayerSoundsManager : MonoBehaviour
 
         while (autoGunShooting)
         {
-            soundManager.PlaySound(soundName);
+            _soundManager.PlaySound(soundName);
             yield return new WaitForSeconds(delay);
         }
     }
@@ -131,33 +135,33 @@ public class PlayerSoundsManager : MonoBehaviour
         switch (_gunManager.CurrentGun.Type)
         {
             case GunType.BasicPistol:
-                soundManager.PlaySound("pistolFire");
+                _soundManager.PlaySound("pistolFire");
                 break;
             case GunType.Revolver:
-                soundManager.PlaySound("revolverFire");
+                _soundManager.PlaySound("revolverFire");
                 break;
             case GunType.Shotgun:
-                soundManager.PlaySound("shotgunFire");
+                _soundManager.PlaySound("shotgunFire");
                 break;
             case GunType.Sniper:
-                soundManager.PlaySound("sniperFire");
+                _soundManager.PlaySound("sniperFire");
                 break;
             case GunType.ShinelessFeather:
                 if (!brokenFeather)
-                    soundManager.PlaySound("featherThrow");
+                    _soundManager.PlaySound("featherThrow");
                 else
-                    soundManager.PlaySound("noFeather");
+                    _soundManager.PlaySound("noFeather");
                 break;
             case GunType.GoldenFeather:
-                soundManager.PlaySound("featherThrow");
+                _soundManager.PlaySound("featherThrow");
                 break;
             case GunType.GranadeLaucher:
-                soundManager.PlaySound("GLFire");
+                _soundManager.PlaySound("GLFire");
                 break;
             case GunType.AncientTome:
                 break;
             case GunType.Crossbow:
-                soundManager.PlaySound("CrossbowFire");
+                _soundManager.PlaySound("CrossbowFire");
                 break;
             case GunType.MysticCanon:
                 break;
@@ -189,32 +193,32 @@ public class PlayerSoundsManager : MonoBehaviour
         switch (_gunManager.CurrentGun.Type)
         {
             case GunType.Rifle:
-                soundManager.PlaySound("rifleReload");
+                _soundManager.PlaySound("rifleReload");
                 break;
             case GunType.BasicPistol:
-                soundManager.PlaySound("pistolReload");
+                _soundManager.PlaySound("pistolReload");
                 break;
             case GunType.Revolver:
-                soundManager.PlaySound("revolverReload");
+                _soundManager.PlaySound("revolverReload");
                 break;
             case GunType.Shotgun:
-                soundManager.PlaySound("shotgunReload");
+                _soundManager.PlaySound("shotgunReload");
                 break;
             case GunType.Sniper:
-                soundManager.PlaySound("sniperReload");
+                _soundManager.PlaySound("sniperReload");
                 break;
             case GunType.ShinelessFeather:
                 break;
             case GunType.GoldenFeather:
-                soundManager.PlaySound("featherReturn");
+                _soundManager.PlaySound("featherReturn");
                 break;
             case GunType.GranadeLaucher:
-                soundManager.PlaySound("GLReload");
+                _soundManager.PlaySound("GLReload");
                 break;
             case GunType.AncientTome:
                 break;
             case GunType.Crossbow:
-                soundManager.PlaySound("CrossbowReload");
+                _soundManager.PlaySound("CrossbowReload");
                 break;
             case GunType.MysticCanon:
                 break;
@@ -225,17 +229,17 @@ public class PlayerSoundsManager : MonoBehaviour
     #region -----Input Actions-----
     public void WeaponChangeSound()
     {
-        soundManager.PlaySound("ChangeGun");
+        _soundManager.PlaySound("ChangeGun");
     }
 
     private void MeleeSound()
     {
-        soundManager.PlaySound("Melee");
+        _soundManager.PlaySound("Melee");
     }
 
     private void SlideSound()
     {
-        soundManager.PlaySound("Slide");
+        _soundManager.PlaySound("Slide");
         StartCoroutine(Sliding());
     }
 
@@ -244,7 +248,7 @@ public class PlayerSoundsManager : MonoBehaviour
         float timer = 0f;
         while (timer < _playerController.SlideDuration)
         {
-            soundManager.StopSound("Run");
+            _soundManager.StopSound("Run");
             timer += Time.deltaTime;
             yield return null;
         }
@@ -252,8 +256,8 @@ public class PlayerSoundsManager : MonoBehaviour
 
     private void JumpSound()
     {
-        soundManager.StopSound("Walk", "Run");
-        soundManager.PlaySound("Jump");
+        _soundManager.StopSound("Walk", "Run");
+        _soundManager.PlaySound("Jump");
     }
     #endregion
 
@@ -261,9 +265,9 @@ public class PlayerSoundsManager : MonoBehaviour
     private void BuyWeapon(bool enoughScore)
     {
         if(enoughScore)
-            soundManager.PlaySound("BuyItem");
+            _soundManager.PlaySound("BuyItem");
         else
-            soundManager.PlaySound("CantBuyItem");
+            _soundManager.PlaySound("CantBuyItem");
     }
 
     private void BuyItem(PickeableType type)
@@ -271,12 +275,31 @@ public class PlayerSoundsManager : MonoBehaviour
         switch (type)
         {
             case PickeableType.Ammo:
-                soundManager.PlaySound("AmmoPickable");
+                _soundManager.PlaySound("AmmoPickable");
                 break;
             case PickeableType.Healing:
-                soundManager.PlaySound("HalthPickable");
+                _soundManager.PlaySound("HalthPickable");
                 break;
         }
+    }
+    #endregion
+
+    #region -----Health-----
+    private void HitSound()
+    {
+        _soundManager.PlaySound("Hit");
+    }
+
+    private void DeathSound(GameObject _)
+    {
+        StartCoroutine(Death());
+    }
+
+    private IEnumerator Death()
+    {
+        _soundManager.StopAllSounds();
+        yield return new WaitForSeconds(0.1f);
+        _soundManager.PlaySound("Dead");
     }
     #endregion
 
@@ -290,13 +313,13 @@ public class PlayerSoundsManager : MonoBehaviour
 
         if(_playerController.PlayerCanMove)
         {
-            soundManager.PlaySound(musicName);
+            _soundManager.PlaySound(musicName);
         }
     }
 
     public void StopEmoteMusic()
     {
-        soundManager.StopSound(activeEmoteMusic);
+        _soundManager.StopSound(activeEmoteMusic);
     }
     #endregion
 }

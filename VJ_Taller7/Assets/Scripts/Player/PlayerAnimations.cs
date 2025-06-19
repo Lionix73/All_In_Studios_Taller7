@@ -6,29 +6,35 @@ using UnityEngine.Animations.Rigging;
 public class PlayerAnimations : MonoBehaviour
 {
     [Header("Animator Controllers")]
-    [SerializeField] private List<RuntimeAnimatorController> animators;
+    [SerializeField] private List<RuntimeAnimatorController> _animators;
 
-    [Header("Animator")]
+    [Header("Animator Variables")]
     [SerializeField] private FloatDampener speedX;
     [SerializeField] private FloatDampener speedY;
     /*[SerializeField] private FloatDampener layersDampener1;
     //[SerializeField] private FloatDampener layersDampener2;
     //private int animationLayerToShow = 0;*/
 
+    #region Private Variables
     private bool isEmoting;
     private GunType lastGun;
+    #endregion
 
+    #region Private Components
     private GunManager _gunManager;
     private PlayerController _playerController;
-    private Animator animator;
+    private Animator _animator;
     private Rig _rig;
+    private Health _health;
+    #endregion
 
     private void Awake()
     {
         _playerController = GetComponent<PlayerController>();
         _gunManager = transform.root.GetComponentInChildren<GunManager>();
         _rig = GetComponentInChildren<Rig>();
-        animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
+        _health = GetComponent<Health>();
     }
 
     private void Start()
@@ -41,6 +47,8 @@ public class PlayerAnimations : MonoBehaviour
         _gunManager.ChangeGun += WeaponChangeAnimation;
         _gunManager.ShootingEvent += ShootAnimation;
         _gunManager.StopShootingFeeback += StopShootingAnimation;
+        _health.OnPlayerDamage += HitAnimation;
+        _health.OnPlayerDeath += DeathAnimation;
     }
 
     private void Update()
@@ -63,23 +71,23 @@ public class PlayerAnimations : MonoBehaviour
         speedX.TargetValue = _playerController.MovInput.x;
         speedY.TargetValue = _playerController.MovInput.y;
 
-        animator.SetBool("isGrounded", _playerController.PlayerInGround);
-        animator.SetBool("isMoving", _playerController.PlayerIsMoving);
-        animator.SetBool("isRunning", _playerController.PlayerIsRunning);
-        animator.SetBool("isCrouching", _playerController.PlayerIsCrouching);
-        animator.SetBool("isSliding", _playerController.PlayerIsSliding);
-        animator.SetBool("isAiming", _playerController.PlayerIsAiming);
-        isEmoting = animator.GetBool("isEmoting");
+        _animator.SetBool("isGrounded", _playerController.PlayerInGround);
+        _animator.SetBool("isMoving", _playerController.PlayerIsMoving);
+        _animator.SetBool("isRunning", _playerController.PlayerIsRunning);
+        _animator.SetBool("isCrouching", _playerController.PlayerIsCrouching);
+        _animator.SetBool("isSliding", _playerController.PlayerIsSliding);
+        _animator.SetBool("isAiming", _playerController.PlayerIsAiming);
+        isEmoting = _animator.GetBool("isEmoting");
 
-        animator.SetFloat("SpeedX", speedX.CurrentValue);
-        animator.SetFloat("SpeedY", speedY.CurrentValue);
+        _animator.SetFloat("SpeedX", speedX.CurrentValue);
+        _animator.SetFloat("SpeedY", speedY.CurrentValue);
     }
 
     private void HandleEmotes()
     {
         if ((Vector3)_playerController.MovInput != Vector3.zero)
         {
-            animator.SetBool("isEmoting", false);
+            _animator.SetBool("isEmoting", false);
         }
 
         if (isEmoting)
@@ -113,19 +121,19 @@ public class PlayerAnimations : MonoBehaviour
 
     private void UpdateAnimLayer()
     {
-        animator.SetLayerWeight(animationLayerToShow, layersDampener1.TargetValue == 1 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
-        int layersAmount = animator.GetLayerIndex("Fire");
+        _animator.SetLayerWeight(animationLayerToShow, layersDampener1.TargetValue == 1 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
+        int layersAmount = _animator.GetLayerIndex("Fire");
 
         for (int i = 0; i < 2; i++)
         {
-            if (i != animationLayerToShow && animator.GetLayerWeight(i) > 0.05f)
+            if (i != animationLayerToShow && _animator.GetLayerWeight(i) > 0.05f)
             {
-                animator.SetLayerWeight(i, layersDampener1.TargetValue == 0 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
+                _animator.SetLayerWeight(i, layersDampener1.TargetValue == 0 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
             }
 
-            if (i != animationLayerToShow && animator.GetLayerWeight(i) < 0.05f && animator.GetLayerWeight(i) > 0f)
+            if (i != animationLayerToShow && _animator.GetLayerWeight(i) < 0.05f && _animator.GetLayerWeight(i) > 0f)
             {
-                animator.SetLayerWeight(i, 0);
+                _animator.SetLayerWeight(i, 0);
             }
         }
     }
@@ -180,11 +188,11 @@ public class PlayerAnimations : MonoBehaviour
 
         if (_gunManager.CurrentGun.ShootConfig.IsAutomatic)
         {
-            animator.SetBool("ShootBurst", true);
+            _animator.SetBool("ShootBurst", true);
         }
         else
         {
-            animator.SetTrigger("ShootOnce");
+            _animator.SetTrigger("ShootOnce");
         }
     }
 
@@ -193,15 +201,15 @@ public class PlayerAnimations : MonoBehaviour
         switch (_gunManager.CurrentGun.Type)
         {
             case GunType.Rifle:
-                animator.runtimeAnimatorController = animators[1];
+                _animator.runtimeAnimatorController = _animators[1];
                 break;
 
             case GunType.BasicPistol:
-                animator.runtimeAnimatorController = animators[0];
+                _animator.runtimeAnimatorController = _animators[0];
                 break;
 
             case GunType.Revolver:
-                animator.runtimeAnimatorController = animators[0];
+                _animator.runtimeAnimatorController = _animators[0];
                 break;
 
             case GunType.Shotgun:
@@ -232,20 +240,20 @@ public class PlayerAnimations : MonoBehaviour
 
     public void WeaponChangeAnimation()
     {
-        animator.SetTrigger("ChangeGun");
+        _animator.SetTrigger("ChangeGun");
 
         SelectGunType();
     }
 
     public void ReloadAnimation()
     {
-        animator.SetBool("ShootBurst", false);
-        animator.SetTrigger("Reload");
+        _animator.SetBool("ShootBurst", false);
+        _animator.SetTrigger("Reload");
     }
 
     private void StopShootingAnimation()
     {
-        animator.SetBool("ShootBurst", false);
+        _animator.SetBool("ShootBurst", false);
     }
     #endregion
 
@@ -257,18 +265,30 @@ public class PlayerAnimations : MonoBehaviour
 
     private IEnumerator Jumping()
     {
-        animator.applyRootMotion = false;
-        animator.SetTrigger("Jump");
-        animator.SetBool("isJumping", true);
+        _animator.applyRootMotion = false;
+        _animator.SetTrigger("Jump");
+        _animator.SetBool("isJumping", true);
 
         yield return new WaitForSeconds(_playerController.JumpDuration);
 
-        animator.SetBool("isJumping", false);
+        _animator.SetBool("isJumping", false);
     }
 
     private void MeleeAnimation()
     {
-        animator.SetTrigger("Melee");
+        _animator.SetTrigger("Melee");
+    }
+    #endregion
+
+    #region -----Health-----
+    private void HitAnimation()
+    {
+        _animator.SetTrigger("Hit");
+    }
+
+    private void DeathAnimation(GameObject _)
+    {
+        _animator.SetTrigger("Dead");
     }
     #endregion
 }
