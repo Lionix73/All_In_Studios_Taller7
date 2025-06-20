@@ -19,6 +19,8 @@ Face relentless waves of enemies, each more challenging than the last, including
 
 Built in Unity 3D as a university project, Eggdivers delivers fast-paced action, strategic combat, and an ever-escalating battle for survival. Will you be able to defy fate and protect the future?
 
+[Gameplay First Beta](https://youtu.be/jA8xzKywggk?si=XFyRQ8ScpfNrV901)
+
 ## Key Features:
 Co-op Multiplayer: Seamless Host connection for direct and engaging matches.
 Dynamic Gameplay: Unique mechanics and abilities that keep every duel fresh and competitive.
