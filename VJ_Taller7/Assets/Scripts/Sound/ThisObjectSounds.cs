@@ -7,11 +7,13 @@ using UnityEngine;
 public class ThisObjectSounds : MonoBehaviour
 {
     public List<StudioEventEmitter> sounds;
-    private int sound_index;
 
+    #region -----Private Variables-----
+    private int sound_index;
     private Queue<string> soundQueue = new Queue<string>();
     private StudioEventEmitter currentPlaying = null;
     private bool isChecking = false;
+    #endregion
 
     private void Start()
     {
@@ -32,6 +34,7 @@ public class ThisObjectSounds : MonoBehaviour
         return -1;
     }
 
+    #region -----Play Sounds-----
     public void PlaySound(string s_name1)
     {
         sound_index = GetSoundIndex(s_name1);
@@ -65,7 +68,9 @@ public class ThisObjectSounds : MonoBehaviour
             }
         }
     }
+    #endregion
 
+    #region -----Stop Sounds-----
     public void StopSound(string s_name1)
     {
         sound_index = GetSoundIndex(s_name1);
@@ -95,7 +100,9 @@ public class ThisObjectSounds : MonoBehaviour
             s.Stop();
         }
     }
+    #endregion
 
+    #region -----Dialogues-----
     public void QueueSound(string s_name)
     {
         soundQueue.Enqueue(s_name);
@@ -136,4 +143,5 @@ public class ThisObjectSounds : MonoBehaviour
         isChecking = false;
         TryPlayNext();
     }
+    #endregion
 }

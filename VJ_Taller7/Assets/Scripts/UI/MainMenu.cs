@@ -61,8 +61,6 @@ public class UIManager : MonoBehaviour
             }
         }
         IsMainMenu = true;
-
-        soundManager = GetComponentInChildren<ThisObjectSounds>();
         defaultColor = scoreInGameText.color;
 
 
@@ -84,18 +82,6 @@ public class UIManager : MonoBehaviour
         if (Singleton == this)
             Singleton = null;
 
-    }
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (!IsPaused)
-                soundManager.PlaySound("PausedButton");
-            else
-                soundManager.PlaySound("PlayButton");
-
-            PauseGame(4);
-        }
     }
 
     private float killedEnemiesUI = 0;
@@ -135,8 +121,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI currentRoundText;
 
     private string playerNameProfile;
-
-    private ThisObjectSounds soundManager;
 
     [SerializeField] private float fadeTime = 1.0f;
     [SerializeField] private AnimationList[] uiPanels; // Todos los paneles que quieres controlar

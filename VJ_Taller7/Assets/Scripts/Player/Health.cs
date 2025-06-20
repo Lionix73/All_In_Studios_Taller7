@@ -66,7 +66,6 @@ public class Health : MonoBehaviour, IDamageable
 
         isDead = true;
         pController.PlayerCanMove = false;
-        pController.PlayerCanJump = false;
         OnPlayerDeath?.Invoke(gameObject);
     }
     #endregion

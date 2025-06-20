@@ -10,6 +10,8 @@ public class SensibilitySettings : MonoBehaviour
     private float currentSensiX;
     private float currentSensiY;
 
+    private UIManager ui;
+
     private void Awake()
     {
         SensibilitySettingsManager = SensibilitySettingsManager.Singleton;
@@ -18,6 +20,7 @@ public class SensibilitySettings : MonoBehaviour
 
     private void Start()
     {
+        ui = UIManager.Singleton;
         ChangeCameraSensitivity(1);
         GetCurrentSensitivity(1);
 
@@ -26,6 +29,22 @@ public class SensibilitySettings : MonoBehaviour
             Slider s = item.gameObject.GetComponent<Slider>();
             s.onValueChanged.AddListener(ChangeCameraSensitivity);
             s.onValueChanged.AddListener(GetCurrentSensitivity);
+        }
+    }
+
+    // TODO: Hacer un evento para la pausa
+    private void PauseCamera()
+    {
+        foreach (InputAxisControllerBase<CinemachineInputAxisController.Reader>.Controller c in axisController.Controllers)
+        {
+            if (c.Name == "Look Orbit X")
+            {
+                c.Enabled = !ui.IsPaused;
+            }
+            else if (c.Name == "Look Orbit Y")
+            {
+                c.Enabled = !ui.IsPaused;
+            }
         }
     }
 

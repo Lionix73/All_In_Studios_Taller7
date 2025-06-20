@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
     #region Visible Variables
     [Header("Movement Settings")]
     [SerializeField] private bool canMove = true;
-    [SerializeField] private bool playerAllowedToJump = true;
     [SerializeField] private float walkSpeed = 2f;
     [SerializeField] private float runSpeed = 5f;
     [SerializeField] private float rotationSpeed = 10f;
@@ -78,6 +77,7 @@ public class PlayerController : MonoBehaviour
     private Transform cameraTransform;
     private Melee melee;
     private SensibilitySettings sensibilitySettings;
+    private UIManager ui;
     #endregion
 
     #region Events
@@ -102,8 +102,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        ui = UIManager.Singleton;
         freeLookCamera = GameObject.FindGameObjectWithTag("FreeLookCamera").GetComponent<CinemachineCamera>();
         cameraTransform = freeLookCamera.transform;
         sensibilitySettings = freeLookCamera.GetComponent<SensibilitySettings>();
@@ -112,6 +111,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        canMove = !ui.IsPaused;
+
         PlayerAiming();
         AdjustRigs();
     }
@@ -235,7 +236,7 @@ public class PlayerController : MonoBehaviour
     #region -----Jump-----
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (!playerAllowedToJump) return;
+        if (!canMove) return;
 
         if (context.performed && jumpCount < maxJumps)
         {
@@ -263,7 +264,9 @@ public class PlayerController : MonoBehaviour
     #region -----Melee-----
     public void OnMelee(InputAction.CallbackContext context) 
     {
-        if(context.performed && canMelee)
+        if (!canMove) return;
+
+        if (context.performed && canMelee)
         {
             MeleeAttackEvent?.Invoke();
             StartCoroutine(Melee());
@@ -283,6 +286,8 @@ public class PlayerController : MonoBehaviour
     #region -----Crouch / Slide-----
     public void OnCrouch(InputAction.CallbackContext context)
     {
+        if (!canMove) return;
+
         if (context.performed && canCrouch && checkTerrainHeight.IsGrounded)
         {
             ExchangeColliders();
@@ -356,8 +361,6 @@ public class PlayerController : MonoBehaviour
     public bool PlayerIsSliding { get => isSliding; set => isSliding = value; }
 
     public bool PlayerInGround { get => checkTerrainHeight.IsGrounded; }
-
-    public bool PlayerCanJump { get => playerAllowedToJump; set => playerAllowedToJump = value; }
 
     public bool PlayerIsAiming { get => isAiming; set => isAiming = value; }
 
