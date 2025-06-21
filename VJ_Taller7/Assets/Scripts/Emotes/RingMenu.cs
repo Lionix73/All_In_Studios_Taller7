@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class RingMenu : MonoBehaviour
 {
@@ -41,19 +41,44 @@ public class RingMenu : MonoBehaviour
 
     private void Update()
     {
-        activeElement = GetActiveElement();
+        Vector2 inputVector;
+        bool isGamepad = Gamepad.current != null && Gamepad.current.rightStick.ReadValue().magnitude > 0.3f;
+
+        if (isGamepad)
+        {
+            // Usa el stick derecho como dirección
+            inputVector = Gamepad.current.rightStick.ReadValue();
+        }
+        else
+        {
+            // Usa la posición del mouse
+            Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2);
+            Vector3 cursorVector = Input.mousePosition - screenCenter;
+            inputVector = new Vector2(cursorVector.x, cursorVector.y);
+        }
+
+        activeElement = GetActiveElement(inputVector);
         HighlightActiveElement(activeElement);
     }
 
-    private int GetActiveElement()
+    private int GetActiveElement(Vector2 direction)
     {
-        Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2);
-        Vector3 cursorVector = Input.mousePosition - screenCenter;
+        const float deadZone = 0.35f;
 
-        float mouseAngle = Vector3.SignedAngle(Vector3.up, cursorVector, Vector3.forward) + degreesPerPiece / 2f;
-        float normalizedMouseAngle = NormalizeAngle(mouseAngle);
+        if (direction.magnitude < deadZone)
+            return activeElement; // Mantén el actual si está cerca del centro
 
-        return (int)(normalizedMouseAngle / degreesPerPiece);
+        float angle = Vector2.SignedAngle(Vector2.up, direction);
+        float normalizedAngle = NormalizeAngle(angle + degreesPerPiece / 2f);
+
+        int selectedIndex = (int)(normalizedAngle / degreesPerPiece);
+
+        // Si ya está seleccionado, solo retorna de nuevo
+        if (selectedIndex == activeElement)
+            return activeElement;
+
+        // Si cambió significativamente, actualiza
+        return selectedIndex;
     }
 
     private float NormalizeAngle(float x) => (x + 360f) % 360f;

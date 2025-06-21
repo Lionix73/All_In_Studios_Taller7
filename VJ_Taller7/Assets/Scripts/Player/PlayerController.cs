@@ -77,7 +77,6 @@ public class PlayerController : MonoBehaviour
     private Transform cameraTransform;
     private Melee melee;
     private SensibilitySettings sensibilitySettings;
-    private UIManager ui;
     #endregion
 
     #region Events
@@ -102,7 +101,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        ui = UIManager.Singleton;
         freeLookCamera = GameObject.FindGameObjectWithTag("FreeLookCamera").GetComponent<CinemachineCamera>();
         cameraTransform = freeLookCamera.transform;
         sensibilitySettings = freeLookCamera.GetComponent<SensibilitySettings>();
@@ -111,8 +109,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        canMove = !ui.IsPaused;
-
         PlayerAiming();
         AdjustRigs();
     }

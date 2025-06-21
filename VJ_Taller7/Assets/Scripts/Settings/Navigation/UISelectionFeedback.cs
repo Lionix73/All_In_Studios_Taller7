@@ -18,7 +18,7 @@ public class UISelectionFeedback : MonoBehaviour
     void Update()
     {
         GameObject current = EventSystem.current.currentSelectedGameObject;
-
+        
         if (current != lastSelected)
         {
             // Restaurar el anterior si existe
