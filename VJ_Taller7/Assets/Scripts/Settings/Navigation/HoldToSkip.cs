@@ -13,13 +13,20 @@ public class HoldToSkip : MonoBehaviour
     [SerializeField] private float decaySpeed = 1f;   // velocidad de descarga al soltar
 
     [Header("UI")]
-    [SerializeField] private Image progressBar; // Usa fillAmount de 0 a 1
+    [Tooltip("GameObject name of the obj with the image of the progress bar")]
+    [SerializeField] private string progressBarName;
 
     [Header("Event")]
     public UnityEvent Skip;
-
+    
     private float holdProgress = 0f;
     private bool isHolding = false;
+    private Image progressBar;
+
+    private void Awake()
+    {
+        progressBar = GameObject.Find(progressBarName).GetComponent<Image>();
+    }
 
     private void OnEnable()
     {
@@ -35,6 +42,9 @@ public class HoldToSkip : MonoBehaviour
     {
         if (holdAction != null)
         {
+            progressBar.fillAmount = 0f;
+            holdProgress = 0f;
+            isHolding = false;
             holdAction.action.performed -= OnHoldStarted;
             holdAction.action.canceled -= OnHoldCanceled;
             holdAction.action.Disable();
@@ -72,8 +82,6 @@ public class HoldToSkip : MonoBehaviour
         if (holdProgress >= 1f)
         {
             Skip?.Invoke();
-            enabled = false; // Desactivamos para evitar múltiples ejecuciones
-            progressBar.fillAmount = 0f;
         }
     }
 }

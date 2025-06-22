@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6293879747867273357}
   - component: {fileID: 7857538833840811330}
   - component: {fileID: 4633763210580677908}
+  - component: {fileID: 505110429547849906}
   m_Layer: 0
   m_Name: GunManager
   m_TagString: Gun Manager
@@ -68,7 +69,6 @@ MonoBehaviour:
   inAPickeableGun: 0
   pickeableToBuy: 0
   inAPickeableCollectable: 0
-  canShoot: 1
   CurrentGun: {fileID: 0}
   CurrentSecondGunType: 0
 --- !u!114 &4633763210580677908
@@ -85,3 +85,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   crosshairImage: {fileID: 0}
   aimTarget: {fileID: 0}
+--- !u!114 &505110429547849906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 492504566856871708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88732d5f3aa46614e86a52633748e7b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  holdAction: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  holdDuration: 1
+  decaySpeed: 1
+  progressBarName: PassRoundCircle
+  Skip:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7857538833840811330}
+        m_TargetAssemblyTypeName: GunManager, Assembly-CSharp
+        m_MethodName: OrderToPassRound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

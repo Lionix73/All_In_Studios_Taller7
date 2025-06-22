@@ -101,6 +101,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         freeLookCamera = GameObject.FindGameObjectWithTag("FreeLookCamera").GetComponent<CinemachineCamera>();
         cameraTransform = freeLookCamera.transform;
         sensibilitySettings = freeLookCamera.GetComponent<SensibilitySettings>();

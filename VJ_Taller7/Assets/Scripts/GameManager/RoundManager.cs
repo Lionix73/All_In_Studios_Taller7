@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using System.Threading;
+using UnityEngine.UI;
 
 public class RoundManager : MonoBehaviour
 {
@@ -46,7 +47,7 @@ public class RoundManager : MonoBehaviour
     private float waveTimer;
     [Tooltip("Tiempo entre oleadas")]
     [SerializeField] private float inBetweenRoundsWaitTime; //Tiempo entre oleadas
-    private float inBetweenRoundsTimer = 35f; //Tiempo entre oleadas
+    private float inBetweenRoundsTimer = 10f; //Tiempo entre oleadas
     private bool inBetweenRounds=true;
     private int aliveEnemies;
 
@@ -83,6 +84,7 @@ public class RoundManager : MonoBehaviour
 
     private RoundsMusicManager _musicRounds;
     private ThisObjectSounds _soundManager;
+    private GameObject _nextRoundSkipCircle;
 
     public void PauseGame(bool state){
         _Simulating = !state;
@@ -90,7 +92,7 @@ public class RoundManager : MonoBehaviour
 
     private void Awake() {
         _RoundUI = GameObject.Find("RoundsCanva");
-       
+        _nextRoundSkipCircle = GameObject.Find("PassRoundCircle");
 
         _UiWaveTimer = _RoundUI.transform.Find("WaveTimer").GetComponent<TextMeshProUGUI>();
         _UiBetweenWavesTimer = _RoundUI.transform.Find("BetweenWavesTimer").GetComponent<TextMeshProUGUI>();
@@ -122,6 +124,7 @@ public class RoundManager : MonoBehaviour
 
         wantToPassRound = true; //Las rondas empiezan de una, para el multiplayer controlar esto con lo de darle a la E para empezar;
         omnipresentWaveCummingWarning = true;
+        _nextRoundSkipCircle.SetActive(false);
     }
     private void Update() {
 
@@ -240,8 +243,9 @@ public class RoundManager : MonoBehaviour
 
         if (currentWave == 3)
         {
-            UIManager.Singleton.UIInstructionToPass("Press E to start next ROUND");
-            if (currentRound == 3) UIManager.Singleton.UIInstructionToPass("Press E to END the Game");
+            _nextRoundSkipCircle.SetActive(true);
+            UIManager.Singleton.UIInstructionToPass("Hold E to start next ROUND");
+            if (currentRound == 3) UIManager.Singleton.UIInstructionToPass("Hold E to END the Game");
         }
         OnWaveComplete?.Invoke(how);
     }
@@ -276,7 +280,7 @@ public class RoundManager : MonoBehaviour
     }
     private void PassRound()
     {
-        UnityEngine.Debug.Log("Pasar Ronda");
+        Debug.Log("Pasar Ronda");
         currentRound++;
         currentWave = 0;
         level++;
@@ -305,6 +309,7 @@ public class RoundManager : MonoBehaviour
 
             UIManager.Singleton.UIInstructionToPass("");
             UIManager.Singleton.UIChangeImageRound(currentRound);
+            _nextRoundSkipCircle.SetActive(false);
             //Aqui deberia salir el aviso de RONDA 2, el que no tiene oleadas
             //Y en caso de que tengamos el aviso de pasar con la E, tambien aqui...
         }
