@@ -1,9 +1,8 @@
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public class ShinelessFeather : GoldenFeathers
 {
-    public delegate void OnfailedShootEvent();
+    public delegate void OnfailedShootEvent(); // Este evento no se usa?
     public event OnfailedShootEvent OnShootMiss;
 
     public override void Spawn(Vector3 SpawnForce)

@@ -2118,6 +2118,7 @@ GameObject:
   - component: {fileID: 8676942630966551283}
   - component: {fileID: 4354347854728633355}
   - component: {fileID: 6614176807173874839}
+  - component: {fileID: 190421668309309860}
   m_Layer: 6
   m_Name: NYX
   m_TagString: Player
@@ -2168,7 +2169,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 16384
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2209,7 +2210,7 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: a4015eb993ad7d8499e777059ec51678, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2276,7 +2277,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canMove: 1
-  playerAllowedToJump: 1
   walkSpeed: 2
   runSpeed: 5
   rotationSpeed: 10
@@ -2680,11 +2680,32 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 4aaf605b-8538-41b9-8f09-af467af43948
     m_ActionName: 'Player/StartGame[/Keyboard/e]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 56472ed5-698c-4d9f-9dc1-026142977a10
+    m_ActionName: 'UI/Pause[/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 249c30ac-e645-4009-9ca3-60c981a24006
+    m_ActionName: 'UI/Skip[/Keyboard/space]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &190421668309309860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5065878726692420922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3f67208caae98549804964d85521432, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentScheme: 0
 --- !u!1 &5388841582245947154
 GameObject:
   m_ObjectHideFlags: 0

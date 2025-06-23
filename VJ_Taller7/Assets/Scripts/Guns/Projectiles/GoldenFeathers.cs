@@ -1,6 +1,3 @@
-using FMODUnity;
-using System.Dynamic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GoldenFeathers : Bullet
@@ -30,7 +27,11 @@ public class GoldenFeathers : Bullet
         GameManager.Instance.gunManager.ReloadEvent += Return;
     }
 
-    public virtual void Return(){
+    public virtual void Return()
+    {
+        //GunType primaryGun = GameManager.Instance.gunManager.CurrentGun.Type;
+        //if (primaryGun != GunType.GoldenFeather || primaryGun != GunType.ShinelessFeather) return;
+
         whereToReturn = GameManager.Instance.playerManager.gunManager.CurrentGun.ShootSystem.transform;
 
         Vector3 direction = whereToReturn.position + - transform.position;

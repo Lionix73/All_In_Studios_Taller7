@@ -766,6 +766,7 @@ GameObject:
   - component: {fileID: 6657655199461660572}
   - component: {fileID: 7399432206293085533}
   - component: {fileID: 2777652071478374145}
+  - component: {fileID: 5578343980627042207}
   m_Layer: 6
   m_Name: UMBRA
   m_TagString: Player
@@ -816,7 +817,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 16384
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -857,7 +858,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -924,7 +925,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canMove: 1
-  playerAllowedToJump: 1
   walkSpeed: 2
   runSpeed: 5
   rotationSpeed: 10
@@ -1328,11 +1328,32 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 30b90059-ed83-4820-b016-bb6d0f5a1633
     m_ActionName: 'UI/Emotiza[/Keyboard/tab]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 56472ed5-698c-4d9f-9dc1-026142977a10
+    m_ActionName: 'UI/Pause[/XInputControllerWindows/start,/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 249c30ac-e645-4009-9ca3-60c981a24006
+    m_ActionName: 'UI/Skip[/Keyboard/space,/XInputControllerWindows/buttonEast]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &5578343980627042207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937287128208277315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3f67208caae98549804964d85521432, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentScheme: 0
 --- !u!1 &2060087220317475734
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,6 +14,7 @@ public class PlayerManager : MonoBehaviour
 
     [Header("Health Scale")]
     private float playerCurrentHealth; //Solo es reflejo de la vida del jugador, no cambiar
+    private float lastHealthAmont;
     public float PlayerCurrentHealth { get { return playerCurrentHealth; } private set { playerCurrentHealth = value; } }
 
     private float playerMaxHealth; //Solo es el reflejo de la vida del jugador, no cambiar
@@ -52,6 +53,7 @@ public class PlayerManager : MonoBehaviour
         playerHealth.OnPlayerDeath += PlayerDie;
         //Setear vida inicial
         playerHealth.SetInitialHealth(playerStartingHealth);
+        lastHealthAmont = playerHealth.GetCurrentHeath;
 
         GameManager.Instance.PlayerSpawn();
     }
@@ -62,9 +64,14 @@ public class PlayerManager : MonoBehaviour
 
         UISet();
 
-        if(currentHealth >= damageUI_VFX.HealthThreshold){
-            damageUI_VFX.ShowDamageFlash(currentHealth, maxHealth); //Flash cuando recibe un hit
+        if(currentHealth >= damageUI_VFX.HealthThreshold)
+        {
+            if(lastHealthAmont > currentHealth)
+            {
+                damageUI_VFX.ShowDamageFlash(currentHealth, maxHealth); //Flash cuando recibe un hit
+            }
         }
+        lastHealthAmont = currentHealth;
         
         damageUI_VFX.UpdateDamageEffect(currentHealth, maxHealth); //Actualiza la cantidad de vida que tiene
     }

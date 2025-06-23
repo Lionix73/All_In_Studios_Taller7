@@ -4540,7 +4540,6 @@ GameObject:
   - component: {fileID: 6480249646880927032}
   - component: {fileID: 5891585108478002654}
   - component: {fileID: 6400046646177769291}
-  - component: {fileID: 4808318063805366449}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -4625,18 +4624,6 @@ MonoBehaviour:
   scaleDuration: 0.2
   outlineColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   outlineWidth: 1.5
---- !u!114 &4808318063805366449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2236496924298197814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f6fd3b4313531d49880c522e01579f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2239689358977901410
 GameObject:
   m_ObjectHideFlags: 0
@@ -6563,7 +6550,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyboardSprite: F
   xboxSprite: {fileID: 1205925285, guid: 9581b5458ec718f4592116384bf7a272, type: 3}
-  playStationSprite: {fileID: 0}
 --- !u!1 &3245006208048563781
 GameObject:
   m_ObjectHideFlags: 0
@@ -12265,7 +12251,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyboardSprite: Q
   xboxSprite: {fileID: 361707385, guid: 9581b5458ec718f4592116384bf7a272, type: 3}
-  playStationSprite: {fileID: 1212909423, guid: 72b52c12efb92904aa96d981847eb70a, type: 3}
 --- !u!1 &6090963152565139189
 GameObject:
   m_ObjectHideFlags: 0
@@ -14567,8 +14552,8 @@ GameObject:
   - component: {fileID: 5197197967389931591}
   - component: {fileID: 2515908615017339288}
   - component: {fileID: 8997434514657753689}
-  - component: {fileID: 329086928613366099}
   - component: {fileID: 4095127054927385639}
+  - component: {fileID: 329086928613366099}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -14702,19 +14687,6 @@ MonoBehaviour:
           m_StringArgument: SkillsMenu/CharacterSelection
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &329086928613366099
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7017327710996461688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7ec0e5e20563a048b37960c0a2ddfb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectToSelect: {fileID: 8989688245980178213}
 --- !u!114 &4095127054927385639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14728,6 +14700,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actionReference: {fileID: 7727032971491509709, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+--- !u!114 &329086928613366099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7017327710996461688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7ec0e5e20563a048b37960c0a2ddfb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToSelect: {fileID: 8989688245980178213}
 --- !u!1 &7058634698957027318
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,51 +1,52 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static DetectDevice;
 
 public class DynamicInputIcon : MonoBehaviour
 {
     [Header("Íconos")]
     public string keyboardSprite;
     public Sprite xboxSprite;
-    public Sprite playStationSprite;
 
     private Image image;
     private TextMeshProUGUI text;
+    private ControlsSchemeManager controls;
 
     private void Awake()
     {
         image = GetComponent<Image>();
         text = GetComponentInChildren<TextMeshProUGUI>();
-        UpdateIcon(InputDeviceManager.CurrentScheme);
-        InputDeviceManager.OnInputSchemeChanged += UpdateIcon;
+    }
+
+    private void OnEnable()
+    {
+        Invoke(nameof(FindControls), 0.5f);
+    }
+
+    private void FindControls()
+    {
+        controls = ControlsSchemeManager.Singleton;
+        controls.OnControlsChange += UpdateIcon;
+        UpdateIcon();
     }
 
     private void OnDestroy()
     {
-        InputDeviceManager.OnInputSchemeChanged -= UpdateIcon;
+        controls.OnControlsChange -= UpdateIcon;
     }
 
-    private void UpdateIcon(InputScheme scheme)
+    private void UpdateIcon()
     {
-        switch (scheme)
+        switch (controls.ChangeScheme)
         {
-            case InputScheme.XboxGamepad:
+            case ControlsSchemeManager.InputScheme.Gamepad:
                 image.color = new Color(255, 255, 255, 255);
                 image.sprite = xboxSprite;
                 text.text = "";
                 break;
-            case InputScheme.PlayStationGamepad:
-                image.color = new Color(255, 255, 255, 255);
-                image.sprite = playStationSprite;
-                text.text = "";
-                break;
-            case InputScheme.KeyboardMouse:
+            case ControlsSchemeManager.InputScheme.KeyboardMouse:
                 text.text = keyboardSprite;
                 image.color = new Color(255, 255, 255, 0);
-                break;
-            default:
-                text.text = keyboardSprite;
                 break;
         }
     }

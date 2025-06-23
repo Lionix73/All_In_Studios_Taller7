@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+// This script is used to link an Action of the InputActions to the click event of a button
 public class LinkActionToButton : MonoBehaviour
 {
     [Header("Input Actions")]

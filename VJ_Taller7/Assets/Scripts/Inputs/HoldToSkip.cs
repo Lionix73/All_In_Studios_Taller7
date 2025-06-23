@@ -42,9 +42,6 @@ public class HoldToSkip : MonoBehaviour
     {
         if (holdAction != null)
         {
-            progressBar.fillAmount = 0f;
-            holdProgress = 0f;
-            isHolding = false;
             holdAction.action.performed -= OnHoldStarted;
             holdAction.action.canceled -= OnHoldCanceled;
             holdAction.action.Disable();
@@ -63,6 +60,8 @@ public class HoldToSkip : MonoBehaviour
 
     private void Update()
     {
+        if (progressBar.gameObject.activeSelf == false) return;
+
         if (isHolding)
         {
             holdProgress += Time.deltaTime / holdDuration;
@@ -81,6 +80,9 @@ public class HoldToSkip : MonoBehaviour
 
         if (holdProgress >= 1f)
         {
+            progressBar.fillAmount = 0f;
+            holdProgress = 0f;
+            isHolding = false;
             Skip?.Invoke();
         }
     }
