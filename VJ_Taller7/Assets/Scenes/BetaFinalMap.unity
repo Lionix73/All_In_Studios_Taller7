@@ -276,8 +276,8 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.1
-  far clip plane: 100
-  field of view: 60.000004
+  far clip plane: 300
+  field of view: 64.99
   orthographic: 0
   orthographic size: 10
   m_Depth: 0
@@ -335,8 +335,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5160925}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6596668, y: 0, z: 0, w: 0.7515582}
-  m_LocalPosition: {x: 0.73062295, y: 12.2763405, z: -3.357542}
+  m_LocalRotation: {x: 0.12218326, y: -2.7531946e-10, z: 3.3893364e-11, w: 0.9925076}
+  m_LocalPosition: {x: 0.73062295, y: 2.27634, z: -3.357542}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -40294,6 +40294,8 @@ GameObject:
   - component: {fileID: 4306653107212965064}
   - component: {fileID: 2225780787773262467}
   - component: {fileID: 7684334872289667407}
+  - component: {fileID: 7684334872289667409}
+  - component: {fileID: 7684334872289667408}
   m_Layer: 7
   m_Name: Puente pocho
   m_TagString: Untagged
@@ -40323,6 +40325,90 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 416352262734464782, guid: d5c5551998e357d449ceb1728fa4a734, type: 3}
+--- !u!73398921 &7684334872289667408
+VFXRenderer:
+  serializedVersion: 1
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7684334872289667406}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!2083052967 &7684334872289667409
+VisualEffect:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7684334872289667406}
+  m_Enabled: 1
+  m_Asset: {fileID: 8926484042661614526, guid: b14792d96b93ca14a9c0fc3b1a748f8d, type: 3}
+  m_InitialEventName: OnPlay
+  m_InitialEventNameOverriden: 0
+  m_StartSeed: 0
+  m_ResetSeedOnPlay: 1
+  m_AllowInstancing: 1
+  m_ResourceVersion: 1
+  m_PropertySheet:
+    m_Float:
+      m_Array: []
+    m_Vector2f:
+      m_Array: []
+    m_Vector3f:
+      m_Array: []
+    m_Vector4f:
+      m_Array: []
+    m_Uint:
+      m_Array: []
+    m_Int:
+      m_Array: []
+    m_Matrix4x4f:
+      m_Array: []
+    m_AnimationCurve:
+      m_Array: []
+    m_Gradient:
+      m_Array: []
+    m_NamedObject:
+      m_Array:
+      - m_Value: {fileID: 416352262734464782, guid: d5c5551998e357d449ceb1728fa4a734, type: 3}
+        m_Name: MeshToMaterialize
+        m_Overridden: 0
+    m_Bool:
+      m_Array: []
 --- !u!33 &7857125725187569423
 MeshFilter:
   m_ObjectHideFlags: 0
