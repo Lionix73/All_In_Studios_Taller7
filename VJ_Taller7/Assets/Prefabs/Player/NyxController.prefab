@@ -63,6 +63,65 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2135381096702659688}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &197521657224118568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4546024534664254505}
+  - component: {fileID: 1687246052164181404}
+  - component: {fileID: 6465095052531210352}
+  m_Layer: 0
+  m_Name: Controls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4546024534664254505
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197521657224118568}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4468175175659240506}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1687246052164181404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197521657224118568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6aaf2760d6cc5c4ab37d070dc283052, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vibrationDuration: 0.3
+--- !u!114 &6465095052531210352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197521657224118568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3f67208caae98549804964d85521432, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentScheme: 0
 --- !u!1 &345023575517845876
 GameObject:
   m_ObjectHideFlags: 0
@@ -1322,6 +1381,7 @@ Transform:
   - {fileID: 9018289881090738243}
   - {fileID: 5550208734229555072}
   - {fileID: 7286469142040947104}
+  - {fileID: 4546024534664254505}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3904718732209742536
@@ -2118,7 +2178,6 @@ GameObject:
   - component: {fileID: 8676942630966551283}
   - component: {fileID: 4354347854728633355}
   - component: {fileID: 6614176807173874839}
-  - component: {fileID: 190421668309309860}
   m_Layer: 6
   m_Name: NYX
   m_TagString: Player
@@ -2693,19 +2752,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &190421668309309860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5065878726692420922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3f67208caae98549804964d85521432, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentScheme: 0
 --- !u!1 &5388841582245947154
 GameObject:
   m_ObjectHideFlags: 0

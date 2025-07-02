@@ -67,13 +67,20 @@ public class GraphicSettingsManager : MonoBehaviour
 
         List<string> options = new();
 
+        int currentRes = 0;
+
         for (int i = 0; i < resolutions.Length; i++)
         {
             string op = $"{resolutions[i].width} x {resolutions[i].height}";
             options.Add(op);
+
+            if (resolutions[i].width == Screen.currentResolution.width &&
+                resolutions[i].height == Screen.currentResolution.height)
+                currentRes = i;
         }
 
         resolutionsDropdown.AddOptions(options);
+        ResolutionIndex = currentRes;
     }
 
     public void SaveResolution(int resolutionIndex)

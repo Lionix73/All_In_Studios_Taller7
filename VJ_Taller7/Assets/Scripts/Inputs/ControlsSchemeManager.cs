@@ -33,7 +33,7 @@ public class ControlsSchemeManager : MonoBehaviour
 
     private void Awake()
     {
-        playerInput = GetComponent<PlayerInput>();
+        playerInput = transform.root.GetComponentInChildren<PlayerInput>();
 
         if (Singleton == null)
         {
