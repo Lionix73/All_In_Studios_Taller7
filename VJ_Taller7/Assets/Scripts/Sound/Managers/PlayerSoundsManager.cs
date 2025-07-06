@@ -79,17 +79,15 @@ public class PlayerSoundsManager : MonoBehaviour
     #region -----SHOOTING-----
 
     public bool brokenFeather;
-    private bool firerateAllowShoot = true;
     private bool autoGunShooting;
 
     private void OnShootingEvent()
     {
-        if (!firerateAllowShoot || !_playerController.PlayerCanMove) return;
+        if (!_playerController.PlayerCanMove) return;
         
         if (_gunManager.CurrentGun.bulletsLeft < 1)
         {
             _soundManager.PlaySound("EmptyMAG");
-            StartCoroutine(FirerateDelay());
             return;
         }
 
@@ -114,7 +112,6 @@ public class PlayerSoundsManager : MonoBehaviour
                 StartCoroutine(PlayAutoWeaponSound("rifleFire"));
                 break;
         }
-        StartCoroutine(FirerateDelay());
     }
 
     private IEnumerator PlayAutoWeaponSound(string soundName)
@@ -166,20 +163,8 @@ public class PlayerSoundsManager : MonoBehaviour
             case GunType.MysticCanon:
                 break;
         }
-        StartCoroutine(FirerateDelay());
     }
     #endregion
-
-    // Limita la emision de sonidos al firerate del arma
-    private IEnumerator FirerateDelay()
-    {
-        firerateAllowShoot = false;
-
-        float delay = _gunManager.CurrentGun.ShootConfig.FireRate;
-        yield return new WaitForSeconds(delay);
-
-        firerateAllowShoot = true;
-    }
 
     private void StopShooting()
     {

@@ -14,11 +14,10 @@ public class ControlsSchemeManager : MonoBehaviour
     }
     #endregion
 
-    PlayerInput playerInput;
-    public PlayerInput GetPlayerInput
-    {
-        get => playerInput;
-    }
+    private PlayerInput playerInput;
+    public PlayerInput GetPlayerInput { get => playerInput; }
+
+    private GamepadVibration gamepadVibration;
 
     public delegate void ControlsChange();
     public event ControlsChange OnControlsChange;
@@ -34,6 +33,7 @@ public class ControlsSchemeManager : MonoBehaviour
     private void Awake()
     {
         playerInput = transform.root.GetComponentInChildren<PlayerInput>();
+        gamepadVibration = GetComponent<GamepadVibration>();
 
         if (Singleton == null)
         {
@@ -47,33 +47,35 @@ public class ControlsSchemeManager : MonoBehaviour
     }
     #endregion
 
-    void Start()
+    private void Start()
     {
         if (playerInput != null)
         {
             playerInput.controlsChangedEvent.AddListener(OnControlsChanged);
+            UpdateScheme(playerInput);
         }
     }
 
-    void OnControlsChanged(PlayerInput playerInput)
+    private void OnControlsChanged(PlayerInput playerInput)
     {
         if (playerInput.currentControlScheme != null)
         {
-            //Debug.Log("Current control scheme: " + playerInput.currentControlScheme);
             UpdateScheme(playerInput);
             OnControlsChange?.Invoke();
         }
     }
 
-    public void UpdateScheme(PlayerInput scheme)
+    private void UpdateScheme(PlayerInput scheme)
     {
         switch (scheme.currentControlScheme)
         {
             case "Keyboard&Mouse":
                 ChangeScheme = InputScheme.KeyboardMouse;
+                gamepadVibration.enabled = false;
                 break;
             case "Gamepad":
                 ChangeScheme = InputScheme.Gamepad;
+                gamepadVibration.enabled = true;
                 break;
         }
     }

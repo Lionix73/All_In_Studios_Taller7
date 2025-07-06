@@ -2,14 +2,18 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
+using FMODUnity;
 
 public class UISelectionFeedback : MonoBehaviour
 {
-    [Header("Animación de escala")]
+    [Header("Select Sound")]
+    public StudioEventEmitter sound;
+
+    [Header("Animation")]
     public float scaleMultiplier = 1.2f;
     public float scaleDuration = 0.2f;
 
-    [Header("Color del Outline")]
+    [Header("Outline")]
     public Color outlineColor = Color.yellow;
     public float outlineWidth = 1.5f;
 
@@ -28,8 +32,9 @@ public class UISelectionFeedback : MonoBehaviour
             }
 
             // Aplicar feedback al nuevo seleccionado
-            if (current != null)
+            if (current != null && current.activeSelf)
             {
+                sound.Play();
                 ApplyButtonFeedback(current);
             }
 

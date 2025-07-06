@@ -199,7 +199,11 @@ public class GunManager : MonoBehaviour
         {
             shooting = context.started;
 
-            if(shooting) ShootingEvent?.Invoke();
+            if (shooting && firerateAllowShoot)
+            { 
+                ShootingEvent?.Invoke();
+                StartCoroutine(FirerateDelay());
+            }
         }
 
         if (context.canceled && CurrentGun.ShootConfig.IsAutomatic)
@@ -207,6 +211,18 @@ public class GunManager : MonoBehaviour
             shooting = false;
             StopShootingFeeback?.Invoke();
         }
+    }
+
+    private bool firerateAllowShoot = true;
+
+    private IEnumerator FirerateDelay()
+    {
+        firerateAllowShoot = false;
+
+        float delay = CurrentGun.ShootConfig.FireRate;
+        yield return new WaitForSeconds(delay);
+
+        firerateAllowShoot = true;
     }
     #endregion
 
