@@ -11,7 +11,7 @@ public class ChangeSens : MonoBehaviour
     private void Awake()
     {
         slider = GetComponent<Slider>();
-        sensiManager = SensibilitySettingsManager.Singleton;
+        sensiManager = SensibilitySettingsManager.Instance;
     }
 
     private void Start()

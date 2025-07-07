@@ -9,7 +9,7 @@ public class ChangeAimMultiplier : MonoBehaviour
     private void Awake()
     {
         slider = GetComponent<Slider>();
-        sensiManager = SensibilitySettingsManager.Singleton;
+        sensiManager = SensibilitySettingsManager.Instance;
     }
 
     private void Start()

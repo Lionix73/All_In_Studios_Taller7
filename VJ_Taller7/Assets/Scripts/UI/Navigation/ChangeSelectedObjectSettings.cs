@@ -1,28 +1,42 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ChangeSelectedObjectSettings : MonoBehaviour
-{
-    [SerializeField] private GameObject mainMenuObjectToSelect;
-    [SerializeField] private GameObject inGameObjectToSelect;
-    
-    private UIManager ui;
-    private Button button;
+{   
+    private UIManager _ui;
+    private Button _button;
+    private DeactivateButtons _deactivateButtons;
 
     private void Awake()
     {
-        button = GetComponent<Button>();
+        _button = GetComponent<Button>();
+        _deactivateButtons = FindFirstObjectByType<DeactivateButtons>();
     }
 
     private void Start()
     {
-        button.onClick.AddListener(ChangeObject);
-        ui = UIManager.Singleton;
+        _button.onClick.AddListener(DelayToChangeTarget);
+        _ui = UIManager.Singleton;
     }
 
-    public void ChangeObject()
+    private void DelayToChangeTarget()
     {
-        EventSystem.current.currentSelectedGameObject = ui.IsMainMenu ? mainMenuObjectToSelect : inGameObjectToSelect;
+        StartCoroutine(ChangeObject());
+    }
+
+    private IEnumerator ChangeObject()
+    {
+        if (_ui.IsMainMenu)
+        {
+            _deactivateButtons.ChangeButtons(0);
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.5f);
+            _deactivateButtons.ChangeButtons(4);
+        }
+
+        yield return null;
     }
 }

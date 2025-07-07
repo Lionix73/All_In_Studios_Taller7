@@ -78,7 +78,7 @@ public class PlayerSoundsManager : MonoBehaviour
 
     #region -----SHOOTING-----
 
-    public bool brokenFeather;
+    public bool brokenFeather { get; set; }
     private bool autoGunShooting;
 
     private void OnShootingEvent()

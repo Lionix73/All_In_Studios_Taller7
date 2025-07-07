@@ -6,7 +6,7 @@ public class FPSLimiter : MonoBehaviour
 
     void Awake()
     {
-        targetFPS = GraphicSettingsManager.Singleton.TargetFPS;
+        targetFPS = GraphicSettingsManager.Instance.TargetFPS;
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = targetFPS;
     }   

@@ -1,5 +1,4 @@
 using Unity.Cinemachine;
-using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

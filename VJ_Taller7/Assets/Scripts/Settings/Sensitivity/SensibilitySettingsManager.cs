@@ -1,38 +1,23 @@
 using UnityEngine;
 
 [DefaultExecutionOrder(-1)]
-public class SensibilitySettingsManager : MonoBehaviour
+public class SensibilitySettingsManager : PersistentSingleton<SensibilitySettingsManager>
 {
-    public float defaultSensiX = 5f;
-    public float defaultSensiY = -2f;
-    public float defaultAimMultiplier = 0.8f;
-
-    public float SensibilityGainX { get; set; }
+    [Header("Current Values")]
+    [field: SerializeField] public float SensibilityGainX { get; set; }
     public float SensibilityLegacyGainX { get; set; }
-    public float SensibilityGainY { get; set; }
+    [field:SerializeField] public float SensibilityGainY { get; set; }
     public float SensibilityLegacyGainY { get; set; }
-    public float AimSensiMultiplier { get; set; }
+    [field:SerializeField] public float AimSensiMultiplier { get; set; }
 
-    private static SensibilitySettingsManager _singleton;
-
-    public static SensibilitySettingsManager Singleton
+    [Header("Default Values")]
+    [SerializeField] private float defaultSensiX = 5f;
+    [SerializeField] private float defaultSensiY = -2f;
+    [SerializeField] private float defaultAimMultiplier = 0.8f;
+    
+    protected override void Awake()
     {
-        get => _singleton;
-        set => _singleton = value;
-    }
-
-    private void Awake()
-    {
-        if (Singleton == null)
-        {
-            Singleton = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+        base.Awake();
 
         SetSensibility();
     }
@@ -49,11 +34,5 @@ public class SensibilitySettingsManager : MonoBehaviour
 
         SensibilityLegacyGainX = sensibilityX * 100f;
         SensibilityLegacyGainY = sensibilityY * 100f;
-    }
-
-    private void OnDestroy()
-    {
-        if (Singleton == this)
-            Singleton = null;
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class DynamicInputIcon : MonoBehaviour
 {
-    [Header("Íconos")]
+    [Header("Icons")]
     public string keyboardSprite;
     public Sprite xboxSprite;
 
@@ -25,7 +25,7 @@ public class DynamicInputIcon : MonoBehaviour
 
     private void FindControls()
     {
-        controls = ControlsSchemeManager.Singleton;
+        controls = ControlsSchemeManager.Instance;
         controls.OnControlsChange += UpdateIcon;
         UpdateIcon();
     }

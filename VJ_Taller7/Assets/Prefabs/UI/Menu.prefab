@@ -184,7 +184,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f897b6b37c65db4a8266d76066e02c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToSelect: {fileID: 4811464346557986018}
   actionReference: {fileID: -7039436947279043799, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1 &100183452069520008
 GameObject:
@@ -4743,7 +4742,7 @@ Transform:
   m_GameObject: {fileID: 2236496924298197814}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -960, y: -540, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4807,7 +4806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d749b44db9edb468ad99bac42f4fa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sound: {fileID: 0}
+  sound: {fileID: 4259218974714466288}
   scaleMultiplier: 1.2
   scaleDuration: 0.2
   outlineColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -4833,20 +4832,24 @@ MonoBehaviour:
     - {fileID: 8668725468182178880}
     - {fileID: 461067601389291354}
   - UiObjs:
+    - {fileID: 1285596694115225177}
     - {fileID: 1959100490934855304}
     - {fileID: 1320469704927318792}
-    - {fileID: 1285596694115225177}
     - {fileID: 926262083032768037}
     - {fileID: 5673869826434057604}
     - {fileID: 8989688245980178213}
   - UiObjs:
+    - {fileID: 6902619177823592482}
     - {fileID: 7017327710996461688}
     - {fileID: 6836459863490670226}
-    - {fileID: 6902619177823592482}
     - {fileID: 1283551760832583954}
     - {fileID: 5513821224519781860}
     - {fileID: 4113993896798017395}
-  - UiObjs: []
+  - UiObjs:
+    - {fileID: 7546467437133121512}
+    - {fileID: 6737760852742347371}
+    - {fileID: 4926013004783677695}
+    - {fileID: 6566193227807864508}
 --- !u!1 &2239689358977901410
 GameObject:
   m_ObjectHideFlags: 0
@@ -8779,7 +8782,6 @@ GameObject:
   - component: {fileID: 8948929986380704873}
   - component: {fileID: 2080940087642558543}
   - component: {fileID: 8783848597766174707}
-  - component: {fileID: 8445570025900903820}
   - component: {fileID: 8954536372271058680}
   m_Layer: 5
   m_Name: Play
@@ -8938,19 +8940,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &8445570025900903820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4109550464340585914}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7ec0e5e20563a048b37960c0a2ddfb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectToSelect: {fileID: 1285596694115225177}
 --- !u!114 &8954536372271058680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10639,6 +10628,7 @@ GameObject:
   - component: {fileID: 7772688026986264377}
   - component: {fileID: 1913644301776821801}
   - component: {fileID: 3663691336922005043}
+  - component: {fileID: 6128394502773263416}
   m_Layer: 5
   m_Name: Resume
   m_TagString: Untagged
@@ -10802,6 +10792,19 @@ MonoBehaviour:
   HoverExit:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6128394502773263416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4811464346557986018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fb7943b0f09dbd41b2e767f2e170f91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionReference: {fileID: 7727032971491509709, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1 &4819303371315340440
 GameObject:
   m_ObjectHideFlags: 0
@@ -19114,7 +19117,6 @@ GameObject:
   - component: {fileID: 4584311910668486587}
   - component: {fileID: 8272130360169434892}
   - component: {fileID: 8048057072447234582}
-  - component: {fileID: 5502154855317980389}
   - component: {fileID: 3726772850597256580}
   m_Layer: 5
   m_Name: Setting
@@ -19249,19 +19251,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &5502154855317980389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8668725468182178880}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7ec0e5e20563a048b37960c0a2ddfb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectToSelect: {fileID: 7546467437133121512}
 --- !u!114 &3726772850597256580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22764,6 +22753,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 4789452899634515912}
+    - target: {fileID: 7136218818607915969, guid: c589b30d369e2814fa615aff3ecd9ae2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 3973970997785359415}
     - target: {fileID: 7232704336401393084, guid: c589b30d369e2814fa615aff3ecd9ae2, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -23017,9 +23010,19 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!1 &4926013004783677695 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3839866437974167011, guid: c589b30d369e2814fa615aff3ecd9ae2, type: 3}
+  m_PrefabInstance: {fileID: 8148494506488036636}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &5693236973935243565 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4474102246660328497, guid: c589b30d369e2814fa615aff3ecd9ae2, type: 3}
+  m_PrefabInstance: {fileID: 8148494506488036636}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6566193227807864508 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3029384776300678048, guid: c589b30d369e2814fa615aff3ecd9ae2, type: 3}
   m_PrefabInstance: {fileID: 8148494506488036636}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &6737760852742347371 stripped
@@ -23039,8 +23042,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf37e57da282c2478711e118f990e1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenuObjectToSelect: {fileID: 8668725468182178880}
-  inGameObjectToSelect: {fileID: 4643138166639442652}
 --- !u!224 &6873032306833844336 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3347492713492485484, guid: c589b30d369e2814fa615aff3ecd9ae2, type: 3}

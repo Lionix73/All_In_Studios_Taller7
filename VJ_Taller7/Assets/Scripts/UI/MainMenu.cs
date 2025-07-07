@@ -84,6 +84,9 @@ public class UIManager : MonoBehaviour
 
     }
 
+    public delegate void PauseEvent();
+    public event PauseEvent OnPause;
+
     private float killedEnemiesUI = 0;
     [SerializeField] private float waitingTimeForMenu = 0;
     [SerializeField] private bool hasWon = false;
@@ -276,6 +279,7 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance!=null) GameManager.Instance.PauseGame();
         
         IsPaused = !IsPaused;
+        OnPause?.Invoke();
         Cursor.visible = IsPaused;
         uiPanels[indexPauseScreen].gameObject.SetActive(IsPaused);
         if(IsPaused)

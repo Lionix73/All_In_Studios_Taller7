@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ControlsSchemeManager : MonoBehaviour
+public class ControlsSchemeManager : Singleton<ControlsSchemeManager>
 {
     #region Controls Scheme
     public enum InputScheme { KeyboardMouse, Gamepad }
@@ -22,30 +22,13 @@ public class ControlsSchemeManager : MonoBehaviour
     public delegate void ControlsChange();
     public event ControlsChange OnControlsChange;
 
-    #region Singleton
-    private static ControlsSchemeManager _singleton;
-    public static ControlsSchemeManager Singleton
+    protected override void Awake()
     {
-        get => _singleton;
-        set => _singleton = value;
-    }
-
-    private void Awake()
-    {
+        base.Awake();
+        
         playerInput = transform.root.GetComponentInChildren<PlayerInput>();
         gamepadVibration = GetComponent<GamepadVibration>();
-
-        if (Singleton == null)
-        {
-            Singleton = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
     }
-    #endregion
 
     private void Start()
     {

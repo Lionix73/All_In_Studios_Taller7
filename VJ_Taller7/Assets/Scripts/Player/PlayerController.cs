@@ -117,18 +117,30 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!canMove) return;
-
         HandleMovement();
         HandleRotation();
     }
 
+    private void HandleRotation()
+    {
+        if (!canMove) return;
+
+        if (moveInput.magnitude > 0.05f || aimInput > 0.05f)
+        {
+            Vector3 cameraForward = cameraTransform.forward;
+            cameraForward.y = 0;
+            Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
+    }
+
+    #region -----Movement-----
     private void HandleMovement()
     {
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
         isMoving = moveInput.sqrMagnitude > 0.1f;
 
-        desiredMoveDirection = (transform.right * moveDirection.x + transform.forward * moveDirection.z);
+        desiredMoveDirection = transform.right * moveDirection.x + transform.forward * moveDirection.z;
 
         speed = isRunning ? runSpeed : walkSpeed;
 
@@ -142,19 +154,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void HandleRotation()
-    {
-        if (moveInput.magnitude > 0.05f || aimInput > 0.05f)
-        {
-            Vector3 cameraForward = cameraTransform.forward;
-            cameraForward.y = 0;
-            Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        }
-    }
-
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (!canMove) return;
+
         moveInput = context.ReadValue<Vector2>();
     }
 
@@ -166,6 +169,12 @@ public class PlayerController : MonoBehaviour
             isCrouching = false;
         }
     }
+
+    public void BlockMovement()
+    {
+        canMove = !canMove;
+    }
+    #endregion
 
     #region -----Aim-----
     public void OnAim(InputAction.CallbackContext context)

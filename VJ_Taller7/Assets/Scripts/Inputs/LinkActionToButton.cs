@@ -21,11 +21,10 @@ public class LinkActionToButton : MonoBehaviour
         if (actionReference != null && actionReference.action != null)
         {
             actionReference.action.performed += OnActionCalled;
-            actionReference.action.Enable();
         }
         else
         {
-            Debug.LogError("No se ha asignado la acción correctamente.");
+            Debug.LogError("No se ha asignado la acciï¿½n correctamente.");
         }
     }
 
@@ -34,7 +33,6 @@ public class LinkActionToButton : MonoBehaviour
         if (actionReference != null && actionReference.action != null)
         {
             actionReference.action.performed -= OnActionCalled;
-            actionReference.action.Disable();
         }
     }
 

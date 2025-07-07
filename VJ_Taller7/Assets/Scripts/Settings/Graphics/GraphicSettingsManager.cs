@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GraphicSettingsManager : MonoBehaviour
+public class GraphicSettingsManager : PersistentSingleton<GraphicSettingsManager>
 {
     [SerializeField] private TMP_Dropdown resolutionsDropdown;
     [SerializeField] private Slider fpsSlider;
@@ -18,29 +18,10 @@ public class GraphicSettingsManager : MonoBehaviour
     public int Fullscreen { get; set; }
     public int TargetFPS { get; set; }
 
-    #region Singleton
-    private static GraphicSettingsManager _singleton;
-
-    public static GraphicSettingsManager Singleton
+    protected override void Awake()
     {
-        get => _singleton;
-        set => _singleton = value;
+        base.Awake();
     }
-
-    private void Awake()
-    {
-        if (Singleton == null)
-        {
-            Singleton = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
-    }
-    #endregion
 
     private void Start()
     {
