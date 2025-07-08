@@ -15,14 +15,12 @@ public class SensibilitySettings : MonoBehaviour
     private float currentSensiX;
     private float currentSensiY;
 
-    private UIManager ui;
     private bool cameraFreeze;
 
     private void Awake()
     {
         SensibilitySettingsManager = SensibilitySettingsManager.Instance;
         axisController = GetComponent<CinemachineInputAxisController>();
-        ui = UIManager.Singleton;
     }
 
     private void Start()
@@ -45,8 +43,6 @@ public class SensibilitySettings : MonoBehaviour
             emotes.action.started += EmotesPauseCamera;
             emotes.action.canceled += EmotesPauseCamera;
             emotes.action.Enable();
-
-            ui.OnPause += GamePause;
         }
         else
         {
@@ -61,8 +57,6 @@ public class SensibilitySettings : MonoBehaviour
             emotes.action.started -= EmotesPauseCamera;
             emotes.action.canceled -= EmotesPauseCamera;
             emotes.action.Disable();
-
-            ui.OnPause -= GamePause;
         }
     }
 
@@ -71,12 +65,7 @@ public class SensibilitySettings : MonoBehaviour
         PauseCamera();
     }
 
-    private void GamePause()
-    {
-        PauseCamera();
-    }
-
-    private void PauseCamera()
+    public void PauseCamera()
     {
         if (!cameraFreeze)
         {

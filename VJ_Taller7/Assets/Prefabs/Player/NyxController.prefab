@@ -108,7 +108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6aaf2760d6cc5c4ab37d070dc283052, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vibrationDuration: 0.3
+  DamageVibrationDuration: 0.3
+  ShootVibrationDuration: 0.1
 --- !u!114 &6465095052531210352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1844,6 +1845,7 @@ Transform:
   - {fileID: 7207975604421782059}
   - {fileID: 8281583347280187715}
   - {fileID: 1692842395145698164}
+  - {fileID: 8698819650364915829}
   m_Father: {fileID: 5550208734229555072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4627971799540797935
@@ -2404,7 +2406,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5559edd55be596244b9a2358cc7a787d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brokenFeather: 0
 --- !u!114 &3370538707091364083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2747,6 +2748,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 249c30ac-e645-4009-9ca3-60c981a24006
     m_ActionName: 'UI/Skip[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3666077492643752597}
+        m_TargetAssemblyTypeName: SeeEnemiesToggle, Assembly-CSharp
+        m_MethodName: OnTogglePerformed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 5bfd99f8-fa7e-422b-bfac-cecec9ebbdb0
+    m_ActionName: 'Player/SearchEnemies[/Keyboard/v]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -5268,6 +5285,79 @@ Transform:
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 6766091055545740915, guid: 27d89b746a2da194c80e775a16b20d6d, type: 3}
   m_PrefabInstance: {fileID: 4705435064704414382}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4940396714549705995
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2785151987722959234}
+    m_Modifications:
+    - target: {fileID: 4339142103231479166, guid: f69b691a2131e6e4ab20debb7d4505d9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4339142103231479166, guid: f69b691a2131e6e4ab20debb7d4505d9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4339142103231479166, guid: f69b691a2131e6e4ab20debb7d4505d9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4339142103231479166, guid: f69b691a2131e6e4ab20debb7d4505d9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4339142103231479166, guid: f69b691a2131e6e4ab20debb7d4505d9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4339142103231479166, guid: f69b691a2131e6e4ab20debb7d4505d9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4339142103231479166, guid: f69b691a2131e6e4ab20debb7d4505d9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4339142103231479166, guid: f69b691a2131e6e4ab20debb7d4505d9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4339142103231479166, guid: f69b691a2131e6e4ab20debb7d4505d9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4339142103231479166, guid: f69b691a2131e6e4ab20debb7d4505d9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7255755003710643174, guid: f69b691a2131e6e4ab20debb7d4505d9, type: 3}
+      propertyPath: m_Name
+      value: SeeEnemies
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f69b691a2131e6e4ab20debb7d4505d9, type: 3}
+--- !u!114 &3666077492643752597 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8534135118714378142, guid: f69b691a2131e6e4ab20debb7d4505d9, type: 3}
+  m_PrefabInstance: {fileID: 4940396714549705995}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faed3a659a989c245b8973519f93baca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &8698819650364915829 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4339142103231479166, guid: f69b691a2131e6e4ab20debb7d4505d9, type: 3}
+  m_PrefabInstance: {fileID: 4940396714549705995}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6362085764419751659
 PrefabInstance:

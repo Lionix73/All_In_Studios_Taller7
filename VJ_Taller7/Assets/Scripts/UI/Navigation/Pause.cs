@@ -15,11 +15,14 @@ public class Pause : MonoBehaviour
     private UIManager _uiManager;
     private PlayerController _playerController;
     private ThisObjectSounds _soundManager;
+    private DeactivateButtons _deactivateButtons;
+    private SensibilitySettings _sensibilitySettings;
 
     private void Start()
     {
         _uiManager = UIManager.Singleton;
         _soundManager = GetComponentInChildren<ThisObjectSounds>();
+        _deactivateButtons = FindFirstObjectByType<DeactivateButtons>();
     }
 
     #region -----Link Action------
@@ -64,10 +67,15 @@ public class Pause : MonoBehaviour
         if (_playerController == null)
             _playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
+        if(_sensibilitySettings == null)
+            _sensibilitySettings = GameObject.FindGameObjectWithTag("FreeLookCamera").GetComponent<SensibilitySettings>();
+
         _playerController.BlockMovement();
+        _sensibilitySettings.PauseCamera();
         _uiManager.PauseGame(4);
 
-        EventSystem.current.currentSelectedGameObject = objectToSelect;
+        _deactivateButtons.ChangeButtons(4);
+        //EventSystem.current.currentSelectedGameObject = objectToSelect;
     }
     #endregion
 
@@ -85,6 +93,7 @@ public class Pause : MonoBehaviour
 
         yield return new WaitForSeconds(0.1f);
         _playerController.BlockMovement();
+        _sensibilitySettings.PauseCamera();
         _uiManager.PauseGame(4);
     }
     #endregion

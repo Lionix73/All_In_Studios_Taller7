@@ -156,7 +156,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (!canMove) return;
+        if (!canMove)
+        {
+            moveInput = Vector2.zero;
+            return;
+        }      
 
         moveInput = context.ReadValue<Vector2>();
     }
@@ -193,7 +197,9 @@ public class PlayerController : MonoBehaviour
 
     public void PlayerAiming()
     {
-        if(isAiming && !wasAiming)
+        if (!canMove) return;
+
+        if (isAiming && !wasAiming)
         {
             sensibilitySettings.AdjustSensiDuringAim();
         }
