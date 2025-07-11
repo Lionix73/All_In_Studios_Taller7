@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7857538833840811330}
   - component: {fileID: 4633763210580677908}
   - component: {fileID: 505110429547849906}
+  - component: {fileID: 7640593970835277726}
   m_Layer: 0
   m_Name: GunManager
   m_TagString: Gun Manager
@@ -116,3 +117,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7640593970835277726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 492504566856871708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24b5766ceb4fb8b4e9354ce62ab0798b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableStickyAim: 1
+  stickyAimRadius: 0.5
+  stickyAimDistance: 100
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  maxAssistMultiplier: 0.8
+  minAssistMultiplier: 0.1

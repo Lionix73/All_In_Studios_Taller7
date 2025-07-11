@@ -8,19 +8,18 @@ public class SensibilitySettings : MonoBehaviour
     [Header("Input Actions")]
     [Tooltip("Choose what action will pause the camera")]
     [SerializeField] private InputActionReference emotes;
-    
-    private CinemachineInputAxisController axisController;
-    private SensibilitySettingsManager SensibilitySettingsManager;
 
-    private float currentSensiX;
-    private float currentSensiY;
+    private CinemachineInputAxisController _axisController;
+    private SensibilitySettingsManager _sensibilitySettingsManager;
 
-    private bool cameraFreeze;
+    private float _currentSensiX;
+    private float _currentSensiY;
+    private bool _cameraFreeze;
 
     private void Awake()
     {
-        SensibilitySettingsManager = SensibilitySettingsManager.Instance;
-        axisController = GetComponent<CinemachineInputAxisController>();
+        _sensibilitySettingsManager = SensibilitySettingsManager.Instance;
+        _axisController = GetComponent<CinemachineInputAxisController>();
     }
 
     private void Start()
@@ -60,6 +59,7 @@ public class SensibilitySettings : MonoBehaviour
         }
     }
 
+    #region -----Pause Camera-----
     private void EmotesPauseCamera(InputAction.CallbackContext _)
     {
         PauseCamera();
@@ -67,9 +67,9 @@ public class SensibilitySettings : MonoBehaviour
 
     public void PauseCamera()
     {
-        if (!cameraFreeze)
+        if (!_cameraFreeze)
         {
-            foreach (InputAxisControllerBase<CinemachineInputAxisController.Reader>.Controller c in axisController.Controllers)
+            foreach (InputAxisControllerBase<CinemachineInputAxisController.Reader>.Controller c in _axisController.Controllers)
             {
                 if (c.Name == "Look Orbit X")
                 {
@@ -88,43 +88,54 @@ public class SensibilitySettings : MonoBehaviour
             ChangeCameraSensitivity(1);
         }
 
-        cameraFreeze = !cameraFreeze;
+        _cameraFreeze = !_cameraFreeze;
     }
+    #endregion
 
+    #region -----Aim Sensitivity Adjustment Methods-----
     public void ChangeCameraSensitivity(float _)
     {
-        foreach (InputAxisControllerBase<CinemachineInputAxisController.Reader>.Controller c in axisController.Controllers)
+        foreach (InputAxisControllerBase<CinemachineInputAxisController.Reader>.Controller c in _axisController.Controllers)
         {
             if (c.Name == "Look Orbit X")
             {
-                c.Input.Gain = SensibilitySettingsManager.SensibilityGainX;
-                c.Input.LegacyGain = SensibilitySettingsManager.SensibilityLegacyGainX;
+                c.Input.Gain = _sensibilitySettingsManager.SensibilityGainX;
+                c.Input.LegacyGain = _sensibilitySettingsManager.SensibilityLegacyGainX;
             }
             else if (c.Name == "Look Orbit Y")
             {
-                c.Input.Gain = SensibilitySettingsManager.SensibilityGainY;
-                c.Input.LegacyGain = SensibilitySettingsManager.SensibilityLegacyGainY;
+                c.Input.Gain = _sensibilitySettingsManager.SensibilityGainY;
+                c.Input.LegacyGain = _sensibilitySettingsManager.SensibilityLegacyGainY;
             }
         }
     }
 
-    public void AdjustSensiDuringAim()
+    public void AdjustSensiNoAim()
     {
-        SensibilitySettingsManager.SensibilityGainX *= SensibilitySettingsManager.AimSensiMultiplier;
-        SensibilitySettingsManager.SensibilityGainY *= SensibilitySettingsManager.AimSensiMultiplier;
+        _sensibilitySettingsManager.SensibilityGainX = _currentSensiX;
+        _sensibilitySettingsManager.SensibilityGainY = _currentSensiY;
         ChangeCameraSensitivity(1);
     }
 
-    public void AdjustSensiNoAim()
+    public void AdjustSensiDuringAim()
     {
-        SensibilitySettingsManager.SensibilityGainX = currentSensiX;
-        SensibilitySettingsManager.SensibilityGainY = currentSensiY;
+        _sensibilitySettingsManager.SensibilityGainX = _currentSensiX * _sensibilitySettingsManager.AimSensiMultiplier;
+        _sensibilitySettingsManager.SensibilityGainY = _currentSensiY * _sensibilitySettingsManager.AimSensiMultiplier;
         ChangeCameraSensitivity(1);
     }
+
+
+    public void AdjustSensiAimAssit(float stickyMultiplier)
+    {
+        _sensibilitySettingsManager.SensibilityGainX = _currentSensiX * _sensibilitySettingsManager.AimSensiMultiplier * stickyMultiplier;
+        _sensibilitySettingsManager.SensibilityGainY = _currentSensiY * _sensibilitySettingsManager.AimSensiMultiplier * stickyMultiplier;
+        ChangeCameraSensitivity(1);
+    }
+    #endregion
 
     private void GetCurrentSensitivity(float _)
     {
-        currentSensiX = SensibilitySettingsManager.SensibilityGainX;
-        currentSensiY = SensibilitySettingsManager.SensibilityGainY;
+        _currentSensiX = _sensibilitySettingsManager.SensibilityGainX;
+        _currentSensiY = _sensibilitySettingsManager.SensibilityGainY;
     }
 }
