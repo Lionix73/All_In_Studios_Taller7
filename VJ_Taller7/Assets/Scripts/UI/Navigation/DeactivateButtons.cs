@@ -31,7 +31,7 @@ public class DeactivateButtons : MonoBehaviour
         }
 
         activeGroup = index;
-        EventSystem.current.currentSelectedGameObject = interactables[index].UiObjs[0];
+        EventSystem.current.SetSelectedGameObject(interactables[index].UiObjs[0]);
     }
 }
 

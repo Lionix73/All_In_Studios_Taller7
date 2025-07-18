@@ -9,13 +9,13 @@ public class HoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        EventSystem.current.currentSelectedGameObject = gameObject;
+        EventSystem.current.SetSelectedGameObject(gameObject);
         HoverEnter?.Invoke();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        EventSystem.current.currentSelectedGameObject = null;
+        EventSystem.current.SetSelectedGameObject(null);
         HoverExit?.Invoke();
     }
 }

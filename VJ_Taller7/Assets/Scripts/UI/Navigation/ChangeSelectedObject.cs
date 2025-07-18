@@ -20,6 +20,6 @@ public class ChangeSelectedObject : MonoBehaviour
 
     public void ChangeObject()
     {
-        EventSystem.current.currentSelectedGameObject = objectToSelect;
+        EventSystem.current.SetSelectedGameObject(objectToSelect);
     }
 }
