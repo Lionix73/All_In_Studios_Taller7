@@ -40,13 +40,13 @@ public class ThisObjectSounds : MonoBehaviour
         sound_index = GetSoundIndex(s_name1);
         if (sound_index != -1)
         {
-            FMOD.RESULT isLoop = sounds[sound_index].EventDescription.isOneshot(out bool oneshot);
+            sounds[sound_index].EventDescription.isOneshot(out bool oneshot);
 
-            if (!oneshot && !sounds[sound_index].IsPlaying())
+            if (oneshot)
             {
                 sounds[sound_index].Play();
             }
-            else if (oneshot)
+            else if (!oneshot && !sounds[sound_index].IsPlaying())
             {
                 sounds[sound_index].Play();
             }
@@ -99,6 +99,11 @@ public class ThisObjectSounds : MonoBehaviour
         {
             s.Stop();
         }
+    }
+
+    public void PauseAllSound()
+    {
+        RuntimeManager.PauseAllEvents(true);
     }
     #endregion
 

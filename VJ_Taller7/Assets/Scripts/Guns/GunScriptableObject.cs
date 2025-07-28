@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Security.Cryptography;
+using FMODUnity;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -22,11 +24,9 @@ public class GunScriptableObject : ScriptableObject {
     public float aimFov;
 
     public GameObject ImpactBulletEffectForHitScan;
-
     public ShootConfigScriptableObjtect ShootConfig;
     public TrailConfigScriptableObject TrailConfig;
 
-    
     public MonoBehaviour ActiveMonoBehaviour;
     public GameObject Model;
     public Camera activeCamera;
@@ -50,9 +50,21 @@ public class GunScriptableObject : ScriptableObject {
     public ObjectPool<Bullet> SFeatherPool;
 
     public Vector3 dondePegaElRayoPaDisparar;
+
+    [Header("Animator")]
+    public RuntimeAnimatorController AnimatorController;
+
+    [Header("Audio")]
+    public EventReference ShootSound;
+    public EventReference ReloadSound;
+    public EventReference NoAmmoSound;
+    
+    [Header("Vibration")]
+    public float ShootingVibrationIntensity;
+    
     private HitFeedback hitFeedback;
 
-    private void Awake() 
+    private void Awake()
     {
         bulletsLeft = MagazineSize;
     }
@@ -376,6 +388,9 @@ public class GunScriptableObject : ScriptableObject {
         clone.SpawnRotation = SpawnRotation;
         clone.aimFov = aimFov;
         clone.ImpactBulletEffectForHitScan = ImpactBulletEffectForHitScan;
+        clone.ShootSound = ShootSound;
+        clone.ReloadSound = ReloadSound;
+        clone.NoAmmoSound = NoAmmoSound;
         return clone;
     }
 }
