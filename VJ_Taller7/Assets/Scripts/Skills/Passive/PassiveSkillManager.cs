@@ -15,7 +15,7 @@ public class PassiveSkillManager : SkillsManagerBase
         if (CharacterManager.Instance != null)
             activeSkillIndex = CharacterManager.Instance.indexPassiveSkill;
 
-        DeactivateUnusedSkills();
+        ActivateSkillGameObject();
         SearchSkillsUI();
         SetupSkillsIcons();
     }
@@ -28,18 +28,11 @@ public class PassiveSkillManager : SkillsManagerBase
 
     private void Update()
     {
-        if (!passiveSkills[activeSkillIndex].IsOnCooldown)
-            passiveSkills[activeSkillIndex].Activate();
+        passiveSkills[activeSkillIndex].Activate();
     }
 
-    private void DeactivateUnusedSkills()
+    private void ActivateSkillGameObject()
     {
-        for (int i = 0; i < passiveSkills.Length; i++)
-        {
-            if (i != activeSkillIndex)
-            {
-                passiveSkills[i].gameObject.SetActive(false);
-            }
-        }
+        passiveSkills[activeSkillIndex].gameObject.SetActive(true);
     }
 }

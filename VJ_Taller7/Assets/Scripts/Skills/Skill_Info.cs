@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Skill_Info", menuName = "Scriptable Objects/Skill_Info")]
@@ -18,6 +19,9 @@ public class Skill_Info : ScriptableObject
     [Header("Skill Description")]
     public string[] descriptionItems;
     public string[] descriptionText;
+
+    [Header("Skill Sound")]
+    public EventReference activateSkillSound;
 
     [Header("SkillMode")]
     public bool isMultiplayer;

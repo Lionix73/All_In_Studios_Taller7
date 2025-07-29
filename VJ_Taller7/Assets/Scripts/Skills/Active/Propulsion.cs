@@ -1,4 +1,5 @@
 using System.Collections;
+using FMODUnity;
 using UnityEngine;
 
 public class Propulsion : SkillBase
@@ -20,7 +21,7 @@ public class Propulsion : SkillBase
         cooldown = cooldownThisSkill;
 
         vfx.Play();
-        soundManager.PlaySound("Propulsion");
+        RuntimeManager.PlayOneShotAttached(skillInfo.activateSkillSound, gameObject);
 
         rb.linearVelocity = Vector3.zero;
 

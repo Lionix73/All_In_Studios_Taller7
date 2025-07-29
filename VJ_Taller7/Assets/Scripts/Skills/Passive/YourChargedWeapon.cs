@@ -1,4 +1,5 @@
 using System.Collections;
+using FMODUnity;
 using UnityEngine;
 
 public class YourChargedWeapon : PassiveSkillBase
@@ -42,7 +43,7 @@ public class YourChargedWeapon : PassiveSkillBase
 
     public override IEnumerator Execute()
     {
-        _players[_friendPlayerIndex].GetComponent<ThisObjectSounds>().PlaySound("YourChargedWeapon");
+        RuntimeManager.PlayOneShotAttached(skillInfo.activateSkillSound, _players[_friendPlayerIndex]);
 
         float incrementedHealth = _orignalMaxHealth * ((float)healthIncreasePercentage/100);
         _friendHealth.ScaleHealth(incrementedHealth);

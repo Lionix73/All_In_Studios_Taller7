@@ -15,7 +15,7 @@ public class ActiveSkillManager : SkillsManagerBase
         if (CharacterManager.Instance != null)
             activeSkillIndex = CharacterManager.Instance.indexActiveSkill;
 
-        DeactivateUnusedSkills();
+        ActivateSkillGameObject();
         SearchSkillsUI();
         SetupSkillsIcons();
     }
@@ -26,15 +26,9 @@ public class ActiveSkillManager : SkillsManagerBase
         SetupShaderMaterial(_actSkillImg, skillSprite);
     }
 
-    private void DeactivateUnusedSkills()
+    private void ActivateSkillGameObject()
     {
-        for (int i = 0; i < skills.Length; i++)
-        {
-            if (i != activeSkillIndex)
-            {
-                skills[i].gameObject.SetActive(false);
-            }
-        }
+        skills[activeSkillIndex].gameObject.SetActive(true);
     }
 
     public void ActivateSkill()
@@ -45,7 +39,7 @@ public class ActiveSkillManager : SkillsManagerBase
         }
         else
         {
-            Debug.LogWarning("Índice de habilidad fuera de rango.");
+            Debug.LogWarning("Ãndice de habilidad fuera de rango.");
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections;
+using FMODUnity;
 using UnityEngine;
 
 public class CarnivoroTemporal : SkillBase
@@ -25,7 +26,7 @@ public class CarnivoroTemporal : SkillBase
     public override IEnumerator Execute()
     {
         CarnivoroActive = true;
-        soundManager.PlaySound("TempCarnivore");
+        RuntimeManager.PlayOneShotAttached(skillInfo.activateSkillSound, gameObject);
 
         yield return new WaitForSeconds(duration);
 

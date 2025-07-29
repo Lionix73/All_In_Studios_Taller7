@@ -1,4 +1,5 @@
 using System.Collections;
+using FMODUnity;
 using UnityEngine;
 
 public class SegundoAliento : PassiveSkillBase
@@ -34,7 +35,7 @@ public class SegundoAliento : PassiveSkillBase
 
     public override IEnumerator Execute()
     {
-        soundManager.PlaySound("SecondBreath");
+        RuntimeManager.PlayOneShotAttached(skillInfo.activateSkillSound, gameObject);
 
         playerHealth.TakeHeal(playerHealth.GetMaxHeath);
         yield return null;

@@ -6,11 +6,10 @@ public class GamepadVibration : MonoBehaviour
 {
     [Header("Vibration Settings")]
     [SerializeField][Range(0, 1)] private float DamageVibrationDuration = 0.3f;
-    [SerializeField][Range(0, 1)] private float ShootVibrationDuration = 0.1f;
 
     private Health _health;
     private GunManager _gunManager;
-    private bool autoGunShooting;
+    private bool _autoGunShooting;
 
     private void Awake()
     {
@@ -49,82 +48,43 @@ public class GamepadVibration : MonoBehaviour
     {
         if (_health.isDead) return;
 
-        if (_gunManager.CurrentGun.bulletsLeft < 1)
-        {
-            StartCoroutine(Vibrate(0.1f, ShootVibrationDuration));
-            return;
-        }
+        GunScriptableObject currentGun = _gunManager.CurrentGun;
 
-        if (_gunManager.CurrentGun.ShootConfig.IsAutomatic)
+        if (currentGun.bulletsLeft < 1) return;
+
+        if (currentGun.ShootConfig.IsAutomatic)
         {
-            VibrateOnShootingAuto();
+            VibrateOnShootingAuto(currentGun);
         }
         else
         {
-            VibrateOnShootingNonAuto();
+            StartCoroutine(Vibrate(currentGun.ShootingVibrationIntensity, currentGun.VibrationDuration));
         }
     }
 
     #region -----Automatic Guns-----
-    private void VibrateOnShootingAuto()
+    private void VibrateOnShootingAuto(GunScriptableObject currentGun)
     {
-        autoGunShooting = true;
-
-        switch (_gunManager.CurrentGun.Type)
-        {
-            case GunType.Rifle:
-                StartCoroutine(VibrateAutomaticWeapon(0.2f));
-                break;
-        }
+        _autoGunShooting = true;
+        StartCoroutine(VibrateAutomaticWeapon(currentGun));
     }
 
-    private IEnumerator VibrateAutomaticWeapon(float intensity)
+    private IEnumerator VibrateAutomaticWeapon(GunScriptableObject currentGun)
     {
-        float delay = _gunManager.CurrentGun.ShootConfig.FireRate;
+        float delay = currentGun.ShootConfig.FireRate;
 
-        while (autoGunShooting)
+        while (_autoGunShooting)
         {
-            StartCoroutine(Vibrate(intensity, ShootVibrationDuration));
+            StartCoroutine(Vibrate(currentGun.ShootingVibrationIntensity, currentGun.VibrationDuration));
             yield return new WaitForSeconds(delay);
         }
     }
 
     private void StopShooting()
     {
-        autoGunShooting = false;
+        _autoGunShooting = false;
     }
     #endregion
-
-    private void VibrateOnShootingNonAuto()
-    {
-        switch (_gunManager.CurrentGun.Type)
-        {
-            case GunType.BasicPistol:
-                StartCoroutine(Vibrate(0.4f, ShootVibrationDuration));
-                break;
-            case GunType.Revolver:
-                StartCoroutine(Vibrate(0.6f, ShootVibrationDuration));
-                break;
-            case GunType.Shotgun:
-                StartCoroutine(Vibrate(0.7f, ShootVibrationDuration));
-                break;
-            case GunType.Sniper:
-                StartCoroutine(Vibrate(0.8f, ShootVibrationDuration));
-                break;
-            case GunType.ShinelessFeather:
-                StartCoroutine(Vibrate(0.2f, ShootVibrationDuration));
-                break;
-            case GunType.GoldenFeather:
-                StartCoroutine(Vibrate(0.2f, ShootVibrationDuration));
-                break;
-            case GunType.GranadeLaucher:
-                StartCoroutine(Vibrate(0.3f, ShootVibrationDuration));
-                break;
-            case GunType.Crossbow:
-                StartCoroutine(Vibrate(0.3f, ShootVibrationDuration));
-                break;
-        }
-    }
     #endregion
 
     private IEnumerator Vibrate(float strength, float duration)

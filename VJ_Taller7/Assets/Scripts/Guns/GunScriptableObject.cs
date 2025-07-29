@@ -60,8 +60,9 @@ public class GunScriptableObject : ScriptableObject {
     public EventReference NoAmmoSound;
     
     [Header("Vibration")]
-    public float ShootingVibrationIntensity;
-    
+    [Range(0, 1)] public float ShootingVibrationIntensity;
+    public float VibrationDuration;
+
     private HitFeedback hitFeedback;
 
     private void Awake()
@@ -391,6 +392,8 @@ public class GunScriptableObject : ScriptableObject {
         clone.ShootSound = ShootSound;
         clone.ReloadSound = ReloadSound;
         clone.NoAmmoSound = NoAmmoSound;
+        clone.ShootingVibrationIntensity = ShootingVibrationIntensity;
+        clone.VibrationDuration = VibrationDuration;
         return clone;
     }
 }

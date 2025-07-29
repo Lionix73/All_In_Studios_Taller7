@@ -1,4 +1,5 @@
 using System.Collections;
+using FMODUnity;
 using UnityEngine;
 
 public class Blink : SkillBase
@@ -19,12 +20,13 @@ public class Blink : SkillBase
         animator = GetComponentInParent<Animator>();
         freeLookCamera = GameObject.FindWithTag("FreeLookCamera").GetComponent<Transform>();
     }
+
     public override IEnumerator Execute()
     {
         cooldown = cooldownThisSkill;
 
         dashVFX.StartTrail();
-        soundManager.PlaySound("Blink");
+        RuntimeManager.PlayOneShotAttached(skillInfo.activateSkillSound, gameObject);
 
         animator.applyRootMotion = false;
         rb.useGravity = false;

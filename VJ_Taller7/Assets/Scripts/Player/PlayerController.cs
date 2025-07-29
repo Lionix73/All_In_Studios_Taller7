@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Animations.Rigging;
 
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(CheckTerrainHeight))]
 public class PlayerController : MonoBehaviour
 {
     #region Visible Variables
@@ -16,7 +18,7 @@ public class PlayerController : MonoBehaviour
     [Header("Slide-Crouch")]
     [SerializeField] private float slideDuration = 3f;
     [SerializeField] private float slideCrouchCooldown = 0.5f;
-    
+
     [Header("Jump")]
     [SerializeField] private int maxJumps = 2;
     [SerializeField] private float jumpVerticalForce = 10f;
@@ -72,7 +74,6 @@ public class PlayerController : MonoBehaviour
     #region Private Components
     private CheckTerrainHeight checkTerrainHeight;
     private FOVHandler fov;
-    private Rig rig;
     private Rigidbody rb;
     private Transform cameraTransform;
     private Melee melee;
@@ -94,7 +95,6 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         checkTerrainHeight = GetComponent<CheckTerrainHeight>();
-        rig = GetComponentInChildren<Rig>();
         melee = GetComponentInChildren<Melee>();
         fov = GetComponent<FOVHandler>();
     }
@@ -160,7 +160,7 @@ public class PlayerController : MonoBehaviour
         {
             moveInput = Vector2.zero;
             return;
-        }      
+        }
 
         moveInput = context.ReadValue<Vector2>();
     }
@@ -226,20 +226,20 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void AdjustRigs()
     {
-        if (aimRig==null || gripRig == null) return;
+        if (aimRig == null || gripRig == null) return;
 
         else if (wasAiming)
         {
-            aimRig.weight=1.0f;
+            aimRig.weight = 1.0f;
             gripRig.weight = 1.0f;
         }
-        else 
+        else
         {
-            aimRig.weight=0; 
+            aimRig.weight = 0;
             gripRig.weight = 0.5f;
         }
 
-        if (moveInput.magnitude!=0)
+        if (moveInput.magnitude != 0)
         {
             aimRig.weight = 1.0f;
         }
@@ -275,7 +275,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region -----Melee-----
-    public void OnMelee(InputAction.CallbackContext context) 
+    public void OnMelee(InputAction.CallbackContext context)
     {
         if (!canMove) return;
 
@@ -307,12 +307,12 @@ public class PlayerController : MonoBehaviour
             isCrouching = !isCrouching;
             canCrouch = false;
 
-            if(isRunning && canSlide && !isSliding)
+            if (isRunning && canSlide && !isSliding)
             {
                 SlidingEvent?.Invoke();
                 StartCoroutine(Slide());
             }
-            else if(!isRunning)
+            else if (!isRunning)
             {
                 Invoke(nameof(ResetCrouchFlag), slideCrouchCooldown);
             }
@@ -337,9 +337,9 @@ public class PlayerController : MonoBehaviour
 
     private void ExchangeColliders()
     {
-        if(playerCollider != null && crouchCollider != null)
+        if (playerCollider != null && crouchCollider != null)
         {
-            if(playerCollider.enabled)
+            if (playerCollider.enabled)
             {
                 crouchCollider.enabled = true;
                 playerCollider.enabled = false;
@@ -376,8 +376,6 @@ public class PlayerController : MonoBehaviour
     public bool PlayerInGround { get => checkTerrainHeight.IsGrounded; }
 
     public bool PlayerIsAiming { get => isAiming; set => isAiming = value; }
-
-    public bool PlayerWasAiming { get => wasAiming; set => wasAiming = value; }
     #endregion
 
     #region Ints

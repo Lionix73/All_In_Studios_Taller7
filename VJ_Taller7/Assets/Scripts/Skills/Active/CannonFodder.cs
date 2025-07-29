@@ -1,4 +1,5 @@
 using System.Collections;
+using FMODUnity;
 using UnityEngine;
 
 public class CannonFodder : SkillBase
@@ -11,7 +12,7 @@ public class CannonFodder : SkillBase
     public override IEnumerator Execute()
     {
         cooldown = cooldownThisSkill;
-        soundManager.PlaySound("CannonFodder");
+        RuntimeManager.PlayOneShotAttached(skillInfo.activateSkillSound, gameObject);
 
         EnemyMovement[] enemies = FindObjectsByType<EnemyMovement>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
 

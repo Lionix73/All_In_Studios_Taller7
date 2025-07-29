@@ -31,7 +31,7 @@ public class NoFriendsInWar : PassiveSkillBase
     {   
         if(!_damageApplied)
         {
-            _gunManager.CurrentGun.Damage *= (1 + (increasedDamagePercentage / 100));
+            _gunManager.CurrentGun.Damage *= 1 + (increasedDamagePercentage / 100);
             _damageApplied = true;
 
             _gunManager.CurrentGun.noFriendsInWar = true;
