@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class ControlsSchemeManager : Singleton<ControlsSchemeManager>
 {
     #region Controls Scheme
-    public enum InputScheme { KeyboardMouse, Gamepad }
+    public enum InputScheme { KeyboardMouse, XboxGamepad, PSGamepad }
 
     [SerializeField] private InputScheme currentScheme = InputScheme.KeyboardMouse;
     public InputScheme ChangeScheme 
@@ -57,7 +57,33 @@ public class ControlsSchemeManager : Singleton<ControlsSchemeManager>
                 gamepadVibration.enabled = false;
                 break;
             case "Gamepad":
-                ChangeScheme = InputScheme.Gamepad;
+                // Detect gamepad type
+                bool isXbox = false;
+                bool isPS = false;
+                foreach (var device in scheme.devices)
+                {
+                    if (device is Gamepad)
+                    {
+                        var prod = device.description.product?.ToLower() ?? "";
+                        var name = device.displayName?.ToLower() ?? "";
+                        if (prod.Contains("xbox") || name.Contains("xbox"))
+                            isXbox = true;
+                        else if (prod.Contains("dualshock") || prod.Contains("playstation") || name.Contains("ps"))
+                            isPS = true;
+                    }
+                }
+                if (isXbox)
+                {
+                    ChangeScheme = InputScheme.XboxGamepad;
+                }
+                else if (isPS)
+                {
+                    ChangeScheme = InputScheme.PSGamepad;
+                }
+                else
+                {
+                    ChangeScheme = InputScheme.XboxGamepad; // Default to Xbox if unknown
+                }
                 gamepadVibration.enabled = true;
                 break;
         }
