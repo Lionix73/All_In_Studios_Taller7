@@ -199,21 +199,25 @@ public class PlayerController : MonoBehaviour
     {
         if (!canMove) return;
 
-        if (isAiming && !wasAiming)
-        {
-            sensibilitySettings.AdjustSensiDuringAim();
-        }
-
         if (isAiming)
         {
-            fov.AimFOV();
+            if (!wasAiming && sensibilitySettings != null)
+                sensibilitySettings.AdjustSensiDuringAim();
+
+            if (fov != null)
+                fov.AimFOV();
+            
             wasAiming = true;
             isRunning = false;
         }
-        else if (!isAiming && wasAiming)
+        else if (!isAiming)
         {
-            fov.NormalFOV();
-            sensibilitySettings.AdjustSensiNoAim();
+            if (wasAiming && sensibilitySettings != null)
+                sensibilitySettings.AdjustSensiNoAim();
+
+            if (fov != null)
+                fov.NormalFOV();
+
             wasAiming = false;
         }
     }

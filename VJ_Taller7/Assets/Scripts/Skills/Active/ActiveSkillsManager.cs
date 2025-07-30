@@ -10,12 +10,16 @@ public class ActiveSkillManager : SkillsManagerBase
         activeSkillIndex = Mathf.Clamp(activeSkillIndex, 0, skills.Length);
     }
 
+    void Awake()
+    {
+        ActivateSkillGameObject();
+    }
+
     private void Start()
     {
         if (CharacterManager.Instance != null)
             activeSkillIndex = CharacterManager.Instance.indexActiveSkill;
 
-        ActivateSkillGameObject();
         SearchSkillsUI();
         SetupSkillsIcons();
     }

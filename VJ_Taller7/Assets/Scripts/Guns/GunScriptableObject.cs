@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Security.Cryptography;
 using FMODUnity;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -58,28 +56,29 @@ public class GunScriptableObject : ScriptableObject {
     public EventReference ShootSound;
     public EventReference ReloadSound;
     public EventReference NoAmmoSound;
-    
+
     [Header("Vibration")]
     [Range(0, 1)] public float ShootingVibrationIntensity;
     public float VibrationDuration;
 
     private HitFeedback hitFeedback;
 
+    #region -----SET UP-----
     private void Awake()
     {
         bulletsLeft = MagazineSize;
     }
 
-    public void Spawn(Transform Parent, MonoBehaviour ActiveMonoBehaviour, Camera camera =null) {
+    public void Spawn(Transform Parent, MonoBehaviour ActiveMonoBehaviour, Camera camera = null) {
         this.ActiveMonoBehaviour = ActiveMonoBehaviour;
         LastShootTime = 0f;
-        if (bulletsLeft == 0){ //En revision porque no se recarga al recoger el arma, ni la primera vez que aparece.
-        bulletsLeft = MagazineSize;}
+        if (bulletsLeft == 0) { //En revision porque no se recarga al recoger el arma, ni la primera vez que aparece.
+            bulletsLeft = MagazineSize; }
         realoading = false;
         TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
         if (!ShootConfig.IsHitScan)
-        {BulletPool = new ObjectPool<Bullet>(CreateBullet);}
-        if(ShootConfig.ShootingType == ShootType.Special){
+        { BulletPool = new ObjectPool<Bullet>(CreateBullet); }
+        if (ShootConfig.ShootingType == ShootType.Special) {
             GFeatherPool = new ObjectPool<Bullet>(CreateBullet);
             SFeatherPool = new ObjectPool<Bullet>(CreateBullet);
         }
@@ -95,29 +94,35 @@ public class GunScriptableObject : ScriptableObject {
         hitFeedback = FindFirstObjectByType<HitFeedback>();
     }
 
-    public void DeSpawn(){
+    public void DeSpawn() {
         //Destroy(Model);
         Model.SetActive(false);
         Destroy(Model);
         TrailPool.Clear();
-        if (!ShootConfig.IsHitScan){
+        if (!ShootConfig.IsHitScan) {
             BulletPool.Clear();
         }
-        if(ShootConfig.ShootingType == ShootType.Special){
+        if (ShootConfig.ShootingType == ShootType.Special) {
             GFeatherPool?.Clear();
             SFeatherPool?.Clear();
         }
     }
+    #endregion
 
-    public void Shoot(){
-        if (Time.time > ShootConfig.FireRate + LastShootTime && bulletsLeft > 0 && !realoading){
+    #region -----SHOOTING-----
+    public void Shoot()
+    {
+        if (Time.time > ShootConfig.FireRate + LastShootTime && bulletsLeft > 0 && !realoading)
+        {
             LastShootTime = Time.time;
-            ShootSystem.Play(); 
+            ShootSystem.Play();
             bulletsLeft -= ShootConfig.BulletsPerShot;
 
-            for (int i = 0; i < ShootConfig.BulletsPerShot; i++){
+            for (int i = 0; i < ShootConfig.BulletsPerShot; i++)
+            {
                 Vector3 shootDirection;
-                if (ShootConfig.HaveSpread){
+                if (ShootConfig.HaveSpread)
+                {
                     shootDirection = ShootSystem.transform.forward +
                     new Vector3(Random.Range
                     (-ShootConfig.Spread.x, ShootConfig.Spread.x),
@@ -127,13 +132,14 @@ public class GunScriptableObject : ScriptableObject {
                     (-ShootConfig.Spread.z, ShootConfig.Spread.z)
                     );
                 }
-                else {
+                else
+                {
                     shootDirection = ShootSystem.transform.forward;
                 }
                 shootDirection.Normalize();
 
                 if (ShootConfig.ShootingType == ShootType.HitScan)
-                DoHitScanShooting(shootDirection, ShootSystem.transform.position, ShootSystem.transform.position);
+                    DoHitScanShooting(shootDirection, ShootSystem.transform.position, ShootSystem.transform.position);
                 else
                 {
                     switch (ShootConfig.ShootingType)
@@ -153,7 +159,7 @@ public class GunScriptableObject : ScriptableObject {
         }
     }
 
-    private void DoHitScanShooting(Vector3 shootDirection, Vector3 Origin, Vector3 TrailOrigin, int Iteration = 0){
+    private void DoHitScanShooting(Vector3 shootDirection, Vector3 Origin, Vector3 TrailOrigin, int Iteration = 0) {
         if (Physics.Raycast(Origin,
                             shootDirection,
                             out RaycastHit hit,
@@ -171,7 +177,11 @@ public class GunScriptableObject : ScriptableObject {
             else if (hit.collider.TryGetComponent(out EnemyHealthMulti enemyM))
             {
                 enemyM.TakeDamageRpc(Damage);
-
+            }
+            // -----TUTORIAL-----
+            if (hit.collider.TryGetComponent(out Target target))
+            {
+                target.TargetHit();
             }
         }
         else
@@ -184,7 +194,7 @@ public class GunScriptableObject : ScriptableObject {
         }
     }
 
-    public Vector3 GetRaycastOrigin(){
+    public Vector3 GetRaycastOrigin() {
         Vector3 origin = ShootSystem.transform.position; //si dispara desde el arma
 
         origin = activeCamera.transform.position +
@@ -194,115 +204,83 @@ public class GunScriptableObject : ScriptableObject {
         return origin;
     }
 
-    public Vector3 GetGunForward(){
+    public Vector3 GetGunForward() {
         return Model.transform.forward;
     }
 
-    private void DoProjectileShooting(Vector3 ShootDirection){
+    private void DoProjectileShooting(Vector3 ShootDirection) {
         Bullet bullet = BulletPool.Get();
 
         bullet.gameObject.SetActive(true);
         bullet.OnCollision += HandleBulletCollision;
         bullet.transform.position = ShootSystem.transform.position;
-        bullet.Spawn(ShootDirection* ShootConfig.BulletSpawnForce);
+        bullet.Spawn(ShootDirection * ShootConfig.BulletSpawnForce);
 
         // El trail de la bala podemos decidir si ponerlo en la bala, o usar el mismo pool que con el hitscan
 
     }
 
-    private void DoSpecialShooting(Vector3 ShootDirection){
-        switch(Type){
+    private void DoSpecialShooting(Vector3 ShootDirection) {
+        switch (Type) {
             case GunType.MysticCanon:
-            return;
+                return;
             case GunType.GoldenFeather:
-            Bullet feather = GFeatherPool.Get();
-            feather.gameObject.SetActive(true);
-            feather.OnCollision += HandleBulletCollision;
-            feather.OnBulletEnd += HandleGoldenBulletCollision; //Para poder eliminar tambien las balas especiales 
-            feather.transform.position = ShootSystem.transform.position;
-            feather.Spawn(ShootDirection* ShootConfig.BulletSpawnForce);
-            return;
+                Bullet feather = GFeatherPool.Get();
+                feather.gameObject.SetActive(true);
+                feather.OnCollision += HandleBulletCollision;
+                feather.OnBulletEnd += HandleGoldenBulletCollision; //Para poder eliminar tambien las balas especiales 
+                feather.transform.position = ShootSystem.transform.position;
+                feather.Spawn(ShootDirection * ShootConfig.BulletSpawnForce);
+                return;
             case GunType.ShinelessFeather:
-            Bullet shineless = SFeatherPool.Get();
+                Bullet shineless = SFeatherPool.Get();
 
-            shineless.gameObject.SetActive(true);
-            shineless.OnCollision += HandleBulletCollision;
-            shineless.OnBulletEnd += HandleShinelessFeather; //Para poder eliminar tambien las balas especiales 
-            shineless.transform.position = ShootSystem.transform.position;
-            shineless.Spawn(ShootDirection* ShootConfig.BulletSpawnForce);
-            return;
+                shineless.gameObject.SetActive(true);
+                shineless.OnCollision += HandleBulletCollision;
+                shineless.OnBulletEnd += HandleShinelessFeather; //Para poder eliminar tambien las balas especiales 
+                shineless.transform.position = ShootSystem.transform.position;
+                shineless.Spawn(ShootDirection * ShootConfig.BulletSpawnForce);
+                return;
         }
     }
-        
-    public void Reload(int totalBulletsLeft) {
+    #endregion
+
+    #region -----RELOADING-----  
+    public void Reload(int totalBulletsLeft)
+    {
         realoading = true;
         //Invoke("FinishedReload", ReloadTime);
         ActiveMonoBehaviour.StartCoroutine(ReloadingCoroutine(totalBulletsLeft));
     }
-    private IEnumerator ReloadingCoroutine(int totalBulletsLeft){
+    private IEnumerator ReloadingCoroutine(int totalBulletsLeft) {
         yield return new WaitForSeconds(ReloadTime);
         FinishedReload(totalBulletsLeft);
     }
     private void FinishedReload(int totalBulletsLeft) {
         if (totalBulletsLeft > MagazineSize) bulletsLeft = MagazineSize;
         else if (bulletsLeft + totalBulletsLeft >= MagazineSize) bulletsLeft = MagazineSize;
-        else bulletsLeft = totalBulletsLeft; 
+        else bulletsLeft = totalBulletsLeft;
         // Si no tengo suficiente para el cargador, pos me quedo con las pocas que tenga
         realoading = false;
         //Debug.Log("Fin de la recarga");
     }
+    #endregion
 
-    private IEnumerator PlayTrail(Vector3 StartPoint, Vector3 EndPoint, RaycastHit Hit){
-        TrailRenderer instance = TrailPool.Get();
-        instance.gameObject.SetActive(true);
-        instance.transform.position = StartPoint;
-        yield return null; //Evitar sobreposicion de trails
-
-        instance.emitting = true;
-
-        float distance = Vector3.Distance(StartPoint, EndPoint);
-        float remainingDistance = distance;
-        while (remainingDistance > 0){
-            instance.transform.position = Vector3.Lerp(
-                StartPoint, 
-                EndPoint, 
-                Mathf.Clamp01(1- (remainingDistance / distance))
-            );
-            remainingDistance -= TrailConfig.SimulationSpeed * Time.deltaTime;
-            yield return null;
-        }
-
-        if (ImpactBulletEffectForHitScan != null)
-            {
-                GameObject impact = Instantiate(ImpactBulletEffectForHitScan, EndPoint, Quaternion.identity);
-                impact.transform.up = Hit.normal;
-                Destroy(impact, 0.5f);
-            }
-
-        instance.transform.position = EndPoint;
-
-        yield return new WaitForSeconds(TrailConfig.Duration);
-        yield return null;
-        instance.emitting = false;
-        instance.gameObject.SetActive(false);
-        TrailPool.Release(instance);
-    }
-
-
-    private void HandleBulletCollision(Bullet bullet, Collision collision){
+    #region -----COLLISIONS-----
+    private void HandleBulletCollision(Bullet bullet, Collision collision) {
         // En caso de usar la pool de trail, hay que desactivarla desde aqui
 
-        if (ShootConfig.ShootingType != ShootType.Special){
+        if (ShootConfig.ShootingType != ShootType.Special) {
             bullet.gameObject.SetActive(false);
             BulletPool.Release(bullet);
         }
 
-        if (collision != null){
+        if (collision != null) {
             ContactPoint contactPoint = collision.GetContact(0);
 
             Collider colliderHit = contactPoint.otherCollider;
 
-            if(noFriendsInWar && colliderHit.gameObject.layer == LayerMask.NameToLayer("Player"))
+            if (noFriendsInWar && colliderHit.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 if (colliderHit.TryGetComponent(out IDamageable player))
                 {
@@ -317,7 +295,7 @@ public class GunScriptableObject : ScriptableObject {
                 enemy.TakeDamage(Damage);
                 hitFeedback.ShowHitMarker();
             }
-            else if(colliderHit.TryGetComponent(out EnemyHealthMulti enemyM))
+            else if (colliderHit.TryGetComponent(out EnemyHealthMulti enemyM))
             {
                 enemyM.TakeDamageRpc(Damage);
             }
@@ -335,12 +313,53 @@ public class GunScriptableObject : ScriptableObject {
         bullet.gameObject.SetActive(false);
         GFeatherPool.Release(bullet);
         bulletsLeft = 1;
-        
+
         bullet.OnCollision -= HandleBulletCollision;
         bullet.OnBulletEnd -= HandleShinelessFeather;
     }
+    #endregion
 
-    public TrailRenderer CreateTrail() {
+    #region -----TRAILS-----
+    private IEnumerator PlayTrail(Vector3 StartPoint, Vector3 EndPoint, RaycastHit Hit)
+    {
+        TrailRenderer instance = TrailPool.Get();
+        instance.gameObject.SetActive(true);
+        instance.transform.position = StartPoint;
+        yield return null; //Evitar sobreposicion de trails
+
+        instance.emitting = true;
+
+        float distance = Vector3.Distance(StartPoint, EndPoint);
+        float remainingDistance = distance;
+        while (remainingDistance > 0)
+        {
+            instance.transform.position = Vector3.Lerp(
+                StartPoint,
+                EndPoint,
+                Mathf.Clamp01(1 - (remainingDistance / distance))
+            );
+            remainingDistance -= TrailConfig.SimulationSpeed * Time.deltaTime;
+            yield return null;
+        }
+
+        if (ImpactBulletEffectForHitScan != null)
+        {
+            GameObject impact = Instantiate(ImpactBulletEffectForHitScan, EndPoint, Quaternion.identity);
+            impact.transform.up = Hit.normal;
+            Destroy(impact, 0.5f);
+        }
+
+        instance.transform.position = EndPoint;
+
+        yield return new WaitForSeconds(TrailConfig.Duration);
+        yield return null;
+        instance.emitting = false;
+        instance.gameObject.SetActive(false);
+        TrailPool.Release(instance);
+    }
+
+    public TrailRenderer CreateTrail()
+    {
         GameObject instance = new GameObject("Trail");
         TrailRenderer trail = instance.AddComponent<TrailRenderer>();
 
@@ -355,12 +374,14 @@ public class GunScriptableObject : ScriptableObject {
 
         return trail;
     }
+    #endregion
 
     private Bullet CreateBullet()
     {
         return Instantiate(ShootConfig.BulletPrefab);
     }
 
+    #region -----CLONE-----
     ///<summary>
     ///Funcion de copia manual, asignar valores del objeto general a una instancia nueva
     ///evita errores de referencias compartidas.
@@ -370,7 +391,8 @@ public class GunScriptableObject : ScriptableObject {
     ///      pero no tengo idea real de como funciona. aunque si siguen los saltos que da
     ///      todo tiene sentido...
     ///</summary>
-    public object Clone() {
+    public object Clone()
+    {
         GunScriptableObject clone = CreateInstance<GunScriptableObject>();
 
         clone.ShootConfig = ShootConfig.Clone() as ShootConfigScriptableObjtect;
@@ -396,4 +418,5 @@ public class GunScriptableObject : ScriptableObject {
         clone.VibrationDuration = VibrationDuration;
         return clone;
     }
+    #endregion
 }

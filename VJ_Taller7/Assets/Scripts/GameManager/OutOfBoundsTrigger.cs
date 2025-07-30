@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class OutOfBoundsTrigger : MonoBehaviour
@@ -19,12 +18,14 @@ public class OutOfBoundsTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            IDamageable damageable;
-            if (other.TryGetComponent<IDamageable>(out damageable))
+            if (damageMultiplier > 0)
             {
-                int damageToDeal = Mathf.FloorToInt(GameManager.Instance.playerManager.PlayerCurrentHealth * damageMultiplier);
+                if (other.TryGetComponent(out IDamageable damageable))
+                {
+                    int damageToDeal = Mathf.FloorToInt(GameManager.Instance.playerManager.PlayerCurrentHealth * damageMultiplier);
 
-                damageable.TakeDamage(damageToDeal);
+                    damageable.TakeDamage(damageToDeal);
+                }
             }
 
             StartCoroutine(RespawnPlayer(other.gameObject));
