@@ -1,8 +1,10 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class AimZoneManager : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI targetsText;
     public UnityEvent HitAllTargets;
 
     private Target[] targets;
@@ -16,6 +18,7 @@ public class AimZoneManager : MonoBehaviour
     public void TargetHit()
     {
         targetsHit++;
+        targetsText.text = $"Targets  {targetsHit} / {targets.Length}";
 
         if (targetsHit >= targets.Length)
         {
