@@ -8,15 +8,17 @@ public class PlayerSoundsManager : MonoBehaviour
     private ThisObjectSounds _soundManager;
     private GunManager _gunManager;
     private PlayerController _playerController;
+    private PlayerAnimations _playerAnimations;
     private Health _health;
     #endregion
 
     private void Awake()
     {
         _soundManager = GetComponent<ThisObjectSounds>();
-        _gunManager = FindAnyObjectByType<GunManager>();
-        _playerController = GetComponent<PlayerController>();
-        _health = GetComponent<Health>();
+        _gunManager = transform.root.GetComponentInChildren<GunManager>();
+        _playerController = transform.root.GetComponentInChildren<PlayerController>();
+        _playerAnimations = transform.root.GetComponentInChildren<PlayerAnimations>();
+        _health = transform.root.GetComponentInChildren<Health>();
     }
 
     private void Start()
@@ -71,8 +73,12 @@ public class PlayerSoundsManager : MonoBehaviour
         }
         else
         {
-            _soundManager.PlaySound("Idle");
             _soundManager.StopSound("Walk", "Run");
+
+            if (_playerAnimations.IsEmoting)
+                _soundManager.StopSound("Idle");
+            else
+                _soundManager.PlaySound("Idle");
         }
     }
     #endregion

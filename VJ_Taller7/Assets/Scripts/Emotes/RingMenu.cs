@@ -7,16 +7,16 @@ public class RingMenu : MonoBehaviour
     public RingPiece ringPiecePrefab;
     public int activeElement;
 
-    private Animator anim;
-    private PlayerSoundsManager soundManager;
+    private Animator _animator;
+    private PlayerSoundsManager _soundManager;
     private RingPiece[] ringPieces;
     private float degreesPerPiece;
     private float gapDegrees = 1f;
 
     private void Start()
     {
-        anim = GameObject.FindWithTag("Player").GetComponent<Animator>();
-        soundManager = GameObject.FindWithTag("Player").GetComponent<PlayerSoundsManager>();
+        _animator = GameObject.FindWithTag("Player").GetComponent<Animator>();
+        _soundManager = GameObject.FindWithTag("Player").GetComponentInChildren<PlayerSoundsManager>();
         degreesPerPiece = 360f / ringAnimations.Length;
 
         float distanceToIcon = Vector3.Distance(ringPiecePrefab.icon.transform.position, ringPiecePrefab.bg.transform.position);
@@ -46,12 +46,12 @@ public class RingMenu : MonoBehaviour
 
         if (isGamepad)
         {
-            // Usa el stick derecho como dirección
+            // Usa el stick derecho como direcciï¿½n
             inputVector = Gamepad.current.rightStick.ReadValue();
         }
         else
         {
-            // Usa la posición del mouse
+            // Usa la posiciï¿½n del mouse
             Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2);
             Vector3 cursorVector = Input.mousePosition - screenCenter;
             inputVector = new Vector2(cursorVector.x, cursorVector.y);
@@ -66,18 +66,18 @@ public class RingMenu : MonoBehaviour
         const float deadZone = 0.35f;
 
         if (direction.magnitude < deadZone)
-            return activeElement; // Mantén el actual si está cerca del centro
+            return activeElement; // Mantï¿½n el actual si estï¿½ cerca del centro
 
         float angle = Vector2.SignedAngle(Vector2.up, direction);
         float normalizedAngle = NormalizeAngle(angle + degreesPerPiece / 2f);
 
         int selectedIndex = (int)(normalizedAngle / degreesPerPiece);
 
-        // Si ya está seleccionado, solo retorna de nuevo
+        // Si ya estï¿½ seleccionado, solo retorna de nuevo
         if (selectedIndex == activeElement)
             return activeElement;
 
-        // Si cambió significativamente, actualiza
+        // Si cambiï¿½ significativamente, actualiza
         return selectedIndex;
     }
 
@@ -100,8 +100,8 @@ public class RingMenu : MonoBehaviour
 
     public void Emotear()
     {
-        anim.SetBool("isEmoting", true);
-        anim.SetFloat("EmoteIndex", activeElement);
-        soundManager.EmoteMusic(ringAnimations[activeElement].name);
+        _animator.SetBool("isEmoting", true);
+        _animator.SetFloat("EmoteIndex", activeElement);
+        _soundManager.EmoteMusic(ringAnimations[activeElement].name);
     }
 }

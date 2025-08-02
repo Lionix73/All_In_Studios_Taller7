@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class EmotesMenuController : MonoBehaviour
 {
-    [SerializeField] private RingMenu ringMenu;
+    private RingMenu ringMenu;
 
     private void Start()
     {

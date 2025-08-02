@@ -11,12 +11,10 @@ public class PlayerAnimations : MonoBehaviour
     [Header("Animator Variables")]
     [SerializeField] private FloatDampener speedX;
     [SerializeField] private FloatDampener speedY;
-    /*[SerializeField] private FloatDampener layersDampener1;
-    //[SerializeField] private FloatDampener layersDampener2;
-    //private int animationLayerToShow = 0;*/
 
     #region Private Variables
     private bool isEmoting;
+    public bool IsEmoting => isEmoting;
     private GunType lastGun;
     #endregion
 
@@ -53,7 +51,6 @@ public class PlayerAnimations : MonoBehaviour
 
     private void Update()
     {
-        //UpdateAnimLayer();
         HandleAnimations();
         HandleEmotes();
 
@@ -64,9 +61,6 @@ public class PlayerAnimations : MonoBehaviour
     {
         speedX.Update();
         speedY.Update();
-        /*layersDampener1.Update();
-        //layersDampener2.Update();
-        //ChangeAnimLayer(SelectAnimLayer());*/
 
         speedX.TargetValue = _playerController.MovInput.x;
         speedY.TargetValue = _playerController.MovInput.y;
@@ -96,91 +90,6 @@ public class PlayerAnimations : MonoBehaviour
             _rig.weight = 1f;
     }
 
-    #region -----Animation Layers Management------ NO ESTA EN USO ACTUALMENTE
-    /*
-    private void ChangeAnimLayer(int index)
-    {
-        if (animationLayerToShow == index) return;
-
-        animationLayerToShow = index;
-
-        if (Mathf.Abs(layersDampener1.TargetValue - layersDampener1.CurrentValue) <= 0.05f)
-        {
-            if (layersDampener1.TargetValue == 0)
-            {
-                layersDampener1.TargetValue = 1;
-                layersDampener2.TargetValue = 0;
-            }
-            else
-            {
-                layersDampener1.TargetValue = 0;
-                layersDampener2.TargetValue = 1;
-            }
-        }
-    }
-
-    private void UpdateAnimLayer()
-    {
-        _animator.SetLayerWeight(animationLayerToShow, layersDampener1.TargetValue == 1 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
-        int layersAmount = _animator.GetLayerIndex("Fire");
-
-        for (int i = 0; i < 2; i++)
-        {
-            if (i != animationLayerToShow && _animator.GetLayerWeight(i) > 0.05f)
-            {
-                _animator.SetLayerWeight(i, layersDampener1.TargetValue == 0 ? layersDampener1.CurrentValue : layersDampener2.CurrentValue);
-            }
-
-            if (i != animationLayerToShow && _animator.GetLayerWeight(i) < 0.05f && _animator.GetLayerWeight(i) > 0f)
-            {
-                _animator.SetLayerWeight(i, 0);
-            }
-        }
-    }
-
-    private int SelectAnimLayer()
-    {
-        switch (_gunManager.CurrentGun.Type)
-        {
-            case GunType.Rifle:
-                return 0;
-
-            case GunType.BasicPistol:
-                return 1;
-
-            case GunType.Revolver:
-                return 1;
-
-            case GunType.Shotgun:
-                return 0;
-
-            case GunType.Sniper:
-                return 0;
-
-            case GunType.ShinelessFeather:
-                return 0;
-
-            case GunType.GoldenFeather:
-                return 0;
-
-            case GunType.GranadeLaucher:
-                return 0;
-
-            case GunType.AncientTome:
-                return 0;
-
-            case GunType.Crossbow:
-                return 0;
-
-            case GunType.MysticCanon:
-                return 0;
-            
-            default: 
-                return 0;
-        }
-    }*/
-    #endregion
-
     #region -----GUNS-----
     private void ShootAnimation()
     {
@@ -198,44 +107,7 @@ public class PlayerAnimations : MonoBehaviour
 
     private void SelectGunType()
     {
-        switch (_gunManager.CurrentGun.Type)
-        {
-            case GunType.Rifle:
-                _animator.runtimeAnimatorController = _animators[1];
-                break;
-
-            case GunType.BasicPistol:
-                _animator.runtimeAnimatorController = _animators[0];
-                break;
-
-            case GunType.Revolver:
-                _animator.runtimeAnimatorController = _animators[0];
-                break;
-
-            case GunType.Shotgun:
-                break;
-
-            case GunType.Sniper:
-                break;
-
-            case GunType.ShinelessFeather:
-                break;
-
-            case GunType.GoldenFeather:
-                break;
-
-            case GunType.GranadeLaucher:
-                break;
-
-            case GunType.AncientTome:
-                break;
-
-            case GunType.Crossbow:
-                break;
-
-            case GunType.MysticCanon:
-                break;
-        }
+        _animator.runtimeAnimatorController = _gunManager.CurrentGun.AnimatorController;
     }
 
     public void WeaponChangeAnimation()

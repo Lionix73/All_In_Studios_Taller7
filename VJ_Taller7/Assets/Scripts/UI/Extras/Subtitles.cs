@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class Subtitles : MonoBehaviour
 {
-    [SerializeField] private GameObject subtitlesBox;
     [SerializeField] private float textSpeed;
     [SerializeField] private SubtitleInfo[] subtitles;
 
@@ -15,12 +14,11 @@ public class Subtitles : MonoBehaviour
 
     void Awake()
     {
-        textComponent = subtitlesBox.GetComponentInChildren<TextMeshProUGUI>();
+        textComponent = GetComponentInChildren<TextMeshProUGUI>();
     }
 
     private void OnEnable()
     {
-        subtitlesBox.SetActive(true);
         StartDialogue();
     }
 

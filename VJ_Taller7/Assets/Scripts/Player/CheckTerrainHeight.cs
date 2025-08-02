@@ -49,7 +49,7 @@ public class CheckTerrainHeight : MonoBehaviour
     private void Awake()
     {
         _playerController = GetComponent<PlayerController>();
-        _soundManager = GetComponent<ThisObjectSounds>();
+        _soundManager = GetComponentInChildren<ThisObjectSounds>();
         _animator = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody>();
     }
