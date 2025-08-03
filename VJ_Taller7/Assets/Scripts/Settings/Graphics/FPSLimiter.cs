@@ -2,12 +2,11 @@ using UnityEngine;
 
 public class FPSLimiter : MonoBehaviour
 {
-    public int targetFPS = 60;
+    [SerializeField] private SettingsSO settingsSO;
 
     void Awake()
     {
-        targetFPS = GraphicSettingsManager.Instance.TargetFPS;
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = targetFPS;
+        Application.targetFrameRate = settingsSO.TargetFPS;
     }   
 }

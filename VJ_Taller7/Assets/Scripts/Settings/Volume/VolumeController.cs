@@ -1,9 +1,22 @@
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
+using UnityEngine.UI;
+using Unity.Mathematics;
 
 public class VolumeController : MonoBehaviour
 {
+    [SerializeField] private SettingsSO settings;
+
+    [SerializeField] private Slider generalSlider;
+    [SerializeField] private Slider dialoguesSlider;
+    [SerializeField] private Slider enemiesSlider;
+    [SerializeField] private Slider environmentSlider;
+    [SerializeField] private Slider gunsSlider;
+    [SerializeField] private Slider musicSlider;
+    [SerializeField] private Slider playerSlider;
+    [SerializeField] private Slider uiSlider;
+
     private VCA vcaGeneral;
     private VCA vcaDialogues;
     private VCA vcaEnemies;
@@ -12,15 +25,6 @@ public class VolumeController : MonoBehaviour
     private VCA vcaMusic;
     private VCA vcaPlayer;
     private VCA vcaUI;
-
-    private const string PREF_GENERAL = "Volume_General";
-    private const string PREF_DIALOGUES = "Volume_Dialogues";
-    private const string PREF_ENEMIES = "Volume_Enemies";
-    private const string PREF_ENVIRONMENT = "Volume_Environment";
-    private const string PREF_GUNS = "Volume_Guns";
-    private const string PREF_MUSIC = "Volume_Music";
-    private const string PREF_PLAYER = "Volume_Player";
-    private const string PREF_UI = "Volume_UI";
 
     void Start()
     {
@@ -33,60 +37,87 @@ public class VolumeController : MonoBehaviour
         vcaPlayer = RuntimeManager.GetVCA("vca:/VCA_Player");
         vcaUI = RuntimeManager.GetVCA("vca:/VCA_UI");
 
-        // Aplicar valores guardados
-        SetGeneralVolume(PlayerPrefs.GetFloat(PREF_GENERAL, 1f));
-        SetDialoguesVolume(PlayerPrefs.GetFloat(PREF_DIALOGUES, 1f));
-        SetEnemiesVolume(PlayerPrefs.GetFloat(PREF_ENEMIES, 1f));
-        SetEnvironmentVolume(PlayerPrefs.GetFloat(PREF_ENVIRONMENT, 1f));
-        SetGunsVolume(PlayerPrefs.GetFloat(PREF_GUNS, 1f));
-        SetMusicVolume(PlayerPrefs.GetFloat(PREF_MUSIC, 1f));
-        SetPlayerVolume(PlayerPrefs.GetFloat(PREF_PLAYER, 1f));
-        SetUIVolume(PlayerPrefs.GetFloat(PREF_UI, 1f));
+        SetGeneralVolume(settings.GeneralVolume);
+        SetDialoguesVolume(settings.DialoguesVolume);
+        SetEnemiesVolume(settings.EnemiesVolume);
+        SetEnvironmentVolume(settings.EnvironmentVolume);
+        SetGunsVolume(settings.GunsVolume);
+        SetMusicVolume(settings.MusicVolume);
+        SetPlayerVolume(settings.PlayerVolume);
+        SetUIVolume(settings.UIVolume);
     }
 
     public void SetGeneralVolume(float value)
     {
+        settings.GeneralVolume = value;
         vcaGeneral.setVolume(value);
     }
 
     public void SetDialoguesVolume(float value)
     {
+        settings.DialoguesVolume = value;
         vcaDialogues.setVolume(value);
     }
 
     public void SetEnemiesVolume(float value)
     {
+        settings.EnemiesVolume = value;
         vcaEnemies.setVolume(value);
     }
 
     public void SetEnvironmentVolume(float value)
     {
+        settings.EnvironmentVolume = value;
         vcaEnvironment.setVolume(value);
     }
 
     public void SetGunsVolume(float value)
     {
+        settings.GunsVolume = value;
         vcaGuns.setVolume(value);
     }
 
     public void SetMusicVolume(float value)
     {
+        settings.MusicVolume = value;
         vcaMusic.setVolume(value);
     }
 
     public void SetPlayerVolume(float value)
     {
+        settings.PlayerVolume = value;
         vcaPlayer.setVolume(value);
     }
 
     public void SetUIVolume(float value)
     {
+        settings.UIVolume = value;
         vcaUI.setVolume(value);
     }
 
-    // Asegura que los cambios se guarden en disco
-    void OnApplicationQuit()
+    public float GetVolume(string channel)
     {
-        PlayerPrefs.Save();
+        switch (channel)
+        {
+            case "Volume_General":
+                return settings.GeneralVolume;
+            case "Volume_Dialogues":
+                return settings.DialoguesVolume;
+            case "Volume_Enemies":
+                return settings.EnemiesVolume;
+            case "Volume_Environment":
+                return settings.EnvironmentVolume;
+            case "Volume_Guns":
+                return settings.GunsVolume;
+            case "Volume_Music":
+                return settings.MusicVolume;
+            case "Volume_Player":
+                return settings.PlayerVolume;
+            case "Volume_UI":
+                return settings.UIVolume;
+            default:
+                return 0f;
+        }
     }
 }
+    

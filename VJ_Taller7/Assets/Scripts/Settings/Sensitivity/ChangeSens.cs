@@ -3,49 +3,44 @@ using UnityEngine.UI;
 
 public class ChangeSens : MonoBehaviour
 {
+    [SerializeField] private SettingsSO _sensiManager;
     [SerializeField] private bool vertical;
     
-    private Slider slider;
-    private SensibilitySettingsManager sensiManager;
+    private Slider _slider;
 
     private void Awake()
     {
-        slider = GetComponent<Slider>();
-        sensiManager = SensibilitySettingsManager.Instance;
+        _slider = GetComponent<Slider>();
     }
 
     private void Start()
     {
         if (vertical)
         {
-            slider.value = Mathf.Abs(sensiManager.SensibilityGainY);
+            _slider.value = Mathf.Abs(_sensiManager.SensibilityGainY);
         }
         else
-            slider.value = sensiManager.SensibilityGainX;
+            _slider.value = _sensiManager.SensibilityGainX;
     }
 
     public void ChangeSensGain()
     {
         if (!vertical)
         {
-            if (sensiManager != null)
+            if (_sensiManager != null)
             {
-                float newValue = slider.value;
+                float newValue = _slider.value;
 
-                sensiManager.SensibilityGainX = newValue;
-                sensiManager.SensibilityLegacyGainX = newValue * 100;
-                PlayerPrefs.SetFloat("Sensibility_Horizontal", newValue);
+                _sensiManager.SensibilityGainX = newValue;
             }
         }
-        else if (vertical)
+        else
         {
-            if (sensiManager != null)
+            if (_sensiManager != null)
             {
-                float newValue = slider.value * -1;
+                float newValue = _slider.value * -1;
 
-                sensiManager.SensibilityGainY = newValue;
-                sensiManager.SensibilityLegacyGainY = newValue * 100;
-                PlayerPrefs.SetFloat("Sensibility_Vertical", newValue);
+                _sensiManager.SensibilityGainY = newValue;
             }
         }
     }

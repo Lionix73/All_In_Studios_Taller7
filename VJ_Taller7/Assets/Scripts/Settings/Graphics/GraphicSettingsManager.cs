@@ -3,20 +3,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GraphicSettingsManager : PersistentSingleton<GraphicSettingsManager>
+public class GraphicSettingsManager : Singleton<GraphicSettingsManager>
 {
+    [SerializeField] private SettingsSO settingsSO;
+
     [SerializeField] private TMP_Dropdown resolutionsDropdown;
     [SerializeField] private Slider fpsSlider;
     [SerializeField] private Toggle fullscreenTogle;
     private Resolution[] resolutions;
-
-    private const string RESOLUTION = "Resolution";
-    private const string FULLSCREEN = "Fullscreen";
-    private const string FPS = "targetFPS";
-
-    public int ResolutionIndex { get; set; }
-    public int Fullscreen { get; set; }
-    public int TargetFPS { get; set; }
 
     protected override void Awake()
     {
@@ -31,10 +25,6 @@ public class GraphicSettingsManager : PersistentSingleton<GraphicSettingsManager
 
     private void LoadSavedData()
     {
-        ResolutionIndex = PlayerPrefs.GetInt(RESOLUTION, 19);
-        Fullscreen = PlayerPrefs.GetInt(FULLSCREEN, 1);
-        TargetFPS = PlayerPrefs.GetInt(FPS, 60);
-
         SetResolution();
         SetFullscreen();
         SetFPS();
@@ -61,21 +51,21 @@ public class GraphicSettingsManager : PersistentSingleton<GraphicSettingsManager
         }
 
         resolutionsDropdown.AddOptions(options);
-        ResolutionIndex = currentRes;
+        settingsSO.ResolutionIndex = currentRes;
     }
 
     public void SaveResolution(int resolutionIndex)
     {
-        PlayerPrefs.SetInt(RESOLUTION, resolutionIndex);
+        settingsSO.ResolutionIndex = resolutionIndex;
         LoadSavedData();
     }
 
     public void SetResolution()
     {
-        resolutionsDropdown.value = ResolutionIndex;
+        resolutionsDropdown.value = settingsSO.ResolutionIndex;
         resolutionsDropdown.RefreshShownValue();
 
-        Resolution res = resolutions[ResolutionIndex];
+        Resolution res = resolutions[settingsSO.ResolutionIndex];
         Screen.SetResolution(res.width, res.height, Screen.fullScreen);
     }
     #endregion
@@ -83,13 +73,13 @@ public class GraphicSettingsManager : PersistentSingleton<GraphicSettingsManager
     #region -----FullScreen-----
     public void SaveFullscreen(bool isFullscreen)
     {
-        PlayerPrefs.SetInt(FULLSCREEN, isFullscreen ? 1 : 0);
+        settingsSO.Fullscreen = isFullscreen;
         LoadSavedData();
     }
 
     private void SetFullscreen()
     {
-        bool isOn = Fullscreen == 1;
+        bool isOn = settingsSO.Fullscreen;
         fullscreenTogle.isOn = isOn;
         Screen.fullScreen = isOn;
     }
@@ -98,13 +88,13 @@ public class GraphicSettingsManager : PersistentSingleton<GraphicSettingsManager
     #region -----FPS-----
     public void SaveTargetFPS(float fps)
     {
-        PlayerPrefs.SetInt(FPS, (int)fps);
+        settingsSO.TargetFPS = Mathf.RoundToInt(fps);
         LoadSavedData();
     }
 
     private void SetFPS()
     {
-        fpsSlider.value = TargetFPS;
+        fpsSlider.value = settingsSO.TargetFPS;
     }
     #endregion
 }

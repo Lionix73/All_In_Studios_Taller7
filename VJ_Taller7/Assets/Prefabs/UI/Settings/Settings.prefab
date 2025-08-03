@@ -2482,6 +2482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a2229e19ef8dee41b3cc773b05f2dd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _sensiManager: {fileID: 11400000, guid: 4447ad7f69193f947a3bcb68a07d15bc, type: 2}
   vertical: 1
 --- !u!114 &6295649378009195193
 MonoBehaviour:
@@ -2806,7 +2807,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
-        m_MethodName: Play
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5818,6 +5819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bfd9fc238b480a4c92569cd7b2b8364, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _sensiManager: {fileID: 11400000, guid: 4447ad7f69193f947a3bcb68a07d15bc, type: 2}
 --- !u!114 &8956641260743406751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9832,6 +9834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a2229e19ef8dee41b3cc773b05f2dd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _sensiManager: {fileID: 11400000, guid: 4447ad7f69193f947a3bcb68a07d15bc, type: 2}
   vertical: 0
 --- !u!114 &4062669037139564915
 MonoBehaviour:
@@ -12589,8 +12592,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4986164696338671989}
   m_HandleRect: {fileID: 1155069767234682096}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.9999999
+  m_Value: 1
+  m_Size: 0.99999976
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13338,7 +13341,6 @@ GameObject:
   - component: {fileID: 7169267003195307285}
   - component: {fileID: 5044191833057257926}
   - component: {fileID: 8064918962311569098}
-  - component: {fileID: 1512260018537624530}
   - component: {fileID: 4299813656575805098}
   m_Layer: 5
   m_Name: Settings
@@ -13461,21 +13463,6 @@ MonoBehaviour:
   canvasGroup: {fileID: 5044191833057257926}
   rectTransform: {fileID: 4474102246660328497}
   items: []
---- !u!114 &1512260018537624530
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7629602239211765075}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d8c52207932ad74d895fc4c1c45b0b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultSensiX: 5
-  defaultSensiY: -2
-  defaultAimMultiplier: 0.7
 --- !u!114 &4299813656575805098
 MonoBehaviour:
   m_ObjectHideFlags: 0

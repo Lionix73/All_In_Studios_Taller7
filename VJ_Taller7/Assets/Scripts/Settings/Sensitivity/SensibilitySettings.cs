@@ -5,12 +5,14 @@ using UnityEngine.UI;
 
 public class SensibilitySettings : MonoBehaviour
 {
+    [Header("Settings Manager")]
+    [SerializeField] private SettingsSO _sensibilitySettingsManager;
+
     [Header("Input Actions")]
     [Tooltip("Choose what action will pause the camera")]
     [SerializeField] private InputActionReference emotes;
 
     private CinemachineInputAxisController _axisController;
-    private SensibilitySettingsManager _sensibilitySettingsManager;
 
     private float _currentSensiX;
     private float _currentSensiY;
@@ -18,7 +20,6 @@ public class SensibilitySettings : MonoBehaviour
 
     private void Awake()
     {
-        _sensibilitySettingsManager = SensibilitySettingsManager.Instance;
         _axisController = GetComponent<CinemachineInputAxisController>();
     }
 
@@ -100,12 +101,10 @@ public class SensibilitySettings : MonoBehaviour
             if (c.Name == "Look Orbit X")
             {
                 c.Input.Gain = _sensibilitySettingsManager.SensibilityGainX;
-                c.Input.LegacyGain = _sensibilitySettingsManager.SensibilityLegacyGainX;
             }
             else if (c.Name == "Look Orbit Y")
             {
                 c.Input.Gain = _sensibilitySettingsManager.SensibilityGainY;
-                c.Input.LegacyGain = _sensibilitySettingsManager.SensibilityLegacyGainY;
             }
         }
     }
