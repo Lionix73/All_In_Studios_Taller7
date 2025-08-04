@@ -22,8 +22,8 @@ public class GunScriptableObject : ScriptableObject {
     public float aimFov;
 
     public GameObject ImpactBulletEffectForHitScan;
-    public ShootConfigScriptableObjtect ShootConfig;
-    public TrailConfigScriptableObject TrailConfig;
+    [ExposedScriptableObject] public ShootConfigScriptableObjtect ShootConfig;
+    [ExposedScriptableObject] public TrailConfigScriptableObject TrailConfig;
 
     public MonoBehaviour ActiveMonoBehaviour;
     public GameObject Model;

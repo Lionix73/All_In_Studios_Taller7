@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class PassiveSkillBase : MonoBehaviour, IPassiveSkill
 {
-    public Skill_Info skillInfo;
+    [ExposedScriptableObject] public Skill_Info skillInfo;
     private PassiveSkillManager skillManager;
     protected ThisObjectSounds soundManager;
 
@@ -27,7 +27,7 @@ public abstract class PassiveSkillBase : MonoBehaviour, IPassiveSkill
         }
     }
 
-    public abstract void CheckCondition(); // Cada skill define cuándo se activa
+    public abstract void CheckCondition(); // Cada skill define cuï¿½ndo se activa
 
     public abstract IEnumerator Execute(); // Cada skill implementa su efecto
 

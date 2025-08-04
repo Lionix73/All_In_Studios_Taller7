@@ -47,6 +47,7 @@ public class GunManager : MonoBehaviour
     [Space]
     [Header("Active Guns Info")]
 
+    [ExposedScriptableObject]
     public GunScriptableObject CurrentGun;
     [SerializeField] private GunType CurrentSecondGunType;
     private int CurrentSecondaryGunBulletsLeft;

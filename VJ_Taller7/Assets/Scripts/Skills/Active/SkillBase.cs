@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class SkillBase : MonoBehaviour, ISkill
 {
-    public Skill_Info skillInfo;
+    [ExposedScriptableObject] public Skill_Info skillInfo;
     private ActiveSkillManager skillManager;
     protected ThisObjectSounds soundManager;
 

@@ -9,7 +9,6 @@ public class SettingsSO : ScriptableObject
     [Range(0, 1)] public float AimSensiMultiplier = 0.8f; // Reduced sensitivity when aiming
 
     [Space(10)]
-
     [Header("Volume Settings")]
     [Range(0, 2)] public float GeneralVolume = 1f;
     [Range(0, 2)] public float DialoguesVolume = 1f;

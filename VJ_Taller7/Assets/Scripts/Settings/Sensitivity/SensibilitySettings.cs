@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class SensibilitySettings : MonoBehaviour
 {
     [Header("Settings Manager")]
+    [ExposedScriptableObject]
     [SerializeField] private SettingsSO _sensibilitySettingsManager;
 
     [Header("Input Actions")]

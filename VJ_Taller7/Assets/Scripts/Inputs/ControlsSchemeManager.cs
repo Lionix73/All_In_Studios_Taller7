@@ -4,19 +4,22 @@ using UnityEngine.InputSystem;
 public class ControlsSchemeManager : Singleton<ControlsSchemeManager>
 {
     #region Controls Scheme
-    public enum InputScheme { KeyboardMouse, XboxGamepad, PSGamepad }
+    public enum InputScheme
+    {
+        KeyboardMouse,
+        XboxGamepad,
+        PSGamepad
+    }
 
     [SerializeField] private InputScheme currentScheme = InputScheme.KeyboardMouse;
-    public InputScheme ChangeScheme 
-    { 
+    public InputScheme ChangeScheme
+    {
         get => currentScheme;
-        set => currentScheme = value;
+        private set => currentScheme = value;
     }
     #endregion
 
     private PlayerInput playerInput;
-    public PlayerInput GetPlayerInput { get => playerInput; }
-
     private GamepadVibration gamepadVibration;
 
     public delegate void ControlsChange();
