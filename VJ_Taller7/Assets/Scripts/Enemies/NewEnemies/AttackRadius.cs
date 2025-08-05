@@ -48,6 +48,7 @@ public class AttackRadius : MonoBehaviour
 
             if(attackCoroutine == null)
             {
+                //Debug.Log("Trigger Radius");
                 attackCoroutine = StartCoroutine(Attack());
             }
         }
@@ -96,34 +97,33 @@ public class AttackRadius : MonoBehaviour
                 yield break;
             }
 
-            for(int i = 0; i < damageables.Count; i++)
+            for (int i = 0; i < damageables.Count; i++)
             {
                 Transform damageablesTransform = damageables[i].GetTransform();
                 float distance = Vector3.Distance(transform.position, damageablesTransform.position);
 
                 //Debug.Log("Distance: " + distance + " - ClosestDistance: " + closestDistance);
 
-                if(distance < closestDistance)
+                if (distance < closestDistance)
                 {
-                    //Debug.Log("Attacking");
+                    Debug.Log("Attacking");
 
-
-                    if(onRangeBehvaiorMethod == OnRangeBehvaior.Stop)
+                    if (onRangeBehvaiorMethod == OnRangeBehvaior.Stop)
                     {
                         enemy.Movement.StopMovement();
                         closestDamageable = damageables[i];
                     }
-                    else if(onRangeBehvaiorMethod == OnRangeBehvaior.Circles)
+                    else if (onRangeBehvaiorMethod == OnRangeBehvaior.Circles)
                     {
                         enemy.Movement.MoveInCircles();
                         closestDamageable = damageables[i];
                     }
-                    else if(onRangeBehvaiorMethod == OnRangeBehvaior.Around)
+                    else if (onRangeBehvaiorMethod == OnRangeBehvaior.Around)
                     {
                         enemy.Movement.MoveAround();
                         closestDamageable = damageables[i];
                     }
-                    else if(onRangeBehvaiorMethod == OnRangeBehvaior.Follow)
+                    else if (onRangeBehvaiorMethod == OnRangeBehvaior.Follow)
                     {
                         closestDamageable = damageables[i];
                     }

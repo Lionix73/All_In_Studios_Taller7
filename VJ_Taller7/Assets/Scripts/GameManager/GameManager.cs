@@ -61,8 +61,11 @@ public class GameManager : MonoBehaviour
         } else {
             Destroy(gameObject);
         }
+        
         cameraAnim = GameObject.FindGameObjectWithTag("AnimationCamera");
+        if(cameraAnim == null) return;
         cameraAnim.SetActive(false);
+        
         ObjectPool.ClearPools();
         playerManager = GetComponent<PlayerManager>();
         roundManager = GetComponent<RoundManager>();

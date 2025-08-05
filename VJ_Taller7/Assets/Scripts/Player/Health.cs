@@ -4,6 +4,8 @@ public class Health : MonoBehaviour, IDamageable
 {
     [SerializeField] private float currentHealth;
     [SerializeField] private float maxHealth;
+    [SerializeField] private bool inmortal = false;
+
     public bool isDead;
 
     #region Events
@@ -43,7 +45,7 @@ public class Health : MonoBehaviour, IDamageable
     #region -----Damage-----
     public void TakeDamage(int damage)
     {
-        if (isDead) return;
+        if (isDead || inmortal) return;
 
         currentHealth -= damage;
         HealthChange();

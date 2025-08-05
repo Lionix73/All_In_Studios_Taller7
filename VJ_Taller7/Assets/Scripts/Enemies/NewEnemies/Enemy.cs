@@ -163,7 +163,11 @@ public class Enemy : PoolableObject, IDamageable
         onomatopeia = GetComponentInChildren<OnomatopoeiaController>();
         AttackRadius.OnAttack += OnAttack;
 
-        roundManager = GameManager.Instance.roundManager;
+        // Safely get roundManager - it might be null in tutorial scenarios
+        if (GameManager.Instance != null)
+        {
+            roundManager = GameManager.Instance.roundManager;
+        }
 
         if (skinnedMeshRenderers == null)
         {
@@ -265,8 +269,12 @@ public class Enemy : PoolableObject, IDamageable
             }
             */
 
-            roundManager.EnemyDied(this);
-            roundManager.ChangeScore(this);
+            // Only call roundManager methods if it exists (for tutorial compatibility)
+            if (roundManager != null)
+            {
+                roundManager.EnemyDied(this);
+                roundManager.ChangeScore(this);
+            }
             isDead = true;
 
             if (!isStatic)

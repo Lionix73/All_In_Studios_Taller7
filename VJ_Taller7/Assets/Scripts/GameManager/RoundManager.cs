@@ -94,14 +94,23 @@ public class RoundManager : MonoBehaviour
         _RoundUI = GameObject.Find("RoundsCanva");
         _nextRoundSkipCircle = GameObject.Find("PassRoundCircle");
 
-        _UiWaveTimer = _RoundUI.transform.Find("WaveTimer").GetComponent<TextMeshProUGUI>();
-        _UiBetweenWavesTimer = _RoundUI.transform.Find("BetweenWavesTimer").GetComponent<TextMeshProUGUI>();
-        _UiWaveCounter = _RoundUI.transform.Find("WaveCounter").GetComponent<TextMeshProUGUI>();
-        _UiRoundCounter = _RoundUI.transform.Find("RoundCounter").GetComponent<TextMeshProUGUI>();
-        _UiEnemyCounter = _RoundUI.transform.Find("EnemyCounter").GetComponent<TextMeshProUGUI>();
+        // Only set up UI elements if the UI exists (for tutorial compatibility)
+        if (_RoundUI != null)
+        {
+            _UiWaveTimer = _RoundUI.transform.Find("WaveTimer").GetComponent<TextMeshProUGUI>();
+            _UiBetweenWavesTimer = _RoundUI.transform.Find("BetweenWavesTimer").GetComponent<TextMeshProUGUI>();
+            _UiWaveCounter = _RoundUI.transform.Find("WaveCounter").GetComponent<TextMeshProUGUI>();
+            _UiRoundCounter = _RoundUI.transform.Find("RoundCounter").GetComponent<TextMeshProUGUI>();
+            _UiEnemyCounter = _RoundUI.transform.Find("EnemyCounter").GetComponent<TextMeshProUGUI>();
+        }
 
         _musicRounds = FindFirstObjectByType<RoundsMusicManager>();
-        _soundManager = transform.parent.GetComponentInChildren<ThisObjectSounds>();
+        
+        // Safely get sound manager - might not exist in tutorial
+        if (transform.parent != null)
+        {
+            _soundManager = transform.parent.GetComponentInChildren<ThisObjectSounds>();
+        }
     }
     private void Start()
     {

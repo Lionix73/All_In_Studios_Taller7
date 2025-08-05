@@ -55,8 +55,16 @@ public class EnemyWavesManager : MonoBehaviour
     private void Awake()
     {
         ObjectPool.ClearPools();
-        GameManager.Instance.PlayerSpawned += GetPlayer;
-        OnEnemySpawned += GameManager.Instance.roundManager.enemyHaveSpawn;
+        
+        // Safely subscribe to events only if GameManager exists
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.PlayerSpawned += GetPlayer;
+            if (GameManager.Instance.roundManager != null)
+            {
+                OnEnemySpawned += GameManager.Instance.roundManager.enemyHaveSpawn;
+            }
+        }
 
         for (int i = 0; i < weightedEnemies.Count; i++)
         {
@@ -106,14 +114,25 @@ public class EnemyWavesManager : MonoBehaviour
         Debug.Log($"Recibiendo oleada de {numberOfEnemiesToSpawn} enemigos");
         ScaleUpSpawns();
         StartCoroutine(SpawnEnemies());
-        GameManager.Instance.roundManager.recieveWaveData(numberOfEnemiesToSpawn);
+        
+        // Safely call roundManager methods only if it exists
+        if (GameManager.Instance != null && GameManager.Instance.roundManager != null)
+        {
+            GameManager.Instance.roundManager.recieveWaveData(numberOfEnemiesToSpawn);
+        }
         
         Debug.Log($"{actualWave} : Nivel acutal para la restriccion de enemigos");
         if (actualWave > 2 && actualWave < 6) actualWave = 3;
         if (actualWave >= 6 && actualWave < 9) actualWave = 4;
         if (actualWave == 9) actualWave = 5;
         if (actualWave > 9) actualWave = 6;
-        availableEnemiesToSpawn = GameManager.Instance.availableEnemiesForWave[actualWave-1].availableEnemies;
+        
+        // Safely access availableEnemiesForWave only if GameManager exists
+        if (GameManager.Instance != null && GameManager.Instance.availableEnemiesForWave != null && 
+            actualWave > 0 && actualWave <= GameManager.Instance.availableEnemiesForWave.Count)
+        {
+            availableEnemiesToSpawn = GameManager.Instance.availableEnemiesForWave[actualWave-1].availableEnemies;
+        }
     }
 
     private IEnumerator SpawnEnemies(){
