@@ -416,6 +416,7 @@ public class GunScriptableObject : ScriptableObject {
         clone.NoAmmoSound = NoAmmoSound;
         clone.ShootingVibrationIntensity = ShootingVibrationIntensity;
         clone.VibrationDuration = VibrationDuration;
+        clone.AnimatorController = AnimatorController;
         return clone;
     }
     #endregion

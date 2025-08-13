@@ -23,7 +23,6 @@ public class HoldToEvent : MonoBehaviour
         {
             holdAction.action.performed += OnHoldStarted;
             holdAction.action.canceled += OnHoldCanceled;
-            holdAction.action.Enable();
         }
     }
 
@@ -33,7 +32,6 @@ public class HoldToEvent : MonoBehaviour
         {
             holdAction.action.performed -= OnHoldStarted;
             holdAction.action.canceled -= OnHoldCanceled;
-            holdAction.action.Disable();
         }
     }
 

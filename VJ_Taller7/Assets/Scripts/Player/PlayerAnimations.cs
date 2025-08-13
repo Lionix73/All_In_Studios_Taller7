@@ -5,9 +5,6 @@ using UnityEngine.Animations.Rigging;
 
 public class PlayerAnimations : MonoBehaviour
 {
-    [Header("Animator Controllers")]
-    [SerializeField] private List<RuntimeAnimatorController> _animators;
-
     [Header("Animator Variables")]
     [SerializeField] private FloatDampener speedX;
     [SerializeField] private FloatDampener speedY;
@@ -15,7 +12,6 @@ public class PlayerAnimations : MonoBehaviour
     #region Private Variables
     private bool isEmoting;
     public bool IsEmoting => isEmoting;
-    private GunType lastGun;
     #endregion
 
     #region Private Components
@@ -37,8 +33,6 @@ public class PlayerAnimations : MonoBehaviour
 
     private void Start()
     {
-        lastGun = _gunManager.CurrentGun.Type;
-
         _playerController.JumpingEvent += JumpAnimation;
         _playerController.MeleeAttackEvent += MeleeAnimation;
         _gunManager.ReloadEvent += ReloadAnimation;
@@ -53,8 +47,6 @@ public class PlayerAnimations : MonoBehaviour
     {
         HandleAnimations();
         HandleEmotes();
-
-        if(lastGun != _gunManager.CurrentGun.Type) SelectGunType();
     }
 
     private void HandleAnimations()
@@ -112,9 +104,8 @@ public class PlayerAnimations : MonoBehaviour
 
     public void WeaponChangeAnimation()
     {
-        _animator.SetTrigger("ChangeGun");
-
         SelectGunType();
+        _animator.SetTrigger("ChangeGun");
     }
 
     public void ReloadAnimation()

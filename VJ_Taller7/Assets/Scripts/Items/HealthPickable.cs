@@ -39,6 +39,12 @@ public class HealthPickable : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if(playerAmmo == null)
+                playerAmmo = other.transform.root.GetComponentInChildren<GunManager>();
+
+            if(playerHealth == null)
+                playerHealth = other.transform.root.GetComponentInChildren<Health>();
+
             pickeableUI.SetActive(true);
             playerAmmo.EnterPickeableCollectable(typeOfPickable, gameObject);
         }

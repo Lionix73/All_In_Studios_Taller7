@@ -40,6 +40,9 @@ public class AmmoPickable : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if(playerAmmo == null)
+                playerAmmo = other.transform.root.GetComponentInChildren<GunManager>();
+            
             pickeableUI.SetActive(true);
             playerAmmo.EnterPickeableCollectable(typeOfPickable, gameObject);
 
@@ -72,7 +75,6 @@ public class AmmoPickable : MonoBehaviour
 
     private void GetPlayer(GameObject player)
     {
-        //playerAmmo = FindAnyObjectByType(typeof(GunManager)).GetComponent<GunManager>();
         playerAmmo = player.GetComponentInChildren<GunManager>();
 
         CheckIfBuyable(1f); //Inicializar interfaz

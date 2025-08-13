@@ -55,10 +55,13 @@ public class GunPickeable : MonoBehaviour
         GunModel.transform.Rotate(spinDirection);
     }
 
-    private void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Player")) {
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            if(gunManager == null)
+                gunManager = other.transform.root.GetComponentInChildren<GunManager>();
             
-            //gunManager = other.gameObject.GetComponentInChildren<GunManager>();
             gunManager.EnterPickeableGun(gunType);
             GunScriptableObject gun = gunManager.GetGun(gunType); //Pa tomar lo que quiran del arma a pickear
             damageText.text = $"DMG: {gun.Damage}";

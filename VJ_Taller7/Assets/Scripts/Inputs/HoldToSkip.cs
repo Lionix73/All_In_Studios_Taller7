@@ -34,7 +34,6 @@ public class HoldToSkip : MonoBehaviour
         {
             holdAction.action.performed += OnHoldStarted;
             holdAction.action.canceled += OnHoldCanceled;
-            holdAction.action.Enable();
         }
     }
 
@@ -44,7 +43,6 @@ public class HoldToSkip : MonoBehaviour
         {
             holdAction.action.performed -= OnHoldStarted;
             holdAction.action.canceled -= OnHoldCanceled;
-            holdAction.action.Disable();
         }
     }
 
