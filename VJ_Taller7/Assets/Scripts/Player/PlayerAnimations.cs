@@ -47,6 +47,9 @@ public class PlayerAnimations : MonoBehaviour
     {
         HandleAnimations();
         HandleEmotes();
+
+        if (_playerController.PlayerInGround)
+            _animator.applyRootMotion = true;
     }
 
     private void HandleAnimations()

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using Unity.Cinemachine;
+using System;
 
 [RequireComponent(typeof(CrosshairManager))]
 public class GunManager : MonoBehaviour
@@ -56,23 +57,13 @@ public class GunManager : MonoBehaviour
     private UIManager ui;
 
     #region Events - Si, cree un monton de eventos... para mas placer
-    public delegate void ReloadingEvent();
-    public event ReloadingEvent ReloadEvent;
-
-    public delegate void ChangeWeaponEvent();
-    public event ChangeWeaponEvent ChangeGun;
-
-    public delegate void StopFeebackEvent();
-    public event StopFeebackEvent StopShootingFeeback;
-
-    public delegate void ShootEvent();
-    public event ShootEvent ShootingEvent;
-
-    public delegate void BuyWeaponEvent(bool canBuy);
-    public event BuyWeaponEvent buyWeaponEvent;
-
-    public delegate void BuyItemEvent(PickeableType type);
-    public event BuyItemEvent buyItemEvent;
+    public event Action ReloadEvent;
+    public event Action ChangeGun;
+    public event Action StopShootingFeeback;
+    public event Action ShootEvent;
+    public event Action ShootingEvent;
+    public event Action<bool> buyWeaponEvent;
+    public event Action<PickeableType> buyItemEvent;
     #endregion
 
     private void Awake() {

@@ -43,14 +43,12 @@ public class CheckTerrainHeight : MonoBehaviour
     private ThisObjectSounds _soundManager;
     private PlayerController _playerController;
     private Rigidbody _rb;
-    private Animator _animator;
     #endregion
 
     private void Awake()
     {
         _playerController = GetComponent<PlayerController>();
         _soundManager = GetComponentInChildren<ThisObjectSounds>();
-        _animator = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody>();
     }
 
@@ -63,7 +61,7 @@ public class CheckTerrainHeight : MonoBehaviour
 
     private void HandleGravityAndSlope()
     {
-        _rb.useGravity = !isGrounded ? true : !OnSlope();
+        _rb.useGravity = !isGrounded || !OnSlope();
 
         if (OnSlope() && !_playerController.PlayerIsJumping)
         {
@@ -88,7 +86,6 @@ public class CheckTerrainHeight : MonoBehaviour
         if (isGrounded && !wasOnGround)
         {
             _soundManager.StopSound("Falling");
-            _animator.applyRootMotion = true;
             _playerController.JumpCount = 0;
 
             if (maxVerticalVelocity < velocityThreshold)

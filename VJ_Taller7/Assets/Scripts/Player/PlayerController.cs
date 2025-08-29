@@ -3,6 +3,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Animations.Rigging;
+using System;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CheckTerrainHeight))]
@@ -81,14 +82,9 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Events
-    public delegate void JumpEvent();
-    public event JumpEvent JumpingEvent;
-
-    public delegate void MeleeEvent();
-    public event MeleeEvent MeleeAttackEvent;
-
-    public delegate void SlideEvent();
-    public event SlideEvent SlidingEvent;
+    public event Action JumpingEvent;
+    public event Action MeleeAttackEvent;
+    public event Action SlidingEvent;
     #endregion
 
     private void Awake()
